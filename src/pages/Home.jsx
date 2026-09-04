@@ -1,12 +1,14 @@
 import Nav from '../components/Nav'
+import Hero from '../components/Hero'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#eceef2] text-neutral-900">
+    <div className="min-h-screen bg-black text-white relative selection:bg-red-600 selection:text-white">
       <Nav />
-      <main className="mx-auto max-w-4xl px-6 py-16 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">Home</h1>
+      <main className="w-full">
+        <Hero />
       </main>
     </div>
   )
 }
+
