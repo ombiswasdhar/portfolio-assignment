@@ -186,6 +186,6 @@
 .animate-tape-marquee {
   display: flex;
   width: max-content;
-  animation: tape-marquee 10s linear infinite;
+  animation: tape-marquee 22s linear infinite;
   will-change: transform;
 }

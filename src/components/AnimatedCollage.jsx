@@ -52,7 +52,7 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
         />
       )}
 
-      {/* ================= ANIMATED GRAPHICS DESIGNER TAPE TICKER ================= */}
+      {/* ================= ANIMATED ROLES TAPE TICKER ================= */}
       <div
         className="absolute overflow-hidden z-[12] select-none pointer-events-none flex items-center shadow-[0_2px_8px_rgba(0,0,0,0.45)] border-y border-black/10"
         style={{
@@ -64,13 +64,39 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
           backgroundImage: 'radial-gradient(#888888 0.75px, transparent 0.75px)',
           backgroundSize: '3.5px 3.5px',
         }}
-        aria-label="Graphics Designer animated tape ticker"
+        aria-label="Om's design roles animated tape ticker: Graphics Designer, UI/UX Designer, Character Designer"
       >
         <div className="animate-tape-marquee flex whitespace-nowrap items-center text-[10px] sm:text-[11px] font-display font-black tracking-wider text-black select-none">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <span key={i} className="px-2.5 flex items-center gap-2">
+          {[
+            'GRAPHICS DESIGNER',
+            'UI/UX DESIGNER',
+            'CHARACTER DESIGNER',
+            'GRAPHICS DESIGNER',
+            'UI/UX DESIGNER',
+            'CHARACTER DESIGNER',
+            'GRAPHICS DESIGNER',
+            'UI/UX DESIGNER',
+            'CHARACTER DESIGNER',
+            'GRAPHICS DESIGNER',
+            'UI/UX DESIGNER',
+            'CHARACTER DESIGNER',
+            // Second half for seamless 50% translateX marquee loop:
+            'GRAPHICS DESIGNER',
+            'UI/UX DESIGNER',
+            'CHARACTER DESIGNER',
+            'GRAPHICS DESIGNER',
+            'UI/UX DESIGNER',
+            'CHARACTER DESIGNER',
+            'GRAPHICS DESIGNER',
+            'UI/UX DESIGNER',
+            'CHARACTER DESIGNER',
+            'GRAPHICS DESIGNER',
+            'UI/UX DESIGNER',
+            'CHARACTER DESIGNER',
+          ].map((role, i) => (
+            <span key={i} className="px-3 flex items-center gap-2">
               <span className="text-black/60 font-normal">/</span>
-              <span>GRAPHICS DESIGNER</span>
+              <span>{role}</span>
             </span>
           ))}
         </div>
