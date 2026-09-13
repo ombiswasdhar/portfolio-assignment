@@ -84,7 +84,7 @@ export default function Nav() {
     <header className="sticky top-6 z-50 flex justify-center px-4 w-full pointer-events-none">
       <nav
         aria-label="Main Navigation"
-        className="pointer-events-auto flex items-center gap-1.5 sm:gap-2 rounded-[28px] bg-white p-2 shadow-[0_12px_40px_rgba(0,0,0,0.08)] border border-neutral-100 transition-all duration-300"
+        className="pointer-events-auto flex items-center gap-1.5 rounded-full bg-black/80 backdrop-blur-xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.6)] border border-white/15 ring-1 ring-white/5 transition-all duration-300"
       >
         {navItems.map((item) => {
           const Icon = item.icon
@@ -100,18 +100,13 @@ export default function Nav() {
               end={item.path === '/'}
               aria-label={item.name}
               title={item.name}
-              className={`group relative flex items-center justify-center transition-all duration-300 ease-out no-underline select-none ${
+              className={`group relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
                 isActive
-                  ? 'bg-[#181824] text-white px-5 py-2.5 rounded-full shadow-sm gap-2.5'
-                  : 'w-11 h-11 text-neutral-800 hover:text-black hover:bg-neutral-100 rounded-full'
+                  ? 'bg-[#BA1F1F] text-white shadow-[0_4px_16px_rgba(186,31,31,0.5)] scale-105'
+                  : 'text-neutral-400 hover:text-white hover:bg-white/10 active:scale-95'
               }`}
             >
-              <Icon className="w-5 h-5 shrink-0" />
-              {isActive && (
-                <span className="text-sm font-medium tracking-wide whitespace-nowrap">
-                  {item.name}
-                </span>
-              )}
+              <Icon className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
             </NavLink>
           )
         })}
