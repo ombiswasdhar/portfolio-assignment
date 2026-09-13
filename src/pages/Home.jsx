@@ -1,5 +1,6 @@
 import Nav from '../components/Nav'
 import Hero from '../components/Hero'
+import AboutSection from '../components/AboutSection'
 
 export default function Home() {
   return (
@@ -7,6 +8,7 @@ export default function Home() {
       <Nav />
       <main className="w-full">
         <Hero />
+        <AboutSection />
       </main>
     </div>
   )
