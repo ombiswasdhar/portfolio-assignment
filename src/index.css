@@ -153,3 +153,64 @@
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
 }
+
+/* Comic text bubble zoom effect */
+.comic-bubble {
+  position: relative;
+  border-radius: 1rem;
+  border: 2px solid transparent;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.25s ease,
+              background-color 0.2s ease,
+              border-color 0.2s ease;
+  will-change: transform;
+  transform-origin: center left;
+  z-index: 10;
+}
+
+.comic-bubble:hover {
+  transform: scale(1.05);
+  background-color: #222428;
+  border-color: #ffffff;
+  box-shadow: 4px 4px 0px #000000, 0 16px 36px rgba(0, 0, 0, 0.85);
+  z-index: 30;
+}
+
+/* Comic bubble tail for pointing character (left-pointing tail) */
+.comic-bubble-tail-left::before {
+  content: '';
+  position: absolute;
+  left: -11px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 11px solid #ffffff;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.comic-bubble-tail-left:hover::before {
+  transform: translateY(-50%) scale(1);
+}
+
+.comic-bubble-tail-left::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 9px solid #222428;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.comic-bubble-tail-left:hover::after {
+  transform: translateY(-50%) scale(1);
+}
