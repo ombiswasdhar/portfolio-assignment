@@ -1,17 +1,17 @@
 import React, { useState, useRef } from 'react'
-import aboutRightCollage from '../assets/about/about_right_collage.png'
+import aboutRightCollageClean from '../assets/about/about_right_collage_clean.png'
 import collagePolaroid from '../assets/about/collage_polaroid_clean.png'
 import collageHashtag from '../assets/about/collage_hashtag.png'
 
 /**
  * AnimatedCollage
  * 
- * Renders the authentic collage with:
- * 1. Interactive 3D tilting and swaying Polaroid photo card ("AGE: 21 YEARS")
- * 2. Animated infinite ticker tape banner for "/ GRAPHICS DESIGNER /" below the Polaroid
- * All other graphics and stickers remain in their authentic form.
+ * @param {boolean} standalone - If true (mobile), renders the clean background graphic.
+ *                                If false (desktop), background is transparent so the
+ *                                seamless aboutFullFrame underneath shows through without
+ *                                any black blocks or overlapping rectangles.
  */
-export default function AnimatedCollage({ className = '' }) {
+export default function AnimatedCollage({ className = '', standalone = false }) {
   const containerRef = useRef(null)
   const [tilt, setTilt] = useState({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
 
@@ -38,17 +38,19 @@ export default function AnimatedCollage({ className = '' }) {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative w-full aspect-[504/738] select-none rounded-[20px] overflow-hidden ${className}`}
+      className={`relative w-full aspect-[504/738] select-none ${className}`}
       style={{ perspective: '1000px' }}
       role="region"
       aria-label="About Me collage with interactive Polaroid - Om: Age 21 Years, Graphics Designer"
     >
-      {/* ================= BASE COLLAGE GRAPHIC ================= */}
-      <img
-        src={aboutRightCollage}
-        alt="About Me - Om, 21 years old Graphics Designer collage"
-        className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-0"
-      />
+      {/* ================= STANDALONE BACKGROUND (Mobile only, zero black strip) ================= */}
+      {standalone && (
+        <img
+          src={aboutRightCollageClean}
+          alt="About Me - Om, 21 years old Graphics Designer collage"
+          className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-0"
+        />
+      )}
 
       {/* ================= ANIMATED GRAPHICS DESIGNER TAPE TICKER ================= */}
       <div
