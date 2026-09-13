@@ -1,9 +1,9 @@
 import aboutFullFrame from '../assets/about/about_full_frame.png'
 import aboutLeftCard from '../assets/about/about_left_card.png'
-import aboutRightCollage from '../assets/about/about_right_collage.png'
 import wordSince from '../assets/about/word_since.png'
 import wordAs from '../assets/about/word_as.png'
 import wordFlourishA from '../assets/about/word_flourish_a.png'
+import AnimatedCollage from './AnimatedCollage'
 
 export default function AboutSection() {
   return (
@@ -29,6 +29,19 @@ export default function AboutSection() {
               alt="About Me - Om, UI/UX Designer, Illustrator, Artist based in Shillong, India. Age 21 Years."
               className="w-full h-full object-cover lg:object-contain object-center select-none pointer-events-none"
             />
+
+            {/* Node 391:26 Animated Collage Layer (replacing static right collage image part) */}
+            <div
+              className="absolute z-10"
+              style={{
+                left: '50.78%',
+                top: '3.91%',
+                width: '49.22%',
+                height: '96.09%',
+              }}
+            >
+              <AnimatedCollage className="w-full h-full" />
+            </div>
 
             {/* Interactive Comic Text Bubbles Overlay for each Paragraph */}
             {/* Tagline */}
@@ -268,13 +281,9 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* Right Collage */}
+          {/* Right Collage - Node 391:26 Animated Collage */}
           <div className="w-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
-            <img
-              src={aboutRightCollage}
-              alt="About Me - Om, 21 years old Graphics Designer collage"
-              className="w-full h-auto object-contain select-none pointer-events-none"
-            />
+            <AnimatedCollage />
           </div>
         </div>
 
