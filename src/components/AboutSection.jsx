@@ -10,7 +10,7 @@ export default function AboutSection() {
     <section
       id="about"
       aria-label="About Me section"
-      className="relative w-full bg-black text-white select-none overflow-hidden pt-8 pb-20 md:py-24"
+      className="relative w-full bg-black text-white select-none overflow-hidden pt-0 pb-20 md:pb-24"
     >
       {/* Decorative ambient background glow matching the hero banner */}
       <div

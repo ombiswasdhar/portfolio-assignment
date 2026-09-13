@@ -201,12 +201,14 @@ export default function Hero() {
           />
         </div>
 
-        {/* Bottom Line (Line 4 in Figma) */}
+      </div>
+
+      {/* Symmetrical White Line Divider below barcode with equal gap to description page */}
+      <div className="w-full flex justify-center mt-10 sm:mt-12 md:mt-14 mb-10 sm:mb-12 md:mb-14 pointer-events-none">
         <div
-          className="absolute left-[19.86%] bottom-0 w-[60.28%] h-[1px] bg-white/20 pointer-events-none"
+          className="w-[60.28%] max-w-[868px] h-[1px] bg-white/20"
           aria-hidden="true"
         />
-
       </div>
     </section>
   )
