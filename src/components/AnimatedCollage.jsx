@@ -1,13 +1,15 @@
 import React, { useState, useRef } from 'react'
 import aboutRightCollage from '../assets/about/about_right_collage.png'
 import collagePolaroid from '../assets/about/collage_polaroid_clean.png'
+import collageHashtag from '../assets/about/collage_hashtag.png'
 
 /**
  * AnimatedCollage
  * 
- * Renders the authentic collage with an interactive 3D tilting
- * and swaying Polaroid photo card ("AGE: 21 YEARS").
- * All other collage stickers and graphics remain in their original form.
+ * Renders the authentic collage with:
+ * 1. Interactive 3D tilting and swaying Polaroid photo card ("AGE: 21 YEARS")
+ * 2. Animated infinite ticker tape banner for "/ GRAPHICS DESIGNER /" below the Polaroid
+ * All other graphics and stickers remain in their authentic form.
  */
 export default function AnimatedCollage({ className = '' }) {
   const containerRef = useRef(null)
@@ -48,9 +50,51 @@ export default function AnimatedCollage({ className = '' }) {
         className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-0"
       />
 
+      {/* ================= ANIMATED GRAPHICS DESIGNER TAPE TICKER ================= */}
+      <div
+        className="absolute overflow-hidden z-[12] select-none pointer-events-none flex items-center shadow-[0_2px_8px_rgba(0,0,0,0.45)] border-y border-black/10"
+        style={{
+          left: '22.8%',
+          top: '74.8%',
+          width: '61.7%',
+          height: '3.65%',
+          backgroundColor: '#ffffff',
+          backgroundImage: 'radial-gradient(#888888 0.75px, transparent 0.75px)',
+          backgroundSize: '3.5px 3.5px',
+        }}
+        aria-label="Graphics Designer animated tape ticker"
+      >
+        <div className="animate-tape-marquee flex whitespace-nowrap items-center text-[10px] sm:text-[11px] font-display font-black tracking-wider text-black select-none">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <span key={i} className="px-2.5 flex items-center gap-2">
+              <span className="text-black/60 font-normal">/</span>
+              <span>GRAPHICS DESIGNER</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Yellow Hashtag Sticker overlapping the right end of the tape */}
+      <div
+        className="absolute z-[14] pointer-events-none"
+        style={{
+          right: '6.5%',
+          bottom: '14.5%',
+          width: '16.8%',
+          height: '11.5%',
+        }}
+        aria-hidden="true"
+      >
+        <img
+          src={collageHashtag}
+          alt=""
+          className="w-full h-full object-contain select-none pointer-events-none"
+        />
+      </div>
+
       {/* ================= 3D INTERACTIVE TILTING POLAROID CARD ================= */}
       <div
-        className={`absolute z-10 cursor-pointer transition-shadow duration-300 ${
+        className={`absolute z-[20] cursor-pointer transition-shadow duration-300 ${
           tilt.isHovered ? '' : 'animate-polaroid-sway'
         }`}
         style={{

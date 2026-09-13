@@ -262,3 +262,20 @@
   transform-origin: 50% 14px;
   animation: polaroid-sway 5.5s ease-in-out infinite alternate;
 }
+
+/* ================= Tape Marquee Keyframes ================= */
+@keyframes tape-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-tape-marquee {
+  display: flex;
+  width: max-content;
+  animation: tape-marquee 10s linear infinite;
+  will-change: transform;
+}
