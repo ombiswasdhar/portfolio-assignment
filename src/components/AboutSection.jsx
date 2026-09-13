@@ -1,9 +1,9 @@
-import charThinking from '../assets/about/char_thinking_perfect.png'
-import charPointing from '../assets/about/char_pointing_perfect.png'
+import aboutFullFrame from '../assets/about/about_full_frame.png'
+import aboutLeftCard from '../assets/about/about_left_card.png'
+import aboutRightCollage from '../assets/about/about_right_collage.png'
 import wordSince from '../assets/about/word_since.png'
 import wordAs from '../assets/about/word_as.png'
 import wordFlourishA from '../assets/about/word_flourish_a.png'
-import aboutRightCollage from '../assets/about/about_right_collage.png'
 
 export default function AboutSection() {
   return (
@@ -18,183 +18,267 @@ export default function AboutSection() {
         aria-hidden="true"
       />
 
-      <div className="relative w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8">
-        {/* Top 'portfolio' cursive text */}
-        <div className="flex justify-center mb-6 sm:mb-8 md:mb-10">
-          <span className="font-script text-3xl sm:text-4xl md:text-5xl font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            portfolio
-          </span>
+      <div className="relative w-full max-w-[1380px] mx-auto px-4 sm:px-6 md:px-8">
+        
+        {/* ================= DESKTOP / TABLET VIEW (md and up) ================= */}
+        <div className="hidden md:block w-full">
+          <div className="relative w-full max-w-[1240px] mx-auto aspect-[1024/768] rounded-[28px] lg:rounded-[36px] overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border border-white/10 group transition-all duration-500 hover:border-white/20">
+            {/* Original Figma Frame - untouched in original form and place */}
+            <img
+              src={aboutFullFrame}
+              alt="About Me - Om, UI/UX Designer, Illustrator, Artist based in Shillong, India. Age 21 Years."
+              className="w-full h-full object-cover lg:object-contain object-center select-none pointer-events-none"
+            />
+
+            {/* Interactive Comic Text Bubbles Overlay for each Paragraph */}
+            {/* Tagline */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '10.16%', top: '39.32%', width: '24.41%', minHeight: '6.25%' }}
+              tabIndex={0}
+              role="article"
+              aria-label="Tagline: ui-ux designer / illustrator / artist based in SHILLONG , INDIA."
+            >
+              <div className="w-full h-full p-2.5 flex items-center gap-2 text-[10px] lg:text-xs text-neutral-200 font-fredoka font-normal">
+                <img
+                  src={wordFlourishA}
+                  alt="a"
+                  className="w-[12px] h-[14px] object-contain inline-block shrink-0 -mb-0.5"
+                />
+                <span>
+                  ui-ux designer / illustrator / artist based in{' '}
+                  <strong className="font-semibold text-white">SHILLONG , INDIA.</strong>
+                </span>
+              </div>
+            </div>
+
+            {/* Paragraph 1: SINCE 8th grade... */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '23.24%', top: '46.88%', width: '27.34%', minHeight: '10.42%' }}
+              tabIndex={0}
+              role="article"
+              aria-label="Description paragraph 1"
+            >
+              <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
+                <div className="flex items-baseline gap-1.5 flex-wrap">
+                  <img
+                    src={wordSince}
+                    alt="SINCE"
+                    className="h-[15px] lg:h-[18px] object-contain inline-block align-baseline -mb-0.5 shrink-0"
+                  />
+                  <span>
+                    8th grade my knack for{' '}
+                    <strong className="font-bold text-white">illustrations</strong> ,{' '}
+                    <strong className="font-bold text-white">character design</strong> , and
+                    anything related to design has been constantly growing.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Paragraph 2: For a long time I was into character designing... */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '23.24%', top: '57.03%', width: '27.34%', minHeight: '13.67%' }}
+              tabIndex={0}
+              role="article"
+              aria-label="Description paragraph 2"
+            >
+              <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
+                <span>
+                  For a long time I was into character designing , then started exploring other
+                  areas , such as (
+                  <strong className="font-bold text-white">
+                    Ui-Ux design / graphic design / illustrations / video editing / 3d design / product design / etc
+                  </strong>
+                  ).
+                </span>
+              </div>
+            </div>
+
+            {/* Paragraph 3: as a new and curious artist... */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '10.16%', top: '70.83%', width: '40.43%', minHeight: '6.51%' }}
+              tabIndex={0}
+              role="article"
+              aria-label="Description paragraph 3"
+            >
+              <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug flex items-baseline gap-2">
+                <img
+                  src={wordAs}
+                  alt="as"
+                  className="h-[14px] lg:h-[16px] object-contain inline-block align-baseline -mb-0.5 shrink-0"
+                />
+                <span>
+                  a new and curious artist, I'm always exploring different styles and mediums , it's
+                  how I learn and evolve.
+                </span>
+              </div>
+            </div>
+
+            {/* Paragraph 4: I love experimenting... */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '10.16%', top: '77.60%', width: '40.43%', minHeight: '6.51%' }}
+              tabIndex={0}
+              role="article"
+              aria-label="Description paragraph 4"
+            >
+              <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
+                <span>
+                  I love experimenting, taking inspiration from everywhere, and turning simple ideas
+                  into something visual and expressive.
+                </span>
+              </div>
+            </div>
+
+            {/* Paragraph 5: I'm also really into sports... */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '10.16%', top: '84.38%', width: '40.43%', minHeight: '7.29%' }}
+              tabIndex={0}
+              role="article"
+              aria-label="Description paragraph 5"
+            >
+              <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
+                <span>
+                  I'm also really into sports and staying active. It helps me keep my energy up and
+                  my creativity flowing. I like to think the discipline from sports shows up in my
+                  art too.
+                </span>
+              </div>
+            </div>
+
+          </div>
         </div>
 
-        {/* ================= MAIN ABOUT CONTENT GRID ================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
-          
-          {/* LEFT INTERACTIVE CARD (Figma Frame Left Side) */}
-          <div className="lg:col-span-6 xl:col-span-6 w-full flex justify-center lg:justify-end z-10">
-            <div className="relative w-full max-w-[530px] bg-[#333333] rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 lg:p-9 shadow-[0_24px_60px_rgba(0,0,0,0.9)] border border-white/10 flex flex-col justify-between">
-              
-              {/* Card Header: Title & Thinking Character */}
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex flex-col">
-                  <h2 className="text-4xl sm:text-5xl lg:text-[54px] font-black text-white leading-none tracking-tight font-sans uppercase">
-                    Hello,
-                  </h2>
-                  <div className="flex items-baseline gap-2 mt-1 sm:mt-2">
-                    <span className="text-3xl sm:text-4xl lg:text-[44px] font-black text-white font-sans">
-                      i'm
-                    </span>
-                    <span className="text-3xl sm:text-4xl lg:text-[44px] font-black text-[#5694FD] font-sans tracking-tight">
-                      OM.
-                    </span>
-                  </div>
-                </div>
+        {/* ================= MOBILE VIEW (Stacked column in previous form) ================= */}
+        <div className="md:hidden flex flex-col items-center gap-8 w-full max-w-[500px] mx-auto">
+          {/* Top 'portfolio' cursive text */}
+          <div className="flex justify-center">
+            <span className="font-script text-3xl font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+              portfolio
+            </span>
+          </div>
 
-                {/* Manga Thinking / Scheming Character */}
-                <div className="w-[115px] sm:w-[135px] lg:w-[150px] shrink-0 -mt-3 -mr-2 transition-transform duration-300 hover:scale-105 select-none">
-                  <img
-                    src={charThinking}
-                    alt="Scheming anime character thinking with hands folded"
-                    className="w-full h-auto object-contain pointer-events-none drop-shadow-md"
-                  />
-                </div>
+          {/* Left Card with Overlay Comic Text Bubbles */}
+          <div className="relative w-full rounded-[28px] overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.8)] border border-white/10">
+            <img
+              src={aboutLeftCard}
+              alt="Hello, i'm OM. UI/UX designer, illustrator, artist based in Shillong, India."
+              className="w-full h-auto object-contain select-none pointer-events-none"
+            />
+
+            {/* Mobile Tagline */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '6.88%', top: '30.00%', width: '52.08%', minHeight: '8.14%' }}
+              tabIndex={0}
+              role="article"
+            >
+              <div className="w-full h-full p-2 flex items-center gap-1.5 text-[10px] text-neutral-200 font-fredoka">
+                <img src={wordFlourishA} alt="a" className="w-[10px] h-[12px] object-contain shrink-0" />
+                <span>
+                  ui-ux designer / illustrator / artist based in{' '}
+                  <strong className="font-semibold text-white">SHILLONG , INDIA.</strong>
+                </span>
               </div>
+            </div>
 
-              {/* Tagline / Subtitle (Interactive Comic Bubble) */}
-              <div className="comic-bubble comic-bubble-tail-left p-3 sm:p-3.5 -mx-1 sm:-mx-2 mt-2 rounded-2xl cursor-default group">
-                <div className="flex items-center gap-2 text-xs sm:text-sm text-neutral-200 font-fredoka font-normal">
-                  <img
-                    src={wordFlourishA}
-                    alt="a"
-                    className="w-[14px] h-[16px] object-contain inline-block shrink-0 -mb-0.5"
-                  />
+            {/* Mobile Paragraph 1 */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '34.79%', top: '39.83%', width: '58.33%', minHeight: '13.56%' }}
+              tabIndex={0}
+              role="article"
+            >
+              <div className="w-full h-full p-2 text-[10px] text-neutral-200 font-fredoka font-light leading-snug">
+                <div className="flex items-baseline gap-1 flex-wrap">
+                  <img src={wordSince} alt="SINCE" className="h-[13px] object-contain shrink-0" />
                   <span>
-                    ui-ux designer / illustrator / artist based in{' '}
-                    <strong className="font-semibold text-white">SHILLONG , INDIA.</strong>
+                    8th grade my knack for{' '}
+                    <strong className="font-bold text-white">illustrations</strong> ,{' '}
+                    <strong className="font-bold text-white">character design</strong> , and anything related to design has been constantly growing.
                   </span>
                 </div>
               </div>
+            </div>
 
-              {/* Middle Section: Pointing Character (left) + Paras 1 & 2 (right) */}
-              <div className="grid grid-cols-12 gap-3 sm:gap-4 items-center my-3 sm:my-4">
-                {/* Pointing Character */}
-                <div className="col-span-4 flex justify-center items-center">
-                  <img
-                    src={charPointing}
-                    alt="Anime boy character pointing index finger up with enthusiasm"
-                    className="w-full max-w-[115px] sm:max-w-[130px] h-auto object-contain select-none pointer-events-none transition-transform duration-300 hover:scale-105"
-                  />
-                </div>
-
-                {/* Description Paragraph 1 & 2 with Comic Bubble Zoom */}
-                <div className="col-span-8 flex flex-col gap-2.5 sm:gap-3">
-                  {/* Paragraph 1 */}
-                  <div
-                    tabIndex={0}
-                    role="article"
-                    aria-label="Description paragraph 1"
-                    className="comic-bubble comic-bubble-tail-left p-3 sm:p-3.5 rounded-2xl cursor-default text-xs sm:text-[13px] lg:text-sm text-neutral-200 font-fredoka font-light leading-snug outline-none focus:scale-105 focus:bg-[#222428] focus:border-white focus:shadow-[4px_4px_0px_#000]"
-                  >
-                    <div className="flex items-baseline gap-1.5 flex-wrap">
-                      <img
-                        src={wordSince}
-                        alt="SINCE"
-                        className="h-[18px] sm:h-[20px] object-contain inline-block align-baseline -mb-1 shrink-0"
-                      />
-                      <span>
-                        8th grade my knack for{' '}
-                        <strong className="font-bold text-white">illustrations</strong> ,{' '}
-                        <strong className="font-bold text-white">character design</strong> , and
-                        anything related to design has been constantly growing.
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Paragraph 2 */}
-                  <div
-                    tabIndex={0}
-                    role="article"
-                    aria-label="Description paragraph 2"
-                    className="comic-bubble comic-bubble-tail-left p-3 sm:p-3.5 rounded-2xl cursor-default text-xs sm:text-[13px] lg:text-sm text-neutral-200 font-fredoka font-light leading-snug outline-none focus:scale-105 focus:bg-[#222428] focus:border-white focus:shadow-[4px_4px_0px_#000]"
-                  >
-                    <span>
-                      For a long time I was into character designing , then started exploring other
-                      areas , such as (
-                      <strong className="font-bold text-white">
-                        Ui-Ux design / graphic design / illustrations / video editing / 3d design / product design / etc
-                      </strong>
-                      ).
-                    </span>
-                  </div>
-                </div>
+            {/* Mobile Paragraph 2 */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '34.79%', top: '53.05%', width: '58.33%', minHeight: '17.80%' }}
+              tabIndex={0}
+              role="article"
+            >
+              <div className="w-full h-full p-2 text-[10px] text-neutral-200 font-fredoka font-light leading-snug">
+                <span>
+                  For a long time I was into character designing , then started exploring other areas , such as (
+                  <strong className="font-bold text-white">
+                    Ui-Ux design / graphic design / illustrations / video editing / 3d design / product design / etc
+                  </strong>
+                  ).
+                </span>
               </div>
+            </div>
 
-              {/* Bottom Section: Paragraphs 3, 4, 5 (Each with Comic Text Bubble Zoom) */}
-              <div className="flex flex-col gap-2.5 sm:gap-3 mt-1">
-                {/* Paragraph 3 */}
-                <div
-                  tabIndex={0}
-                  role="article"
-                  aria-label="Description paragraph 3"
-                  className="comic-bubble comic-bubble-tail-left p-3 sm:p-3.5 rounded-2xl cursor-default text-xs sm:text-[13px] lg:text-sm text-neutral-200 font-fredoka font-light leading-snug outline-none focus:scale-105 focus:bg-[#222428] focus:border-white focus:shadow-[4px_4px_0px_#000]"
-                >
-                  <div className="flex items-baseline gap-2">
-                    <img
-                      src={wordAs}
-                      alt="as"
-                      className="h-[16px] sm:h-[18px] object-contain inline-block align-baseline -mb-0.5 shrink-0"
-                    />
-                    <span>
-                      a new and curious artist, I'm always exploring different styles and mediums , it's
-                      how I learn and evolve.
-                    </span>
-                  </div>
-                </div>
-
-                {/* Paragraph 4 */}
-                <div
-                  tabIndex={0}
-                  role="article"
-                  aria-label="Description paragraph 4"
-                  className="comic-bubble comic-bubble-tail-left p-3 sm:p-3.5 rounded-2xl cursor-default text-xs sm:text-[13px] lg:text-sm text-neutral-200 font-fredoka font-light leading-snug outline-none focus:scale-105 focus:bg-[#222428] focus:border-white focus:shadow-[4px_4px_0px_#000]"
-                >
-                  <span>
-                    I love experimenting, taking inspiration from everywhere, and turning simple
-                    ideas into something visual and expressive.
-                  </span>
-                </div>
-
-                {/* Paragraph 5 */}
-                <div
-                  tabIndex={0}
-                  role="article"
-                  aria-label="Description paragraph 5"
-                  className="comic-bubble comic-bubble-tail-left p-3 sm:p-3.5 rounded-2xl cursor-default text-xs sm:text-[13px] lg:text-sm text-neutral-200 font-fredoka font-light leading-snug outline-none focus:scale-105 focus:bg-[#222428] focus:border-white focus:shadow-[4px_4px_0px_#000]"
-                >
-                  <span>
-                    I'm also really into sports and staying active. It helps me keep my energy up
-                    and my creativity flowing. I like to think the discipline from sports shows up
-                    in my art too.
-                  </span>
-                </div>
+            {/* Mobile Paragraph 3 */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '6.88%', top: '71.02%', width: '86.25%', minHeight: '8.47%' }}
+              tabIndex={0}
+              role="article"
+            >
+              <div className="w-full h-full p-2 text-[10px] text-neutral-200 font-fredoka font-light leading-snug flex items-baseline gap-1.5">
+                <img src={wordAs} alt="as" className="h-[12px] object-contain shrink-0" />
+                <span>
+                  a new and curious artist, I'm always exploring different styles and mediums , it's how I learn and evolve.
+                </span>
               </div>
+            </div>
 
+            {/* Mobile Paragraph 4 */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '6.88%', top: '79.83%', width: '86.25%', minHeight: '8.47%' }}
+              tabIndex={0}
+              role="article"
+            >
+              <div className="w-full h-full p-2 text-[10px] text-neutral-200 font-fredoka font-light leading-snug">
+                <span>
+                  I love experimenting, taking inspiration from everywhere, and turning simple ideas into something visual and expressive.
+                </span>
+              </div>
+            </div>
+
+            {/* Mobile Paragraph 5 */}
+            <div
+              className="comic-overlay-bubble comic-bubble-tail-left"
+              style={{ left: '6.88%', top: '88.64%', width: '86.25%', minHeight: '9.49%' }}
+              tabIndex={0}
+              role="article"
+            >
+              <div className="w-full h-full p-2 text-[10px] text-neutral-200 font-fredoka font-light leading-snug">
+                <span>
+                  I'm also really into sports and staying active. It helps me keep my energy up and my creativity flowing. I like to think the discipline from sports shows up in my art too.
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* RIGHT COLLAGE (Figma Frame Right Side) */}
-          <div className="lg:col-span-6 xl:col-span-6 w-full flex justify-center lg:justify-start lg:-ml-6 xl:-ml-10 z-0">
-            <div className="relative w-full max-w-[500px] lg:max-w-[540px] drop-shadow-[0_24px_60px_rgba(0,0,0,0.9)] transition-transform duration-500 hover:scale-[1.01]">
-              <img
-                src={aboutRightCollage}
-                alt="About Me - Om, 21 years old Graphics Designer collage with Polaroid photo, sunburst rays, stickers and anime doodles"
-                className="w-full h-auto object-contain select-none pointer-events-none"
-              />
-            </div>
+          {/* Right Collage */}
+          <div className="w-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
+            <img
+              src={aboutRightCollage}
+              alt="About Me - Om, 21 years old Graphics Designer collage"
+              className="w-full h-auto object-contain select-none pointer-events-none"
+            />
           </div>
-
         </div>
 
-        {/* Screen Reader & SEO Metadata */}
+        {/* ================= SCREEN READER / SEO METADATA ================= */}
         <div className="sr-only">
           <h2>About Me — Hello, i'm OM.</h2>
           <p>ui-ux designer / illustrator / artist based in SHILLONG , INDIA.</p>
