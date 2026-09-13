@@ -1,9 +1,11 @@
-import { NavLink, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const navItems = [
   {
     name: 'Home',
     path: '/',
+    id: 'home',
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -20,8 +22,28 @@ const navItems = [
     ),
   },
   {
+    name: 'About Me',
+    path: '/#about',
+    id: 'about',
+    icon: (props) => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <circle cx="12" cy="7.5" r="4" />
+        <path d="M5 20.5C5 16.5 8.2 14 12 14C15.8 14 19 16.5 19 20.5" />
+      </svg>
+    ),
+  },
+  {
     name: 'Work',
     path: '/work',
+    id: 'work',
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -39,26 +61,9 @@ const navItems = [
     ),
   },
   {
-    name: 'About',
-    path: '/about',
-    icon: (props) => (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-      >
-        <circle cx="12" cy="7.5" r="4" />
-        <path d="M5 20.5C5 16.5 8.2 14 12 14C15.8 14 19 16.5 19 20.5" />
-      </svg>
-    ),
-  },
-  {
     name: 'Contact',
     path: '/contact',
+    id: 'contact',
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -79,6 +84,59 @@ const navItems = [
 
 export default function Nav() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const [activeSection, setActiveSection] = useState('home')
+
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setActiveSection(location.pathname.replace('/', ''))
+      return
+    }
+
+    // Scroll spy: check if scrolled down to the #about second screen
+    const handleScroll = () => {
+      const aboutEl = document.getElementById('about')
+      if (aboutEl) {
+        const rect = aboutEl.getBoundingClientRect()
+        // When top of about section approaches the viewport
+        if (rect.top <= 350) {
+          setActiveSection('about')
+        } else {
+          setActiveSection('home')
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [location])
+
+  const handleClick = (e, item) => {
+    if (item.id === 'about') {
+      e.preventDefault()
+      if (location.pathname === '/') {
+        const el = document.getElementById('about')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+          window.history.pushState(null, '', '/#about')
+          setActiveSection('about')
+        }
+      } else {
+        navigate('/#about')
+      }
+      return
+    }
+
+    if (item.id === 'home') {
+      if (location.pathname === '/') {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.history.pushState(null, '', '/')
+        setActiveSection('home')
+      }
+    }
+  }
 
   return (
     <header className="sticky top-6 z-50 flex justify-center px-4 w-full pointer-events-none">
@@ -88,16 +146,13 @@ export default function Nav() {
       >
         {navItems.map((item) => {
           const Icon = item.icon
-          const isActive =
-            item.path === '/'
-              ? location.pathname === '/'
-              : location.pathname.startsWith(item.path)
+          const isActive = activeSection === item.id
 
           return (
-            <NavLink
+            <Link
               key={item.path}
               to={item.path}
-              end={item.path === '/'}
+              onClick={(e) => handleClick(e, item)}
               aria-label={item.name}
               title={item.name}
               className={`group relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
@@ -107,7 +162,7 @@ export default function Nav() {
               }`}
             >
               <Icon className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
-            </NavLink>
+            </Link>
           )
         })}
       </nav>
