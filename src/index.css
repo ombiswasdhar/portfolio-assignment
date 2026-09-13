@@ -245,20 +245,7 @@
   z-index: 50;
 }
 
-/* ================= Node 391:26 Animated Collage Keyframes ================= */
-@keyframes spin-rays {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-.animate-spin-rays {
-  animation: spin-rays 28s linear infinite;
-}
-
+/* ================= Polaroid Sway Keyframes ================= */
 @keyframes polaroid-sway {
   0% {
     transform: rotate(-0.9deg);
@@ -274,62 +261,4 @@
 .animate-polaroid-sway {
   transform-origin: 50% 14px;
   animation: polaroid-sway 5.5s ease-in-out infinite alternate;
-}
-
-@keyframes sticker-float {
-  0% {
-    transform: translateY(0px) rotate(1deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(-1.5deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(1deg);
-  }
-}
-
-.animate-sticker-float {
-  animation: sticker-float 3.6s ease-in-out infinite alternate;
-}
-
-@keyframes pulse-gentle {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.04);
-  }
-}
-
-.animate-pulse-gentle {
-  animation: pulse-gentle 3.5s ease-in-out infinite;
-}
-
-@keyframes hashtag-wiggle {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(6deg) scale(1.04);
-  }
-  75% {
-    transform: rotate(-4deg) scale(0.97);
-  }
-}
-
-.animate-hashtag-wiggle {
-  animation: hashtag-wiggle 4.2s ease-in-out infinite;
-}
-
-@keyframes chrome-shine {
-  0%, 100% {
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)) brightness(1);
-  }
-  50% {
-    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.95)) brightness(1.35);
-  }
-}
-
-.animate-chrome-shine {
-  animation: chrome-shine 3s ease-in-out infinite;
 }
