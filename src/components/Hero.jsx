@@ -91,13 +91,13 @@ export default function Hero() {
           {/* 1. Metallic Smiley Sticker (top-left, breaking out of banner) */}
           {/* In Figma: left -5.87%, top -16.36%, w: 14.65%, h: 34.65% relative to banner */}
           <div
-            className="absolute -left-[5.87%] -top-[16.36%] w-[14.65%] z-30 group cursor-pointer"
+            className="absolute -left-[5.87%] -top-[16.36%] w-[14.65%] z-30 group cursor-pointer transition-transform duration-300 ease-out hover:scale-110"
             title="Smiley sticker"
           >
             <img
               src={smiley}
               alt="Smiley sticker"
-              className="w-full h-auto object-contain transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-rotate-6 drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
+              className="w-full h-auto object-contain origin-center animate-spin-slow drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)] will-change-transform"
             />
           </div>
 
