@@ -44,8 +44,85 @@ export default function Hero() {
       id="hero"
       aria-label="Hero section"
       onMouseMove={handleMouseMove}
-      className="relative w-full bg-black text-white select-none overflow-hidden"
+      className="relative w-full bg-[#050507] text-white select-none overflow-hidden"
     >
+      {/* 1. Dynamic Parallax Ambient Crimson Glow (tracking cursor) */}
+      <div
+        className="absolute inset-0 pointer-events-none transition-all duration-300 ease-out"
+        style={{
+          background: `radial-gradient(900px circle at calc(50% + ${mousePos.x * 16}px) calc(46% + ${mousePos.y * 16}px), rgba(186, 31, 31, 0.18) 0%, rgba(90, 12, 22, 0.08) 38%, transparent 72%)`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* 2. Secondary Atmospheric Nebula Glow */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[750px] bg-gradient-to-b from-[#BA1F1F]/10 via-[#3a0814]/15 to-transparent blur-[140px] rounded-full pointer-events-none opacity-80"
+        aria-hidden="true"
+      />
+
+      {/* 3. Cyberpunk Geometric Matrix & Dot Grid */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen select-none"
+        style={{
+          maskImage: 'radial-gradient(circle at 50% 48%, black 30%, transparent 78%)',
+          WebkitMaskImage: 'radial-gradient(circle at 50% 48%, black 30%, transparent 78%)',
+        }}
+        aria-hidden="true"
+      >
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="cyberGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.75" />
+              <circle cx="0" cy="0" r="1.2" fill="rgba(255,255,255,0.2)" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#cyberGrid)" />
+        </svg>
+      </div>
+
+      {/* 4. Analog Film Grain & Paper Noise Texture Overlay */}
+      <svg
+        className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.15] mix-blend-overlay select-none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <filter id="heroNoise">
+          <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#heroNoise)" />
+      </svg>
+
+      {/* 5. Editorial & Cyberpunk HUD Telemetry Details */}
+      <div className="absolute inset-0 max-w-[1440px] mx-auto pointer-events-none select-none z-10 hidden sm:block">
+        {/* Top-Left Telemetry Coordinates */}
+        <div className="absolute left-6 top-6 font-mono text-[9px] tracking-widest text-neutral-500 uppercase flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-ping" />
+          <span>SYS.ONLINE // 25.5788° N, 91.8933° E</span>
+        </div>
+
+        {/* Top-Right Status */}
+        <div className="absolute right-6 top-6 font-mono text-[9px] tracking-widest text-neutral-500 uppercase">
+          [ CREATIVE PORTFOLIO • 2025 ]
+        </div>
+
+        {/* Subtle Framing Crosshair Marks at Golden Ratios */}
+        <span className="absolute left-[3%] top-[20%] text-neutral-600/50 font-mono text-[11px]">+</span>
+        <span className="absolute right-[3%] top-[20%] text-neutral-600/50 font-mono text-[11px]">+</span>
+        <span className="absolute left-[3%] bottom-[16%] text-neutral-600/50 font-mono text-[11px]">+</span>
+        <span className="absolute right-[3%] bottom-[16%] text-neutral-600/50 font-mono text-[11px]">+</span>
+      </div>
+
+      {/* 6. Soft Cinematic Edge Vignette */}
+      <div
+        className="absolute inset-0 pointer-events-none select-none"
+        style={{
+          background: 'radial-gradient(circle at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.8) 100%)',
+        }}
+        aria-hidden="true"
+      />
+
       {/* 1440x1024 Canvas Container */}
       <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/1024] min-h-[560px] sm:min-h-[640px] md:min-h-[850px] lg:min-h-[1024px]">
         
