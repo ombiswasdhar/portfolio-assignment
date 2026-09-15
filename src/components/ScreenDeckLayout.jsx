@@ -227,18 +227,16 @@ export default function ScreenDeckLayout({
       className="relative w-full min-h-screen bg-black text-white"
     >
 
-      {/* Floating Active Screen Title Pill (Deck Mode) */}
+      {/* Floating Active Screen Title Pill (Deck Mode) - Minimalist frosted capsule */}
       {scrollMode === 'deck' && (
         <div
-          className="fixed top-5 sm:top-6 left-1/2 -translate-x-1/2 z-40 pointer-events-none flex items-center gap-2.5 sm:gap-3 px-4 sm:px-5 py-1.5 sm:py-2 rounded-full hud-glass text-xs sm:text-sm md:text-base font-mono tracking-wider text-white transition-all duration-300 shadow-2xl border border-white/20 backdrop-blur-xl"
+          className="fixed top-4 sm:top-5 left-1/2 -translate-x-1/2 z-40 pointer-events-none flex items-center gap-2 px-3.5 py-1 rounded-full hud-glass text-[11px] sm:text-xs font-mono tracking-wider text-neutral-300 transition-all duration-300 shadow-lg border border-white/10 backdrop-blur-md"
         >
-          <div className="flex items-center gap-1 font-bold">
-            <span className="text-[#BA1F1F] text-sm sm:text-base">0{activeScreen + 1}</span>
-            <span className="text-neutral-500">/</span>
-            <span className="text-neutral-400 text-xs sm:text-sm">0{SCREEN_IDS.length}</span>
-          </div>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" />
-          <span className="text-white font-extrabold tracking-widest font-display text-xs sm:text-sm uppercase">
+          <span className="text-[#BA1F1F] font-bold">0{activeScreen + 1}</span>
+          <span className="text-neutral-600">/</span>
+          <span className="text-neutral-400">0{SCREEN_IDS.length}</span>
+          <span className="w-1 h-1 rounded-full bg-neutral-600" />
+          <span className="text-neutral-200 font-semibold tracking-wider uppercase text-[10px] sm:text-[11px]">
             {SCREEN_TITLES[activeScreen]}
           </span>
         </div>
