@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import ScreenHud from './ScreenHud'
 
 const SCREEN_IDS = ['hero', 'about', 'skills', 'cv']
 const SCREEN_TITLES = ['HERO', 'ABOUT ME', 'SKILL SET', 'CURRICULUM VITAE']
@@ -29,11 +28,13 @@ export default function ScreenDeckLayout({
     setActiveScreen(nextIdx)
     onScreenChange(nextIdx, SCREEN_IDS[nextIdx])
 
+    const targetId = SCREEN_IDS[nextIdx]
     if (updateHash) {
-      const targetId = SCREEN_IDS[nextIdx]
       window.history.replaceState(null, '', targetId === 'hero' ? '/' : `/#${targetId}`)
-      window.dispatchEvent(new CustomEvent('deck-screen-change', { detail: { screenId: targetId } }))
     }
+    window.dispatchEvent(new CustomEvent('deck-screen-change', {
+      detail: { screenId: targetId, screenIndex: nextIdx, scrollMode }
+    }))
 
     if (scrollMode === 'free') {
       const el = document.getElementById(SCREEN_IDS[nextIdx])
@@ -186,9 +187,12 @@ export default function ScreenDeckLayout({
   }, [scrollMode, activeScreen, onScreenChange])
 
   // Toggle between Deck View and Free Scroll
-  const toggleMode = () => {
+  const toggleMode = useCallback(() => {
     const nextMode = scrollMode === 'deck' ? 'free' : 'deck'
     setScrollMode(nextMode)
+    window.dispatchEvent(new CustomEvent('deck-screen-change', {
+      detail: { screenId: SCREEN_IDS[activeScreen], screenIndex: activeScreen, scrollMode: nextMode }
+    }))
 
     // Smooth transition between modes
     setTimeout(() => {
@@ -197,7 +201,21 @@ export default function ScreenDeckLayout({
         el.scrollIntoView({ behavior: 'smooth' })
       }
     }, 100)
-  }
+  }, [scrollMode, activeScreen])
+
+  // Listen to toggle mode from Nav component
+  useEffect(() => {
+    const handleNavToggleMode = () => toggleMode()
+    window.addEventListener('nav-toggle-mode', handleNavToggleMode)
+    return () => window.removeEventListener('nav-toggle-mode', handleNavToggleMode)
+  }, [toggleMode])
+
+  // Broadcast initial mode and screen index on mount
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('deck-screen-change', {
+      detail: { screenId: SCREEN_IDS[activeScreen], screenIndex: activeScreen, scrollMode }
+    }))
+  }, [])
 
   const childrenArray = React.Children.toArray(children)
 
@@ -208,14 +226,6 @@ export default function ScreenDeckLayout({
       onTouchEnd={handleTouchEnd}
       className="relative w-full min-h-screen bg-black text-white"
     >
-      {/* Interactive Floating Screen HUD Rail */}
-      <ScreenHud
-        currentScreen={activeScreen}
-        onSelectScreen={(idx) => goToScreen(idx, true)}
-        scrollMode={scrollMode}
-        onToggleMode={toggleMode}
-        totalScreens={SCREEN_IDS.length}
-      />
 
       {/* Floating Active Screen Title Pill (Deck Mode) */}
       {scrollMode === 'deck' && (

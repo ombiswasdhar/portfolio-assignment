@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-const navItems = [
+const screenItems = [
   {
     name: 'Home',
     path: '/',
     id: 'home',
+    number: '01',
+    screenIndex: 0,
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -25,6 +27,8 @@ const navItems = [
     name: 'About Me',
     path: '/#about',
     id: 'about',
+    number: '02',
+    screenIndex: 1,
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -44,6 +48,8 @@ const navItems = [
     name: 'Skills',
     path: '/#skills',
     id: 'skills',
+    number: '03',
+    screenIndex: 2,
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -64,6 +70,8 @@ const navItems = [
     name: 'CV',
     path: '/#cv',
     id: 'cv',
+    number: '04',
+    screenIndex: 3,
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -82,6 +90,9 @@ const navItems = [
       </svg>
     ),
   },
+]
+
+const pageItems = [
   {
     name: 'Work',
     path: '/work',
@@ -128,6 +139,9 @@ export default function Nav() {
   const location = useLocation()
   const navigate = useNavigate()
   const [activeSection, setActiveSection] = useState('home')
+  const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
+  const [scrollMode, setScrollMode] = useState('deck') // 'deck' | 'free'
+  const isHomePage = location.pathname === '/'
 
   useEffect(() => {
     if (location.pathname !== '/') {
@@ -135,7 +149,7 @@ export default function Nav() {
       return
     }
 
-    // Scroll spy: check if scrolled down to #about, #skills, or #cv
+    // Scroll spy: check if scrolled down to #about, #skills, or #cv in free scroll
     const handleScroll = () => {
       const cvEl = document.getElementById('cv')
       const skillsEl = document.getElementById('skills')
@@ -143,12 +157,16 @@ export default function Nav() {
 
       if (cvEl && cvEl.getBoundingClientRect().top <= 350) {
         setActiveSection('cv')
+        setCurrentScreenIndex(3)
       } else if (skillsEl && skillsEl.getBoundingClientRect().top <= 350) {
         setActiveSection('skills')
+        setCurrentScreenIndex(2)
       } else if (aboutEl && aboutEl.getBoundingClientRect().top <= 350) {
         setActiveSection('about')
+        setCurrentScreenIndex(1)
       } else {
         setActiveSection('home')
+        setCurrentScreenIndex(0)
       }
     }
 
@@ -157,16 +175,28 @@ export default function Nav() {
       if (screenId) {
         setActiveSection(screenId === 'hero' ? 'home' : screenId)
       }
+      if (e.detail?.screenIndex !== undefined) {
+        setCurrentScreenIndex(e.detail.screenIndex)
+      }
+      if (e.detail?.scrollMode) {
+        setScrollMode(e.detail.scrollMode)
+      }
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('deck-screen-change', handleDeckScreenChange)
     handleScroll()
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('deck-screen-change', handleDeckScreenChange)
     }
   }, [location])
+
+  const handleToggleMode = (e) => {
+    e.preventDefault()
+    window.dispatchEvent(new CustomEvent('nav-toggle-mode'))
+  }
 
   const handleClick = (e, item) => {
     // Notify ScreenDeckLayout of navigation
@@ -180,6 +210,7 @@ export default function Nav() {
           el.scrollIntoView({ behavior: 'smooth' })
           window.history.pushState(null, '', '/#about')
           setActiveSection('about')
+          setCurrentScreenIndex(1)
         }
       } else {
         navigate('/#about')
@@ -195,6 +226,7 @@ export default function Nav() {
           el.scrollIntoView({ behavior: 'smooth' })
           window.history.pushState(null, '', '/#skills')
           setActiveSection('skills')
+          setCurrentScreenIndex(2)
         }
       } else {
         navigate('/#skills')
@@ -210,6 +242,7 @@ export default function Nav() {
           el.scrollIntoView({ behavior: 'smooth' })
           window.history.pushState(null, '', '/#cv')
           setActiveSection('cv')
+          setCurrentScreenIndex(3)
         }
       } else {
         navigate('/#cv')
@@ -223,41 +256,120 @@ export default function Nav() {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         window.history.pushState(null, '', '/')
         setActiveSection('home')
+        setCurrentScreenIndex(0)
       }
     }
   }
 
   return (
-    <header className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-50 pointer-events-none">
+    <header className="fixed left-3 sm:left-6 top-1/2 -translate-y-1/2 z-50 pointer-events-none select-none">
       <nav
-        aria-label="Main Navigation"
-        className="pointer-events-auto flex flex-col items-center gap-1.5 sm:gap-2 rounded-full bg-black/85 backdrop-blur-xl p-1.5 sm:p-2 shadow-[0_16px_40px_rgba(0,0,0,0.8)] border border-white/15 ring-1 ring-white/5 transition-all duration-300"
+        aria-label="Unified Navigation and Progress Dock"
+        className="pointer-events-auto flex flex-col items-center gap-2 rounded-[26px] sm:rounded-[30px] bg-black/85 backdrop-blur-xl p-2 sm:p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] border border-white/15 ring-1 ring-white/5 transition-all duration-300"
       >
-        {navItems.map((item) => {
-          const Icon = item.icon
-          const isActive = activeSection === item.id
+        {/* Mode Switcher Pill (Home page only) */}
+        {isHomePage && (
+          <button
+            type="button"
+            onClick={handleToggleMode}
+            title={`Toggle view mode: ${scrollMode === 'deck' ? 'Deck Snap' : 'Free Scroll'}`}
+            className="group flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-red-500/50 text-[10px] font-mono text-neutral-300 hover:text-white transition-all duration-200 active:scale-95 cursor-pointer shadow-sm"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" />
+            <span className="text-[9px] font-bold tracking-wider text-neutral-300 group-hover:text-white">
+              {scrollMode === 'deck' ? 'SNAP' : 'FLOW'}
+            </span>
+          </button>
+        )}
 
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={(e) => handleClick(e, item)}
-              aria-label={item.name}
-              className={`group relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
-                isActive
-                  ? 'bg-[#BA1F1F] text-white shadow-[0_4px_16px_rgba(186,31,31,0.5)] scale-105'
-                  : 'text-neutral-400 hover:text-white hover:bg-white/10 active:scale-95'
-              }`}
+        {/* ================= SCREEN ITEMS + VERTICAL LASER PROGRESS BAR ================= */}
+        <div className="relative flex flex-col items-center gap-1.5 sm:gap-2">
+          {/* Vertical Laser Track along the left side */}
+          {isHomePage && (
+            <div
+              className="absolute left-[3px] top-3.5 bottom-3.5 w-[2px] bg-white/10 rounded-full pointer-events-none overflow-hidden"
+              aria-hidden="true"
             >
-              <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+              <div
+                className="w-full bg-[#BA1F1F] rounded-full shadow-[0_0_10px_#ba1f1f] transition-all duration-500 ease-out"
+                style={{
+                  height: `${(currentScreenIndex / (screenItems.length - 1)) * 100}%`,
+                }}
+              />
+            </div>
+          )}
 
-              {/* Tooltip on the left of each nav icon */}
-              <span className="pointer-events-none absolute right-full mr-3.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-md bg-neutral-950/95 text-white text-xs font-medium tracking-wide whitespace-nowrap opacity-0 translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 shadow-xl border border-white/15 backdrop-blur-md hidden sm:block">
-                {item.name}
-              </span>
-            </Link>
-          )
-        })}
+          {screenItems.map((item) => {
+            const Icon = item.icon
+            const isActive = activeSection === item.id
+
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={(e) => handleClick(e, item)}
+                aria-label={`${item.number} ${item.name}`}
+                className={`group relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
+                  isActive
+                    ? 'bg-[#BA1F1F] text-white shadow-[0_4px_16px_rgba(186,31,31,0.55)] scale-105'
+                    : 'text-neutral-400 hover:text-white hover:bg-white/10 active:scale-95'
+                }`}
+              >
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+
+                {/* Tooltip popping to the RIGHT */}
+                <span className="pointer-events-none absolute left-full ml-3.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-md bg-neutral-950/95 text-white text-xs font-medium tracking-wide whitespace-nowrap opacity-0 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 shadow-xl border border-white/15 backdrop-blur-md hidden sm:flex items-center gap-2 z-50">
+                  <span className="text-[#BA1F1F] font-mono text-[10px] font-bold">
+                    {item.number}
+                  </span>
+                  <span className="font-display font-medium text-[11px] tracking-wide">
+                    {item.name}
+                  </span>
+                </span>
+              </Link>
+            )
+          })}
+        </div>
+
+        {/* Hairline Divider between screens & external pages */}
+        <div className="w-5 h-[1px] bg-white/15 my-0.5" aria-hidden="true" />
+
+        {/* ================= EXTERNAL PAGE ROUTES (Work, Contact) ================= */}
+        <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+          {pageItems.map((item) => {
+            const Icon = item.icon
+            const isActive = activeSection === item.id
+
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={(e) => handleClick(e, item)}
+                aria-label={item.name}
+                className={`group relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
+                  isActive
+                    ? 'bg-[#BA1F1F] text-white shadow-[0_4px_16px_rgba(186,31,31,0.55)] scale-105'
+                    : 'text-neutral-400 hover:text-white hover:bg-white/10 active:scale-95'
+                }`}
+              >
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+
+                {/* Tooltip popping to the RIGHT */}
+                <span className="pointer-events-none absolute left-full ml-3.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-md bg-neutral-950/95 text-white text-xs font-medium tracking-wide whitespace-nowrap opacity-0 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 shadow-xl border border-white/15 backdrop-blur-md hidden sm:block z-50 font-display text-[11px]">
+                  {item.name}
+                </span>
+              </Link>
+            )
+          })}
+        </div>
+
+        {/* Keyboard Navigation Hint (Deck mode only) */}
+        {isHomePage && scrollMode === 'deck' && (
+          <div className="hidden sm:flex items-center gap-1 pt-1 opacity-50 hover:opacity-100 transition-opacity text-[8px] font-mono text-neutral-400">
+            <kbd className="px-1 py-0.5 rounded bg-white/5 border border-white/10">↑</kbd>
+            <kbd className="px-1 py-0.5 rounded bg-white/5 border border-white/10">↓</kbd>
+          </div>
+        )}
       </nav>
     </header>
   )
