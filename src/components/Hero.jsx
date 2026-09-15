@@ -97,13 +97,13 @@ export default function Hero() {
       {/* 5. Editorial & Cyberpunk HUD Telemetry Details */}
       <div className="absolute inset-0 max-w-[1440px] mx-auto pointer-events-none select-none z-10 hidden sm:block">
         {/* Top-Left Telemetry Coordinates */}
-        <div className="absolute left-6 top-6 font-mono text-[9px] tracking-widest text-neutral-500 uppercase flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-ping" />
+        <div className="absolute left-6 top-6 font-mono text-xs sm:text-sm tracking-wider text-neutral-300 uppercase flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#BA1F1F] animate-ping" />
           <span>SYS.ONLINE // 25.5788° N, 91.8933° E</span>
         </div>
 
         {/* Top-Right Status */}
-        <div className="absolute right-6 top-6 font-mono text-[9px] tracking-widest text-neutral-500 uppercase">
+        <div className="absolute right-6 top-6 font-mono text-xs sm:text-sm tracking-wider text-neutral-300 uppercase font-medium">
           [ CREATIVE PORTFOLIO • 2025 ]
         </div>
 
@@ -132,7 +132,7 @@ export default function Hero() {
           className="absolute left-4 sm:left-6 md:left-[2.29%] top-16 sm:top-14 md:top-[3.81%] z-20 flex items-center"
           title="Year 2025"
         >
-          <span className="font-display font-black text-lg sm:text-2xl md:text-[28px] leading-none tracking-[0.08em] text-white">
+          <span className="font-display font-black text-xl sm:text-2xl md:text-[32px] leading-none tracking-[0.08em] text-white">
             2025
           </span>
         </div>
@@ -141,7 +141,7 @@ export default function Hero() {
         <div
           className="absolute left-1/2 top-16 sm:top-14 md:top-[4.00%] -translate-x-1/2 z-20 flex items-center pointer-events-none"
         >
-          <span className="font-script text-2xl sm:text-3xl md:text-[34px] font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-center">
+          <span className="font-script text-3xl sm:text-4xl md:text-[44px] font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] text-center">
             portfolio
           </span>
         </div>
