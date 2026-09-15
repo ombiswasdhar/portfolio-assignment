@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react'
 import frame41 from '../assets/hero/frame41.png'
 import halftone from '../assets/hero/halftone.png'
 import portfolioText from '../assets/hero/portfolio_text.svg'
@@ -10,6 +11,26 @@ import barcode from '../assets/hero/barcode.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
 
 export default function Hero() {
+  const [scrollY, setScrollY] = useState(0)
+
+  useEffect(() => {
+    let ticking = false
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY)
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const bannerScale = Math.max(0.95, 1 - (scrollY / 3000))
+  const bannerOpacity = Math.max(0.85, 1 - (scrollY / 4000))
+
   return (
     <section
       aria-label="Hero section"
@@ -66,6 +87,12 @@ export default function Hero() {
         {/* Banner Area: responsive width on mobile, exact Figma coordinate on desktop */}
         <div
           className="absolute left-[4%] sm:left-[6%] md:left-[9.17%] top-[25%] sm:top-[25.5%] md:top-[25.88%] w-[92%] sm:w-[88%] md:w-[81.67%] h-[46%] md:h-[47.75%] z-10"
+          style={{
+            transform: `scale(${bannerScale})`,
+            opacity: bannerOpacity,
+            transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
+            willChange: 'transform, opacity',
+          }}
         >
           {/* Base Rounded Banner (Red background + Lucy anime + Halftone) */}
           <div className="relative w-full h-full rounded-[20px] sm:rounded-[32px] md:rounded-[50px] overflow-hidden bg-[#BA1F1F] shadow-[0_20px_60px_rgba(186,31,31,0.25)]">

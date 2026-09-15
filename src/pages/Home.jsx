@@ -4,6 +4,7 @@ import Nav from '../components/Nav'
 import Hero from '../components/Hero'
 import AboutSection from '../components/AboutSection'
 import SkillSetSection from '../components/SkillSetSection'
+import ScrollProgressBar from '../components/ScrollProgressBar'
 
 export default function Home() {
   const location = useLocation()
@@ -23,6 +24,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white relative selection:bg-red-600 selection:text-white">
+      <ScrollProgressBar />
       <Nav />
       <main className="w-full">
         <Hero />

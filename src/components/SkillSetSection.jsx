@@ -13,6 +13,7 @@ import {
   AutocadIcon,
   ProcreateDreamsIcon,
 } from './SkillIcons'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 const row1Apps = [
   { name: 'Procreate', Icon: ProcreateIcon, glow: 'hover:shadow-[0_14px_32px_rgba(181,23,158,0.45)]' },
@@ -54,6 +55,7 @@ const otherSkillsCol3 = [
 
 export default function SkillSetSection() {
   const [hoveredApp, setHoveredApp] = useState(null)
+  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
 
   return (
     <section
@@ -62,7 +64,12 @@ export default function SkillSetSection() {
       className="relative w-full bg-black text-white select-none overflow-hidden pt-0 pb-16 sm:pb-20 md:pb-24"
     >
       {/* Container aligned flush with AboutSection card */}
-      <div className="relative w-full max-w-[1380px] mx-auto px-3 sm:px-6 md:px-8">
+      <div
+        ref={sectionRef}
+        className={`relative w-full max-w-[1380px] mx-auto px-3 sm:px-6 md:px-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+          isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
+        }`}
+      >
         
         {/* ================= POSTER CARD (Seamless zero gap with AboutSection) ================= */}
         <div className="relative w-full max-w-[1240px] mx-auto rounded-b-[24px] sm:rounded-b-[28px] lg:rounded-b-[36px] rounded-t-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-[#F2F0EA] text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-12 sm:pb-16 md:pb-20 transition-all duration-500 hover:border-white/20">
@@ -111,13 +118,17 @@ export default function SkillSetSection() {
             <div className="max-w-[760px] md:max-w-[820px] mx-auto">
               {/* Desktop / Tablet 5-Column Grid */}
               <div className="hidden sm:grid grid-cols-5 gap-y-8 md:gap-y-10 gap-x-4 sm:gap-x-8 items-start justify-items-center">
-                {/* Row 1: Procreate, Sketchbook, Figma, Premier Pro, Blender */}
-                {row1Apps.map((app) => {
+                {/* Row 1: Procreate, Sketchbook, Figma, Premier Pro, Blender with staggered scroll cascade */}
+                {row1Apps.map((app, idx) => {
                   const IconComponent = app.Icon
+                  const delay = isVisible ? `${80 + idx * 70}ms` : '0ms'
                   return (
                     <div
                       key={app.name}
-                      className="group flex flex-col items-center cursor-pointer"
+                      className={`group flex flex-col items-center cursor-pointer transition-all duration-600 ease-out ${
+                        isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-90'
+                      }`}
+                      style={{ transitionDelay: delay }}
                       onMouseEnter={() => setHoveredApp(app.name)}
                       onMouseLeave={() => setHoveredApp(null)}
                     >
@@ -131,13 +142,17 @@ export default function SkillSetSection() {
                   )
                 })}
 
-                {/* Row 2: Photoshop, Illustrator, InShot, Canva, Autocad */}
-                {row2Apps.map((app) => {
+                {/* Row 2: Photoshop, Illustrator, InShot, Canva, Autocad with staggered scroll cascade */}
+                {row2Apps.map((app, idx) => {
                   const IconComponent = app.Icon
+                  const delay = isVisible ? `${440 + idx * 70}ms` : '0ms'
                   return (
                     <div
                       key={app.name}
-                      className="group flex flex-col items-center cursor-pointer"
+                      className={`group flex flex-col items-center cursor-pointer transition-all duration-600 ease-out ${
+                        isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-90'
+                      }`}
+                      style={{ transitionDelay: delay }}
                       onMouseEnter={() => setHoveredApp(app.name)}
                       onMouseLeave={() => setHoveredApp(null)}
                     >
@@ -155,9 +170,12 @@ export default function SkillSetSection() {
                 <div aria-hidden="true" />
                 <div aria-hidden="true" />
 
-                {/* Procreate Dreams */}
+                {/* Procreate Dreams with staggered reveal */}
                 <div
-                  className="group flex flex-col items-center cursor-pointer"
+                  className={`group flex flex-col items-center cursor-pointer transition-all duration-600 ease-out ${
+                    isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-90'
+                  }`}
+                  style={{ transitionDelay: isVisible ? '790ms' : '0ms' }}
                   onMouseEnter={() => setHoveredApp('Procreate Dreams')}
                   onMouseLeave={() => setHoveredApp(null)}
                 >
@@ -169,8 +187,13 @@ export default function SkillSetSection() {
                   </span>
                 </div>
 
-                {/* Big 3 Box with Interactive Shimmer, Lift, and Animated Icon Hover */}
-                <div className="col-span-2 w-full flex items-center justify-start pl-3 sm:pl-5">
+                {/* Big 3 Box with Interactive Shimmer, Lift, and Staggered Reveal */}
+                <div
+                  className={`col-span-2 w-full flex items-center justify-start pl-3 sm:pl-5 transition-all duration-700 ease-out ${
+                    isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-90'
+                  }`}
+                  style={{ transitionDelay: isVisible ? '860ms' : '0ms' }}
+                >
                   <div className="relative overflow-hidden w-full max-w-[270px] sm:max-w-[290px] md:max-w-[310px] rounded-xl sm:rounded-2xl border border-neutral-900/90 bg-white/50 backdrop-blur-sm px-4 md:px-5 py-2 sm:py-2.5 flex items-center justify-between shadow-[0_4px_14px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.12)] hover:bg-white/80 hover:-translate-y-1 transition-all duration-300 group/big3">
                     <div className="flex items-center gap-1.5">
                       <span className="text-xl sm:text-2xl font-bold font-sans tracking-tight text-neutral-950 whitespace-nowrap">
@@ -246,11 +269,16 @@ export default function SkillSetSection() {
               </span>
             </div>
 
-            {/* 3 Columns Layout exactly matching Figma matrix with interactive tactile chips */}
+            {/* 3 Columns Layout exactly matching Figma matrix with interactive tactile chips & scroll cascades */}
             <div className="max-w-[780px] md:max-w-[840px] mx-auto">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-0 gap-x-6 sm:gap-x-10 text-center">
                 {/* Column 1: Sketching, Animation, Product design, Mood boarding */}
-                <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div
+                  className={`flex flex-col items-center space-y-2 sm:space-y-3 transition-all duration-700 ease-out ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: isVisible ? '920ms' : '0ms' }}
+                >
                   {otherSkillsCol1.map((skill) => (
                     <div
                       key={skill}
@@ -265,7 +293,12 @@ export default function SkillSetSection() {
                 </div>
 
                 {/* Column 2: Painting, Ui/Ux design, 3d design, Mind Mapping, Information Collection */}
-                <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div
+                  className={`flex flex-col items-center space-y-2 sm:space-y-3 transition-all duration-700 ease-out ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: isVisible ? '1000ms' : '0ms' }}
+                >
                   {otherSkillsCol2.map((skill) => (
                     <div
                       key={skill}
@@ -280,7 +313,12 @@ export default function SkillSetSection() {
                 </div>
 
                 {/* Column 3: Character design, Graphic design, Animation, User Personas */}
-                <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div
+                  className={`flex flex-col items-center space-y-2 sm:space-y-3 transition-all duration-700 ease-out ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: isVisible ? '1080ms' : '0ms' }}
+                >
                   {otherSkillsCol3.map((skill) => (
                     <div
                       key={skill}

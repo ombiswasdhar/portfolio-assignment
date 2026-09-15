@@ -5,9 +5,11 @@ import wordSince from '../assets/about/word_since.png'
 import wordAs from '../assets/about/word_as.png'
 import wordFlourishA from '../assets/about/word_flourish_a.png'
 import AnimatedCollage from './AnimatedCollage'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 export default function AboutSection() {
   const [activeMobileBubble, setActiveMobileBubble] = useState(null)
+  const [cardRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
 
   return (
     <section
@@ -21,7 +23,12 @@ export default function AboutSection() {
         aria-hidden="true"
       />
 
-      <div className="relative w-full max-w-[1380px] mx-auto px-3 sm:px-6 md:px-8">
+      <div
+        ref={cardRef}
+        className={`relative w-full max-w-[1380px] mx-auto px-3 sm:px-6 md:px-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+          isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
+        }`}
+      >
         
         {/* ================= DESKTOP / TABLET VIEW (md and up) ================= */}
         <div className="hidden md:block w-full">
