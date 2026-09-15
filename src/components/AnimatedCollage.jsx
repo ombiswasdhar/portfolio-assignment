@@ -15,7 +15,7 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
   const containerRef = useRef(null)
   const [tilt, setTilt] = useState({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
 
-  // Interactive 3D tilt tracking for the Polaroid card
+  // Interactive 3D tilt tracking for the Polaroid card (Mouse & Touch)
   const handleMouseMove = (e) => {
     if (!containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
@@ -33,12 +33,33 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
     setTilt({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
   }
 
+  // Mobile touch gesture tracking
+  const handleTouchMove = (e) => {
+    if (!containerRef.current || !e.touches[0]) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const touch = e.touches[0]
+    const px = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width))
+    const py = Math.max(0, Math.min(1, (touch.clientY - rect.top) / rect.height))
+
+    const tiltX = (py - 0.5) * -16
+    const tiltY = (px - 0.5) * 16
+
+    setTilt({ x: tiltX, y: tiltY, isHovered: true, px, py })
+  }
+
+  const handleTouchEnd = () => {
+    setTilt({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
+  }
+
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative w-full aspect-[504/738] select-none ${className}`}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
+      className={`relative w-full aspect-[504/738] select-none touch-pan-y ${className}`}
       style={{ perspective: '1000px' }}
       role="region"
       aria-label="About Me collage with interactive Polaroid - Om: Age 21 Years, Graphics Designer"
@@ -59,14 +80,15 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
           left: '22.8%',
           top: '74.8%',
           width: '61.7%',
-          height: '3.65%',
+          height: '4.2%',
+          minHeight: '20px',
           backgroundColor: '#ffffff',
           backgroundImage: 'radial-gradient(#888888 0.75px, transparent 0.75px)',
           backgroundSize: '3.5px 3.5px',
         }}
         aria-label="Om's design roles animated tape ticker: Graphics Designer, UI/UX Designer, Character Designer"
       >
-        <div className="animate-tape-marquee flex whitespace-nowrap items-center text-[10px] sm:text-[11px] font-display font-black tracking-wider text-black select-none">
+        <div className="animate-tape-marquee flex whitespace-nowrap items-center text-[9px] sm:text-[10px] md:text-[11px] font-display font-black tracking-wider text-black select-none">
           {[
             'GRAPHICS DESIGNER',
             'UI/UX DESIGNER',

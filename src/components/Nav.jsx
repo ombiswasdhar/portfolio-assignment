@@ -41,6 +41,26 @@ const navItems = [
     ),
   },
   {
+    name: 'Skills',
+    path: '/#skills',
+    id: 'skills',
+    icon: (props) => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M12 2L2 7L12 12L22 7L12 2Z" />
+        <path d="M2 17L12 22L22 17" />
+        <path d="M2 12L12 17L22 12" />
+      </svg>
+    ),
+  },
+  {
     name: 'Work',
     path: '/work',
     id: 'work',
@@ -93,17 +113,17 @@ export default function Nav() {
       return
     }
 
-    // Scroll spy: check if scrolled down to the #about second screen
+    // Scroll spy: check if scrolled down to #about or #skills
     const handleScroll = () => {
+      const skillsEl = document.getElementById('skills')
       const aboutEl = document.getElementById('about')
-      if (aboutEl) {
-        const rect = aboutEl.getBoundingClientRect()
-        // When top of about section approaches the viewport
-        if (rect.top <= 350) {
-          setActiveSection('about')
-        } else {
-          setActiveSection('home')
-        }
+
+      if (skillsEl && skillsEl.getBoundingClientRect().top <= 350) {
+        setActiveSection('skills')
+      } else if (aboutEl && aboutEl.getBoundingClientRect().top <= 350) {
+        setActiveSection('about')
+      } else {
+        setActiveSection('home')
       }
     }
 
@@ -128,6 +148,21 @@ export default function Nav() {
       return
     }
 
+    if (item.id === 'skills') {
+      e.preventDefault()
+      if (location.pathname === '/') {
+        const el = document.getElementById('skills')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+          window.history.pushState(null, '', '/#skills')
+          setActiveSection('skills')
+        }
+      } else {
+        navigate('/#skills')
+      }
+      return
+    }
+
     if (item.id === 'home') {
       if (location.pathname === '/') {
         e.preventDefault()
@@ -139,10 +174,10 @@ export default function Nav() {
   }
 
   return (
-    <header className="sticky top-6 z-50 flex justify-center px-4 w-full pointer-events-none">
+    <header className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-50 pointer-events-none">
       <nav
         aria-label="Main Navigation"
-        className="pointer-events-auto flex items-center gap-1.5 rounded-full bg-black/80 backdrop-blur-xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.6)] border border-white/15 ring-1 ring-white/5 transition-all duration-300"
+        className="pointer-events-auto flex flex-col items-center gap-1.5 sm:gap-2 rounded-full bg-black/85 backdrop-blur-xl p-1.5 sm:p-2 shadow-[0_16px_40px_rgba(0,0,0,0.8)] border border-white/15 ring-1 ring-white/5 transition-all duration-300"
       >
         {navItems.map((item) => {
           const Icon = item.icon
@@ -154,14 +189,18 @@ export default function Nav() {
               to={item.path}
               onClick={(e) => handleClick(e, item)}
               aria-label={item.name}
-              title={item.name}
-              className={`group relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
+              className={`group relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
                 isActive
                   ? 'bg-[#BA1F1F] text-white shadow-[0_4px_16px_rgba(186,31,31,0.5)] scale-105'
                   : 'text-neutral-400 hover:text-white hover:bg-white/10 active:scale-95'
               }`}
             >
-              <Icon className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+              <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+
+              {/* Tooltip on the left of each nav icon */}
+              <span className="pointer-events-none absolute right-full mr-3.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-md bg-neutral-950/95 text-white text-xs font-medium tracking-wide whitespace-nowrap opacity-0 translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 shadow-xl border border-white/15 backdrop-blur-md hidden sm:block">
+                {item.name}
+              </span>
             </Link>
           )
         })}

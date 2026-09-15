@@ -16,22 +16,22 @@ export default function Hero() {
       className="relative w-full bg-black text-white select-none overflow-hidden"
     >
       {/* 1440x1024 Canvas Container */}
-      <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/1024] min-h-[580px] sm:min-h-[720px] md:min-h-[850px] lg:min-h-[1024px]">
+      <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/1024] min-h-[560px] sm:min-h-[640px] md:min-h-[850px] lg:min-h-[1024px]">
         
         {/* ================= TOP ROW ================= */}
         {/* 2025 - Akira / Unbounded font */}
         <div
-          className="absolute left-[2.29%] top-[3.81%] z-20 flex items-center"
+          className="absolute left-4 sm:left-6 md:left-[2.29%] top-16 sm:top-14 md:top-[3.81%] z-20 flex items-center"
           title="Year 2025"
         >
-          <span className="font-display font-black text-xl sm:text-2xl md:text-[28px] leading-none tracking-[0.08em] text-white">
+          <span className="font-display font-black text-lg sm:text-2xl md:text-[28px] leading-none tracking-[0.08em] text-white">
             2025
           </span>
         </div>
 
         {/* portfolio - Handwritten cursive script */}
         <div
-          className="absolute left-1/2 top-[4.00%] -translate-x-1/2 z-20 flex items-center pointer-events-none"
+          className="absolute left-1/2 top-16 sm:top-14 md:top-[4.00%] -translate-x-1/2 z-20 flex items-center pointer-events-none"
         >
           <span className="font-script text-2xl sm:text-3xl md:text-[34px] font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-center">
             portfolio
@@ -40,12 +40,12 @@ export default function Hero() {
 
         {/* Top-Right OM Badge */}
         <div
-          className="absolute left-[92.29%] top-[4.00%] -translate-x-1/2 z-20 flex items-center"
+          className="absolute right-4 sm:right-6 md:right-auto md:left-[92.29%] md:-translate-x-1/2 top-16 sm:top-14 md:top-[4.00%] z-20 flex items-center"
         >
           <img
             src={topLogo}
             alt="Om Biswas Monogram"
-            className="w-10 sm:w-14 md:w-[76px] h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer drop-shadow-md"
+            className="w-9 sm:w-12 md:w-[76px] h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer drop-shadow-md"
           />
         </div>
 
@@ -63,12 +63,12 @@ export default function Hero() {
         />
 
         {/* ================= CENTERPIECE BANNER ================= */}
-        {/* Banner Area: left: 9.17%, top: 25.88%, width: 81.67%, height: 47.75% */}
+        {/* Banner Area: responsive width on mobile, exact Figma coordinate on desktop */}
         <div
-          className="absolute left-[9.17%] top-[25.88%] w-[81.67%] h-[47.75%] z-10"
+          className="absolute left-[4%] sm:left-[6%] md:left-[9.17%] top-[25%] sm:top-[25.5%] md:top-[25.88%] w-[92%] sm:w-[88%] md:w-[81.67%] h-[46%] md:h-[47.75%] z-10"
         >
           {/* Base Rounded Banner (Red background + Lucy anime + Halftone) */}
-          <div className="relative w-full h-full rounded-[24px] sm:rounded-[36px] md:rounded-[50px] overflow-hidden bg-[#BA1F1F] shadow-[0_20px_60px_rgba(186,31,31,0.25)]">
+          <div className="relative w-full h-full rounded-[20px] sm:rounded-[32px] md:rounded-[50px] overflow-hidden bg-[#BA1F1F] shadow-[0_20px_60px_rgba(186,31,31,0.25)]">
             {/* Cyberpunk Lucy Anime Illustration (Left portion) */}
             <img
               src={frame41}
@@ -89,20 +89,22 @@ export default function Hero() {
           {/* ================= BANNER OVERLAYS & STICKERS ================= */}
 
           {/* 1. Metallic Smiley Sticker (top-left, breaking out of banner) */}
-          {/* In Figma: left -5.87%, top -16.36%, w: 14.65%, h: 34.65% relative to banner */}
           <div
-            className="absolute -left-[5.87%] -top-[16.36%] w-[14.65%] z-30 group cursor-pointer transition-transform duration-300 ease-out hover:scale-110"
+            className="absolute -left-[4%] sm:-left-[5.87%] -top-[14%] sm:-top-[16.36%] w-[17%] sm:w-[14.65%] z-30 group cursor-pointer transition-transform duration-300 ease-out hover:scale-110 drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
             title="Smiley sticker"
           >
             <img
               src={smiley}
               alt="Smiley sticker"
-              className="w-full h-auto object-contain origin-center animate-spin-slow drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)] will-change-transform"
+              className="w-full h-auto object-contain origin-center animate-spin-slow will-change-transform select-none pointer-events-none"
+              style={{
+                animation: 'spin-slow 8s linear infinite',
+                transformOrigin: 'center center',
+              }}
             />
           </div>
 
           {/* 2. Custom Typography: "PORTFOLIO" Vector Art */}
-          {/* In Figma: left -3.23%, top 23.72%, w: 106.41%, h: 52.15% relative to banner */}
           <div
             className="absolute -left-[3.23%] top-[23.72%] w-[106.41%] h-[52.15%] z-20 pointer-events-none flex items-center justify-center"
           >
@@ -114,9 +116,8 @@ export default function Hero() {
           </div>
 
           {/* 3. Center OM Badge (replacing the 'O' in PORTFOLiO) */}
-          {/* In Figma: left 53.49%, top 32.11%, w: 10.54%, h: 36.03% relative to banner */}
           <div
-            className="absolute left-[53.49%] top-[32.11%] w-[10.54%] z-25 group cursor-pointer"
+            className="absolute left-[53.49%] top-[32.11%] w-[11%] md:w-[10.54%] z-25 group cursor-pointer"
             title="OM Logo"
           >
             <img
@@ -127,9 +128,8 @@ export default function Hero() {
           </div>
 
           {/* 4. Crown Doodle (perched on top of the center OM badge) */}
-          {/* In Figma: left 59.95%, top 14.93%, w: 9.11%, h: 22.22% relative to banner */}
           <div
-            className="absolute left-[59.95%] top-[14.93%] w-[9.11%] z-30 group cursor-pointer pointer-events-auto"
+            className="absolute left-[59.95%] top-[14.93%] w-[10%] md:w-[9.11%] z-30 group cursor-pointer pointer-events-auto"
             title="Crown doodle"
           >
             <img
@@ -140,9 +140,8 @@ export default function Hero() {
           </div>
 
           {/* 5. Double Exclamation Action Doodle (above the letter 'L' / 'i') */}
-          {/* In Figma: left 81.12%, top 11.66%, w: 7.24%, h: 18.96% relative to banner */}
           <div
-            className="absolute left-[81.12%] top-[11.66%] w-[7.24%] z-30 group cursor-pointer pointer-events-auto"
+            className="absolute left-[81.12%] top-[11.66%] w-[7.5%] md:w-[7.24%] z-30 group cursor-pointer pointer-events-auto"
             title="Action marks doodle"
           >
             <img
@@ -153,60 +152,88 @@ export default function Hero() {
           </div>
 
           {/* 6. OM BISWAS Text (bottom-right under banner) */}
-          {/* In Figma: left 81.38%, top 101.64%, w: 22.45% relative to banner */}
           <div
-            className="absolute right-0 top-[101.64%] z-20 pt-2 sm:pt-3 text-right"
+            className="absolute right-0 top-[102%] z-20 pt-1 sm:pt-2 md:pt-3 text-right"
           >
-            <span className="font-fredoka font-bold text-lg sm:text-2xl md:text-[32px] leading-none tracking-normal text-white uppercase whitespace-nowrap">
+            <span className="font-fredoka font-bold text-base sm:text-xl md:text-[32px] leading-none tracking-normal text-white uppercase whitespace-nowrap">
               OM BISWAS
             </span>
           </div>
 
         </div>
 
-        {/* ================= BOTTOM ROW ================= */}
-        {/* Left: Symbiosis School of Planning, Architecture and Design */}
-        {/* In Figma: left 2.50%, top 90.92%, w: 18.68% */}
-        <div
-          className="absolute left-[2.50%] top-[90.92%] max-w-[280px] z-20"
-        >
-          <p className="font-fredoka font-normal text-xs sm:text-sm md:text-base lg:text-[20px] leading-snug text-white">
-            Symbiosis School of Planning,
-            <br />
-            Architecture and Design
-          </p>
+        {/* ================= DESKTOP BOTTOM ROW (md and up, exact Figma layout) ================= */}
+        <div className="hidden md:block">
+          {/* Left: Symbiosis Institute of Design */}
+          <div
+            className="absolute left-[2.50%] top-[90.92%] max-w-[280px] z-20"
+          >
+            <p className="font-fredoka font-normal text-base lg:text-[20px] leading-snug text-white">
+              Symbiosis Institute
+              <br />
+              of Design
+            </p>
+          </div>
+
+          {/* Center: Barcode */}
+          <div
+            className="absolute left-[41.81%] top-[90.43%] w-[16.32%] z-20 flex justify-center items-center"
+          >
+            <img
+              src={barcode}
+              alt="Barcode"
+              className="w-full max-w-[235px] h-auto object-contain filter invert brightness-200 pointer-events-none"
+            />
+          </div>
+
+          {/* Right: Arrow Monogram Logo */}
+          <div
+            className="absolute left-[92.22%] top-[88.09%] w-[5.49%] z-20 flex items-center justify-end"
+          >
+            <img
+              src={arrowLogo}
+              alt="Arrow monogram"
+              className="w-full max-w-[79px] h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer"
+            />
+          </div>
         </div>
 
-        {/* Center: Barcode */}
-        {/* In Figma: left 41.81%, top 90.43%, w: 16.32% */}
-        <div
-          className="absolute left-[41.81%] top-[90.43%] w-[16.32%] z-20 flex justify-center items-center"
-        >
-          <img
-            src={barcode}
-            alt="Barcode"
-            className="w-full max-w-[235px] h-auto object-contain filter invert brightness-200 pointer-events-none"
-          />
-        </div>
+        {/* ================= MOBILE BOTTOM ROW (< md, zero overlap clean flex row) ================= */}
+        <div className="md:hidden absolute bottom-3 sm:bottom-4 left-0 right-0 px-3 sm:px-6 z-20 flex items-center justify-between gap-2">
+          {/* Left: Symbiosis Institute of Design text */}
+          <div className="shrink-0 max-w-[130px] sm:max-w-[180px]">
+            <p className="font-fredoka font-normal text-[10px] sm:text-xs leading-tight text-neutral-300">
+              Symbiosis Institute
+              <br />
+              of Design
+            </p>
+          </div>
 
-        {/* Right: Arrow Monogram Logo */}
-        {/* In Figma: left 92.22%, top 88.09%, w: 5.49% */}
-        <div
-          className="absolute left-[92.22%] top-[88.09%] w-[5.49%] z-20 flex items-center justify-end"
-        >
-          <img
-            src={arrowLogo}
-            alt="Arrow monogram"
-            className="w-full max-w-[79px] h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer"
-          />
+          {/* Center: Barcode */}
+          <div className="flex-1 flex justify-center items-center px-1">
+            <img
+              src={barcode}
+              alt="Barcode"
+              className="w-20 sm:w-28 h-auto object-contain filter invert brightness-200 pointer-events-none"
+            />
+          </div>
+
+          {/* Right: Arrow Monogram Logo */}
+          <div className="shrink-0 flex items-center justify-end">
+            <img
+              src={arrowLogo}
+              alt="Arrow monogram"
+              className="w-7 sm:w-8 h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer"
+            />
+          </div>
         </div>
 
       </div>
 
       {/* Symmetrical White Line Divider below barcode with equal gap to description page */}
-      <div className="w-full flex justify-center mt-10 sm:mt-12 md:mt-14 mb-10 sm:mb-12 md:mb-14 pointer-events-none">
+      <div className="w-full flex justify-center mt-6 sm:mt-10 md:mt-14 mb-6 sm:mt-10 md:mb-14 pointer-events-none">
         <div
-          className="w-[60.28%] max-w-[868px] h-[1px] bg-white/20"
+          className="w-[88%] sm:w-[75%] md:w-[60.28%] max-w-[868px] h-[1px] bg-white/20"
           aria-hidden="true"
         />
       </div>

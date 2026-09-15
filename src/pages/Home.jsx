@@ -3,14 +3,16 @@ import { useLocation } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Hero from '../components/Hero'
 import AboutSection from '../components/AboutSection'
+import SkillSetSection from '../components/SkillSetSection'
 
 export default function Home() {
   const location = useLocation()
 
   useEffect(() => {
-    if (location.hash === '#about') {
+    if (location.hash) {
+      const targetId = location.hash.replace('#', '')
       const timer = setTimeout(() => {
-        const el = document.getElementById('about')
+        const el = document.getElementById(targetId)
         if (el) {
           el.scrollIntoView({ behavior: 'smooth' })
         }
@@ -25,6 +27,7 @@ export default function Home() {
       <main className="w-full">
         <Hero />
         <AboutSection />
+        <SkillSetSection />
       </main>
     </div>
   )

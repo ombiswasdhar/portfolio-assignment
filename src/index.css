@@ -46,6 +46,7 @@
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
+    --animate-spin-slow: spin-slow 8s linear infinite;
 }
 
 :root {
@@ -141,13 +142,21 @@
   font-family: 'Unbounded', sans-serif;
 }
 
+.font-serif-display {
+  font-family: 'Bodoni Moda', 'Playfair Display', Didot, 'Bodoni MT', Georgia, serif;
+}
+
 @keyframes spin-slow {
-  from {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite !important;
 }
 
 /* ================= Comic Text Bubble Zoom Effect ================= */
