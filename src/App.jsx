@@ -4,10 +4,12 @@ import Work from './pages/Work'
 import About from './pages/About'
 import Skills from './pages/Skills'
 import Contact from './pages/Contact'
+import CustomCursor from './components/CustomCursor'
 
 function App() {
   return (
     <BrowserRouter>
+      <CustomCursor />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/work" element={<Work />} />
