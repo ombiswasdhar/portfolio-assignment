@@ -4,6 +4,7 @@ import Nav from '../components/Nav'
 import Hero from '../components/Hero'
 import AboutSection from '../components/AboutSection'
 import SkillSetSection from '../components/SkillSetSection'
+import CVSection from '../components/CVSection'
 import ScrollProgressBar from '../components/ScrollProgressBar'
 
 export default function Home() {
@@ -30,6 +31,7 @@ export default function Home() {
         <Hero />
         <AboutSection />
         <SkillSetSection />
+        <CVSection />
       </main>
     </div>
   )
