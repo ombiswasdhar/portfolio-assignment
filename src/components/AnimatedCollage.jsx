@@ -126,19 +126,20 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
 
       {/* Yellow Hashtag Sticker overlapping the right end of the tape */}
       <div
-        className="absolute z-[14] pointer-events-none"
+        className="absolute z-[14] pointer-events-auto group/hashtag cursor-pointer"
         style={{
           right: '6.5%',
           bottom: '14.5%',
           width: '16.8%',
           height: '11.5%',
         }}
+        title="#designer"
         aria-hidden="true"
       >
         <img
           src={collageHashtag}
           alt=""
-          className="w-full h-full object-contain select-none pointer-events-none"
+          className="w-full h-full object-contain select-none pointer-events-none transition-all duration-300 ease-out group-hover/hashtag:scale-125 group-hover/hashtag:rotate-12 group-hover/hashtag:drop-shadow-[0_8px_20px_rgba(234,179,8,0.5)]"
         />
       </div>
 

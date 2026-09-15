@@ -123,7 +123,7 @@ export default function Hero() {
             <img
               src={centerLogo}
               alt="OM Center Badge"
-              className="w-full h-auto object-contain transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
+              className="w-full h-auto object-contain transition-all duration-300 ease-out group-hover:scale-110 group-hover:drop-shadow-[0_0_24px_rgba(186,31,31,0.85)] drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
             />
           </div>
 
@@ -135,7 +135,7 @@ export default function Hero() {
             <img
               src={crown}
               alt="Crown sticker"
-              className="w-full h-auto object-contain transition-transform duration-300 ease-out group-hover:scale-115 group-hover:rotate-6 drop-shadow-md"
+              className="w-full h-auto object-contain animate-float-gentle transition-transform duration-300 ease-out group-hover:scale-125 group-hover:rotate-12 drop-shadow-md"
             />
           </div>
 
@@ -147,7 +147,7 @@ export default function Hero() {
             <img
               src={doodle}
               alt="Action marks doodle"
-              className="w-full h-auto object-contain transition-transform duration-300 ease-out group-hover:scale-115 group-hover:-rotate-6 drop-shadow-md"
+              className="w-full h-auto object-contain animate-float-reverse transition-transform duration-300 ease-out group-hover:scale-125 group-hover:-translate-y-2 drop-shadow-md"
             />
           </div>
 
@@ -193,7 +193,7 @@ export default function Hero() {
             <img
               src={arrowLogo}
               alt="Arrow monogram"
-              className="w-full max-w-[79px] h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer"
+              className="w-full max-w-[79px] h-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300 cursor-pointer"
             />
           </div>
         </div>
@@ -223,19 +223,42 @@ export default function Hero() {
             <img
               src={arrowLogo}
               alt="Arrow monogram"
-              className="w-7 sm:w-8 h-auto object-contain hover:scale-105 transition-transform duration-300 cursor-pointer"
+              className="w-7 sm:w-8 h-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300 cursor-pointer"
             />
           </div>
         </div>
 
       </div>
 
-      {/* Symmetrical White Line Divider below barcode with equal gap to description page */}
-      <div className="w-full flex justify-center mt-6 sm:mt-10 md:mt-14 mb-6 sm:mt-10 md:mb-14 pointer-events-none">
+      {/* Symmetrical White Line Divider below barcode with animated scroll down cue */}
+      <div className="w-full flex flex-col items-center justify-center mt-6 sm:mt-8 md:mt-10 mb-4 sm:mb-6 md:mb-8">
         <div
           className="w-[88%] sm:w-[75%] md:w-[60.28%] max-w-[868px] h-[1px] bg-white/20"
           aria-hidden="true"
         />
+        
+        {/* Subtle Animated Scroll Indicator */}
+        <a
+          href="#about"
+          className="group flex flex-col items-center gap-1 mt-3 sm:mt-4 text-neutral-400 hover:text-white transition-colors duration-300 pointer-events-auto select-none"
+          aria-label="Scroll down to About Me section"
+        >
+          <span className="text-[10px] sm:text-[11px] font-mono tracking-widest uppercase opacity-60 group-hover:opacity-100 transition-opacity">
+            Scroll to explore
+          </span>
+          <svg
+            className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-scroll-cue text-neutral-400 group-hover:text-[#BA1F1F] transition-colors"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="7 13 12 18 17 13" />
+            <polyline points="7 6 12 11 17 6" />
+          </svg>
+        </a>
       </div>
     </section>
   )
