@@ -12,6 +12,7 @@ import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     let ticking = false
@@ -28,12 +29,21 @@ export default function Hero() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const handleMouseMove = (e) => {
+    const { innerWidth, innerHeight } = window
+    const x = ((e.clientX / innerWidth) - 0.5) * 16
+    const y = ((e.clientY / innerHeight) - 0.5) * 16
+    setMousePos({ x, y })
+  }
+
   const bannerScale = Math.max(0.95, 1 - (scrollY / 3000))
   const bannerOpacity = Math.max(0.85, 1 - (scrollY / 4000))
 
   return (
     <section
+      id="hero"
       aria-label="Hero section"
+      onMouseMove={handleMouseMove}
       className="relative w-full bg-black text-white select-none overflow-hidden"
     >
       {/* 1440x1024 Canvas Container */}
@@ -88,9 +98,9 @@ export default function Hero() {
         <div
           className="absolute left-[4%] sm:left-[6%] md:left-[9.17%] top-[25%] sm:top-[25.5%] md:top-[25.88%] w-[92%] sm:w-[88%] md:w-[81.67%] h-[46%] md:h-[47.75%] z-10"
           style={{
-            transform: `scale(${bannerScale})`,
+            transform: `perspective(1200px) rotateX(${-mousePos.y * 0.35}deg) rotateY(${mousePos.x * 0.35}deg) scale(${bannerScale})`,
             opacity: bannerOpacity,
-            transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
+            transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
             willChange: 'transform, opacity',
           }}
         >
@@ -119,6 +129,10 @@ export default function Hero() {
           <div
             className="absolute -left-[4%] sm:-left-[5.87%] -top-[14%] sm:-top-[16.36%] w-[17%] sm:w-[14.65%] z-30 group cursor-pointer transition-transform duration-300 ease-out hover:scale-110 drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
             title="Smiley sticker"
+            style={{
+              transform: `translate3d(${mousePos.x * 0.9}px, ${mousePos.y * 0.9}px, 0)`,
+              transition: 'transform 0.2s ease-out',
+            }}
           >
             <img
               src={smiley}
@@ -158,6 +172,10 @@ export default function Hero() {
           <div
             className="absolute left-[59.95%] top-[14.93%] w-[10%] md:w-[9.11%] z-30 group cursor-pointer pointer-events-auto"
             title="Crown doodle"
+            style={{
+              transform: `translate3d(${-mousePos.x * 0.7}px, ${-mousePos.y * 0.7}px, 0)`,
+              transition: 'transform 0.2s ease-out',
+            }}
           >
             <img
               src={crown}
@@ -170,6 +188,10 @@ export default function Hero() {
           <div
             className="absolute left-[81.12%] top-[11.66%] w-[7.5%] md:w-[7.24%] z-30 group cursor-pointer pointer-events-auto"
             title="Action marks doodle"
+            style={{
+              transform: `translate3d(${mousePos.x * 0.6}px, ${-mousePos.y * 0.6}px, 0)`,
+              transition: 'transform 0.2s ease-out',
+            }}
           >
             <img
               src={doodle}

@@ -6,6 +6,7 @@ import AboutSection from '../components/AboutSection'
 import SkillSetSection from '../components/SkillSetSection'
 import CVSection from '../components/CVSection'
 import ScrollProgressBar from '../components/ScrollProgressBar'
+import ScreenDeckLayout from '../components/ScreenDeckLayout'
 
 export default function Home() {
   const location = useLocation()
@@ -28,10 +29,12 @@ export default function Home() {
       <ScrollProgressBar />
       <Nav />
       <main className="w-full">
-        <Hero />
-        <AboutSection />
-        <SkillSetSection />
-        <CVSection />
+        <ScreenDeckLayout activeHash={location.hash}>
+          <Hero />
+          <AboutSection />
+          <SkillSetSection />
+          <CVSection />
+        </ScreenDeckLayout>
       </main>
     </div>
   )

@@ -353,3 +353,51 @@
 .cursor-dot--click {
   transform: scale(1.3) !important;
 }
+
+/* ================= 3D Screen Deck & Cinematic Scroll Utilities ================= */
+.deck-viewport {
+  perspective: 1400px;
+  perspective-origin: center center;
+  overflow: hidden;
+}
+
+.deck-card-transition {
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity, filter;
+}
+
+/* Stacking card deck in continuous scroll mode */
+.stack-card-layer {
+  position: sticky;
+  top: 0;
+  will-change: transform, opacity, filter;
+  transition: transform 0.3s ease-out, filter 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* Subtle glassmorphic HUD pill */
+.hud-glass {
+  background: rgba(10, 10, 12, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.hud-glass-active {
+  background: rgba(26, 26, 30, 0.9);
+  border-color: rgba(186, 31, 31, 0.5);
+  box-shadow: 0 0 20px rgba(186, 31, 31, 0.3), inset 0 0 12px rgba(186, 31, 31, 0.1);
+}
+
+/* Scroll snap container helper */
+.scroll-snap-y-mandatory {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.scroll-snap-align-start {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}

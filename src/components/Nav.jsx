@@ -152,12 +152,26 @@ export default function Nav() {
       }
     }
 
+    const handleDeckScreenChange = (e) => {
+      const screenId = e.detail?.screenId
+      if (screenId) {
+        setActiveSection(screenId === 'hero' ? 'home' : screenId)
+      }
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('deck-screen-change', handleDeckScreenChange)
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('deck-screen-change', handleDeckScreenChange)
+    }
   }, [location])
 
   const handleClick = (e, item) => {
+    // Notify ScreenDeckLayout of navigation
+    window.dispatchEvent(new CustomEvent('nav-screen-change', { detail: { screenId: item.id } }))
+
     if (item.id === 'about') {
       e.preventDefault()
       if (location.pathname === '/') {
