@@ -5,6 +5,7 @@ import Hero from '../components/Hero'
 import AboutSection from '../components/AboutSection'
 import SkillSetSection from '../components/SkillSetSection'
 import CVSection from '../components/CVSection'
+import ContentsSection from '../components/ContentsSection'
 import ScrollProgressBar from '../components/ScrollProgressBar'
 import ScreenDeckLayout from '../components/ScreenDeckLayout'
 
@@ -34,6 +35,7 @@ export default function Home() {
           <AboutSection />
           <SkillSetSection />
           <CVSection />
+          <ContentsSection />
         </ScreenDeckLayout>
       </main>
     </div>

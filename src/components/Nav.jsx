@@ -90,13 +90,12 @@ const screenItems = [
       </svg>
     ),
   },
-]
-
-const pageItems = [
   {
     name: 'Work',
-    path: '/work',
+    path: '/#work',
     id: 'work',
+    number: '05',
+    screenIndex: 4,
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -113,6 +112,9 @@ const pageItems = [
       </svg>
     ),
   },
+]
+
+const pageItems = [
   {
     name: 'Contact',
     path: '/contact',
@@ -149,13 +151,17 @@ export default function Nav() {
       return
     }
 
-    // Scroll spy: check if scrolled down to #about, #skills, or #cv in free scroll
+    // Scroll spy: check if scrolled down to #about, #skills, #cv, or #work in free scroll
     const handleScroll = () => {
+      const workEl = document.getElementById('work')
       const cvEl = document.getElementById('cv')
       const skillsEl = document.getElementById('skills')
       const aboutEl = document.getElementById('about')
 
-      if (cvEl && cvEl.getBoundingClientRect().top <= 350) {
+      if (workEl && workEl.getBoundingClientRect().top <= 350) {
+        setActiveSection('work')
+        setCurrentScreenIndex(4)
+      } else if (cvEl && cvEl.getBoundingClientRect().top <= 350) {
         setActiveSection('cv')
         setCurrentScreenIndex(3)
       } else if (skillsEl && skillsEl.getBoundingClientRect().top <= 350) {
@@ -201,6 +207,22 @@ export default function Nav() {
   const handleClick = (e, item) => {
     // Notify ScreenDeckLayout of navigation
     window.dispatchEvent(new CustomEvent('nav-screen-change', { detail: { screenId: item.id } }))
+
+    if (item.id === 'work') {
+      e.preventDefault()
+      if (location.pathname === '/') {
+        const el = document.getElementById('work')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+          window.history.pushState(null, '', '/#work')
+          setActiveSection('work')
+          setCurrentScreenIndex(4)
+        }
+      } else {
+        navigate('/#work')
+      }
+      return
+    }
 
     if (item.id === 'about') {
       e.preventDefault()
