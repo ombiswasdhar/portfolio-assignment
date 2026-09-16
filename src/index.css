@@ -249,6 +249,27 @@
   animation: scroll-cue 2.2s ease-in-out infinite;
 }
 
+@keyframes equalizer-bounce {
+  0%, 100% { height: 4px; }
+  50% { height: 22px; }
+}
+
+@keyframes scanline-sweep {
+  0% { transform: translateY(-120%); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(320%); opacity: 0; }
+}
+
+.animate-equalizer-1 { animation: equalizer-bounce 0.85s ease-in-out infinite; }
+.animate-equalizer-2 { animation: equalizer-bounce 1.1s ease-in-out 0.15s infinite; }
+.animate-equalizer-3 { animation: equalizer-bounce 0.65s ease-in-out 0.3s infinite; }
+.animate-equalizer-4 { animation: equalizer-bounce 0.95s ease-in-out 0.1s infinite; }
+.animate-equalizer-5 { animation: equalizer-bounce 1.25s ease-in-out 0.25s infinite; }
+
+.animate-scanline {
+  animation: scanline-sweep 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
 /* ================= Comic Text Bubble Zoom Effect ================= */
 .comic-overlay-bubble {
   position: absolute;
