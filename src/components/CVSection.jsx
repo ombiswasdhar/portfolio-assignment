@@ -233,7 +233,7 @@ export default function CVSection() {
                     SOFTWARE
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto select-none py-0.5">
+                <div className="grid grid-cols-4 gap-1.5 sm:gap-2 select-none py-0.5 w-fit">
                   <ProcreateIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
                   <SketchbookIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
                   <FigmaIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
