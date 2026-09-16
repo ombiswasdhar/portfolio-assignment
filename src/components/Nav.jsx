@@ -67,11 +67,35 @@ const screenItems = [
     ),
   },
   {
+    name: 'CV',
+    path: '/#cv',
+    id: 'cv',
+    number: '04',
+    screenIndex: 3,
+    icon: (props) => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <line x1="10" y1="9" x2="8" y2="9" />
+      </svg>
+    ),
+  },
+  {
     name: 'Work',
     path: '/#work',
     id: 'work',
-    number: '04',
-    screenIndex: 3,
+    number: '05',
+    screenIndex: 4,
     icon: (props) => (
       <svg
         viewBox="0 0 24 24"
@@ -91,28 +115,6 @@ const screenItems = [
 ]
 
 const pageItems = [
-  {
-    name: 'CV / Resume',
-    path: '/cv',
-    id: 'cv',
-    icon: (props) => (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-      >
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
-        <line x1="10" y1="9" x2="8" y2="9" />
-      </svg>
-    ),
-  },
   {
     name: 'Contact',
     path: '/contact',
@@ -149,14 +151,18 @@ export default function Nav() {
       return
     }
 
-    // Scroll spy: check if scrolled down to #about, #skills, or #work in free scroll
+    // Scroll spy: check if scrolled down to #about, #skills, #cv, or #work in free scroll
     const handleScroll = () => {
       const workEl = document.getElementById('work')
+      const cvEl = document.getElementById('cv')
       const skillsEl = document.getElementById('skills')
       const aboutEl = document.getElementById('about')
 
       if (workEl && workEl.getBoundingClientRect().top <= 350) {
         setActiveSection('work')
+        setCurrentScreenIndex(4)
+      } else if (cvEl && cvEl.getBoundingClientRect().top <= 350) {
+        setActiveSection('cv')
         setCurrentScreenIndex(3)
       } else if (skillsEl && skillsEl.getBoundingClientRect().top <= 350) {
         setActiveSection('skills')
@@ -210,7 +216,7 @@ export default function Nav() {
           el.scrollIntoView({ behavior: 'smooth' })
           window.history.pushState(null, '', '/#work')
           setActiveSection('work')
-          setCurrentScreenIndex(3)
+          setCurrentScreenIndex(4)
         }
       } else {
         navigate('/#work')
@@ -251,9 +257,17 @@ export default function Nav() {
     }
 
     if (item.id === 'cv') {
-      if (location.pathname === '/cv') {
-        e.preventDefault()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+      e.preventDefault()
+      if (location.pathname === '/') {
+        const el = document.getElementById('cv')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+          window.history.pushState(null, '', '/#cv')
+          setActiveSection('cv')
+          setCurrentScreenIndex(3)
+        }
+      } else {
+        navigate('/#cv')
       }
       return
     }

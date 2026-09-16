@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import cvFullFrame from '../assets/cv/cv_full_frame.png'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import {
@@ -26,7 +25,7 @@ import {
  * - Animated crown & comic doodles
  * - Download & Print action bar
  */
-export default function CVSection({ standalone = false }) {
+export default function CVSection() {
   const containerRef = useRef(null)
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
   const [tilt, setTilt] = useState({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
@@ -66,7 +65,7 @@ export default function CVSection({ standalone = false }) {
     <section
       id="cv"
       aria-label="Curriculum Vitae / Resume section"
-      className="relative w-full bg-black text-white select-none overflow-hidden pt-12 sm:pt-16 pb-20 sm:pb-24 md:pb-28"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-12 sm:pt-16 pb-20 sm:pb-24 md:pb-28"
     >
       {/* Decorative ambient background glow */}
       <div
@@ -95,14 +94,6 @@ export default function CVSection({ standalone = false }) {
 
           {/* Action Bar: Download CV, Print, Copy Email */}
           <div className="flex items-center gap-2.5 flex-wrap justify-center">
-            {standalone && (
-              <Link
-                to="/"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/15 text-xs font-mono text-neutral-300 hover:text-white hover:bg-white/10 transition-all active:scale-95 shadow-md"
-              >
-                <span>← Home Deck</span>
-              </Link>
-            )}
 
             <button
               type="button"
