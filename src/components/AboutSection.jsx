@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import aboutFullFrame from '../assets/about/about_full_frame.png'
-import aboutLeftCard from '../assets/about/about_left_card.png'
+import aboutFullFrameCanvas from '../assets/about/about_full_frame_canvas.png'
+import aboutLeftCardCanvas from '../assets/about/about_left_card_canvas.png'
 import wordSince from '../assets/about/word_since.png'
 import wordAs from '../assets/about/word_as.png'
 import wordFlourishA from '../assets/about/word_flourish_a.png'
 import AnimatedCollage from './AnimatedCollage'
+import AboutCharacters from './AboutCharacters'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 
 export default function AboutSection() {
@@ -33,12 +34,15 @@ export default function AboutSection() {
         {/* ================= DESKTOP / TABLET VIEW (md and up) ================= */}
         <div className="hidden md:block w-full">
           <div className="relative w-full max-w-[1240px] mx-auto aspect-[1024/768] rounded-t-[28px] lg:rounded-t-[36px] rounded-b-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-t border-x border-white/10 group transition-all duration-500 hover:border-white/20">
-            {/* Original Figma Frame - untouched in original form and place */}
+            {/* Pristine Figma Frame Canvas with clean base for animated layers */}
             <img
-              src={aboutFullFrame}
+              src={aboutFullFrameCanvas}
               alt="About Me - Om, UI/UX Designer, Illustrator, Artist based in Shillong, India. Age 21 Years."
               className="w-full h-full object-cover lg:object-contain object-center select-none pointer-events-none"
             />
+
+            {/* Interactive Animated Characters & "Hello, i'm OM." */}
+            <AboutCharacters isMobile={false} />
 
             {/* Interactive Animated Overlays: 3D Tilting Polaroid & Graphics Designer Marquee Tape */}
             <div
@@ -188,13 +192,16 @@ export default function AboutSection() {
             </span>
           </div>
 
-          {/* Left Card - Clean, authentic Figma art with tap-to-zoom bubbles */}
+          {/* Left Card - Clean, authentic Figma art with animated characters & tap-to-zoom bubbles */}
           <div className="relative w-full rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.8)] border border-white/10">
             <img
-              src={aboutLeftCard}
+              src={aboutLeftCardCanvas}
               alt="Hello, i'm OM. UI/UX designer, illustrator, artist based in Shillong, India."
               className="w-full h-auto object-contain select-none pointer-events-none"
             />
+
+            {/* Interactive Animated Characters & "Hello, i'm OM." (Mobile) */}
+            <AboutCharacters isMobile={true} />
 
             {/* Mobile Tagline */}
             <div
