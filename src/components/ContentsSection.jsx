@@ -472,11 +472,21 @@ export default function ContentsSection({ standalone = false }) {
             aria-hidden="true"
           />
           <span className="relative z-10">OM BISWAS • COLLEGE PORTFOLIO</span>
-          <img
-            src={arrowLogo}
-            alt="Arrow logo"
-            className="relative z-10 w-5 h-5 object-contain filter invert opacity-70 hover:opacity-100 hover:rotate-45 transition-all cursor-pointer"
-          />
+
+          <div className="relative z-10 flex items-center gap-3">
+            <a
+              href="/cv"
+              className="px-3 py-1 rounded-full bg-white/5 hover:bg-white/15 border border-white/15 text-neutral-300 hover:text-white transition-all text-[11px] font-mono flex items-center gap-1.5"
+            >
+              <span>View Full CV</span>
+              <span>→</span>
+            </a>
+            <img
+              src={arrowLogo}
+              alt="Arrow logo"
+              className="w-5 h-5 object-contain filter invert opacity-70 hover:opacity-100 hover:rotate-45 transition-all cursor-pointer"
+            />
+          </div>
         </div>
       </div>
     </section>

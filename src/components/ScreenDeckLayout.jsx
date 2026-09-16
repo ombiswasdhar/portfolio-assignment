@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 
-const SCREEN_IDS = ['hero', 'about', 'skills', 'cv', 'work']
-const SCREEN_TITLES = ['HERO', 'ABOUT ME', 'SKILL SET', 'CURRICULUM VITAE', 'CONTENTS']
+const SCREEN_IDS = ['hero', 'about', 'skills', 'work']
+const SCREEN_TITLES = ['HERO', 'ABOUT ME', 'SKILL SET', 'CONTENTS']
 
 /**
  * ScreenDeckLayout
