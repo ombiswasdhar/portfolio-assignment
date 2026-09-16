@@ -132,6 +132,7 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     overflow-x: hidden;

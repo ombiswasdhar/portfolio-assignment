@@ -7,7 +7,6 @@ import SkillSetSection from '../components/SkillSetSection'
 import CVSection from '../components/CVSection'
 import ContentsSection from '../components/ContentsSection'
 import ScrollProgressBar from '../components/ScrollProgressBar'
-import ScreenDeckLayout from '../components/ScreenDeckLayout'
 import ConstellationGrid from '@/components/ui/constellation-grid'
 
 export default function Home() {
@@ -38,14 +37,12 @@ export default function Home() {
 
       <ScrollProgressBar />
       <Nav />
-      <main className="w-full relative z-10">
-        <ScreenDeckLayout activeHash={location.hash}>
-          <Hero />
-          <AboutSection />
-          <SkillSetSection />
-          <CVSection />
-          <ContentsSection />
-        </ScreenDeckLayout>
+      <main className="w-full relative z-10 flex flex-col">
+        <Hero />
+        <AboutSection />
+        <SkillSetSection />
+        <CVSection />
+        <ContentsSection />
       </main>
     </div>
   )

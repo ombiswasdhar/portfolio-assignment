@@ -142,7 +142,6 @@ export default function Nav() {
   const navigate = useNavigate()
   const [activeSection, setActiveSection] = useState('home')
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
-  const [scrollMode, setScrollMode] = useState('deck') // 'deck' | 'free'
   const isHomePage = location.pathname === '/'
 
   useEffect(() => {
@@ -151,7 +150,7 @@ export default function Nav() {
       return
     }
 
-    // Scroll spy: check if scrolled down to #about, #skills, #cv, or #work in free scroll
+    // Scroll spy: check if scrolled down to #about, #skills, #cv, or #work
     const handleScroll = () => {
       const workEl = document.getElementById('work')
       const cvEl = document.getElementById('cv')
@@ -176,110 +175,44 @@ export default function Nav() {
       }
     }
 
-    const handleDeckScreenChange = (e) => {
-      const screenId = e.detail?.screenId
-      if (screenId) {
-        setActiveSection(screenId === 'hero' ? 'home' : screenId)
-      }
-      if (e.detail?.screenIndex !== undefined) {
-        setCurrentScreenIndex(e.detail.screenIndex)
-      }
-      if (e.detail?.scrollMode) {
-        setScrollMode(e.detail.scrollMode)
-      }
-    }
-
     window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('deck-screen-change', handleDeckScreenChange)
     handleScroll()
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('deck-screen-change', handleDeckScreenChange)
     }
   }, [location])
 
-  const handleToggleMode = (e) => {
-    e.preventDefault()
-    window.dispatchEvent(new CustomEvent('nav-toggle-mode'))
-  }
-
   const handleClick = (e, item) => {
-    // Notify ScreenDeckLayout of navigation
-    window.dispatchEvent(new CustomEvent('nav-screen-change', { detail: { screenId: item.id } }))
-
-    if (item.id === 'work') {
-      e.preventDefault()
-      if (location.pathname === '/') {
-        const el = document.getElementById('work')
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' })
-          window.history.pushState(null, '', '/#work')
-          setActiveSection('work')
-          setCurrentScreenIndex(4)
-        }
-      } else {
-        navigate('/#work')
-      }
+    if (item.id === 'contact') {
       return
     }
 
-    if (item.id === 'about') {
-      e.preventDefault()
-      if (location.pathname === '/') {
-        const el = document.getElementById('about')
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' })
-          window.history.pushState(null, '', '/#about')
-          setActiveSection('about')
-          setCurrentScreenIndex(1)
-        }
-      } else {
-        navigate('/#about')
-      }
-      return
-    }
-
-    if (item.id === 'skills') {
-      e.preventDefault()
-      if (location.pathname === '/') {
-        const el = document.getElementById('skills')
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' })
-          window.history.pushState(null, '', '/#skills')
-          setActiveSection('skills')
-          setCurrentScreenIndex(2)
-        }
-      } else {
-        navigate('/#skills')
-      }
-      return
-    }
-
-    if (item.id === 'cv') {
-      e.preventDefault()
-      if (location.pathname === '/') {
-        const el = document.getElementById('cv')
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' })
-          window.history.pushState(null, '', '/#cv')
-          setActiveSection('cv')
-          setCurrentScreenIndex(3)
-        }
-      } else {
-        navigate('/#cv')
-      }
-      return
-    }
+    e.preventDefault()
 
     if (item.id === 'home') {
       if (location.pathname === '/') {
-        e.preventDefault()
         window.scrollTo({ top: 0, behavior: 'smooth' })
         window.history.pushState(null, '', '/')
         setActiveSection('home')
         setCurrentScreenIndex(0)
+      } else {
+        navigate('/')
       }
+      return
+    }
+
+    if (location.pathname === '/') {
+      const el = document.getElementById(item.id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+        window.history.pushState(null, '', `/#${item.id}`)
+        setActiveSection(item.id)
+        const idx = screenItems.findIndex((n) => n.id === item.id)
+        if (idx >= 0) setCurrentScreenIndex(idx)
+      }
+    } else {
+      navigate(`/#${item.id}`)
     }
   }
 
@@ -289,21 +222,6 @@ export default function Nav() {
         aria-label="Unified Navigation and Progress Dock"
         className="pointer-events-auto flex flex-col items-center gap-2 rounded-[26px] sm:rounded-[30px] bg-black/85 backdrop-blur-xl p-2 sm:p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] border border-white/15 ring-1 ring-white/5 transition-all duration-300"
       >
-        {/* Mode Switcher Pill (Home page only) */}
-        {isHomePage && (
-          <button
-            type="button"
-            onClick={handleToggleMode}
-            title={`Toggle view mode: ${scrollMode === 'deck' ? 'Deck Snap' : 'Free Scroll'}`}
-            className="group flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-red-500/50 text-[10px] font-mono text-neutral-300 hover:text-white transition-all duration-200 active:scale-95 cursor-pointer shadow-sm"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" />
-            <span className="text-[9px] font-bold tracking-wider text-neutral-300 group-hover:text-white">
-              {scrollMode === 'deck' ? 'SNAP' : 'FLOW'}
-            </span>
-          </button>
-        )}
-
         {/* ================= SCREEN ITEMS + VERTICAL LASER PROGRESS BAR ================= */}
         <div className="relative flex flex-col items-center gap-1.5 sm:gap-2">
           {/* Vertical Laser Track along the left side */}
@@ -384,14 +302,6 @@ export default function Nav() {
             )
           })}
         </div>
-
-        {/* Keyboard Navigation Hint (Deck mode only) */}
-        {isHomePage && scrollMode === 'deck' && (
-          <div className="hidden sm:flex items-center gap-1 pt-1 opacity-50 hover:opacity-100 transition-opacity text-[8px] font-mono text-neutral-400">
-            <kbd className="px-1 py-0.5 rounded bg-white/5 border border-white/10">↑</kbd>
-            <kbd className="px-1 py-0.5 rounded bg-white/5 border border-white/10">↓</kbd>
-          </div>
-        )}
       </nav>
     </header>
   )

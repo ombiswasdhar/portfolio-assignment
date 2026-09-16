@@ -10,8 +10,8 @@ import { useEffect, useState, useRef } from 'react'
  * @param {boolean} options.triggerOnce - Whether to only animate once
  */
 export function useScrollReveal({
-  threshold = 0.12,
-  rootMargin = '0px 0px -60px 0px',
+  threshold = 0.05,
+  rootMargin = '80px 0px 80px 0px',
   triggerOnce = true,
 } = {}) {
   const [isVisible, setIsVisible] = useState(false)
@@ -21,10 +21,17 @@ export function useScrollReveal({
     const el = ref.current
     if (!el) return
 
+    // Immediately check if already visible in viewport
+    const rect = el.getBoundingClientRect()
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setIsVisible(true)
+      if (triggerOnce) return
+    }
+
     // Fallback if IntersectionObserver is not supported
     if (typeof IntersectionObserver === 'undefined') {
-      setIsVisible(true)
-      return
+      const timer = setTimeout(() => setIsVisible(true), 0)
+      return () => clearTimeout(timer)
     }
 
     const observer = new IntersectionObserver(
@@ -43,8 +50,14 @@ export function useScrollReveal({
 
     observer.observe(el)
 
+    // Safety fallback: ensure section is never left invisible or black
+    const safetyTimer = setTimeout(() => {
+      setIsVisible(true)
+    }, 500)
+
     return () => {
       observer.disconnect()
+      clearTimeout(safetyTimer)
     }
   }, [threshold, rootMargin, triggerOnce])
 
