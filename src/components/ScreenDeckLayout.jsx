@@ -308,7 +308,7 @@ export default function ScreenDeckLayout({
               <div
                 key={SCREEN_IDS[index] || index}
                 id={SCREEN_IDS[index]}
-                className={`absolute inset-0 w-full h-full overflow-y-auto allow-internal-scroll deck-card-transition ${
+                className={`absolute inset-0 w-full h-full overflow-y-auto allow-internal-scroll deck-card-transition no-scrollbar ${
                   isActive ? 'pointer-events-auto' : 'pointer-events-none'
                 }`}
                 style={{
@@ -316,6 +316,8 @@ export default function ScreenDeckLayout({
                   opacity,
                   filter,
                   zIndex,
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
                 }}
               >
                 <div className="w-full min-h-full flex flex-col justify-center py-10 sm:py-14 md:py-16">
