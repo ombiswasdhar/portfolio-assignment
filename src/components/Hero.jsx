@@ -44,7 +44,7 @@ export default function Hero() {
       id="hero"
       aria-label="Hero section"
       onMouseMove={handleMouseMove}
-      className="relative w-full bg-[#050507] text-white select-none overflow-hidden"
+      className="relative w-full bg-[#050507]/60 text-white select-none overflow-hidden"
     >
       {/* 1. Dynamic Parallax Ambient Crimson Glow (tracking cursor) */}
       <div

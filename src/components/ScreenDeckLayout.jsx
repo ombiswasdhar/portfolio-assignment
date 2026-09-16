@@ -224,7 +224,7 @@ export default function ScreenDeckLayout({
       ref={containerRef}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full min-h-screen bg-black text-white"
+      className="relative w-full min-h-screen bg-transparent text-white"
     >
 
       {/* Floating Active Screen Title Pill (Deck Mode) - Minimalist frosted capsule */}

@@ -15,7 +15,7 @@ export default function AboutSection() {
     <section
       id="about"
       aria-label="About Me section"
-      className="relative w-full bg-black text-white select-none overflow-hidden pt-0 pb-0"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-0"
     >
       {/* Decorative ambient background glow matching the hero banner */}
       <div

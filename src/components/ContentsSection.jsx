@@ -145,7 +145,7 @@ export default function ContentsSection() {
     <section
       id="work"
       aria-label="Selected Works and Coursework Projects"
-      className="relative w-full bg-black text-white select-none overflow-hidden pt-8 sm:pt-14 pb-16 sm:pb-24"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-8 sm:pt-14 pb-16 sm:pb-24"
     >
       {/* Dynamic Background Atmosphere Glows */}
       <div

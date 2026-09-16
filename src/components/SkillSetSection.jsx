@@ -61,7 +61,7 @@ export default function SkillSetSection() {
     <section
       id="skills"
       aria-label="My Skill Set section"
-      className="relative w-full bg-black text-white select-none overflow-hidden pt-0 pb-16 sm:pb-20 md:pb-24"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-16 sm:pb-20 md:pb-24"
     >
       {/* Container aligned flush with AboutSection card */}
       <div

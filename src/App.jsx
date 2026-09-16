@@ -6,6 +6,7 @@ import Skills from './pages/Skills'
 import CV from './pages/CV'
 import Contact from './pages/Contact'
 import CustomCursor from './components/CustomCursor'
+import ConstellationGrid from '@/components/ui/constellation-grid'
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
         <Route path="/cv" element={<CV />} />
         <Route path="/resume" element={<CV />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/demo" element={<ConstellationGrid />} />
+        <Route path="/constellation" element={<ConstellationGrid />} />
       </Routes>
     </BrowserRouter>
   )
