@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import cvFullFrame from '../assets/cv/cv_full_frame.png'
+import philosophyCardImg from '../assets/cv/philosophy_card_2x.png'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import {
   ProcreateIcon,
@@ -10,6 +11,10 @@ import {
   IllustratorIcon,
   CanvaIcon,
   ProcreateDreamsIcon,
+  InstagramIcon,
+  PhoneIcon,
+  MailIcon,
+  BehanceIcon,
 } from './SkillIcons'
 
 /**
@@ -164,32 +169,28 @@ export default function CVSection() {
 
             {/* ================= 1. HOVER ZOOM: MY PHYLOSOPHY ================= */}
             <div
-              className={`cv-zoom-card bg-[#BA1F1F] text-white p-4 sm:p-5 flex flex-col justify-between shadow-2xl ${
+              className={`cv-zoom-card cv-zoom-card--philosophy p-0 shadow-2xl overflow-hidden ${
                 pinnedCard === 'philosophy' ? 'is-active' : ''
               }`}
               style={{
-                left: '4.8%',
-                top: '3.5%',
-                width: '35.8%',
-                height: '19.0%',
+                left: '2.92%',
+                top: '1.85%',
+                width: '38.60%',
+                height: '21.00%',
                 transformOrigin: 'top left',
-                background: 'radial-gradient(circle at 45% 45%, #cf2525 0%, #a81717 60%, #850f0f 100%)',
               }}
               onClick={() => setPinnedCard(pinnedCard === 'philosophy' ? null : 'philosophy')}
               role="region"
-              aria-label="Zoomed view: Philosophy"
+              aria-label="Zoomed view: Philosophy - Keep Upgrading. Keep Evolving. ALWAYS at your Own pace."
             >
-              <div className="flex items-center justify-between border-b border-white/20 pb-1">
-                <h3 className="font-display font-extrabold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white">
-                  MY PHYLOSOPHY
-                </h3>
-              </div>
-              <div className="font-script text-lg sm:text-2xl md:text-3xl font-bold text-yellow-300 leading-tight py-1 select-text">
-                <p>Keep Upgrading.</p>
-                <p>Keep Evolving.</p>
-                <p>ALWAYS at your</p>
-                <p className="text-yellow-400">Own pace.</p>
-              </div>
+              <img
+                src={philosophyCardImg}
+                alt="My Philosophy: Keep Upgrading. Keep Evolving. ALWAYS at your Own pace."
+                className="w-full h-full object-fill pointer-events-none select-none rounded-[8px]"
+              />
+              <span className="sr-only">
+                MY PHYLOSOPHY: Keep Upgrading. Keep Evolving. ALWAYS at your Own pace.
+              </span>
             </div>
 
             {/* ================= 2. HOVER ZOOM: DESIGNER & SOFTWARE ================= */}
@@ -399,7 +400,7 @@ export default function CVSection() {
                   className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors"
                   title="Call 9383049271"
                 >
-                  <span className="w-4 h-4 rounded bg-blue-500 text-white flex items-center justify-center text-[9px] shrink-0">📞</span>
+                  <PhoneIcon className="w-4 h-4 shrink-0 shadow-sm" />
                   <span className="truncate">: 9383049271</span>
                 </a>
                 <button
@@ -408,7 +409,7 @@ export default function CVSection() {
                   className="w-full flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors text-left cursor-pointer"
                   title="Copy ombiswasdhar@gmail.com"
                 >
-                  <span className="w-4 h-4 rounded bg-cyan-500 text-white flex items-center justify-center text-[9px] shrink-0">✉️</span>
+                  <MailIcon className="w-4 h-4 shrink-0 shadow-sm" />
                   <span className="truncate">: {copiedEmail ? '✓ Copied!' : 'ombiswasdhar@gmail.com'}</span>
                 </button>
                 <a
@@ -419,7 +420,7 @@ export default function CVSection() {
                   className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors"
                   title="Instagram: @jkitsnoah"
                 >
-                  <span className="w-4 h-4 rounded bg-pink-500 text-white flex items-center justify-center text-[9px] shrink-0">📷</span>
+                  <InstagramIcon className="w-4 h-4 shrink-0 shadow-sm" />
                   <span className="truncate">: @jkitsnoah</span>
                 </a>
                 <a
@@ -430,7 +431,7 @@ export default function CVSection() {
                   className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors"
                   title="Behance: OmBiswasXD"
                 >
-                  <span className="w-4 h-4 rounded bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold shrink-0">Bē</span>
+                  <BehanceIcon className="w-4 h-4 shrink-0 shadow-sm" />
                   <span className="truncate">: OmBiswasXD</span>
                 </a>
               </div>

@@ -496,6 +496,21 @@
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 
+
+/* Philosophy zoom card: retains the authentic poster artwork identically without synthetic borders */
+.cv-zoom-card--philosophy {
+  border: none !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+}
+
+.cv-zoom-card--philosophy:hover,
+.cv-zoom-card--philosophy:focus-visible,
+.cv-zoom-card--philosophy.is-active {
+  border: none !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95) !important;
+}
+
 @media (max-width: 640px) {
   .cv-zoom-card:hover,
   .cv-zoom-card:focus-visible,
