@@ -179,6 +179,10 @@
   font-family: 'Caveat', cursive;
 }
 
+.font-kalam {
+  font-family: 'Kalam', cursive, sans-serif;
+}
+
 .font-display {
   font-family: 'Unbounded', sans-serif;
 }
