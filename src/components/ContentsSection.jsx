@@ -143,37 +143,34 @@ export default function ContentsSection({ standalone = false }) {
         aria-label="Coursework Disclaimer"
         className="relative min-h-screen w-full flex flex-col justify-between items-center px-4 sm:px-6 md:px-8 pt-8 sm:pt-14 pb-8 sm:pb-12"
       >
-        {/* Top bar with telemetry & Monogram */}
+        {/* Top bar with telemetry & Monogram - Perfectly Centered */}
         <div
           ref={disclaimerRef}
-          className={`w-full max-w-6xl mx-auto flex items-center justify-between transition-all duration-700 ${
+          className={`w-full max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-center transition-all duration-700 ${
             isDisclaimerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
         >
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest bg-white/5 border border-white/10 text-neutral-300 font-semibold shadow-sm">
+          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 shadow-sm">
+            <img
+              src={monogramTopRight}
+              alt="Om Biswas Monogram"
+              className="w-5 h-5 object-contain filter invert opacity-90 hover:opacity-100 hover:scale-110 transition-all cursor-pointer"
+            />
+            <span className="text-xs font-mono uppercase tracking-widest text-neutral-200 font-semibold">
               Portfolio Index
             </span>
             <span className="w-2 h-2 rounded-full bg-[#E84A4A] animate-pulse" />
-            <span className="hidden sm:inline-block text-[11px] font-mono text-neutral-400">
+            <span className="text-[11px] font-mono text-neutral-400">
               01 / 02 • Coursework Context
             </span>
-          </div>
-
-          <div className="flex items-center gap-3">
             {standalone && (
               <a
                 href="/"
-                className="px-3.5 py-1 rounded-full text-xs font-mono bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 transition-colors"
+                className="ml-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-white/10 hover:bg-white/20 text-neutral-300 transition-colors"
               >
                 ← Home Deck
               </a>
             )}
-            <img
-              src={monogramTopRight}
-              alt="Om Biswas Monogram"
-              className="w-7 h-7 sm:w-8 sm:h-8 object-contain filter invert opacity-80 hover:opacity-100 hover:scale-110 transition-all cursor-pointer"
-            />
           </div>
         </div>
 
@@ -191,7 +188,7 @@ export default function ContentsSection({ standalone = false }) {
               aria-hidden="true"
             />
 
-            {/* Authentic Figma Handwriting Artwork: Zoomed SVG Vector filling the landscape frame with 100% crispness */}
+            {/* Authentic Figma Handwriting Artwork: Perfectly Symmetrically Centered Vector filling landscape frame */}
             <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto py-6 sm:py-10 md:py-12 select-none flex items-center justify-center">
               <img
                 src={disclaimerHandwriting}
@@ -200,12 +197,13 @@ export default function ContentsSection({ standalone = false }) {
               />
             </div>
 
-            {/* Generous Line Spacing & Handcrafted Note metadata below the handwriting */}
-            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-neutral-400">
+            {/* Centered Line Spacing & Handcrafted Note metadata below the handwriting */}
+            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/10 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs font-mono text-neutral-400 text-center">
               <span className="flex items-center gap-2">
                 <span className="text-[#E84A4A]">✍️</span>
                 <span>Handcrafted in Procreate & Figma • Symbiosis Institute of Design</span>
               </span>
+              <span className="hidden sm:inline text-neutral-600">•</span>
               <span className="text-neutral-500">
                 2nd Year Graphic & Experience Design Coursework
               </span>
@@ -252,24 +250,20 @@ export default function ContentsSection({ standalone = false }) {
             isBoardVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
           }`}
         >
-          {/* Section Telemetry Bar */}
-          <div className="flex items-center justify-between max-w-[640px] mx-auto mb-4 sm:mb-6">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest bg-white/5 border border-white/10 text-neutral-300 font-semibold">
-                Contents Index
-              </span>
-              <span className="w-2 h-2 rounded-full bg-[#E84A4A] animate-pulse" />
-              <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-mono text-neutral-400">
-                <span>📌</span>
-                <span>Click any project to inspect case study</span>
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400">
-                02 / 02 • 3 Projects
-              </span>
-            </div>
+          {/* Section Telemetry Bar - Centered */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 max-w-[640px] mx-auto mb-4 sm:mb-6 text-center">
+            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest bg-white/5 border border-white/10 text-neutral-300 font-semibold">
+              Contents Index
+            </span>
+            <span className="w-2 h-2 rounded-full bg-[#E84A4A] animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-neutral-400">
+              <span>📌</span>
+              <span>Click any project to inspect case study</span>
+            </span>
+            <span className="hidden sm:inline text-neutral-600">•</span>
+            <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400">
+              02 / 02 • 3 Projects
+            </span>
           </div>
 
           {/* ================= DESKTOP / TABLET VIEW: AUTHENTIC 3D PINNED BOARD ================= */}
@@ -537,20 +531,20 @@ export default function ContentsSection({ standalone = false }) {
             </div>
           )}
 
-          {/* ================= BOTTOM BAR & CV BRIDGING ================= */}
-          <div className="relative mt-12 sm:mt-16 pt-4 border-t border-white/10 max-w-[640px] mx-auto flex items-center justify-between text-xs font-mono text-neutral-400">
+          {/* ================= BOTTOM BAR & CV BRIDGING - Centered ================= */}
+          <div className="relative mt-12 sm:mt-16 pt-4 border-t border-white/10 max-w-[640px] mx-auto flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs font-mono text-neutral-400 text-center">
             {/* Subtle Halftone Pattern Overlay */}
             <div
               className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[500px] h-12 opacity-15 pointer-events-none mix-blend-screen bg-repeat-x"
               style={{ backgroundImage: `url(${halftone})`, backgroundSize: 'contain' }}
               aria-hidden="true"
             />
-            <div className="relative z-10 flex items-center gap-2">
+            <div className="relative z-10 flex items-center justify-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>OM BISWAS • 2ND YEAR DESIGN COURSEWORK • SYMBIOIS</span>
             </div>
 
-            <div className="relative z-10 flex items-center gap-3">
+            <div className="relative z-10 flex items-center justify-center gap-3">
               <Link
                 to="/cv"
                 className="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/15 border border-white/15 text-neutral-200 hover:text-white transition-all text-xs font-mono flex items-center gap-2 shadow-sm"
