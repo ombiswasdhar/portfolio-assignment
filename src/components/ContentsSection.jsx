@@ -196,9 +196,9 @@ export default function ContentsSection({ standalone = false }) {
                 className="w-full h-auto object-contain filter drop-shadow-[0_2px_18px_rgba(255,255,255,0.25)] select-none pointer-events-none transform scale-100 sm:scale-[1.04] md:scale-[1.08] transition-transform duration-500 origin-center"
               />
 
-              {/* Handcrafted Subtext Note: 100% Crisp, Beautiful & Readable */}
-              <p className="font-kalam text-lg sm:text-2xl md:text-[28px] text-[#F5F5F7]/90 font-normal tracking-wide mt-3 sm:mt-5 text-center select-none filter drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]">
-                (yes , that's my handwriting , don't judge 😄)
+              {/* Subtext Note: Exact Fredoka font from Figma without emoji */}
+              <p className="font-fredoka text-sm sm:text-base md:text-lg lg:text-xl text-neutral-300 font-normal tracking-wide mt-3 sm:mt-4 text-center select-none">
+                (yes , that's my handwriting , don't judge)
               </p>
             </div>
 
