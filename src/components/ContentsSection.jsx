@@ -146,7 +146,7 @@ export default function ContentsSection({ standalone = false }) {
         {/* Top bar with telemetry & Monogram */}
         <div
           ref={disclaimerRef}
-          className={`w-full max-w-5xl mx-auto flex items-center justify-between transition-all duration-700 ${
+          className={`w-full max-w-6xl mx-auto flex items-center justify-between transition-all duration-700 ${
             isDisclaimerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
         >
@@ -177,31 +177,31 @@ export default function ContentsSection({ standalone = false }) {
           </div>
         </div>
 
-        {/* Center: Expansive Landscape Disclaimer Artwork with generous line spacing */}
+        {/* Center: Expansive Landscape Disclaimer Artwork with zoomed layout to fill the page */}
         <div
-          className={`w-full max-w-5xl mx-auto my-auto flex flex-col items-center justify-center transition-all duration-1000 delay-150 ${
+          className={`w-full max-w-6xl mx-auto my-auto flex flex-col items-center justify-center transition-all duration-1000 delay-150 ${
             isDisclaimerVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-8'
           }`}
         >
           {/* Landscape Card Frame */}
-          <div className="relative w-full rounded-[28px] sm:rounded-[36px] bg-[#0E0E12] border border-white/15 p-6 sm:p-10 md:p-12 shadow-[0_30px_90px_rgba(0,0,0,0.9)] overflow-hidden group hover:border-white/25 transition-all duration-500">
+          <div className="relative w-full rounded-[32px] sm:rounded-[44px] bg-[#0E0E12] border border-white/15 p-6 sm:p-10 md:p-14 shadow-[0_30px_100px_rgba(0,0,0,0.95)] overflow-hidden group hover:border-white/25 transition-all duration-500">
             {/* Ambient inner card glow */}
             <div
-              className="absolute -top-20 left-1/2 -translate-x-1/2 w-96 h-40 bg-red-600/10 blur-3xl rounded-full pointer-events-none"
+              className="absolute -top-24 left-1/2 -translate-x-1/2 w-[550px] h-48 bg-red-600/15 blur-3xl rounded-full pointer-events-none"
               aria-hidden="true"
             />
 
-            {/* Authentic Figma Handwriting Artwork: Pure Vector SVG, 100% Crisp at any resolution, Zero Pixelation */}
-            <div className="relative w-full max-w-2xl mx-auto py-4 sm:py-8 select-none flex items-center justify-center">
+            {/* Authentic Figma Handwriting Artwork: Zoomed SVG Vector filling the landscape frame with 100% crispness */}
+            <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto py-6 sm:py-10 md:py-12 select-none flex items-center justify-center">
               <img
                 src={disclaimerHandwriting}
                 alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework. (see, that's my handwriting , don't judge 😄)"
-                className="w-full h-auto object-contain filter drop-shadow-[0_2px_16px_rgba(255,255,255,0.22)] select-none pointer-events-none"
+                className="w-full h-auto object-contain filter drop-shadow-[0_2px_18px_rgba(255,255,255,0.25)] select-none pointer-events-none transform scale-100 sm:scale-[1.04] md:scale-[1.08] transition-transform duration-500 origin-center"
               />
             </div>
 
             {/* Generous Line Spacing & Handcrafted Note metadata below the handwriting */}
-            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-neutral-400">
+            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-neutral-400">
               <span className="flex items-center gap-2">
                 <span className="text-[#E84A4A]">✍️</span>
                 <span>Handcrafted in Procreate & Figma • Symbiosis Institute of Design</span>
@@ -214,7 +214,7 @@ export default function ContentsSection({ standalone = false }) {
         </div>
 
         {/* Bottom: Generous Spacing + Smooth Interactive Scroll-Down Guide to Section 2 */}
-        <div className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center pt-4 sm:pt-6 pb-2">
+        <div className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center pt-4 sm:pt-6 pb-2">
           <a
             href="#contents-board"
             onClick={scrollToContents}
