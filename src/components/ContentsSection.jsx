@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import disclaimerHandwriting from '../assets/work/disclaimer_handwriting.svg'
 import contentsBoardClean from '../assets/work/contents_board_clean.png'
 import previewBusinessCards from '../assets/work/preview_business_cards.png'
 import previewAureaus from '../assets/work/preview_aureaus.png'
@@ -190,39 +191,13 @@ export default function ContentsSection({ standalone = false }) {
               aria-hidden="true"
             />
 
-            {/* Pure Vector Typography: 100% Crisp at any resolution (4K/Retina), Zero Pixelation */}
-            <div className="relative w-full max-w-2xl mx-auto py-2 sm:py-4 select-none flex flex-col items-center">
-              {/* Title */}
-              <h2 className="font-script text-4xl sm:text-5xl md:text-6xl text-center text-white font-bold tracking-wide drop-shadow-[0_2px_14px_rgba(255,255,255,0.25)] mb-4 sm:mb-6 lowercase">
-                disclaimer !
-              </h2>
-
-              {/* Body text lines */}
-              <div className="font-script text-xl sm:text-2xl md:text-[28px] text-center text-neutral-100 font-medium leading-[1.65] max-w-xl mx-auto lowercase space-y-1">
-                <p>all the projects showcased here are my</p>
-                <p className="text-white font-semibold">2nd year college assignments</p>
-                <p className="text-neutral-300">(3 projects)</p>
-                <p>which i created as part of my coursework.</p>
-              </div>
-
-              {/* Hand-drawn Organic Divider Line */}
-              <div className="w-full max-w-lg mx-auto my-5 sm:my-7 flex justify-center">
-                <svg className="w-full h-3" viewBox="0 0 500 6" fill="none" preserveAspectRatio="none">
-                  <path
-                    d="M2 3.5 C 90 2, 220 5, 340 3 C 400 2, 460 4.5, 498 3.5"
-                    stroke="rgba(255, 255, 255, 0.4)"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-
-              {/* Handwriting Note (aligned to the right of the divider line) */}
-              <div className="w-full max-w-lg mx-auto flex justify-end pr-1 sm:pr-2">
-                <p className="font-script text-sm sm:text-base md:text-lg text-neutral-400 lowercase tracking-wide">
-                  (see, that's my handwriting , don't judge 😄)
-                </p>
-              </div>
+            {/* Authentic Figma Handwriting Artwork: Pure Vector SVG, 100% Crisp at any resolution, Zero Pixelation */}
+            <div className="relative w-full max-w-2xl mx-auto py-4 sm:py-8 select-none flex items-center justify-center">
+              <img
+                src={disclaimerHandwriting}
+                alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework. (see, that's my handwriting , don't judge 😄)"
+                className="w-full h-auto object-contain filter drop-shadow-[0_2px_16px_rgba(255,255,255,0.22)] select-none pointer-events-none"
+              />
             </div>
 
             {/* Generous Line Spacing & Handcrafted Note metadata below the handwriting */}
