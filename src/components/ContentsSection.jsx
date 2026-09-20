@@ -189,17 +189,12 @@ export default function ContentsSection({ standalone = false }) {
             />
 
             {/* Authentic Figma Handwriting Artwork: Perfectly Symmetrically Centered Vector filling landscape frame */}
-            <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto pt-6 sm:pt-10 md:pt-12 pb-3 sm:pb-6 select-none flex flex-col items-center justify-center">
+            <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto py-6 sm:py-10 md:py-12 select-none flex items-center justify-center">
               <img
                 src={disclaimerHandwriting}
-                alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework."
+                alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework. (yes , that's my handwriting , don't judge)"
                 className="w-full h-auto object-contain filter drop-shadow-[0_2px_18px_rgba(255,255,255,0.25)] select-none pointer-events-none transform scale-100 sm:scale-[1.04] md:scale-[1.08] transition-transform duration-500 origin-center"
               />
-
-              {/* Subtext Note: Exact Fredoka font from Figma without emoji */}
-              <p className="font-fredoka text-sm sm:text-base md:text-lg lg:text-xl text-neutral-300 font-normal tracking-wide mt-3 sm:mt-4 text-center select-none">
-                (yes , that's my handwriting , don't judge)
-              </p>
             </div>
 
             {/* Centered Line Spacing & Handcrafted Note metadata below the handwriting */}
