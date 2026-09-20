@@ -5,7 +5,6 @@ import contentsBoardClean from '../assets/work/contents_board_clean.png'
 import previewBusinessCards from '../assets/work/preview_business_cards.png'
 import previewAureaus from '../assets/work/preview_aureaus.png'
 import previewMelody from '../assets/work/preview_melody.png'
-import monogramTopRight from '../assets/skills/monogram_top_right.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
 import halftone from '../assets/hero/halftone.png'
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -89,7 +88,7 @@ const projectsData = [
   },
 ]
 
-export default function ContentsSection({ standalone = false }) {
+export default function ContentsSection() {
   const containerRef = useRef(null)
   const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
   const [boardRef, isBoardVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
@@ -141,42 +140,12 @@ export default function ContentsSection({ standalone = false }) {
       <section
         id="work"
         aria-label="Coursework Disclaimer"
-        className="relative min-h-screen w-full flex flex-col justify-between items-center px-4 sm:px-6 md:px-8 pt-8 sm:pt-14 pb-8 sm:pb-12"
+        className="relative min-h-[80vh] sm:min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-8 sm:pb-12 gap-6 sm:gap-10"
       >
-        {/* Top bar with telemetry & Monogram - Perfectly Centered */}
-        <div
-          ref={disclaimerRef}
-          className={`w-full max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-center transition-all duration-700 ${
-            isDisclaimerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-          }`}
-        >
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 shadow-sm">
-            <img
-              src={monogramTopRight}
-              alt="Om Biswas Monogram"
-              className="w-5 h-5 object-contain filter invert opacity-90 hover:opacity-100 hover:scale-110 transition-all cursor-pointer"
-            />
-            <span className="text-xs font-mono uppercase tracking-widest text-neutral-200 font-semibold">
-              Portfolio Index
-            </span>
-            <span className="w-2 h-2 rounded-full bg-[#E84A4A] animate-pulse" />
-            <span className="text-[11px] font-mono text-neutral-400">
-              01 / 02 • Coursework Context
-            </span>
-            {standalone && (
-              <a
-                href="/"
-                className="ml-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-white/10 hover:bg-white/20 text-neutral-300 transition-colors"
-              >
-                ← Home Deck
-              </a>
-            )}
-          </div>
-        </div>
-
         {/* Center: Full-Screen Landscape Disclaimer Artwork (Unboxed & Immersive) */}
         <div
-          className={`relative w-full max-w-6xl mx-auto my-auto flex flex-col items-center justify-center transition-all duration-1000 delay-150 ${
+          ref={disclaimerRef}
+          className={`relative w-full max-w-6xl mx-auto flex flex-col items-center justify-center transition-all duration-1000 ${
             isDisclaimerVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-8'
           }`}
         >

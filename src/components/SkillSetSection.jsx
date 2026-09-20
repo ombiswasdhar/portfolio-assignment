@@ -61,7 +61,7 @@ export default function SkillSetSection() {
     <section
       id="skills"
       aria-label="My Skill Set section"
-      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-16 sm:pb-20 md:pb-24"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-4 sm:pb-6 md:pb-8"
     >
       {/* Container aligned flush with AboutSection card */}
       <div
@@ -72,7 +72,7 @@ export default function SkillSetSection() {
       >
         
         {/* ================= POSTER CARD (Seamless zero gap with AboutSection) ================= */}
-        <div className="relative w-full max-w-[1240px] mx-auto rounded-b-[24px] sm:rounded-b-[28px] lg:rounded-b-[36px] rounded-t-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-[#F2F0EA] text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-12 sm:pb-16 md:pb-20 transition-all duration-500 hover:border-white/20">
+        <div className="relative w-full max-w-[1240px] mx-auto rounded-b-[24px] sm:rounded-b-[28px] lg:rounded-b-[36px] rounded-t-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-[#F2F0EA] text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20">
           
           {/* Subtle Paper Grain Overlay */}
           <svg
@@ -336,7 +336,7 @@ export default function SkillSetSection() {
           </div>
 
           {/* ================= BOTTOM-RIGHT CORNER MONOGRAM ================= */}
-          <div className="relative w-full flex justify-end mt-10 sm:mt-12 md:mt-14">
+          <div className="relative w-full flex justify-end mt-4 sm:mt-6 md:mt-8">
             <div className="sm:absolute sm:right-2 md:right-4 sm:bottom-0 pointer-events-auto">
               <img
                 src={arrowLogo}
