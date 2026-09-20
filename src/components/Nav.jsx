@@ -1,152 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import monogramTopRight from '../assets/skills/monogram_top_right.png'
 
-const screenItems = [
-  {
-    name: 'Home',
-    path: '/',
-    id: 'home',
-    number: '01',
-    screenIndex: 0,
-    icon: (props) => (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-      >
-        <path d="M4 10.5L12 3.5L20 10.5V19C20 20.1 19.1 21 18 21H6C4.9 21 4 20.1 4 19V10.5Z" />
-        <line x1="12" y1="16" x2="12" y2="18.5" />
-      </svg>
-    ),
-  },
-  {
-    name: 'About Me',
-    path: '/#about',
-    id: 'about',
-    number: '02',
-    screenIndex: 1,
-    icon: (props) => (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-      >
-        <circle cx="12" cy="7.5" r="4" />
-        <path d="M5 20.5C5 16.5 8.2 14 12 14C15.8 14 19 16.5 19 20.5" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Skills',
-    path: '/#skills',
-    id: 'skills',
-    number: '03',
-    screenIndex: 2,
-    icon: (props) => (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-      >
-        <path d="M12 2L2 7L12 12L22 7L12 2Z" />
-        <path d="M2 17L12 22L22 17" />
-        <path d="M2 12L12 17L22 12" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Work',
-    path: '/#work',
-    id: 'work',
-    number: '04',
-    screenIndex: 3,
-    icon: (props) => (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-      >
-        <rect x="2.5" y="7" width="19" height="13.5" rx="2.5" />
-        <path d="M16 7V5C16 3.9 15.1 3 14 3H10C8.9 3 8 3.9 8 5V7" />
-        <line x1="12" y1="12" x2="12" y2="14" />
-      </svg>
-    ),
-  },
-]
-
-const pageItems = [
-  {
-    name: 'CV / Resume',
-    path: '/cv',
-    id: 'cv',
-    icon: (props) => (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-      >
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
-        <line x1="10" y1="9" x2="8" y2="9" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Contact',
-    path: '/contact',
-    id: 'contact',
-    icon: (props) => (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-      >
-        <path d="M21 15C21 16.1 20.1 17 19 17H7L3 21V5C3 3.9 3.9 3 5 3H19C20.1 3 21 3.9 21 5V15Z" />
-        <line x1="8" y1="9" x2="16" y2="9" />
-        <line x1="8" y1="13" x2="13" y2="13" />
-      </svg>
-    ),
-  },
+const navItems = [
+  { id: 'home', number: '01', name: 'Home', path: '/' },
+  { id: 'about', number: '02', name: 'About', path: '/#about' },
+  { id: 'skills', number: '03', name: 'Skills', path: '/#skills' },
+  { id: 'work', number: '04', name: 'Work', path: '/#work' },
+  { id: 'cv', number: '05', name: 'CV', path: '/cv' },
+  { id: 'contact', number: '06', name: 'Contact', path: '/contact' },
 ]
 
 export default function Nav() {
   const location = useLocation()
   const navigate = useNavigate()
-  const [activeSection, setActiveSection] = useState('home')
-  const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
-  const isHomePage = location.pathname === '/'
+
+  const [scrollSection, setScrollSection] = useState('home')
+
+  // Derive active section directly based on route or scroll position
+  const activeSection =
+    location.pathname === '/cv'
+      ? 'cv'
+      : location.pathname === '/contact'
+      ? 'contact'
+      : scrollSection
 
   useEffect(() => {
-    if (location.pathname !== '/') {
-      setActiveSection(location.pathname.replace('/', ''))
-      return
-    }
+    if (location.pathname !== '/') return
 
     // Scroll spy: check if scrolled down to #about, #skills, or #work
     const handleScroll = () => {
@@ -154,18 +34,16 @@ export default function Nav() {
       const skillsEl = document.getElementById('skills')
       const aboutEl = document.getElementById('about')
 
-      if (workEl && workEl.getBoundingClientRect().top <= 350) {
-        setActiveSection('work')
-        setCurrentScreenIndex(3)
-      } else if (skillsEl && skillsEl.getBoundingClientRect().top <= 350) {
-        setActiveSection('skills')
-        setCurrentScreenIndex(2)
-      } else if (aboutEl && aboutEl.getBoundingClientRect().top <= 350) {
-        setActiveSection('about')
-        setCurrentScreenIndex(1)
+      const threshold = window.innerHeight * 0.45
+
+      if (workEl && workEl.getBoundingClientRect().top <= threshold) {
+        setScrollSection('work')
+      } else if (skillsEl && skillsEl.getBoundingClientRect().top <= threshold) {
+        setScrollSection('skills')
+      } else if (aboutEl && aboutEl.getBoundingClientRect().top <= threshold) {
+        setScrollSection('about')
       } else {
-        setActiveSection('home')
-        setCurrentScreenIndex(0)
+        setScrollSection('home')
       }
     }
 
@@ -175,15 +53,20 @@ export default function Nav() {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [location])
+  }, [location.pathname])
 
   const handleClick = (e, item) => {
-    if (item.id === 'contact') {
+    // Handling dedicated route pages
+    if (item.id === 'cv') {
+      if (location.pathname === '/cv') {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
       return
     }
 
-    if (item.id === 'cv') {
-      if (location.pathname === '/cv') {
+    if (item.id === 'contact') {
+      if (location.pathname === '/contact') {
         e.preventDefault()
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
@@ -196,22 +79,20 @@ export default function Nav() {
       if (location.pathname === '/') {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         window.history.pushState(null, '', '/')
-        setActiveSection('home')
-        setCurrentScreenIndex(0)
+        setScrollSection('home')
       } else {
         navigate('/')
       }
       return
     }
 
+    // Scrolling to in-page section on Home
     if (location.pathname === '/') {
       const el = document.getElementById(item.id)
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' })
         window.history.pushState(null, '', `/#${item.id}`)
-        setActiveSection(item.id)
-        const idx = screenItems.findIndex((n) => n.id === item.id)
-        if (idx >= 0) setCurrentScreenIndex(idx)
+        setScrollSection(item.id)
       }
     } else {
       navigate(`/#${item.id}`)
@@ -219,92 +100,135 @@ export default function Nav() {
   }
 
   return (
-    <header className="fixed left-3 sm:left-6 top-1/2 -translate-y-1/2 z-50 pointer-events-none select-none">
-      <nav
-        aria-label="Unified Navigation and Progress Dock"
-        className="pointer-events-auto flex flex-col items-center gap-2 rounded-[26px] sm:rounded-[30px] bg-black/85 backdrop-blur-xl p-2 sm:p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] border border-white/15 ring-1 ring-white/5 transition-all duration-300"
+    <>
+      {/* ========================================================================= */}
+      {/* DESKTOP LEFT SIDEBAR DOCK (KRIS NORD STYLE CAPSULES) - SHOWN ON LG+ */}
+      {/* ========================================================================= */}
+      <aside
+        aria-label="Sidebar Navigation"
+        className="hidden lg:flex fixed left-4 xl:left-8 top-1/2 -translate-y-1/2 z-50 flex-col items-start gap-2 select-none pointer-events-auto"
       >
-        {/* ================= SCREEN ITEMS + VERTICAL LASER PROGRESS BAR ================= */}
-        <div className="relative flex flex-col items-center gap-1.5 sm:gap-2">
-          {/* Vertical Laser Track along the left side */}
-          {isHomePage && (
-            <div
-              className="absolute left-[3px] top-3.5 bottom-3.5 w-[2px] bg-white/10 rounded-full pointer-events-none overflow-hidden"
-              aria-hidden="true"
-            >
-              <div
-                className="w-full bg-[#BA1F1F] rounded-full shadow-[0_0_10px_#ba1f1f] transition-all duration-500 ease-out"
-                style={{
-                  height: `${(currentScreenIndex / (screenItems.length - 1)) * 100}%`,
-                }}
-              />
-            </div>
-          )}
+        {/* Top Branding / Monogram Card */}
+        <Link
+          to="/"
+          onClick={(e) => {
+            if (location.pathname === '/') {
+              e.preventDefault()
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+              window.history.pushState(null, '', '/')
+              setScrollSection('home')
+            }
+          }}
+          className="w-[154px] h-[46px] rounded-[22px] bg-[#0E0E12]/90 hover:bg-[#15151C] backdrop-blur-xl border border-white/15 hover:border-white/30 px-3.5 flex items-center justify-between shadow-lg shadow-black/60 group transition-all duration-300 ease-out active:scale-95 mb-1 cursor-pointer"
+          title="Om Biswas — Back to top"
+        >
+          <div className="flex items-center gap-2">
+            <img
+              src={monogramTopRight}
+              alt="Om Biswas Monogram"
+              className="w-4 h-4 object-contain filter invert opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all"
+            />
+            <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-300 font-bold group-hover:text-white transition-colors">
+              OM BISWAS
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+          </div>
+        </Link>
 
-          {screenItems.map((item) => {
-            const Icon = item.icon
+        {/* Column of Numbered Pill Tabs (01 Home ... 06 Contact) */}
+        <nav className="flex flex-col gap-1.5 w-[154px]">
+          {navItems.map((item) => {
             const isActive = activeSection === item.id
 
             return (
               <Link
-                key={item.path}
+                key={item.id}
                 to={item.path}
                 onClick={(e) => handleClick(e, item)}
+                className={`group relative w-full h-[46px] rounded-[22px] px-4 flex items-center justify-between no-underline select-none transition-all duration-300 ease-out ${
+                  isActive
+                    ? 'bg-white text-black shadow-[0_6px_25px_rgba(255,255,255,0.25)] border border-white scale-[1.02] translate-x-1 font-bold z-10'
+                    : 'bg-[#0E0E12]/80 hover:bg-white/10 text-neutral-300 hover:text-white border border-white/10 hover:border-white/25 backdrop-blur-xl hover:translate-x-1.5 active:scale-95 shadow-md shadow-black/40'
+                }`}
                 aria-label={`${item.number} ${item.name}`}
-                className={`group relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
-                  isActive
-                    ? 'bg-[#BA1F1F] text-white shadow-[0_4px_16px_rgba(186,31,31,0.55)] scale-105'
-                    : 'text-neutral-400 hover:text-white hover:bg-white/10 active:scale-95'
-                }`}
               >
-                <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
-
-                {/* Tooltip popping to the RIGHT */}
-                <span className="pointer-events-none absolute left-full ml-3.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-md bg-neutral-950/95 text-white text-xs font-medium tracking-wide whitespace-nowrap opacity-0 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 shadow-xl border border-white/15 backdrop-blur-md hidden sm:flex items-center gap-2 z-50">
-                  <span className="text-[#BA1F1F] font-mono text-[10px] font-bold">
-                    {item.number}
-                  </span>
-                  <span className="font-display font-medium text-[11px] tracking-wide">
-                    {item.name}
-                  </span>
+                {/* Left: Number */}
+                <span
+                  className={`font-mono text-xs transition-colors ${
+                    isActive ? 'text-black font-bold' : 'text-neutral-500 group-hover:text-neutral-300 font-semibold'
+                  }`}
+                >
+                  {item.number}
                 </span>
-              </Link>
-            )
-          })}
-        </div>
 
-        {/* Hairline Divider between screens & external pages */}
-        <div className="w-5 h-[1px] bg-white/15 my-0.5" aria-hidden="true" />
-
-        {/* ================= EXTERNAL PAGE ROUTES (Work, Contact) ================= */}
-        <div className="flex flex-col items-center gap-1.5 sm:gap-2">
-          {pageItems.map((item) => {
-            const Icon = item.icon
-            const isActive = activeSection === item.id
-
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={(e) => handleClick(e, item)}
-                aria-label={item.name}
-                className={`group relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-all duration-300 ease-out no-underline select-none ${
-                  isActive
-                    ? 'bg-[#BA1F1F] text-white shadow-[0_4px_16px_rgba(186,31,31,0.55)] scale-105'
-                    : 'text-neutral-400 hover:text-white hover:bg-white/10 active:scale-95'
-                }`}
-              >
-                <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
-
-                {/* Tooltip popping to the RIGHT */}
-                <span className="pointer-events-none absolute left-full ml-3.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-md bg-neutral-950/95 text-white text-xs font-medium tracking-wide whitespace-nowrap opacity-0 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 shadow-xl border border-white/15 backdrop-blur-md hidden sm:block z-50 font-display text-[11px]">
+                {/* Center: Label */}
+                <span
+                  className={`font-display text-xs tracking-wide transition-colors ${
+                    isActive ? 'text-black font-bold' : 'text-neutral-200 group-hover:text-white font-medium'
+                  }`}
+                >
                   {item.name}
                 </span>
+
+                {/* Right: Toggle / Dot Indicator (Kris Nord signature element) */}
+                <span
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'bg-[#BA1F1F] shadow-[0_0_8px_rgba(186,31,31,0.85)] scale-100'
+                      : 'bg-white/20 group-hover:bg-white/60 opacity-40 group-hover:opacity-100 scale-75 group-hover:scale-100'
+                  }`}
+                />
               </Link>
             )
           })}
-        </div>
+        </nav>
+      </aside>
+
+      {/* ========================================================================= */}
+      {/* MOBILE / TABLET FLOATING DOCK (KRIS NORD PHONE MENU) - SHOWN ON < LG */}
+      {/* ========================================================================= */}
+      <nav
+        aria-label="Mobile Navigation Dock"
+        className="lg:hidden fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-20px)] sm:max-w-md p-1.5 rounded-[26px] bg-[#0E0E12]/92 backdrop-blur-2xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.95)] flex items-center justify-center gap-1 overflow-x-auto no-scrollbar pointer-events-auto select-none"
+      >
+        {navItems.map((item) => {
+          const isActive = activeSection === item.id
+
+          return (
+            <Link
+              key={item.id}
+              to={item.path}
+              onClick={(e) => handleClick(e, item)}
+              className={`group shrink-0 h-9 rounded-[18px] px-3 flex items-center gap-1.5 no-underline transition-all duration-300 ease-out active:scale-95 ${
+                isActive
+                  ? 'bg-white text-black font-bold shadow-md shadow-white/20 scale-105'
+                  : 'text-neutral-400 hover:text-white hover:bg-white/10 font-medium'
+              }`}
+              aria-label={`${item.number} ${item.name}`}
+            >
+              <span
+                className={`font-mono text-[10px] transition-colors ${
+                  isActive ? 'text-neutral-600 font-bold' : 'text-neutral-500'
+                }`}
+              >
+                {item.number}
+              </span>
+              <span
+                className={`font-display text-xs tracking-wide ${
+                  isActive ? 'text-black font-bold' : 'text-neutral-300'
+                }`}
+              >
+                {item.name}
+              </span>
+              {isActive && (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] shrink-0" />
+              )}
+            </Link>
+          )
+        })}
       </nav>
-    </header>
+    </>
   )
 }
