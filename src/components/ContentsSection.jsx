@@ -174,40 +174,36 @@ export default function ContentsSection({ standalone = false }) {
           </div>
         </div>
 
-        {/* Center: Expansive Landscape Disclaimer Artwork with zoomed layout to fill the page */}
+        {/* Center: Full-Screen Landscape Disclaimer Artwork (Unboxed & Immersive) */}
         <div
-          className={`w-full max-w-6xl mx-auto my-auto flex flex-col items-center justify-center transition-all duration-1000 delay-150 ${
+          className={`relative w-full max-w-6xl mx-auto my-auto flex flex-col items-center justify-center transition-all duration-1000 delay-150 ${
             isDisclaimerVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-8'
           }`}
         >
-          {/* Landscape Card Frame */}
-          <div className="relative w-full rounded-[32px] sm:rounded-[44px] bg-[#0E0E12] border border-white/15 p-6 sm:p-10 md:p-14 shadow-[0_30px_100px_rgba(0,0,0,0.95)] overflow-hidden group hover:border-white/25 transition-all duration-500">
-            {/* Ambient inner card glow */}
-            <div
-              className="absolute -top-24 left-1/2 -translate-x-1/2 w-[550px] h-48 bg-red-600/15 blur-3xl rounded-full pointer-events-none"
-              aria-hidden="true"
+          {/* Ambient soft glow directly behind artwork */}
+          <div
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-red-600/10 blur-[130px] rounded-full pointer-events-none"
+            aria-hidden="true"
+          />
+
+          {/* Authentic Figma Handwriting Artwork: Symmetrically Centered Vector floating naturally on screen */}
+          <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto py-4 sm:py-6 select-none flex items-center justify-center">
+            <img
+              src={disclaimerHandwriting}
+              alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework. (yes , that's my handwriting , don't judge)"
+              className="w-full h-auto object-contain filter drop-shadow-[0_2px_18px_rgba(255,255,255,0.25)] select-none pointer-events-none transform scale-100 sm:scale-[1.04] md:scale-[1.08] transition-transform duration-500 origin-center"
             />
+          </div>
 
-            {/* Authentic Figma Handwriting Artwork: Perfectly Symmetrically Centered Vector filling landscape frame */}
-            <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto py-6 sm:py-10 md:py-12 select-none flex items-center justify-center">
-              <img
-                src={disclaimerHandwriting}
-                alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework. (yes , that's my handwriting , don't judge)"
-                className="w-full h-auto object-contain filter drop-shadow-[0_2px_18px_rgba(255,255,255,0.25)] select-none pointer-events-none transform scale-100 sm:scale-[1.04] md:scale-[1.08] transition-transform duration-500 origin-center"
-              />
-            </div>
-
-            {/* Centered Line Spacing & Handcrafted Note metadata below the handwriting */}
-            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/10 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs font-mono text-neutral-400 text-center">
-              <span className="flex items-center gap-2">
-                <span className="text-[#E84A4A]">✍️</span>
-                <span>Handcrafted in Procreate & Figma • Symbiosis Institute of Design</span>
-              </span>
-              <span className="hidden sm:inline text-neutral-600">•</span>
-              <span className="text-neutral-500">
-                2nd Year Graphic & Experience Design Coursework
-              </span>
-            </div>
+          {/* Centered clean metadata below the handwriting (zero emojis) */}
+          <div className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-mono text-neutral-400 text-center">
+            <span>Handcrafted in Procreate & Figma</span>
+            <span className="text-neutral-600">•</span>
+            <span>Symbiosis Institute of Design</span>
+            <span className="hidden sm:inline text-neutral-600">•</span>
+            <span className="text-neutral-500">
+              2nd Year Graphic & Experience Design Coursework
+            </span>
           </div>
         </div>
 
