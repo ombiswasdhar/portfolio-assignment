@@ -124,13 +124,9 @@ export default function ContentsSection() {
 
   return (
     <div className="relative w-full bg-black text-white select-none overflow-hidden">
-      {/* Ambient background glow orbs */}
+      {/* Ambient background glow orb for lower contents board */}
       <div
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[550px] bg-red-950/20 blur-[150px] rounded-full pointer-events-none"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute top-3/4 right-1/4 w-[600px] h-[450px] bg-blue-950/20 blur-[140px] rounded-full pointer-events-none"
+        className="absolute bottom-1/4 right-1/4 w-[600px] h-[450px] bg-blue-950/20 blur-[140px] rounded-full pointer-events-none"
         aria-hidden="true"
       />
 
@@ -142,25 +138,19 @@ export default function ContentsSection() {
         aria-label="Coursework Disclaimer"
         className="relative min-h-[80vh] sm:min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-8 sm:pb-12 gap-6 sm:gap-10"
       >
-        {/* Center: Full-Screen Landscape Disclaimer Artwork (Unboxed & Immersive) */}
+        {/* Center: Full-Screen Landscape Disclaimer Artwork (Clean & Crisp, No Glow) */}
         <div
           ref={disclaimerRef}
           className={`relative w-full max-w-6xl mx-auto flex flex-col items-center justify-center transition-all duration-1000 ${
             isDisclaimerVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-8'
           }`}
         >
-          {/* Ambient soft glow directly behind artwork */}
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-red-600/10 blur-[130px] rounded-full pointer-events-none"
-            aria-hidden="true"
-          />
-
           {/* Authentic Figma Handwriting Artwork: Symmetrically Centered Vector floating naturally on screen */}
-          <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto py-4 sm:py-6 select-none flex items-center justify-center">
+          <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto py-2 sm:py-4 select-none flex items-center justify-center">
             <img
               src={disclaimerHandwriting}
               alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework. (yes , that's my handwriting , don't judge)"
-              className="w-full h-auto object-contain filter drop-shadow-[0_2px_18px_rgba(255,255,255,0.25)] select-none pointer-events-none transform scale-100 sm:scale-[1.04] md:scale-[1.08] transition-transform duration-500 origin-center"
+              className="w-full h-auto object-contain select-none pointer-events-none transform scale-100 sm:scale-[1.04] md:scale-[1.08] transition-transform duration-500 origin-center"
             />
           </div>
 
