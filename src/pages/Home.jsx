@@ -32,7 +32,7 @@ export default function Home() {
   }, [location, navigate])
 
   return (
-    <div className="min-h-screen bg-black text-white relative selection:bg-red-600 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white relative selection:bg-red-600 selection:text-white overflow-x-clip">
       {/* Dynamic Constellation Grid Background */}
       <div 
         className="fixed inset-0 z-0 pointer-events-none overflow-hidden opacity-60 [&_.mix-blend-difference]:opacity-0"

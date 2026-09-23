@@ -128,14 +128,14 @@
     @apply bg-black text-white;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   html {
     @apply font-sans;
     scroll-behavior: smooth;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 
@@ -565,4 +565,67 @@
 .anim-float-pointing {
   animation: about-float-3 3.6s ease-in-out infinite 0.7s;
   will-change: transform;
+}
+
+/* ================= Creative Artsy Portfolio Styles ================= */
+.font-ca-mono {
+  font-family: 'Space Mono', monospace;
+}
+
+.font-ca-display {
+  font-family: 'Unbounded', sans-serif;
+}
+
+.font-ca-hand {
+  font-family: 'Caveat', 'Kalam', cursive;
+}
+
+.font-ca-grotesk {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/Myfont-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-myfont {
+  font-family: 'MyFont', cursive, sans-serif;
+}
+
+
+.ca-tape-clip {
+  clip-path: polygon(1.5% 0, 100% 8%, 98.5% 100%, 0 92%);
+}
+
+.ca-tab-left {
+  clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
+}
+@media (min-width: 640px) {
+  .ca-tab-left {
+    clip-path: polygon(0 0, calc(100% - 68px) 0, 100% 100%, 0 100%);
+  }
+}
+
+.ca-tab-mid {
+  clip-path: polygon(40px 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
+}
+@media (min-width: 640px) {
+  .ca-tab-mid {
+    clip-path: polygon(68px 0, calc(100% - 68px) 0, 100% 100%, 0 100%);
+  }
+}
+
+.ca-tag-clip {
+  clip-path: polygon(0 26%, 14% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Authentic washi masking tape effect */
+.washi-tape {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(1px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2), inset 0 0 2px rgba(255, 255, 255, 0.4);
 }

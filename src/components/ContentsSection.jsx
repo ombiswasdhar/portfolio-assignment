@@ -1,461 +1,502 @@
-import React, { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import disclaimerHandwriting from '../assets/work/disclaimer_handwriting.svg'
-import contentsBoardClean from '../assets/work/contents_board_clean.png'
-import previewBusinessCards from '../assets/work/preview_business_cards.png'
-import previewAureaus from '../assets/work/preview_aureaus.png'
-import previewMelody from '../assets/work/preview_melody.png'
-import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
-import halftone from '../assets/hero/halftone.png'
+import projectCardsImg from '../assets/work/project_cards.jpg'
+import projectAureausImg from '../assets/work/project_aureaus.png'
+import projectMelodyImg from '../assets/work/project_melody.jpg'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 
 const projectsData = [
   {
     id: 'business-cards',
     num: '01',
-    label: '1. BUSINESS CARDS',
-    category: 'Brand Identity & Print Design',
-    color: '#E84A4A',
-    accentColor: '#B399D4',
+    tabLabel: 'Project 01',
+    tabBg: '#4338CA',
+    cardBg: '#1E1B4B',
+    accentColor: '#A78BFA',
+    date: 'MAR 19, 2026',
+    title: 'Oni Design Studios',
+    subtitle: 'Brand Identity & Print Design',
+    category: 'Brand Identity',
+    description:
+      'Students were given the assignment of researching business cards and designing their own card, either as a freelancer or an employee of any brand. Analysis of the card was done after preparing different iterations which include the logo, colours, typefaces, and dimensions.',
+    thumbnail: projectCardsImg,
+    tags: ['Brand Identity', 'Print Design', 'Figma', 'Procreate', 'Typography'],
+    deliverables: [
+      'Brand analysis & competitive benchmarking',
+      'Custom illustrated anime mascot avatar & color studies',
+      'Multiple typographic & layout iterations',
+      'Print-ready business cards with custom QR code integration',
+      'Complete vector identity guidelines for print production',
+    ],
+    highlights:
+      'Focused on balancing artistic expression with functional corporate dimensions, culminating in a striking cyberpunk purple identity with diagonal layout dynamics.',
     tools: ['Figma', 'Illustrator', 'Procreate'],
-    previewImg: previewBusinessCards,
-    quote:
-      'Students were given the assignment of researching business card and designing their own card, either as a freelancer or an employee of any brand. Analysis of the brand was done after preparing different iterations which include the logo, colours, typefaces, and dimensions.',
-    extendedDetails: {
-      type: '2nd Year College Coursework',
-      duration: '3 Weeks',
-      deliverables: [
-        'Brand analysis & competitive benchmarking',
-        'Custom illustrated character mascot & avatar',
-        'Multiple typographic & color palette iterations',
-        'Print-ready business cards with custom QR code integration',
-      ],
-      highlights:
-        'Focused on balancing artistic expression with functional corporate dimensions, culminating in a striking cyberpunk purple identity with diagonal layout dynamics.',
-    },
-    // Hotspot bounds on cropped 1152x1450 board
-    bounds: { left: '3%', top: '15.6%', width: '94%', height: '24%' },
   },
   {
     id: 'aureaus',
     num: '02',
-    label: '2. AUREAUS',
-    category: '3D Product Design & Editorial UI',
-    color: '#E84A4A',
-    accentColor: '#1A1A1A',
+    tabLabel: 'Project 02',
+    tabBg: '#191510',
+    cardBg: '#121316',
+    accentColor: '#E84A4A',
+    date: 'MAR 2, 2026',
+    title: 'Aureaus Audio',
+    subtitle: '3D Hardware & Editorial UI',
+    category: '3D Product Design',
+    description:
+      'Aureus is your go-to site for discovering top quality headphones made by the best brands for audio in the market. We focus on bringing you a carefully chosen range of luxurious, high performance headphones that combine superior sound with sleek design.',
+    thumbnail: projectAureausImg,
+    tags: ['3D Modeling', 'Blender', 'Editorial UI', 'Telemetry', 'Hardware Lookbook'],
+    deliverables: [
+      '3D headphone model rendering & lighting setups in Blender',
+      'Editorial audio lookbook & magazine spread typography',
+      'Headphone review breakdown & telemetry dashboard',
+      'Dark mode product landing page design system',
+      'Custom floating geometric props in 3D space',
+    ],
+    highlights:
+      'Seamlessly integrated tactile 3D floating geometries with monochromatic high-contrast audio hardware presentation for modern audiophiles.',
     tools: ['Blender', 'Figma', 'Photoshop'],
-    previewImg: previewAureaus,
-    quote:
-      'Aureaus is your go-to site for discovering top review headphones made by the best brands for audio in the market. We focus on bringing you a carefully curated range of flawless, high performance headphones that combine superior sound with sleek design.',
-    extendedDetails: {
-      type: '2nd Year College Coursework',
-      duration: '4 Weeks',
-      deliverables: [
-        '3D headphone model rendering & lighting setups in Blender',
-        'Editorial audio lookbook & magazine spread typography',
-        'Headphone review breakdown & telemetry dashboard',
-        'Dark mode product landing page design system',
-      ],
-      highlights:
-        'Seamlessly integrated tactile 3D floating geometries with monochromatic high-contrast audio hardware presentation for modern audiophiles.',
-    },
-    bounds: { left: '8%', top: '39.6%', width: '90%', height: '25.4%' },
   },
   {
     id: 'melody',
     num: '03',
-    label: '3. MELODY',
-    category: 'Entertainment UI/UX & Web Flow',
-    color: '#E84A4A',
-    accentColor: '#4B8BF5',
+    tabLabel: 'Project 03',
+    tabBg: '#2563EB',
+    cardBg: '#1E3A8A',
+    accentColor: '#60A5FA',
+    date: 'JAN 12, 2026',
+    title: 'Melody Tickets',
+    subtitle: 'Entertainment UI/UX & Web Flow',
+    category: 'UI/UX & User Flow',
+    description:
+      'The task was to develop a website on any subject, named "MELODY," and demonstrate a user flow for an activity on the site. For instance, outlining the steps of purchasing a movie ticket online or navigating through various sections of a website.',
+    thumbnail: projectMelodyImg,
+    tags: ['UI/UX Design', 'User Flow', 'Interactive Funnel', 'Figma', 'Ticketing'],
+    deliverables: [
+      'Complete end-to-end user flow: discover to ticket checkout',
+      'Information architecture & wireframe journeys',
+      'Interactive concert ticket seat selector & confirmation modal',
+      'Vibrant promotional campaign banner ("NEW SEASON TICKETS!!")',
+      'Mobile and desktop responsive breakpoint wireframes',
+    ],
+    highlights:
+      'Designed an intuitive booking funnel that eliminates cart friction, illustrated with floating 3D spheres and bold chromatic accents.',
     tools: ['Figma', 'UI/UX Design', 'User Flow'],
-    previewImg: previewMelody,
-    quote:
-      "The task was to develop a website on any subject named 'MELODY,' and demonstrate a user flow for an activity on the site. For instance, outlining the steps of purchasing a movie ticket online or navigating through various sections of a website.",
-    extendedDetails: {
-      type: '2nd Year College Coursework',
-      duration: '4 Weeks',
-      deliverables: [
-        'Complete end-to-end user flow: discover to ticket checkout',
-        'Information architecture & wireframe journeys',
-        'Interactive movie ticket seat selector & confirmation modal',
-        'Vibrant promotional campaign banner ("NEW SEASON TICKETS!!")',
-      ],
-      highlights:
-        'Designed an intuitive booking funnel that eliminates cart friction, illustrated with floating 3D spheres and bold chromatic accents.',
-    },
-    bounds: { left: '14%', top: '65.0%', width: '84%', height: '25.4%' },
   },
 ]
 
 export default function ContentsSection() {
-  const containerRef = useRef(null)
-  const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
-  const [boardRef, isBoardVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
-  const [tilt, setTilt] = useState({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
   const [activeProject, setActiveProject] = useState(null)
-  const [hoveredProjectId, setHoveredProjectId] = useState(null)
+  const [activeImageZoom, setActiveImageZoom] = useState(null)
+  const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
+  const [headerRef, isHeaderVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
 
-  // 3D Tilt calculation on mouse move for the bulletin board
-  const handleMouseMove = (e) => {
-    if (!containerRef.current) return
-    const rect = containerRef.current.getBoundingClientRect()
-    const px = (e.clientX - rect.left) / rect.width
-    const py = (e.clientY - rect.top) / rect.height
+  // ESC key closes modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActiveProject(null)
+        setActiveImageZoom(null)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
-    const tiltX = (py - 0.5) * -8
-    const tiltY = (px - 0.5) * 8
+  // Lock body scroll when modal is active
+  useEffect(() => {
+    if (activeProject || activeImageZoom) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [activeProject, activeImageZoom])
 
-    setTilt({ x: tiltX, y: tiltY, isHovered: true, px, py })
+  const scrollToCard = (id) => {
+    const el = document.getElementById(`project-card-${id}`)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
-    setHoveredProjectId(null)
-  }
-
-  const scrollToContents = (e) => {
+  const scrollToWorks = (e) => {
     e.preventDefault()
-    const boardEl = document.getElementById('contents-board')
-    if (boardEl) {
-      boardEl.scrollIntoView({ behavior: 'smooth' })
+    const target = document.getElementById('featured-works')
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
   return (
-    <div className="relative w-full bg-black text-white select-none overflow-hidden">
-      {/* Ambient background glow orb for lower contents board */}
+    <div id="work" className="relative w-full bg-[#08080C] text-white select-none overflow-x-clip">
+      {/* Ambient background glow orbs */}
       <div
-        className="absolute bottom-1/4 right-1/4 w-[600px] h-[450px] bg-blue-950/20 blur-[140px] rounded-full pointer-events-none"
+        className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-purple-900/10 blur-[160px] rounded-full pointer-events-none"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-1/4 right-10 w-[600px] h-[600px] bg-blue-900/10 blur-[180px] rounded-full pointer-events-none"
         aria-hidden="true"
       />
 
       {/* ========================================================================= */}
-      {/* PART 1: DISCLAIMER SECTION (FILL SCREEN / LANDSCAPE HERO WITH LINE SPACING) */}
+      {/* PART 1: DISCLAIMER PRELUDE (AUTHENTIC SYMBIOSIS HANDWRITING) */}
       {/* ========================================================================= */}
       <section
-        id="work"
         aria-label="Coursework Disclaimer"
-        className="relative min-h-[80vh] sm:min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-8 sm:pb-12 gap-6 sm:gap-10"
+        className="relative min-h-[60vh] sm:min-h-[70vh] w-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 pt-10 sm:pt-16 pb-12 sm:pb-16 gap-6 sm:gap-8"
       >
-        {/* Center: Full-Screen Landscape Disclaimer Artwork (Clean & Crisp, No Glow) */}
         <div
           ref={disclaimerRef}
-          className={`relative w-full max-w-6xl mx-auto flex flex-col items-center justify-center transition-all duration-1000 ${
+          className={`relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center transition-all duration-1000 ${
             isDisclaimerVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-8'
           }`}
         >
-          {/* Authentic Figma Handwriting Artwork: Symmetrically Centered Vector floating naturally on screen */}
-          <div className="relative w-full max-w-4xl sm:max-w-5xl mx-auto py-2 sm:py-4 select-none flex items-center justify-center">
+          {/* Authentic Symbiosis Handwriting Artwork Vector */}
+          <div className="relative w-full max-w-4xl mx-auto py-2 select-none flex items-center justify-center">
             <img
               src={disclaimerHandwriting}
               alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework. (yes , that's my handwriting , don't judge)"
-              className="w-full h-auto object-contain select-none pointer-events-none transform scale-100 sm:scale-[1.04] md:scale-[1.08] transition-transform duration-500 origin-center"
+              className="w-full h-auto object-contain select-none pointer-events-none transform scale-100 sm:scale-[1.04] transition-transform duration-500 origin-center filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
             />
           </div>
 
-          {/* Centered clean metadata below the handwriting (zero emojis) */}
-          <div className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-mono text-neutral-400 text-center">
-            <span>Handcrafted in Procreate & Figma</span>
+          {/* Metadata pill */}
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-ca-mono text-neutral-400 text-center">
+            <span className="text-neutral-300">Handcrafted in Procreate &amp; Figma</span>
             <span className="text-neutral-600">•</span>
-            <span>Symbiosis Institute of Design</span>
+            <span className="text-neutral-300">Symbiosis Institute of Design</span>
             <span className="hidden sm:inline text-neutral-600">•</span>
-            <span className="text-neutral-500">
-              2nd Year Graphic & Experience Design Coursework
-            </span>
+            <span className="text-neutral-400">2nd Year Coursework</span>
           </div>
-        </div>
 
-        {/* Bottom: Generous Spacing + Smooth Interactive Scroll-Down Guide to Section 2 */}
-        <div className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center pt-4 sm:pt-6 pb-2">
-          <a
-            href="#contents-board"
-            onClick={scrollToContents}
-            className="group flex flex-col items-center gap-2.5 text-neutral-400 hover:text-white transition-all cursor-pointer focus:outline-none"
-            aria-label="Scroll down to explore contents"
-          >
-            <span className="text-xs font-mono tracking-widest uppercase text-neutral-400 group-hover:text-neutral-200 transition-colors">
-              Scroll down to explore contents
-            </span>
-            <div className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center group-hover:border-white/50 group-hover:bg-white/15 group-hover:translate-y-1 transition-all shadow-lg">
-              <svg
-                className="w-4 h-4 text-neutral-300 group-hover:text-white transition-colors animate-bounce"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-            </div>
-          </a>
+          {/* Scroll down button */}
+          <div className="mt-8 flex flex-col items-center justify-center">
+            <a
+              href="#featured-works"
+              onClick={scrollToWorks}
+              className="group flex flex-col items-center gap-2 text-neutral-400 hover:text-white transition-all cursor-pointer focus:outline-none"
+              aria-label="Scroll down to explore featured assignments"
+            >
+              <span className="text-xs font-ca-mono tracking-widest uppercase text-neutral-400 group-hover:text-neutral-200 transition-colors">
+                Scroll down to explore assignments
+              </span>
+              <div className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center group-hover:border-white/50 group-hover:bg-white/15 group-hover:translate-y-1 transition-all shadow-lg">
+                <svg
+                  className="w-4 h-4 text-neutral-300 group-hover:text-white transition-colors animate-bounce"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+            </a>
+          </div>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* PART 2: CONTENTS SECTION (APPEARS ON SCROLL DOWN: 3D PINNED BULLETIN BOARD) */}
+      {/* PART 2: CREATIVE ARTSY SECTION HEADER (WITH LETTER REVEAL) */}
       {/* ========================================================================= */}
-      <section
-        id="contents-board"
-        aria-label="Contents Bulletin Board"
-        className="relative min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 pt-16 sm:pt-24 pb-20 sm:pb-32"
-      >
+      <section id="featured-works" className="relative w-full pt-12 sm:pt-16 pb-12 sm:pb-20 px-4 sm:px-8">
         <div
-          ref={boardRef}
-          className={`relative w-full max-w-[1380px] mx-auto transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
-            isBoardVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
+          ref={headerRef}
+          className={`mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-1000 ${
+            isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          {/* Section Telemetry Bar - Centered */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 max-w-[640px] mx-auto mb-4 sm:mb-6 text-center">
-            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest bg-white/5 border border-white/10 text-neutral-300 font-semibold">
-              Contents Index
-            </span>
-            <span className="w-2 h-2 rounded-full bg-[#E84A4A] animate-pulse" />
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-neutral-400">
-              <span>📌</span>
-              <span>Click any project to inspect case study</span>
-            </span>
-            <span className="hidden sm:inline text-neutral-600">•</span>
-            <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400">
-              02 / 02 • 3 Projects
-            </span>
+          {/* Cursive handwritten header */}
+          <div className="flex flex-col items-center">
+            <p className="font-ca-hand text-3xl sm:text-4xl text-neutral-200 font-medium tracking-wide">
+              explore my work!
+            </p>
+            {/* Hand-drawn double squiggle SVG */}
+            <svg
+              viewBox="0 0 64 12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              className="mt-1 h-3.5 w-24 sm:w-28 text-[#E84A4A]"
+              aria-hidden="true"
+            >
+              <path d="M3 4c18-3 40-3 58 0" />
+              <path d="M9 9c14-2.5 32-2.5 46 0" />
+            </svg>
           </div>
 
-          {/* ================= DESKTOP / TABLET VIEW: AUTHENTIC 3D PINNED BOARD ================= */}
-          <div className="hidden sm:block w-full">
-            <div
-              ref={containerRef}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              className="relative w-full max-w-[620px] mx-auto rounded-[28px] sm:rounded-[36px] overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.95)] border border-white/15 transition-all duration-300 group"
+          {/* Chunky massive display headline */}
+          <h2 className="mt-6 font-ca-display text-6xl leading-[0.92] tracking-tight text-white sm:text-8xl lg:text-9xl uppercase font-black">
+            FEATURED WORKS
+          </h2>
+
+          {/* Angled Washi Tape Sticker Banner */}
+          <div className="mt-8 max-w-md -rotate-[3.6deg] hover:rotate-0 transition-transform duration-300">
+            <span className="ca-tape-clip inline-block px-6 py-2.5 text-xs sm:text-sm font-ca-mono font-bold uppercase tracking-wider text-black bg-[#FFE57F] shadow-[0_8px_24px_rgba(0,0,0,0.6)]">
+              A few products I helped make simpler, calmer, and easier to trust.
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* PART 3: CREATIVE ARTSY STACKING FOLDER CARDS (EXACT PORTFOLIOFY SCROLL) */}
+      {/* ========================================================================= */}
+      <div className="flex flex-col gap-16 px-4 sm:px-8 lg:px-20 lg:gap-[14vh] pb-32 max-w-[1400px] mx-auto">
+        {projectsData.map((proj, idx) => {
+          const isFirst = idx === 0
+          // Exact tab offset calculation from portfoliofy.io
+          const tabMarginDesktop = isFirst
+            ? '0px'
+            : `min(calc(${22 * idx}% - 72px), calc(100% - 340px))`
+
+          return (
+            <article
+              key={proj.id}
+              id={`project-card-${proj.id}`}
+              className="lg:sticky lg:top-28 transition-all duration-300 scroll-mt-28"
               style={{
-                perspective: '1200px',
+                zIndex: 10 + idx,
               }}
             >
-              {/* 3D Tilting Poster Canvas */}
+              {/* Folder Tab on top of Card */}
               <div
-                className="relative w-full aspect-[1152/1450] bg-[#0E0E12] transition-transform ease-out will-change-transform"
+                className="flex transition-all duration-300 ml-0"
                 style={{
-                  transform: tilt.isHovered
-                    ? `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(1.02)`
-                    : 'rotateX(0deg) rotateY(0deg) scale(1)',
-                  transition: tilt.isHovered ? 'transform 0.08s ease-out' : 'transform 0.5s ease-out',
+                  '--tab-offset': tabMarginDesktop,
                 }}
               >
-                {/* Authentic Pinned Board Crop Artwork */}
-                <img
-                  src={contentsBoardClean}
-                  alt="CONTENTS - Pinned red board with 3 college projects: Business Cards, Aureaus, and Melody"
-                  className="w-full h-full object-contain pointer-events-none select-none"
-                />
-
-                {/* Dynamic Specular Sheen Light Reflection across the glossy poster on tilt */}
-                {tilt.isHovered && (
-                  <div
-                    className="absolute inset-0 pointer-events-none mix-blend-overlay transition-opacity duration-200 z-10"
-                    style={{
-                      background: `radial-gradient(circle at ${(tilt.px || 0.5) * 100}% ${(tilt.py || 0.5) * 100}%, rgba(255,255,255,0.35) 0%, transparent 60%)`,
-                    }}
-                    aria-hidden="true"
-                  />
-                )}
-
-                {/* Wooden Pushpin Interactive Glow and wobble */}
-                <div
-                  className="absolute left-[55.5%] top-[9.6%] -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full cursor-pointer z-20 group/pin"
-                  title="Tactile wooden pushpin"
-                  onClick={() => {
-                    if (containerRef.current) {
-                      containerRef.current.classList.add('animate-bounce')
-                      setTimeout(() => containerRef.current?.classList.remove('animate-bounce'), 800)
+                <style>
+                  {`
+                    @media (min-width: 1024px) {
+                      #project-card-${proj.id} > div:first-child {
+                        margin-left: ${tabMarginDesktop} !important;
+                      }
                     }
-                  }}
+                  `}
+                </style>
+                <button
+                  onClick={() => scrollToCard(proj.id)}
+                  className={`ca-mono inline-flex items-center gap-2 py-3.5 pr-14 text-xs font-bold uppercase tracking-[0.2em] sm:gap-3.5 sm:py-6 sm:pr-28 sm:text-base text-white cursor-pointer hover:brightness-110 transition-all ${
+                    isFirst
+                      ? 'pl-5 [clip-path:polygon(0_0,calc(100%-44px)_0,100%_100%,0_100%)] sm:pl-9 sm:[clip-path:polygon(0_0,calc(100%-76px)_0,100%_100%,0_100%)]'
+                      : 'pl-16 [clip-path:polygon(44px_0,calc(100%-44px)_0,100%_100%,0_100%)] sm:pl-[6.75rem] sm:[clip-path:polygon(76px_0,calc(100%-76px)_0,100%_100%,0_100%)]'
+                  }`}
+                  style={{ backgroundColor: proj.tabBg }}
                 >
-                  <div className="w-full h-full rounded-full opacity-0 group-hover/pin:opacity-100 transition-opacity bg-yellow-400/20 blur-sm pointer-events-none" />
-                </div>
-
-                {/* Interactive Hotspot Overlay Cards for each of the 3 projects */}
-                {projectsData.map((proj) => {
-                  const isHovered = hoveredProjectId === proj.id
-                  return (
-                    <div
-                      key={proj.id}
-                      style={{
-                        left: proj.bounds.left,
-                        top: proj.bounds.top,
-                        width: proj.bounds.width,
-                        height: proj.bounds.height,
-                      }}
-                      onMouseEnter={() => setHoveredProjectId(proj.id)}
-                      onMouseLeave={() => setHoveredProjectId(null)}
-                      onClick={() => setActiveProject(proj)}
-                      className="absolute z-20 cursor-pointer rounded-2xl transition-all duration-300 group/item focus:outline-none"
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`View details for ${proj.label}`}
-                    >
-                      {/* Hover Glow Rim */}
-                      <div
-                        className={`absolute inset-0 rounded-2xl border-2 transition-all duration-300 pointer-events-none ${
-                          isHovered
-                            ? 'border-white bg-black/20 shadow-[0_12px_36px_rgba(0,0,0,0.85)] scale-[1.02]'
-                            : 'border-transparent'
-                        }`}
-                      />
-
-                      {/* Floating Action Pill on Hover */}
-                      <div
-                        className={`absolute -bottom-2.5 right-6 px-3 py-1 rounded-full bg-black/90 text-white border border-white/30 text-[10px] font-mono tracking-wider flex items-center gap-1.5 shadow-xl transition-all duration-300 pointer-events-none ${
-                          isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
-                        }`}
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
-                        <span>CLICK TO INSPECT CASE STUDY →</span>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* ================= MOBILE VIEW: RESPONSIVE CARDS ================= */}
-          <div className="sm:hidden w-full flex flex-col gap-6">
-            <div className="text-center">
-              <h2 className="text-4xl font-black font-display tracking-tight text-white">
-                CONTENTS
-              </h2>
-            </div>
-
-            {/* Tilted Red Bulletin Pinboard for Mobile */}
-            <div className="relative rounded-3xl bg-[#EB4D42] p-4 pt-8 shadow-2xl border border-white/20 -rotate-1">
-              {/* Pushpin at top */}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#E5B582] border-2 border-[#8E5E35] shadow-lg flex items-center justify-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#8E5E35]" />
-              </div>
-
-              {/* List of 3 Mobile Projects */}
-              <div className="flex flex-col gap-6">
-                {projectsData.map((proj) => (
-                  <div
-                    key={proj.id}
-                    onClick={() => setActiveProject(proj)}
-                    className="bg-[#1C1D21] rounded-2xl p-4 border border-white/10 shadow-lg text-white active:scale-98 transition-all cursor-pointer"
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="h-3 w-3 sm:h-4 sm:w-4 text-white"
+                    aria-hidden="true"
                   >
-                    <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
-                      <span className="font-display font-bold text-sm tracking-wide text-white">
-                        {proj.label}
-                      </span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-neutral-300">
-                        Case Study →
-                      </span>
-                    </div>
+                    <path d="M12 2c1 5 4 8 9 9-5 1-8 4-9 9-1-5-4-8-9-9 5-1 8-4 9-9Z" />
+                  </svg>
+                  Project {proj.num}
+                </button>
+              </div>
 
-                    <div className="rounded-xl overflow-hidden mb-3 border border-white/10 aspect-[16/10] bg-neutral-800">
-                      <img
-                        src={proj.previewImg}
-                        alt={proj.label}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+              {/* Card Body with Full Viewport Height Stack */}
+              <div
+                className="grid grid-cols-1 gap-6 p-6 sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12 lg:p-14 lg:min-h-[calc(100vh-14rem)] shadow-[0_-12px_36px_rgba(0,0,0,0.7),0_30px_70px_rgba(0,0,0,0.9)] border border-white/10"
+                style={{ backgroundColor: proj.cardBg }}
+              >
+                {/* Left Column: Metadata, Title, Description, Link, Tags */}
+                <div className="flex flex-col justify-between">
+                  <div>
+                    {/* Date / Pill */}
+                    <span className="ca-mono inline-flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] text-white">
+                      <span className="h-3 w-3 rounded-full" style={{ backgroundColor: '#ffffff' }} />
+                      {proj.date}
+                    </span>
 
-                    <p className="text-xs font-fredoka text-neutral-300 leading-relaxed">
-                      {proj.quote}
+                    {/* Massive Title */}
+                    <h2 className="mt-6 text-5xl font-semibold tracking-tight sm:text-6xl xl:text-7xl text-white">
+                      {proj.title}
+                    </h2>
+
+                    {/* Subtitle / Category */}
+                    <p className="mt-2 text-sm sm:text-base font-ca-mono text-neutral-300 font-semibold">
+                      {proj.subtitle}
                     </p>
 
-                    <div className="mt-3 pt-2 flex items-center justify-between border-t border-white/5 text-[10px] font-mono text-neutral-400">
-                      <span>{proj.category}</span>
-                      <span className="text-red-400 font-semibold">Inspect 🔍</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+                    {/* Description */}
+                    <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/90">
+                      {proj.description}
+                    </p>
 
-          {/* ================= MODAL / CASE STUDY DEEP DIVE DRAWER ================= */}
-          {activeProject && (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-fadeIn"
-              onClick={() => setActiveProject(null)}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-title"
-            >
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#18191E] border border-white/20 p-6 sm:p-8 shadow-[0_30px_90px_rgba(0,0,0,0.95)] text-white"
-              >
-                {/* Close Button */}
-                <button
-                  type="button"
-                  onClick={() => setActiveProject(null)}
-                  className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white text-sm transition-all cursor-pointer active:scale-95"
-                  aria-label="Close modal"
-                >
-                  ✕
-                </button>
-
-                {/* Tag & Course Header */}
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-red-500/20 border border-red-500/30 text-red-300">
-                    {activeProject.extendedDetails.type}
-                  </span>
-                  <span className="text-xs font-mono text-neutral-400">
-                    • {activeProject.category}
-                  </span>
-                </div>
-
-                {/* Project Title */}
-                <h3 id="modal-title" className="text-2xl sm:text-3xl font-black font-display text-white mb-4">
-                  {activeProject.label}
-                </h3>
-
-                {/* Hero Preview Image */}
-                <div className="rounded-2xl overflow-hidden border border-white/15 mb-6 shadow-xl bg-neutral-900 aspect-[16/9] flex items-center justify-center">
-                  <img
-                    src={activeProject.previewImg}
-                    alt={activeProject.label}
-                    className="w-full h-full object-contain p-2"
-                  />
-                </div>
-
-                {/* Original Figma Quote Box */}
-                <div className="rounded-2xl bg-neutral-900/90 border border-white/10 p-4 sm:p-5 mb-6">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block mb-1">
-                    Assignment Brief & Overview
-                  </span>
-                  <p className="text-xs sm:text-sm font-fredoka text-neutral-200 leading-relaxed">
-                    "{activeProject.quote}"
-                  </p>
-                </div>
-
-                {/* Tools Used Pills */}
-                <div className="mb-6">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 block mb-2">
-                    Tools & Technologies
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {activeProject.tools.map((tool) => (
-                      <span
-                        key={tool}
-                        className="px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/15 text-neutral-200"
+                    {/* View project action link */}
+                    <button
+                      onClick={() => setActiveProject(proj)}
+                      className="ca-mono mt-8 inline-flex items-center gap-2.5 self-start border-b-2 pb-1 text-sm font-bold uppercase tracking-[0.2em] text-white cursor-pointer hover:text-white/80 hover:border-white/80 transition-all group/cta"
+                      style={{ borderColor: '#ffffff' }}
+                    >
+                      View project
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.4"
+                        className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
+                        aria-hidden="true"
                       >
-                        {tool}
+                        <path d="M7 17 17 7M9 7h8v8" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Polygon Clipped Tags */}
+                  <div className="mt-auto flex flex-wrap gap-2.5 pt-12">
+                    {proj.tags.map((tag, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="ca-mono px-4 pb-2 pt-2.5 text-base font-bold uppercase tracking-wide [clip-path:polygon(0_28%,12%_0,100%_0,100%_100%,0_100%)] text-[var(--ca-ink,#111)] bg-white shadow-sm"
+                      >
+                        {tag}
                       </span>
                     ))}
                   </div>
                 </div>
 
+                {/* Right Column: Framed Thumbnail with Washi Tape Mounts */}
+                <div className="lg:self-center">
+                  <div className="relative">
+                    {/* Washi masking tape: Top-Left */}
+                    <span
+                      aria-hidden="true"
+                      className="washi-tape absolute -left-5 -top-3 z-10 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                    />
+                    {/* Washi masking tape: Top-Right */}
+                    <span
+                      aria-hidden="true"
+                      className="washi-tape absolute -right-5 -top-3 z-10 h-6 w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                    />
+
+                    {/* Image Border Box */}
+                    <div
+                      onClick={() => setActiveProject(proj)}
+                      className="relative overflow-hidden border-4 border-white bg-black aspect-square w-full lg:aspect-auto lg:h-[calc(100vh-21rem)] cursor-pointer group/thumb shadow-2xl"
+                    >
+                      <div className="relative overflow-hidden h-full w-full">
+                        <img
+                          src={proj.thumbnail}
+                          alt={proj.title}
+                          className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out"
+                        />
+                      </div>
+
+                      {/* Hover Pill */}
+                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                        <span className="px-4 py-2 rounded-full bg-black/90 text-white border border-white/30 text-xs font-ca-mono tracking-wider shadow-2xl">
+                          Click to inspect case study 🔍
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+
+      {/* ========================================================================= */}
+      {/* CASE STUDY DETAIL MODAL */}
+      {/* ========================================================================= */}
+      {activeProject && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/90 backdrop-blur-md overflow-y-auto animate-fadeIn"
+          onClick={() => setActiveProject(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${activeProject.title} Case Study`}
+        >
+          <div
+            className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-[#101015] border border-white/20 rounded-2xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] p-5 sm:p-8 lg:p-10 my-auto text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-4 pb-6 border-b border-white/10">
+              <div className="flex flex-col gap-1">
+                <div className="inline-flex items-center gap-2 text-xs font-ca-mono font-bold tracking-widest text-neutral-400 uppercase">
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeProject.accentColor }} />
+                  <span>{activeProject.num} / 03 • {activeProject.category}</span>
+                </div>
+                <h3 className="font-ca-display text-2xl sm:text-4xl font-bold tracking-tight text-white">
+                  {activeProject.title}
+                </h3>
+                <p className="text-xs sm:text-sm font-ca-mono text-neutral-400">
+                  {activeProject.subtitle}
+                </p>
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setActiveProject(null)}
+                className="p-2 sm:p-2.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/20 text-neutral-300 hover:text-white transition-all cursor-pointer focus:outline-none shrink-0"
+                aria-label="Close modal"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 sm:gap-8 pt-6 sm:pt-8 items-start">
+              {/* Full-resolution Heading Image Preview with Click-to-Zoom */}
+              <div className="flex flex-col gap-3">
+                <div
+                  onClick={() => setActiveImageZoom(activeProject.thumbnail)}
+                  className="relative rounded-xl overflow-hidden border-2 border-white/20 shadow-xl bg-black cursor-zoom-in group/zoom"
+                  title="Click for full-screen lightbox zoom"
+                >
+                  <img
+                    src={activeProject.thumbnail}
+                    alt={activeProject.title}
+                    className="w-full h-auto max-h-[500px] object-contain mx-auto"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/zoom:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                    <span className="px-3.5 py-1.5 rounded-full bg-black/80 text-white border border-white/30 text-xs font-ca-mono flex items-center gap-2">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                      </svg>
+                      <span>Click to expand full lightbox</span>
+                    </span>
+                  </div>
+                </div>
+                <p className="text-[11px] font-ca-mono text-neutral-400 text-center">
+                  Original Assignment Submission • Symbiosis Institute of Design
+                </p>
+              </div>
+
+              {/* Case Study Details & Deliverables */}
+              <div className="flex flex-col gap-6">
+                {/* Coursework Assignment Context */}
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <h4 className="text-xs font-ca-mono font-bold uppercase tracking-widest text-neutral-300 mb-2">
+                    Coursework Brief
+                  </h4>
+                  <p className="text-xs sm:text-sm text-neutral-200 leading-relaxed">
+                    {activeProject.description}
+                  </p>
+                </div>
+
                 {/* Key Deliverables */}
-                <div className="mb-6">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 block mb-2">
-                    Key Deliverables
-                  </span>
-                  <ul className="space-y-1.5 text-xs sm:text-sm font-fredoka text-neutral-300">
-                    {activeProject.extendedDetails.deliverables.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-red-400 font-mono">0{idx + 1}.</span>
+                <div>
+                  <h4 className="text-xs font-ca-mono font-bold uppercase tracking-widest text-neutral-300 mb-3 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                    <span>Key Deliverables &amp; Artifacts</span>
+                  </h4>
+                  <ul className="space-y-2">
+                    {activeProject.deliverables.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-300">
+                        <span className="text-[#E84A4A] font-bold shrink-0 mt-0.5">✦</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -463,59 +504,69 @@ export default function ContentsSection() {
                 </div>
 
                 {/* Highlights */}
-                <div className="pt-4 border-t border-white/10">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 block mb-1">
-                    Design Highlights & Learning
-                  </span>
-                  <p className="text-xs sm:text-sm font-fredoka text-neutral-300 leading-relaxed">
-                    {activeProject.extendedDetails.highlights}
+                <div>
+                  <h4 className="text-xs font-ca-mono font-bold uppercase tracking-widest text-neutral-300 mb-2">
+                    Design Highlights
+                  </h4>
+                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                    {activeProject.highlights}
                   </p>
                 </div>
 
-                {/* Close Action */}
-                <div className="mt-8 flex justify-end">
+                {/* Tools used */}
+                <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeProject.tools.map((tool, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2.5 py-1 rounded-md bg-white/10 text-neutral-200 font-ca-mono text-xs"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+
                   <button
-                    type="button"
                     onClick={() => setActiveProject(null)}
-                    className="px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono uppercase tracking-wider text-white transition-all active:scale-95 cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-white text-black font-ca-mono font-bold text-xs uppercase tracking-wider hover:bg-neutral-200 transition-colors cursor-pointer"
                   >
-                    Close Case Study
+                    Done Reading
                   </button>
                 </div>
               </div>
             </div>
-          )}
-
-          {/* ================= BOTTOM BAR & CV BRIDGING - Centered ================= */}
-          <div className="relative mt-12 sm:mt-16 pt-4 border-t border-white/10 max-w-[640px] mx-auto flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs font-mono text-neutral-400 text-center">
-            {/* Subtle Halftone Pattern Overlay */}
-            <div
-              className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[500px] h-12 opacity-15 pointer-events-none mix-blend-screen bg-repeat-x"
-              style={{ backgroundImage: `url(${halftone})`, backgroundSize: 'contain' }}
-              aria-hidden="true"
-            />
-            <div className="relative z-10 flex items-center justify-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>OM BISWAS • 2ND YEAR DESIGN COURSEWORK • SYMBIOIS</span>
-            </div>
-
-            <div className="relative z-10 flex items-center justify-center gap-3">
-              <Link
-                to="/cv"
-                className="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/15 border border-white/15 text-neutral-200 hover:text-white transition-all text-xs font-mono flex items-center gap-2 shadow-sm"
-              >
-                <span>View Full Curriculum Vitae</span>
-                <span className="text-[#BA1F1F]">→</span>
-              </Link>
-              <img
-                src={arrowLogo}
-                alt="Arrow logo"
-                className="w-5 h-5 object-contain filter invert opacity-70 hover:opacity-100 hover:rotate-45 transition-all cursor-pointer"
-              />
-            </div>
           </div>
         </div>
-      </section>
+      )}
+
+      {/* ========================================================================= */}
+      {/* FULL-SCREEN LIGHTBOX ZOOM */}
+      {/* ========================================================================= */}
+      {activeImageZoom && (
+        <div
+          className="fixed inset-0 z-60 flex items-center justify-center p-2 sm:p-4 bg-black/95 backdrop-blur-lg animate-fadeIn cursor-zoom-out"
+          onClick={() => setActiveImageZoom(null)}
+          role="dialog"
+          aria-label="Expanded Image Lightbox"
+        >
+          <div className="relative max-w-7xl max-h-[96vh] flex flex-col items-center justify-center">
+            <img
+              src={activeImageZoom}
+              alt="Expanded high-resolution assignment page"
+              className="w-auto h-auto max-h-[92vh] max-w-[95vw] object-contain rounded-lg shadow-2xl border border-white/20"
+            />
+            <button
+              onClick={() => setActiveImageZoom(null)}
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2.5 rounded-full bg-black/80 text-white border border-white/30 hover:bg-white hover:text-black transition-colors"
+              aria-label="Close full-screen image"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
