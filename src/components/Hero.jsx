@@ -9,108 +9,6 @@ import crown from '../assets/hero/crown_rendered.png'
 import doodle from '../assets/hero/doodle_rendered.png'
 import barcode from '../assets/hero/barcode.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
-import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
-import {
-  Palette,
-  Crown,
-  PenTool,
-  Smile,
-  Sparkles,
-  Brush,
-  Layers,
-  Zap,
-  Camera,
-  Music,
-  Globe,
-  Rocket,
-} from 'lucide-react'
-
-const heroIcons = [
-  {
-    id: 1,
-    icon: Palette,
-    className: 'top-[10%] left-[8%]',
-    cardClassName: 'bg-rose-500/20 border-rose-500/40 shadow-[0_0_22px_rgba(244,63,94,0.35)] hover:shadow-[0_0_30px_rgba(244,63,94,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.7)]',
-  },
-  {
-    id: 2,
-    icon: Crown,
-    className: 'top-[14%] right-[8%]',
-    cardClassName: 'bg-amber-500/20 border-amber-400/40 shadow-[0_0_22px_rgba(251,191,36,0.35)] hover:shadow-[0_0_30px_rgba(251,191,36,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.7)]',
-  },
-  {
-    id: 3,
-    icon: PenTool,
-    className: 'top-[78%] left-[7%]',
-    cardClassName: 'bg-cyan-500/20 border-cyan-400/40 shadow-[0_0_22px_rgba(6,182,212,0.35)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.7)]',
-  },
-  {
-    id: 4,
-    icon: Smile,
-    className: 'bottom-[10%] right-[7%]',
-    cardClassName: 'bg-yellow-400/20 border-yellow-300/40 shadow-[0_0_22px_rgba(250,204,21,0.35)] hover:shadow-[0_0_30px_rgba(250,204,21,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-yellow-300 drop-shadow-[0_0_8px_rgba(250,204,21,0.7)]',
-  },
-  {
-    id: 5,
-    icon: Sparkles,
-    className: 'top-[8%] left-[32%]',
-    cardClassName: 'bg-purple-500/20 border-purple-400/40 shadow-[0_0_22px_rgba(168,85,247,0.35)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]',
-  },
-  {
-    id: 6,
-    icon: Brush,
-    className: 'top-[8%] right-[32%]',
-    cardClassName: 'bg-red-500/20 border-red-500/40 shadow-[0_0_22px_rgba(239,68,68,0.35)] hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-red-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.7)]',
-  },
-  {
-    id: 7,
-    icon: Layers,
-    className: 'bottom-[12%] left-[22%]',
-    cardClassName: 'bg-indigo-500/20 border-indigo-400/40 shadow-[0_0_22px_rgba(99,102,241,0.35)] hover:shadow-[0_0_30px_rgba(99,102,241,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-indigo-300 drop-shadow-[0_0_8px_rgba(99,102,241,0.7)]',
-  },
-  {
-    id: 8,
-    icon: Zap,
-    className: 'top-[42%] left-[3%]',
-    cardClassName: 'bg-emerald-400/20 border-emerald-400/40 shadow-[0_0_22px_rgba(52,211,153,0.35)] hover:shadow-[0_0_30px_rgba(52,211,153,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-emerald-300 drop-shadow-[0_0_8px_rgba(52,211,153,0.7)]',
-  },
-  {
-    id: 9,
-    icon: Camera,
-    className: 'top-[76%] right-[22%]',
-    cardClassName: 'bg-teal-500/20 border-teal-400/40 shadow-[0_0_22px_rgba(45,212,191,0.35)] hover:shadow-[0_0_30px_rgba(45,212,191,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-teal-300 drop-shadow-[0_0_8px_rgba(45,212,191,0.7)]',
-  },
-  {
-    id: 10,
-    icon: Music,
-    className: 'top-[46%] right-[3%]',
-    cardClassName: 'bg-fuchsia-500/20 border-fuchsia-400/40 shadow-[0_0_22px_rgba(232,121,249,0.35)] hover:shadow-[0_0_30px_rgba(232,121,249,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-fuchsia-300 drop-shadow-[0_0_8px_rgba(232,121,249,0.7)]',
-  },
-  {
-    id: 11,
-    icon: Globe,
-    className: 'top-[58%] left-[3%]',
-    cardClassName: 'bg-blue-500/20 border-blue-400/40 shadow-[0_0_22px_rgba(96,165,250,0.35)] hover:shadow-[0_0_30px_rgba(96,165,250,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-blue-300 drop-shadow-[0_0_8px_rgba(96,165,250,0.7)]',
-  },
-  {
-    id: 12,
-    icon: Rocket,
-    className: 'top-[26%] right-[14%]',
-    cardClassName: 'bg-orange-500/20 border-orange-400/40 shadow-[0_0_22px_rgba(251,146,60,0.35)] hover:shadow-[0_0_30px_rgba(251,146,60,0.6)] hover:scale-110 transition-transform',
-    iconClassName: 'text-orange-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.7)]',
-  },
-]
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
@@ -204,18 +102,6 @@ export default function Hero() {
         }}
         aria-hidden="true"
       />
-
-      {/* 6. Interactive Floating Icons Hero Background (ambient floating icons without center text) */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-[1] overflow-hidden">
-        <FloatingIconsHero
-          title=""
-          subtitle=""
-          ctaText=""
-          ctaHref="#"
-          icons={heroIcons}
-          className="w-full h-full min-h-0 bg-transparent [&_.relative.z-10]:hidden pointer-events-auto"
-        />
-      </div>
 
       {/* 1440x940 Canvas Container */}
       <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/940] min-h-[500px] sm:min-h-[580px] md:min-h-[740px] lg:min-h-[860px]">
