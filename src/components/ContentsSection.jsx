@@ -12,11 +12,17 @@ const projectsData = [
   {
     id: 'business-cards',
     num: '01',
-    tabLabel: 'Project 01',
-    tabBg: '#CB9DE2',
-    cardBg: '#CB9DE2',
-    accentColor: '#8B5CF6',
-    isLight: true,
+    tabLabel: 'BRANDING',
+    tabSlot: 'slot-1',
+    folderColor: '#76C689',
+    accentColor: '#0F3D1F',
+    hasStarburst: true,
+    polaroid: {
+      side: 'right',
+      rotation: 'rotate-[4.5deg]',
+      label: 'CAOS / Proof #01',
+      img: projectCardsImg,
+    },
     date: 'MAR 19, 2026',
     title: 'Oni Design Studios',
     subtitle: 'Brand Identity & Print Design',
@@ -39,10 +45,17 @@ const projectsData = [
   {
     id: 'aureaus',
     num: '02',
-    tabLabel: 'Project 02',
-    tabBg: '#191510',
-    cardBg: '#121316',
-    accentColor: '#E84A4A',
+    tabLabel: 'EDITORIAL',
+    tabSlot: 'slot-4',
+    folderColor: '#FCD36E',
+    accentColor: '#422A06',
+    hasLeaves: true,
+    polaroid: {
+      side: 'left',
+      rotation: '-rotate-[5deg]',
+      label: 'Lookbook Vol. 1',
+      img: projectAureausImg,
+    },
     date: 'MAR 2, 2026',
     title: 'Aureaus Audio',
     subtitle: '3D Hardware & Editorial UI',
@@ -65,10 +78,17 @@ const projectsData = [
   {
     id: 'melody',
     num: '03',
-    tabLabel: 'Project 03',
-    tabBg: '#2563EB',
-    cardBg: '#1E3A8A',
-    accentColor: '#60A5FA',
+    tabLabel: 'SOCIAL MEDIA',
+    tabSlot: 'slot-2',
+    folderColor: '#7C8FE5',
+    accentColor: '#151F47',
+    hasLeaves: true,
+    polaroid: {
+      side: 'right',
+      rotation: 'rotate-[3.5deg]',
+      label: 'Live Pass #404',
+      img: projectMelodyImg,
+    },
     date: 'JAN 12, 2026',
     title: 'Melody Tickets',
     subtitle: 'Entertainment UI/UX & Web Flow',
@@ -91,11 +111,16 @@ const projectsData = [
   {
     id: 'playstaples',
     num: '04',
-    tabLabel: 'Project 04',
-    tabBg: '#FACC15',
-    tabTextColor: 'text-neutral-950',
-    cardBg: '#121214',
-    accentColor: '#FACC15',
+    tabLabel: 'PACKAGING',
+    tabSlot: 'slot-3',
+    folderColor: '#F3A1C5',
+    accentColor: '#4A152D',
+    polaroid: {
+      side: 'left',
+      rotation: '-rotate-[4deg]',
+      label: 'Kaali Peeli Taxi',
+      img: projectPlaystaplesImg,
+    },
     date: 'FEB 20, 2026',
     title: 'PlayStaples',
     subtitle: 'Kaali Peeli Toy Design & Brand Experience',
@@ -361,120 +386,180 @@ export default function ContentsSection() {
         </div>
       </section>
 
+      {/* Editorial Dossier Header matching Reference Image */}
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-20 mb-8 pt-2">
+        <div className="flex items-center justify-between text-xs sm:text-sm font-poppins-light font-light text-neutral-600 lowercase tracking-[0.35em] sm:tracking-[0.45em] pb-3">
+          <span>del</span>
+          <span>silencio</span>
+          <span>a</span>
+          <span>la</span>
+          <span>forma</span>
+        </div>
+        <div className="flex items-center justify-between border-b-2 border-black/15 pb-4">
+          <span className="font-akira font-black text-xl sm:text-3xl md:text-4xl tracking-tight text-neutral-950 uppercase">
+            MIS
+          </span>
+          <span className="font-poppins-light font-light text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neutral-500 hidden sm:inline-block">
+            // 2026 ARCHIVE DOSSIER • 04 CASES
+          </span>
+          <span className="font-akira font-black text-xl sm:text-3xl md:text-4xl tracking-tight text-neutral-950 uppercase">
+            PROYECTOS
+          </span>
+        </div>
+      </div>
+
       {/* ========================================================================= */}
-      {/* PART 3: CREATIVE ARTSY STACKING FOLDER CARDS (EXACT PORTFOLIOFY SCROLL) */}
+      {/* PART 3: PHYSICAL FILE FOLDER DOSSIERS (STACKING FOLDER SYSTEM) */}
       {/* ========================================================================= */}
-      <div className="flex flex-col gap-16 px-4 sm:px-8 lg:px-20 lg:gap-[14vh] pb-32 max-w-[1400px] mx-auto">
+      <div className="flex flex-col gap-16 px-4 sm:px-8 lg:px-20 lg:gap-[14vh] pb-36 max-w-[1400px] mx-auto">
         {projectsData.map((proj, idx) => {
-          const isFirst = idx === 0
-          const isLight = Boolean(proj.isLight)
-          // Exact tab offset calculation from portfoliofy.io
-          const tabMarginDesktop = isFirst
-            ? '0px'
-            : `min(calc(${22 * idx}% - 72px), calc(100% - 340px))`
+          const tabSlotAlign =
+            proj.tabSlot === 'slot-1'
+              ? 'lg:ml-2 lg:mr-auto'
+              : proj.tabSlot === 'slot-2'
+              ? 'lg:ml-[25%] lg:mr-auto'
+              : proj.tabSlot === 'slot-3'
+              ? 'lg:ml-[50%] lg:mr-auto'
+              : 'lg:ml-auto lg:mr-2'
 
           return (
             <article
               key={proj.id}
               id={`project-card-${proj.id}`}
-              className="lg:sticky lg:top-28 transition-all duration-300 scroll-mt-28"
+              className="lg:sticky transition-all duration-300 scroll-mt-28"
               style={{
                 zIndex: 10 + idx,
+                top: `calc(4.5rem + ${idx * 2.6}rem)`,
               }}
             >
-              {/* Folder Tab on top of Card */}
-              <div
-                className="flex transition-all duration-300 ml-0"
-                style={{
-                  '--tab-offset': tabMarginDesktop,
-                }}
-              >
-                <style>
-                  {`
-                    @media (min-width: 1024px) {
-                      #project-card-${proj.id} > div:first-child {
-                        margin-left: ${tabMarginDesktop} !important;
-                      }
-                    }
-                  `}
-                </style>
-                <button
-                  onClick={() => scrollToCard(proj.id)}
-                  className={`ca-mono inline-flex items-center gap-2 py-3.5 pr-14 text-xs font-bold uppercase tracking-[0.2em] sm:gap-3.5 sm:py-6 sm:pr-28 sm:text-base cursor-pointer hover:brightness-105 transition-all shadow-[0_-2px_10px_rgba(0,0,0,0.06)] ${
-                    proj.tabTextColor || (isLight ? 'text-[#180A2E]' : 'text-white')
-                  } ${
-                    isFirst
-                      ? 'pl-5 [clip-path:polygon(0_0,calc(100%-44px)_0,100%_100%,0_100%)] sm:pl-9 sm:[clip-path:polygon(0_0,calc(100%-76px)_0,100%_100%,0_100%)]'
-                      : 'pl-16 [clip-path:polygon(44px_0,calc(100%-44px)_0,100%_100%,0_100%)] sm:pl-[6.75rem] sm:[clip-path:polygon(76px_0,calc(100%-76px)_0,100%_100%,0_100%)]'
-                  }`}
-                  style={{ backgroundColor: proj.tabBg }}
+              {/* Folder Tab Row Container with Peeking Document Sheet & Polaroid */}
+              <div className="relative w-full">
+                {/* 1. White Document Paper Sheet peeking from behind the folder */}
+                <div
+                  className="absolute -top-5 sm:-top-7 inset-x-2 sm:inset-x-6 h-8 sm:h-10 bg-white rounded-t-xl sm:rounded-t-2xl border-t-2 border-x-2 border-black/15 shadow-[0_-2px_10px_rgba(0,0,0,0.04)] pointer-events-none z-0 flex items-center justify-between px-4 sm:px-6"
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className={`h-3 w-3 sm:h-4 sm:w-4 ${proj.tabTextColor || (isLight ? 'text-[#180A2E]' : 'text-white')}`}
-                    aria-hidden="true"
+                  <span className="font-poppins-light font-light text-[9px] sm:text-[10px] uppercase tracking-[0.25em] text-neutral-400">
+                    DOSSIER // {proj.category}
+                  </span>
+                  <span className="font-poppins-light font-light text-[9px] sm:text-[10px] uppercase tracking-[0.25em] text-neutral-400">
+                    REF: 2026-F{proj.num}
+                  </span>
+                </div>
+
+                {/* 2. Optional Botanical Ivy Leaves peeking out (Reference image detail on yellow & blue folders) */}
+                {proj.hasLeaves && (
+                  <div className="absolute -top-8 sm:-top-11 right-24 sm:right-44 md:right-56 z-10 pointer-events-none select-none opacity-90 hidden sm:block">
+                    <svg viewBox="0 0 120 60" className="w-24 h-12 text-[#4E8B56] drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)]" fill="currentColor">
+                      <ellipse cx="25" cy="28" rx="11" ry="6" transform="rotate(-30 25 28)" fill="#5C9E65" />
+                      <ellipse cx="48" cy="20" rx="13" ry="7" transform="rotate(15 48 20)" fill="#447D4C" />
+                      <ellipse cx="72" cy="18" rx="12" ry="6.5" transform="rotate(-15 72 18)" fill="#68AF73" />
+                      <ellipse cx="94" cy="16" rx="9" ry="5.5" transform="rotate(20 94 16)" fill="#4E8B56" />
+                      <path d="M12 45 Q 45 25 105 14" stroke="#2D5A34" strokeWidth="1.8" fill="none" />
+                    </svg>
+                  </div>
+                )}
+
+                {/* 3. Tilted Mini Polaroid Photo Print peeking out from the opposite shoulder */}
+                {proj.polaroid && (
+                  <div
+                    onClick={() => setActiveProject(proj)}
+                    className={`absolute -top-11 sm:-top-16 z-20 cursor-pointer group/polaroid transition-all duration-300 hover:z-30 hover:scale-105 hover:rotate-0 select-none ${
+                      proj.polaroid.side === 'right'
+                        ? 'right-3 sm:right-10 md:right-16 ' + proj.polaroid.rotation
+                        : 'left-3 sm:left-10 md:left-16 ' + proj.polaroid.rotation
+                    }`}
+                    title={`Inspect ${proj.title} proof`}
                   >
-                    <path d="M12 2c1 5 4 8 9 9-5 1-8 4-9 9-1-5-4-8-9-9 5-1 8-4 9-9Z" />
-                  </svg>
-                  Project {proj.num}
-                </button>
+                    <div className="bg-white p-1.5 pb-4 sm:p-2 sm:pb-5 rounded-xs shadow-[0_8px_24px_rgba(0,0,0,0.18)] border border-black/15 flex flex-col items-center">
+                      <div className="w-16 h-12 sm:w-22 sm:h-16 md:w-26 md:h-18 overflow-hidden bg-neutral-900 border border-black/10">
+                        <img
+                          src={proj.polaroid.img}
+                          alt={proj.polaroid.label}
+                          className="w-full h-full object-cover group-hover/polaroid:scale-110 transition-transform duration-500"
+                        />
+                      </div>
+                      <span className="mt-1 sm:mt-1.5 font-myfont text-[10px] sm:text-xs text-neutral-800 tracking-wide font-medium leading-none">
+                        {proj.polaroid.label}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* 4. The Physical Folder Tab */}
+                <div className={`relative flex z-10 ${tabSlotAlign}`}>
+                  <button
+                    onClick={() => scrollToCard(proj.id)}
+                    className="group/tab relative inline-flex items-center justify-center gap-2.5 px-6 sm:px-9 py-3 sm:py-4 rounded-t-2xl sm:rounded-t-3xl border-t-2 border-x-2 border-black/20 shadow-[0_-3px_12px_rgba(0,0,0,0.06)] hover:brightness-105 active:scale-[0.99] transition-all cursor-pointer select-none w-full sm:w-auto lg:w-[24%] min-w-[190px] sm:min-w-[220px]"
+                    style={{ backgroundColor: proj.folderColor }}
+                    title={`Open ${proj.tabLabel} folder`}
+                  >
+                    {/* Subtle top edge paper gloss highlight */}
+                    <span className="absolute inset-x-3 top-1 h-[2px] bg-white/40 rounded-full pointer-events-none" />
+                    <span className="font-akira font-black uppercase text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] text-xs sm:text-sm md:text-[15px] tracking-widest">
+                      {proj.tabLabel}
+                    </span>
+                  </button>
+                </div>
               </div>
 
-              {/* Card Body with Full Viewport Height Stack */}
+              {/* Card Body (Folder Cover & Interior) */}
               <div
-                className={`grid grid-cols-1 gap-6 p-6 sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12 lg:p-14 lg:min-h-[calc(100vh-14rem)] ${
-                  isLight
-                    ? 'shadow-[0_24px_55px_rgba(110,60,150,0.18),0_4px_16px_rgba(0,0,0,0.06)] border border-purple-900/15'
-                    : 'shadow-[0_24px_55px_rgba(0,0,0,0.22),0_4px_16px_rgba(0,0,0,0.08)] border border-white/15'
-                }`}
-                style={{ backgroundColor: proj.cardBg }}
+                className="relative overflow-hidden grid grid-cols-1 gap-8 p-6 sm:p-10 lg:grid-cols-[1fr_1.05fr] lg:gap-12 lg:p-12 lg:min-h-[calc(100vh-16rem)] border-2 border-black/20 rounded-2xl sm:rounded-3xl shadow-[0_24px_65px_rgba(0,0,0,0.14),0_6px_20px_rgba(0,0,0,0.06)]"
+                style={{ backgroundColor: proj.folderColor }}
               >
-                {/* Left Column: Metadata, Title, Description, Link, Tags */}
-                <div className="flex flex-col justify-between">
-                  <div>
-                    {/* Date / Pill */}
-                    <span className={`font-poppins-light font-light inline-flex items-center gap-3 text-sm uppercase tracking-[0.2em] ${
-                      isLight ? 'text-[#2E0854]' : 'text-white'
-                    }`}>
-                      <span
-                        className="h-3 w-3 rounded-full"
-                        style={{ backgroundColor: isLight ? '#2E0854' : '#ffffff' }}
-                      />
-                      {proj.date}
-                    </span>
+                {/* Top Folder Crease line */}
+                <div className="absolute inset-x-0 top-0 h-1 bg-black/10 rounded-t-2xl sm:rounded-t-3xl pointer-events-none" />
 
-                    {/* Massive Title */}
-                    <h2 className={`mt-6 font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[48px] xl:text-[56px] leading-[1.08] tracking-tight ${
-                      isLight ? 'text-[#130722]' : 'text-white'
-                    }`}>
+                {/* Project 01 Mint Green Starburst Graphic from Reference Image */}
+                {proj.hasStarburst && (
+                  <div className="absolute -bottom-12 -left-12 sm:-bottom-16 sm:-left-16 lg:-bottom-20 lg:-left-20 pointer-events-none z-0 select-none">
+                    <svg
+                      viewBox="0 0 400 400"
+                      className="w-60 h-60 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[460px] lg:h-[460px] text-[#F7F2EB] drop-shadow-[0_4px_16px_rgba(0,0,0,0.08)] -rotate-[14deg]"
+                      fill="currentColor"
+                      stroke="#1c1917"
+                      strokeWidth="3.5"
+                      strokeLinejoin="round"
+                    >
+                      <polygon points="200,12 228,134 332,68 266,172 388,200 266,228 332,332 228,266 200,388 172,266 68,332 134,228 12,200 134,172 68,68 172,134" />
+                    </svg>
+                  </div>
+                )}
+
+                {/* Left Column: Metadata, Title, Description, Link, Tags */}
+                <div className="relative z-10 flex flex-col justify-between">
+                  <div>
+                    {/* Date / Dossier Pill */}
+                    <div className="flex items-center gap-3">
+                      <span className="font-poppins-light font-light text-xs sm:text-sm uppercase tracking-[0.2em] bg-black/10 text-neutral-900 border border-black/15 px-3.5 py-1 rounded-full inline-flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-neutral-900" />
+                        {proj.date}
+                      </span>
+                      <span className="font-poppins-light font-light text-xs uppercase tracking-[0.2em] text-neutral-800">
+                        FOLDER // 0{idx + 1}
+                      </span>
+                    </div>
+
+                    {/* Massive Title in Akira Expanded */}
+                    <h2 className="mt-5 font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[50px] leading-[1.08] tracking-tight text-neutral-950">
                       {proj.title}
                     </h2>
 
-                    {/* Subtitle / Category */}
-                    <p className={`mt-2.5 text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase ${
-                      isLight ? 'text-[#3B1560]' : 'text-neutral-300'
-                    }`}>
+                    {/* Subtitle in Poppins Light */}
+                    <p className="mt-2 text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
                       {proj.subtitle}
                     </p>
 
-                    {/* Description */}
-                    <p className={`mt-5 max-w-lg text-base sm:text-lg leading-relaxed font-poppins font-normal ${
-                      isLight ? 'text-[#240C38]' : 'text-white/90'
-                    }`}>
+                    {/* Description in Poppins Regular */}
+                    <p className="mt-5 max-w-lg text-base sm:text-lg leading-relaxed font-poppins font-normal text-neutral-900/95">
                       {proj.description}
                     </p>
 
-                    {/* View project & Figma action links */}
+                    {/* View Project & Figma Action Buttons in Poppins Light */}
                     <div className="mt-8 flex flex-wrap items-center gap-4">
                       <button
                         onClick={() => setActiveProject(proj)}
-                        className={`font-poppins-light font-light inline-flex items-center gap-2.5 self-start border-b-2 pb-1 text-sm uppercase tracking-[0.2em] cursor-pointer transition-all group/cta ${
-                          isLight
-                            ? 'text-[#180A2E] hover:text-[#180A2E]/70'
-                            : 'text-white hover:text-white/80'
-                        }`}
-                        style={{ borderColor: isLight ? '#180A2E' : (proj.accentColor || '#ffffff') }}
+                        className="font-poppins-light font-light inline-flex items-center gap-2.5 pb-1 border-b-2 border-neutral-950 text-sm uppercase tracking-[0.2em] cursor-pointer text-neutral-950 hover:text-black/70 transition-all group/cta font-medium"
                       >
                         View project
                         <svg
@@ -494,7 +579,7 @@ export default function ContentsSection() {
                           href={proj.figmaUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-poppins-light font-light inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-yellow-400/40 bg-yellow-400/10 text-yellow-300 hover:bg-yellow-400 hover:text-black transition-all text-xs uppercase tracking-wider group/figma"
+                          className="font-poppins-light font-light inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black transition-all text-xs uppercase tracking-wider group/figma shadow-sm"
                           title="Open design file in Figma"
                         >
                           <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
@@ -509,16 +594,12 @@ export default function ContentsSection() {
                     </div>
                   </div>
 
-                  {/* Polygon Clipped Tags */}
-                  <div className="mt-auto flex flex-wrap gap-2.5 pt-12">
+                  {/* Tags in Poppins Light */}
+                  <div className="mt-auto flex flex-wrap gap-2 pt-10">
                     {proj.tags.map((tag, tIdx) => (
                       <span
                         key={tIdx}
-                        className={`font-poppins-light font-light text-sm px-4 pb-2 pt-2.5 uppercase tracking-wide [clip-path:polygon(0_28%,12%_0,100%_0,100%_100%,0_100%)] shadow-sm ${
-                          isLight
-                            ? 'text-[#180A2E] bg-white border border-purple-900/10'
-                            : 'text-[var(--ca-ink,#111)] bg-white'
-                        }`}
+                        className="font-poppins-light font-light text-xs sm:text-sm px-3.5 py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
                       >
                         {tag}
                       </span>
@@ -527,23 +608,20 @@ export default function ContentsSection() {
                 </div>
 
                 {/* Right Column: Framed Thumbnail with Washi Tape Mounts */}
-                <div className="lg:self-center">
+                <div className="lg:self-center relative z-10">
                   <div className="relative">
-                    {/* Washi masking tape: Top-Left */}
                     <span
                       aria-hidden="true"
                       className="washi-tape absolute -left-5 -top-3 z-10 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
                     />
-                    {/* Washi masking tape: Top-Right */}
                     <span
                       aria-hidden="true"
                       className="washi-tape absolute -right-5 -top-3 z-10 h-6 w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
                     />
 
-                    {/* Image Border Box */}
                     <div
                       onClick={() => setActiveProject(proj)}
-                      className="relative overflow-hidden border-4 border-white bg-black aspect-square w-full lg:aspect-auto lg:h-[calc(100vh-21rem)] cursor-pointer group/thumb shadow-2xl"
+                      className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-square w-full lg:aspect-auto lg:h-[calc(100vh-22rem)] cursor-pointer group/thumb shadow-[0_16px_40px_rgba(0,0,0,0.25)] rounded-xs"
                     >
                       <div className="relative overflow-hidden h-full w-full">
                         <img
@@ -553,10 +631,9 @@ export default function ContentsSection() {
                         />
                       </div>
 
-                      {/* Hover Pill */}
-                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                        <span className="px-4 py-2 rounded-full bg-black/90 text-white border border-white/30 text-xs font-ca-mono tracking-wider shadow-2xl">
-                          Click to inspect case study 🔍
+                      <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                        <span className="px-5 py-2.5 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-widest uppercase shadow-2xl">
+                          Inspect Case Study 🔍
                         </span>
                       </div>
                     </div>
