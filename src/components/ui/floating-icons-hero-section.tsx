@@ -9,8 +9,6 @@ interface IconProps {
   id: number;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
   className: string;
-  cardClassName?: string;
-  iconClassName?: string;
 }
 
 export interface FloatingIconsHeroProps {
@@ -63,10 +61,10 @@ const Icon = ({
       initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={cn('absolute', iconData.className)}>
-      <motion.div className={cn("flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 p-2 sm:p-2.5 rounded-2xl shadow-lg bg-card/80 backdrop-blur-md border border-border/10", iconData.cardClassName)}
-        animate={{ y: [0, -6, 0, 6, 0], x: [0, 4, 0, -4, 0], rotate: [0, 4, 0, -4, 0] }}
+      <motion.div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 p-3 rounded-3xl shadow-xl bg-card/80 backdrop-blur-md border border-border/10"
+        animate={{ y: [0, -8, 0, 8, 0], x: [0, 6, 0, -6, 0], rotate: [0, 5, 0, -5, 0] }}
         transition={{ duration: 5 + Math.random() * 5, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}>
-        <iconData.icon className={cn("w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6 text-foreground", iconData.iconClassName)} />
+        <iconData.icon className="w-8 h-8 md:w-10 md:h-10 text-foreground" />
       </motion.div>
     </motion.div>
   );

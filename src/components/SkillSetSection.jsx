@@ -14,6 +14,67 @@ import {
   ProcreateDreamsIcon,
 } from './SkillIcons'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
+
+// Floating ambient background icons using actual skill set app icons
+// Scaled down (not too big), positioned along perimeter margins, with soft translucent watermark feel so they don't get mixed up with the foreground app grid
+const floatingAppIcons = [
+  {
+    id: 1,
+    icon: ProcreateIcon,
+    className: 'top-[3.5%] left-[3%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto',
+  },
+  {
+    id: 2,
+    icon: SketchbookIcon,
+    className: 'top-[4.5%] right-[7%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto',
+  },
+  {
+    id: 3,
+    icon: FigmaIcon,
+    className: 'top-[20%] left-[1.5%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-35 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto',
+  },
+  {
+    id: 4,
+    icon: PremierProIcon,
+    className: 'top-[22%] right-[2%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto',
+  },
+  {
+    id: 5,
+    icon: BlenderIcon,
+    className: 'top-[40%] left-[1%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto hidden sm:block',
+  },
+  {
+    id: 6,
+    icon: PhotoshopIcon,
+    className: 'top-[42%] right-[1.5%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto hidden sm:block',
+  },
+  {
+    id: 7,
+    icon: IllustratorIcon,
+    className: 'top-[60%] left-[2.5%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto',
+  },
+  {
+    id: 8,
+    icon: InShotIcon,
+    className: 'top-[62%] right-[2.5%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto',
+  },
+  {
+    id: 9,
+    icon: CanvaIcon,
+    className: 'bottom-[8%] left-[3%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto',
+  },
+  {
+    id: 10,
+    icon: AutocadIcon,
+    className: 'bottom-[9%] right-[5%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto hidden sm:block',
+  },
+  {
+    id: 11,
+    icon: ProcreateDreamsIcon,
+    className: 'bottom-[4%] left-[46%] scale-[0.52] sm:scale-[0.62] md:scale-[0.68] opacity-30 hover:opacity-85 transition-opacity duration-300 filter grayscale-[65%] hover:grayscale-0 pointer-events-auto hidden md:block',
+  },
+]
 
 const row1Apps = [
   { name: 'Procreate', Icon: ProcreateIcon, glow: 'hover:shadow-[0_14px_32px_rgba(181,23,158,0.45)]' },
@@ -87,8 +148,18 @@ export default function SkillSetSection() {
             <rect width="100%" height="100%" filter="url(#paperNoise)" />
           </svg>
 
+          {/* NedDev Floating Icons Hero Component - Ambient Background Layer */}
+          <FloatingIconsHero
+            className="absolute inset-0 w-full h-full min-h-0 !h-full bg-transparent overflow-hidden z-0 select-none [&>div.relative.z-10]:hidden"
+            title=""
+            subtitle=""
+            ctaText=""
+            ctaHref="#"
+            icons={floatingAppIcons}
+          />
+
           {/* ================= TOP ROW: TITLE & CORNER MONOGRAM ================= */}
-          <div className="relative w-full flex items-center justify-center">
+          <div className="relative z-10 w-full flex items-center justify-center">
             <h2 className="font-thunder text-5xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[98px] font-semibold text-center tracking-wide uppercase text-neutral-950 leading-none">
               My Skill Set
             </h2>
@@ -105,7 +176,7 @@ export default function SkillSetSection() {
           </div>
 
           {/* ================= DIGITAL SECTION ================= */}
-          <div className="w-full mt-8 sm:mt-10 md:mt-12">
+          <div className="relative z-10 w-full mt-8 sm:mt-10 md:mt-12">
             {/* Section Pill Badge with Interactive Hover State & Shimmer */}
             <div className="flex justify-center mb-7 sm:mb-9 md:mb-10">
               <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm font-fredoka font-normal text-sm sm:text-base md:text-lg text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
@@ -260,7 +331,7 @@ export default function SkillSetSection() {
           </div>
 
           {/* ================= OTHER SECTION ================= */}
-          <div className="w-full mt-12 sm:mt-16 md:mt-20">
+          <div className="relative z-10 w-full mt-12 sm:mt-16 md:mt-20">
             {/* Section Pill Badge with Interactive Hover State & Shimmer */}
             <div className="flex justify-center mb-8 sm:mb-10 md:mb-12">
               <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm font-fredoka font-normal text-sm sm:text-base md:text-lg text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
@@ -336,7 +407,7 @@ export default function SkillSetSection() {
           </div>
 
           {/* ================= BOTTOM-RIGHT CORNER MONOGRAM ================= */}
-          <div className="relative w-full flex justify-end mt-4 sm:mt-6 md:mt-8">
+          <div className="relative z-10 w-full flex justify-end mt-4 sm:mt-6 md:mt-8">
             <div className="sm:absolute sm:right-2 md:right-4 sm:bottom-0 pointer-events-auto">
               <img
                 src={arrowLogo}
