@@ -120,11 +120,42 @@ function CartoonEyesBadge({ className = '' }) {
 /* ========================================================================= */
 const projectsData = [
   {
-    id: 'business-cards',
+    id: 'playstaples',
     num: '01',
+    tabTitle: 'PlayStaples',
+    displayTitle: 'PLAYSTAPLES ©',
+    folderColor: '#48C9A8', // Fresh Mint Green (clearly distinct from Oni Studios yellow)
+    tabColor: '#48C9A8',
+    accentColor: '#FF6584',
+    date: 'FEB 20, 2026',
+    title: 'PlayStaples',
+    subtitle: 'Kaali Peeli Toy Design & Brand Experience',
+    category: 'Toy Design & Branding',
+    bulletSummary: 'Kaali Peeli Toy Design • 3D CAD Modeling • Retail Packaging',
+    description:
+      'PlayStaples celebrates iconic Indian street culture through tactile collectible design. "Kaali Peeli" reimagines the legendary Mumbai Premier Padmini taxi as a handcrafted wooden toy—celebrating nostalgia "for the ones who carved dreams on the trunk." Developed with 3D product visualization, custom taxi livery, physical packaging, and brand storytelling.',
+    thumbnail: projectPlaystaplesImg,
+    previewPhotos: [projectPlaystaplesImg, projectPlaystaplesImg],
+    tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
+    deliverables: [
+      'Handcrafted wooden toy conceptualization & 3D CAD modeling',
+      'Authentic "Kaali Peeli" Mumbai taxi colorway & livery details',
+      'Custom rooftop luggage rack & tactile wooden wheel proportions',
+      'Complete retail packaging design, hangtags & typography',
+      'Interactive 3D renders & lifestyle product scene staging',
+    ],
+    highlights:
+      'Transformed an ubiquitous Mumbai cultural emblem into a sleek, nostalgic collectible wooden toy—blending warm organic wood grain with pop-art industrial styling and playful brand identity.',
+    tools: ['Figma', '3D Modeling', 'Photoshop', 'Packaging Design'],
+    figmaUrl:
+      'https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0',
+  },
+  {
+    id: 'business-cards',
+    num: '02',
     tabTitle: 'Oni Studios',
     displayTitle: 'ONI STUDIOS ©',
-    folderColor: '#EAB854', // Mustard Manila Yellow (from Mellow folder!)
+    folderColor: '#EAB854', // Mustard Manila Yellow
     tabColor: '#EAB854',
     accentColor: '#FF6584',
     date: 'MAR 19, 2026',
@@ -150,10 +181,10 @@ const projectsData = [
   },
   {
     id: 'aureaus',
-    num: '02',
+    num: '03',
     tabTitle: 'Aureaus Audio',
     displayTitle: 'AUREAUS ©',
-    folderColor: '#F08264', // Coral Peach (from Tab 2 "Safe"!)
+    folderColor: '#F08264', // Coral Peach
     tabColor: '#F08264',
     accentColor: '#EAB854',
     date: 'MAR 2, 2026',
@@ -179,10 +210,10 @@ const projectsData = [
   },
   {
     id: 'melody',
-    num: '03',
+    num: '04',
     tabTitle: 'Melody Tickets',
     displayTitle: 'MELODY ©',
-    folderColor: '#8B7DE8', // Lavender Purple (from Tab 3 "Caring Teachers"!)
+    folderColor: '#8B7DE8', // Lavender Purple
     tabColor: '#8B7DE8',
     accentColor: '#FF6584',
     date: 'JAN 12, 2026',
@@ -205,37 +236,6 @@ const projectsData = [
     highlights:
       'Designed an intuitive booking funnel that eliminates cart friction, illustrated with floating 3D spheres and bold chromatic accents.',
     tools: ['Figma', 'UI/UX Design', 'User Flow'],
-  },
-  {
-    id: 'playstaples',
-    num: '04',
-    tabTitle: 'PlayStaples',
-    displayTitle: 'PLAYSTAPLES ©',
-    folderColor: '#C4A576', // Warm Kraft Khaki (from Tab 4 "Learning"!)
-    tabColor: '#C4A576',
-    accentColor: '#EAB854',
-    date: 'FEB 20, 2026',
-    title: 'PlayStaples',
-    subtitle: 'Kaali Peeli Toy Design & Brand Experience',
-    category: 'Toy Design & Branding',
-    bulletSummary: 'Kaali Peeli Toy Design • 3D CAD Modeling • Retail Packaging',
-    description:
-      'PlayStaples celebrates iconic Indian street culture through tactile collectible design. "Kaali Peeli" reimagines the legendary Mumbai Premier Padmini taxi as a handcrafted wooden toy—celebrating nostalgia "for the ones who carved dreams on the trunk." Developed with 3D product visualization, custom taxi livery, physical packaging, and brand storytelling.',
-    thumbnail: projectPlaystaplesImg,
-    previewPhotos: [projectPlaystaplesImg, projectPlaystaplesImg],
-    tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
-    deliverables: [
-      'Handcrafted wooden toy conceptualization & 3D CAD modeling',
-      'Authentic "Kaali Peeli" Mumbai taxi colorway & livery details',
-      'Custom rooftop luggage rack & tactile wooden wheel proportions',
-      'Complete retail packaging design, hangtags & typography',
-      'Interactive 3D renders & lifestyle product scene staging',
-    ],
-    highlights:
-      'Transformed an ubiquitous Mumbai cultural emblem into a sleek, nostalgic collectible wooden toy—blending warm organic wood grain with pop-art industrial styling and playful brand identity.',
-    tools: ['Figma', '3D Modeling', 'Photoshop', 'Packaging Design'],
-    figmaUrl:
-      'https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0',
   },
 ]
 
