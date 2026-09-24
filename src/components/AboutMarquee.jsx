@@ -1,38 +1,7 @@
 import React from 'react'
 
-// Authentic Red & Black 3x4 Checkerboard pattern matching the design
-function RedBlackCheckerboard() {
-  return (
-    <svg
-      className="w-10 h-5 sm:w-12 sm:h-6 shrink-0 select-none shadow-xs border border-black/20"
-      viewBox="0 0 44 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Row 0 */}
-      <rect x="0" y="0" width="11" height="8" fill="#DE2020" />
-      <rect x="11" y="0" width="11" height="8" fill="#0A0A0A" />
-      <rect x="22" y="0" width="11" height="8" fill="#DE2020" />
-      <rect x="33" y="0" width="11" height="8" fill="#0A0A0A" />
-
-      {/* Row 1 */}
-      <rect x="0" y="8" width="11" height="8" fill="#0A0A0A" />
-      <rect x="11" y="8" width="11" height="8" fill="#DE2020" />
-      <rect x="22" y="8" width="11" height="8" fill="#0A0A0A" />
-      <rect x="33" y="8" width="11" height="8" fill="#DE2020" />
-
-      {/* Row 2 */}
-      <rect x="0" y="16" width="11" height="8" fill="#DE2020" />
-      <rect x="11" y="16" width="11" height="8" fill="#0A0A0A" />
-      <rect x="22" y="16" width="11" height="8" fill="#DE2020" />
-      <rect x="33" y="16" width="11" height="8" fill="#0A0A0A" />
-    </svg>
-  )
-}
-
 export default function AboutMarquee({ className = '' }) {
-  const repetitions = Array.from({ length: 14 }, (_, i) => i)
+  const repetitions = Array.from({ length: 16 }, (_, i) => i)
 
   return (
     <div
@@ -52,11 +21,12 @@ export default function AboutMarquee({ className = '' }) {
               {repetitions.map((idx) => (
                 <div
                   key={`red-h1-${idx}`}
-                  className="flex items-center px-8 sm:px-12 h-full shrink-0 group/red cursor-pointer"
+                  className="flex items-center gap-4 sm:gap-6 px-7 sm:px-10 h-full border-r border-black/20 hover:bg-black/10 transition-colors group/red cursor-pointer shrink-0"
                 >
-                  <span className="font-akira font-black text-xs sm:text-sm tracking-[0.25em] uppercase text-white group-hover/red:text-neutral-900 transition-colors">
+                  <span className="font-akira font-black text-xs sm:text-sm tracking-[0.2em] uppercase text-white group-hover/red:text-neutral-950 transition-colors">
                     ABOUT
                   </span>
+                  <span className="text-white/80 text-xs font-bold shrink-0">✦</span>
                 </div>
               ))}
             </div>
@@ -66,11 +36,12 @@ export default function AboutMarquee({ className = '' }) {
               {repetitions.map((idx) => (
                 <div
                   key={`red-h2-${idx}`}
-                  className="flex items-center px-8 sm:px-12 h-full shrink-0 group/red cursor-pointer"
+                  className="flex items-center gap-4 sm:gap-6 px-7 sm:px-10 h-full border-r border-black/20 hover:bg-black/10 transition-colors group/red cursor-pointer shrink-0"
                 >
-                  <span className="font-akira font-black text-xs sm:text-sm tracking-[0.25em] uppercase text-white group-hover/red:text-neutral-900 transition-colors">
+                  <span className="font-akira font-black text-xs sm:text-sm tracking-[0.2em] uppercase text-white group-hover/red:text-neutral-950 transition-colors">
                     ABOUT
                   </span>
+                  <span className="text-white/80 text-xs font-bold shrink-0">✦</span>
                 </div>
               ))}
             </div>
@@ -78,7 +49,7 @@ export default function AboutMarquee({ className = '' }) {
         </div>
       </div>
 
-      {/* Bottom Tier: Tilted White Ribbon with black ABOUT + Red/Black Checkered Blocks */}
+      {/* Bottom Tier: Tilted White Ribbon (Portfolio Theme with Akira font + Crimson Stars ✦) */}
       <div className="relative w-full overflow-hidden pt-2 sm:pt-3 pb-4 sm:pb-5 z-20">
         <div className="w-[108%] -ml-[4%] -rotate-[2deg] sm:-rotate-[2.5deg] shadow-[0_12px_36px_rgba(0,0,0,0.85)]">
           <div className="relative w-full h-9 sm:h-10 bg-white text-black flex items-stretch overflow-hidden border-y-2 border-black">
@@ -93,12 +64,14 @@ export default function AboutMarquee({ className = '' }) {
                   {repetitions.map((idx) => (
                     <div
                       key={`wht-h1-${idx}`}
-                      className="flex items-center gap-5 sm:gap-7 px-5 sm:px-7 h-full shrink-0 group/wht cursor-pointer"
+                      className="flex items-center gap-4 sm:gap-5 px-6 sm:px-8 h-full border-r border-black/15 hover:bg-neutral-100/80 transition-all duration-200 group/wht cursor-pointer shrink-0"
                     >
-                      <span className="font-akira font-black text-xs sm:text-sm tracking-[0.22em] uppercase text-black group-hover/wht:text-[#DE2020] transition-colors">
+                      <span className="font-akira font-black text-xs sm:text-sm tracking-wider uppercase text-neutral-900 group-hover/wht:text-[#DE2020] transition-colors">
                         ABOUT
                       </span>
-                      <RedBlackCheckerboard />
+                      <span className="text-[#DE2020] text-xs sm:text-sm font-bold shrink-0 drop-shadow-[0_0_6px_rgba(222,32,32,0.4)]">
+                        ✦
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -108,12 +81,14 @@ export default function AboutMarquee({ className = '' }) {
                   {repetitions.map((idx) => (
                     <div
                       key={`wht-h2-${idx}`}
-                      className="flex items-center gap-5 sm:gap-7 px-5 sm:px-7 h-full shrink-0 group/wht cursor-pointer"
+                      className="flex items-center gap-4 sm:gap-5 px-6 sm:px-8 h-full border-r border-black/15 hover:bg-neutral-100/80 transition-all duration-200 group/wht cursor-pointer shrink-0"
                     >
-                      <span className="font-akira font-black text-xs sm:text-sm tracking-[0.22em] uppercase text-black group-hover/wht:text-[#DE2020] transition-colors">
+                      <span className="font-akira font-black text-xs sm:text-sm tracking-wider uppercase text-neutral-900 group-hover/wht:text-[#DE2020] transition-colors">
                         ABOUT
                       </span>
-                      <RedBlackCheckerboard />
+                      <span className="text-[#DE2020] text-xs sm:text-sm font-bold shrink-0 drop-shadow-[0_0_6px_rgba(222,32,32,0.4)]">
+                        ✦
+                      </span>
                     </div>
                   ))}
                 </div>
