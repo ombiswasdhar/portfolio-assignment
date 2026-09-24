@@ -310,8 +310,8 @@ export default function ContentsSection() {
             </svg>
           </div>
 
-          {/* Chunky massive display headline */}
-          <h2 className="mt-6 font-ca-display text-6xl leading-[0.92] tracking-tight text-neutral-950 sm:text-8xl lg:text-9xl uppercase font-black">
+          {/* Akira Expanded display headline */}
+          <h2 className="mt-6 font-akira text-[26px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight text-neutral-950 uppercase font-black text-center">
             FEATURED WORKS
           </h2>
 

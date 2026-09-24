@@ -2,7 +2,9 @@ import React from 'react'
 import mentorsityLogo from '../assets/nav/mentorsity_logo.png'
 import playStaplesLogo from '../assets/nav/play_staples_logo.png'
 
-export default function MarqueeBar({ className = '' }) {
+export default function MarqueeBar({ className = '', direction = 'left', reverse = false }) {
+  const isReverse = direction === 'right' || reverse
+
   // A single repeating pair: Mentorsity Logo cell + Play Staples Logo cell
   const renderLogoPair = (key) => (
     <React.Fragment key={key}>
@@ -45,9 +47,9 @@ export default function MarqueeBar({ className = '' }) {
       <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-12 z-10 bg-gradient-to-r from-white to-transparent" />
       <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-12 z-10 bg-gradient-to-l from-white to-transparent" />
 
-      {/* Infinite Scrolling Track (Duplicated 2-half loop for seamless translateX -50%) */}
+      {/* Infinite Scrolling Track (Duplicated 2-half loop for seamless translateX) */}
       <div className="relative w-full overflow-hidden h-full flex items-center">
-        <div className="animate-marquee-scroll flex items-center h-full">
+        <div className={`${isReverse ? 'animate-marquee-scroll-reverse' : 'animate-marquee-scroll'} flex items-center h-full`}>
           {/* Half 1 */}
           <div className="flex items-center h-full shrink-0">
             {loopIndexes.map((idx) => renderLogoPair(`h1-${idx}`))}
