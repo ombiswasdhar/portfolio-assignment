@@ -129,6 +129,8 @@
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     overflow-x: clip;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   html {
     @apply font-sans;
@@ -136,6 +138,8 @@
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     overflow-x: clip;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 }
 

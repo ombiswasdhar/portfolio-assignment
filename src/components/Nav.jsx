@@ -18,6 +18,7 @@ export default function Nav() {
   const [isLightBg, setIsLightBg] = useState(false)
   const [scrollY, setScrollY] = useState(0)
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const MARQUEE_HEIGHT = 36 // height in px of the top MarqueeBar
   const marqueeOffset = Math.min(scrollY, MARQUEE_HEIGHT)
 
@@ -26,6 +27,18 @@ export default function Nav() {
     location.pathname === '/contact'
       ? 'contact'
       : scrollSection
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   useEffect(() => {
     if (location.pathname !== '/') {
@@ -112,15 +125,15 @@ export default function Nav() {
       {/* Top Tier: Animated White Marquee Bar (scrolls up and away as page scrolls) */}
       <MarqueeBar variant="roles" />
 
-      {/* Main Tier: Editorial Navigation Bar (sticks to the top when marquee scrolls away) */}
+      {/* Main Tier: Editorial Navigation Bar */}
       <div
-        className={`w-full flex items-stretch h-12 md:h-13 overflow-x-auto no-scrollbar shadow-[0_2px_15px_rgba(0,0,0,0.12)] transition-colors duration-300 ease-out will-change-[background-color,border-color,color] ${
+        className={`w-full flex items-stretch h-12 md:h-13 shadow-[0_2px_15px_rgba(0,0,0,0.12)] transition-colors duration-300 ease-out will-change-[background-color,border-color,color] ${
           isLightBg
             ? 'bg-[#F4F3EF]/95 border-b border-black text-black backdrop-blur-md'
             : 'bg-[#0A0A0E]/90 border-b border-white/20 text-white backdrop-blur-md'
         }`}
       >
-        {/* Cell 1: Brand (Om Biswas + Monogram Icon with rich hover responsiveness) */}
+        {/* Cell 1: Brand (Om Biswas + Monogram Icon) */}
         <Link
           to="/"
           onClick={(e) => {
@@ -130,23 +143,23 @@ export default function Nav() {
               window.history.pushState(null, '', '/')
               setScrollSection('')
             }
+            setMobileMenuOpen(false)
           }}
-          className={`group shrink-0 md:flex-[1.3] px-4 sm:px-6 flex items-center justify-between sm:justify-start gap-2.5 transition-colors duration-200 cursor-pointer no-underline active:scale-[0.99] ${
+          className={`group flex-1 md:flex-none md:flex-[1.3] px-3.5 sm:px-6 flex items-center justify-between sm:justify-start gap-2.5 transition-colors duration-200 cursor-pointer no-underline active:scale-[0.99] ${
             isLightBg
-              ? 'border-r border-black bg-transparent hover:bg-[#EAE8E2] text-black'
-              : 'border-r border-white/20 bg-transparent hover:bg-white/10 text-white'
+              ? 'border-r-0 md:border-r border-black bg-transparent hover:bg-[#EAE8E2] text-black'
+              : 'border-r-0 md:border-r border-white/20 bg-transparent hover:bg-white/10 text-white'
           }`}
           title="Om Biswas — Back to top"
         >
           <div className="flex items-center gap-2 sm:gap-2.5">
-            {/* Monogram Icon: Hover Responsive with smooth scale, tilt, and vermilion shadow */}
             <img
               src={omMonogramImg}
               alt="Om Biswas Monogram"
               className="w-4 h-5 sm:w-5 sm:h-6 object-contain transition-all duration-300 ease-out group-hover:scale-125 group-hover:-rotate-6 group-hover:drop-shadow-[0_4px_10px_rgba(222,32,32,0.55)] cursor-pointer will-change-transform"
             />
             <span
-              className={`font-myfont text-[22px] sm:text-[25px] md:text-[27px] tracking-wide leading-none pt-1 transition-colors duration-200 ${
+              className={`font-myfont text-[21px] sm:text-[25px] md:text-[27px] tracking-wide leading-none pt-1 transition-colors duration-200 ${
                 isLightBg
                   ? 'text-black group-hover:text-[#DE2020]'
                   : 'text-white group-hover:text-[#FF4A4A]'
@@ -158,38 +171,81 @@ export default function Nav() {
           <span className="w-1.5 h-1.5 rounded-full bg-[#DE2020] animate-pulse hidden sm:inline-block ml-auto shadow-[0_0_8px_#DE2020] group-hover:scale-125 group-hover:shadow-[0_0_12px_#DE2020] transition-all duration-300" />
         </Link>
 
-        {/* Cells 2-5: Middle Navigation Links (About, Work, Skills, CV with hover responsive text and cells) */}
-        {primaryNavItems.map((item) => {
-          const isActive = activeSection === item.id
+        {/* Mobile Action Controls (< md): Quick Contact Pill + Hamburger Button */}
+        <div className="md:hidden flex items-center pr-3 gap-2 shrink-0">
+          <Link
+            to="/contact"
+            onClick={(e) => {
+              handleClick(e, { id: 'contact' })
+              setMobileMenuOpen(false)
+            }}
+            className={`px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-colors ${
+              activeSection === 'contact'
+                ? 'bg-[#DE2020] text-white'
+                : isLightBg
+                ? 'bg-black text-white hover:bg-[#DE2020]'
+                : 'bg-white text-black hover:bg-[#DE2020] hover:text-white'
+            }`}
+          >
+            Contact
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className={`min-w-[44px] min-h-[44px] p-2 rounded-lg border transition-colors flex items-center justify-center cursor-pointer active:scale-95 ${
+              isLightBg
+                ? 'border-black/30 hover:bg-black/5 text-black'
+                : 'border-white/30 hover:bg-white/10 text-white'
+            }`}
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
 
-          return (
-            <Link
-              key={item.id}
-              to={item.path}
-              onClick={(e) => handleClick(e, item)}
-              className={`shrink-0 md:flex-1 px-4 sm:px-3 flex items-center justify-center text-center transition-all duration-200 no-underline cursor-pointer group active:scale-[0.98] ${
-                isLightBg ? 'border-r border-black' : 'border-r border-white/20'
-              } ${
-                isActive
-                  ? 'bg-[#DE2020] text-white shadow-inner font-bold'
-                  : isLightBg
-                  ? 'bg-transparent hover:bg-[#EAE8E2] text-black hover:text-[#DE2020]'
-                  : 'bg-transparent hover:bg-white/10 text-neutral-200 hover:text-[#FF4A4A]'
-              }`}
-              aria-label={item.name}
-            >
-              <span className="font-myfont text-[21px] sm:text-[23px] md:text-[25px] tracking-wide leading-none pt-1 transition-transform duration-200 group-hover:scale-105">
-                {item.name}
-              </span>
-            </Link>
-          )
-        })}
+        {/* Desktop Cells 2-5: Middle Navigation Links (About, Work, Skills, CV) */}
+        <div className="hidden md:flex flex-1 items-stretch">
+          {primaryNavItems.map((item) => {
+            const isActive = activeSection === item.id
 
-        {/* Cell 6: Call To Action (Studio Koba "Get in Touch" solid high-contrast block with hover responsive glow) */}
+            return (
+              <Link
+                key={item.id}
+                to={item.path}
+                onClick={(e) => handleClick(e, item)}
+                className={`flex-1 px-3 flex items-center justify-center text-center transition-all duration-200 no-underline cursor-pointer group active:scale-[0.98] ${
+                  isLightBg ? 'border-r border-black' : 'border-r border-white/20'
+                } ${
+                  isActive
+                    ? 'bg-[#DE2020] text-white shadow-inner font-bold'
+                    : isLightBg
+                    ? 'bg-transparent hover:bg-[#EAE8E2] text-black hover:text-[#DE2020]'
+                    : 'bg-transparent hover:bg-white/10 text-neutral-200 hover:text-[#FF4A4A]'
+                }`}
+                aria-label={item.name}
+              >
+                <span className="font-myfont text-[21px] sm:text-[23px] md:text-[25px] tracking-wide leading-none pt-1 transition-transform duration-200 group-hover:scale-105">
+                  {item.name}
+                </span>
+              </Link>
+            )
+          })}
+        </div>
+
+        {/* Desktop Cell 6: Call To Action Get in Touch */}
         <Link
           to="/contact"
           onClick={(e) => handleClick(e, { id: 'contact' })}
-          className={`shrink-0 md:flex-[1.2] px-5 sm:px-6 flex items-center justify-center text-center transition-all duration-200 no-underline cursor-pointer group active:scale-[0.98] ${
+          className={`hidden md:flex md:flex-[1.2] px-6 items-center justify-center text-center transition-all duration-200 no-underline cursor-pointer group active:scale-[0.98] ${
             activeSection === 'contact'
               ? 'bg-[#DE2020] text-white font-bold'
               : isLightBg
@@ -203,6 +259,74 @@ export default function Nav() {
           </span>
         </Link>
       </div>
+
+      {/* Mobile Slide-Down Dropdown Menu & Backdrop (< md) */}
+      {mobileMenuOpen && (
+        <>
+          <div
+            className="fixed inset-0 top-12 md:hidden bg-black/60 backdrop-blur-sm z-[-1] animate-fadeIn"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div
+            className={`md:hidden w-full flex flex-col border-b shadow-2xl transition-all duration-300 animate-fadeIn ${
+              isLightBg
+                ? 'bg-[#F4F3EF]/98 border-black text-black backdrop-blur-xl'
+                : 'bg-[#0A0A0E]/98 border-white/20 text-white backdrop-blur-xl'
+            }`}
+          >
+          {primaryNavItems.map((item) => {
+            const isActive = activeSection === item.id
+            return (
+              <Link
+                key={item.id}
+                to={item.path}
+                onClick={(e) => {
+                  handleClick(e, item)
+                  setMobileMenuOpen(false)
+                }}
+                className={`w-full py-3.5 px-6 flex items-center justify-between border-b text-left transition-colors cursor-pointer ${
+                  isLightBg ? 'border-black/10' : 'border-white/10'
+                } ${
+                  isActive
+                    ? 'bg-[#DE2020] text-white font-bold'
+                    : isLightBg
+                    ? 'hover:bg-black/5 text-neutral-900 active:bg-black/10'
+                    : 'hover:bg-white/5 text-neutral-100 active:bg-white/10'
+                }`}
+              >
+                <span className="font-myfont text-2xl tracking-wide">
+                  {item.name}
+                </span>
+                <span className="text-xs font-mono opacity-60">
+                  {isActive ? '● VIEWING' : '→'}
+                </span>
+              </Link>
+            )
+          })}
+
+          <Link
+            to="/contact"
+            onClick={(e) => {
+              handleClick(e, { id: 'contact' })
+              setMobileMenuOpen(false)
+            }}
+            className={`w-full py-4 px-6 flex items-center justify-between cursor-pointer font-bold ${
+              activeSection === 'contact'
+                ? 'bg-[#DE2020] text-white'
+                : isLightBg
+                ? 'bg-black text-white hover:bg-[#DE2020]'
+                : 'bg-white text-black hover:bg-[#DE2020] hover:text-white'
+            }`}
+          >
+            <span className="font-myfont text-2xl tracking-wide">
+              Get in Touch
+            </span>
+            <span className="text-base">✉️</span>
+          </Link>
+        </div>
+        </>
+      )}
     </header>
   )
 }

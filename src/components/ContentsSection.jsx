@@ -246,6 +246,32 @@ export default function ContentsSection() {
   const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
   const [headerRef, isHeaderVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
 
+  // Mobile touch swipe gestures for intuitive project flipping
+  const [touchStartX, setTouchStartX] = useState(null)
+  const [touchEndX, setTouchEndX] = useState(null)
+  const minSwipeDistance = 45
+
+  const handleTouchStart = (e) => {
+    setTouchEndX(null)
+    setTouchStartX(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return
+    const distance = touchStartX - touchEndX
+    if (distance > minSwipeDistance) {
+      // Swiped Left -> Next project
+      setActiveTabIdx((prev) => (prev < projectsData.length - 1 ? prev + 1 : 0))
+    } else if (distance < -minSwipeDistance) {
+      // Swiped Right -> Previous project
+      setActiveTabIdx((prev) => (prev > 0 ? prev - 1 : projectsData.length - 1))
+    }
+  }
+
   // Bi-directional viewport tracker: resets handwriting animation whenever scrolled past or scrolled above
   const [isHandwritingInView, setIsHandwritingInView] = useState(false)
   const [handwritingKey, setHandwritingKey] = useState(0)
@@ -472,7 +498,7 @@ export default function ContentsSection() {
                   <button
                     key={p.id}
                     onClick={() => setActiveTabIdx(idx)}
-                    className={`group relative inline-flex items-center gap-2 sm:gap-2.5 px-4 sm:px-7 py-2.5 sm:py-3.5 rounded-t-2xl sm:rounded-t-3xl border-t-2 sm:border-t-3 border-x-2 sm:border-x-3 border-black font-akira font-black text-xs sm:text-[13px] uppercase tracking-wider cursor-pointer transition-all duration-200 select-none ${
+                    className={`group relative inline-flex items-center gap-2 sm:gap-2.5 px-4 sm:px-7 py-2.5 sm:py-3.5 rounded-t-2xl sm:rounded-t-3xl border-t-2 sm:border-t-3 border-x-2 sm:border-x-3 border-black font-akira font-black text-xs sm:text-[13px] uppercase tracking-wider cursor-pointer transition-all duration-200 select-none shrink-0 whitespace-nowrap ${
                       isActive
                         ? 'z-30 text-black shadow-[0_-4px_14px_rgba(0,0,0,0.18)]'
                         : 'z-10 text-neutral-900 opacity-90 hover:opacity-100 hover:-translate-y-0.5'
@@ -504,7 +530,10 @@ export default function ContentsSection() {
 
             {/* Folder Body Canvas with 2-Column Info & Framed Imagery */}
             <div
-              className="relative w-full rounded-3xl sm:rounded-[40px] border-2 sm:border-3 border-black shadow-[0_25px_80px_rgba(0,0,0,0.4)] overflow-hidden transition-colors duration-500 p-6 sm:p-10 lg:p-12 min-h-[540px] flex flex-col justify-between select-none"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              className="relative w-full rounded-2xl sm:rounded-[40px] border-2 sm:border-3 border-black shadow-[0_25px_80px_rgba(0,0,0,0.4)] overflow-hidden transition-colors duration-500 p-5 sm:p-10 lg:p-12 min-h-[460px] sm:min-h-[540px] flex flex-col justify-between select-none touch-pan-y"
               style={{ backgroundColor: currentProject.folderColor }}
             >
               {/* Retro Cartoon Mascot Stickers on the Right of Folder (Clear of text) */}
@@ -642,31 +671,32 @@ export default function ContentsSection() {
               </div>
 
               {/* Folder Bottom Row */}
-              <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase">
+              <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
                 <span>{currentProject.bulletSummary}</span>
                 <span className="font-semibold text-neutral-800 hidden sm:inline">Press ← → to flip files</span>
+                <span className="font-semibold text-neutral-800 sm:hidden">Swipe ← → to flip</span>
               </div>
             </div>
 
             {/* Left & Right Circular Arrow Navigation Controls */}
             <button
               onClick={() => setActiveTabIdx((prev) => (prev > 0 ? prev - 1 : projectsData.length - 1))}
-              className="absolute -left-3 sm:-left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-13 sm:h-13 rounded-full bg-white text-black border-2 sm:border-3 border-black shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
+              className="absolute -left-2 sm:-left-6 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-13 sm:h-13 min-w-[36px] min-h-[36px] sm:min-w-[52px] sm:min-h-[52px] rounded-full bg-white text-black border-2 sm:border-3 border-black shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
               title="Previous project"
               aria-label="Previous project"
             >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
 
             <button
               onClick={() => setActiveTabIdx((prev) => (prev < projectsData.length - 1 ? prev + 1 : 0))}
-              className="absolute -right-3 sm:-right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-13 sm:h-13 rounded-full bg-white text-black border-2 sm:border-3 border-black shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
+              className="absolute -right-2 sm:-right-6 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-13 sm:h-13 min-w-[36px] min-h-[36px] sm:min-w-[52px] sm:min-h-[52px] rounded-full bg-white text-black border-2 sm:border-3 border-black shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
               title="Next project"
               aria-label="Next project"
             >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -724,7 +754,7 @@ export default function ContentsSection() {
               {/* Close Button */}
               <button
                 onClick={() => setActiveProject(null)}
-                className="p-2 sm:p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-neutral-300 hover:text-white transition-all cursor-pointer focus:outline-none shrink-0"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-neutral-300 hover:text-white transition-all cursor-pointer focus:outline-none shrink-0"
                 aria-label="Close modal"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -858,7 +888,7 @@ export default function ContentsSection() {
             />
             <button
               onClick={() => setActiveImageZoom(null)}
-              className="absolute top-4 right-4 p-3 rounded-full bg-black/70 hover:bg-black text-white border border-white/30 transition-all cursor-pointer"
+              className="absolute top-4 right-4 w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-black/70 hover:bg-black active:scale-95 text-white border border-white/30 transition-all cursor-pointer"
               aria-label="Close zoom"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

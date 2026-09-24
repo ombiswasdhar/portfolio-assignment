@@ -91,19 +91,19 @@ export default function CVSection() {
               Curriculum Vitae
             </span>
             <span className="w-2 h-2 rounded-full bg-[#BA1F1F] animate-pulse" />
-            <span className="hidden md:inline-flex items-center gap-1.5 text-[11px] font-mono text-neutral-400 pl-2">
+            <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-neutral-400 pl-1 sm:pl-2">
               <span>🔍</span>
-              <span>Hover any section to zoom & read</span>
+              <span><span className="md:hidden">Tap</span><span className="hidden md:inline">Hover</span> any section to zoom</span>
             </span>
           </div>
 
           {/* Action Bar: Download CV, Print, Copy Email */}
-          <div className="flex items-center gap-2.5 flex-wrap justify-center">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center">
 
             <button
               type="button"
               onClick={handleCopyEmail}
-              className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-mono text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer"
+              className="group inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-mono text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
               title="Copy Email Address"
             >
               <span>{copiedEmail ? '✓ Copied!' : 'Copy Email'}</span>
@@ -112,7 +112,7 @@ export default function CVSection() {
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-mono text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-mono text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
               title="Print CV or Save as PDF"
             >
               <span>Print / PDF</span>
@@ -121,7 +121,7 @@ export default function CVSection() {
             <a
               href={cvFullFrame}
               download="Om_Biswas_CV.png"
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-bold font-mono tracking-wide shadow-[0_4px_16px_rgba(186,31,31,0.45)] hover:shadow-[0_6px_22px_rgba(186,31,31,0.65)] hover:scale-105 active:scale-95 transition-all"
+              className="inline-flex items-center gap-1.5 px-4 sm:px-4.5 py-2 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-bold font-mono tracking-wide shadow-[0_4px_16px_rgba(186,31,31,0.45)] hover:shadow-[0_6px_22px_rgba(186,31,31,0.65)] hover:scale-105 active:scale-95 transition-all min-h-[38px]"
             >
               <span>Download CV</span>
               <span>↓</span>

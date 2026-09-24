@@ -132,14 +132,14 @@ export default function CustomCursor() {
       <div
         ref={dotRef}
         aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 -ml-[4px] -mt-[4px] w-2 h-2 rounded-full bg-[#BA1F1F] shadow-[0_0_10px_#ff4d4d,0_0_20px_#ba1f1f] z-[9999] opacity-0 transition-opacity duration-200 will-change-transform"
+        className="hidden md:block pointer-events-none fixed top-0 left-0 -ml-[4px] -mt-[4px] w-2 h-2 rounded-full bg-[#BA1F1F] shadow-[0_0_10px_#ff4d4d,0_0_20px_#ba1f1f] z-[9999] opacity-0 transition-opacity duration-200 will-change-transform"
       />
 
       {/* 2. Trailing Interpolated Ring */}
       <div
         ref={ringRef}
         aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 -ml-[18px] -mt-[18px] w-9 h-9 rounded-full border border-red-500/50 bg-red-500/5 backdrop-blur-[0.5px] z-[9998] opacity-0 transition-opacity duration-300 will-change-transform flex items-center justify-center"
+        className="hidden md:block pointer-events-none fixed top-0 left-0 -ml-[18px] -mt-[18px] w-9 h-9 rounded-full border border-red-500/50 bg-red-500/5 backdrop-blur-[0.5px] z-[9998] opacity-0 transition-opacity duration-300 will-change-transform flex items-center justify-center"
       >
         {/* Subtle internal crosshair action accent */}
         <div className="w-1.5 h-1.5 rounded-full border border-red-400/40 opacity-40 scale-75 transition-transform duration-200" />
