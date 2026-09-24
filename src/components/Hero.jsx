@@ -9,7 +9,7 @@ import crown from '../assets/hero/crown_rendered.png'
 import doodle from '../assets/hero/doodle_rendered.png'
 import barcode from '../assets/hero/barcode.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
-import MarqueeBar from './MarqueeBar'
+import AboutMarquee from './AboutMarquee'
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
@@ -45,7 +45,7 @@ export default function Hero() {
       id="hero"
       aria-label="Hero section"
       onMouseMove={handleMouseMove}
-      className="relative w-full bg-[#050507]/60 text-white select-none overflow-hidden"
+      className="relative w-full bg-[#050507]/60 text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
       {/* 1. Dynamic Parallax Ambient Crimson Glow (tracking cursor) */}
       <div
@@ -110,7 +110,7 @@ export default function Hero() {
         {/* ================= TOP ROW ================= */}
         {/* 2026 - Akira Expanded font */}
         <div
-          className="absolute left-4 sm:left-6 md:left-[2.29%] top-[92px] sm:top-[98px] md:top-[9%] z-20 flex items-center"
+          className="absolute left-4 sm:left-6 md:left-[2.29%] top-3 sm:top-4 md:top-[3%] z-20 flex items-center"
           title="Year 2026"
         >
           <span className="font-akira font-black text-lg sm:text-2xl md:text-[28px] leading-none tracking-[0.08em] text-white">
@@ -120,7 +120,7 @@ export default function Hero() {
 
         {/* portfolio - Handwritten cursive script */}
         <div
-          className="absolute left-1/2 top-[92px] sm:top-[98px] md:top-[9%] -translate-x-1/2 z-20 flex items-center pointer-events-none"
+          className="absolute left-1/2 top-3 sm:top-4 md:top-[3%] -translate-x-1/2 z-20 flex items-center pointer-events-none"
         >
           <span className="font-script text-2xl sm:text-3xl md:text-[34px] font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-center">
             portfolio
@@ -129,7 +129,7 @@ export default function Hero() {
 
         {/* Top-Right OM Badge */}
         <div
-          className="absolute right-4 sm:right-6 md:right-auto md:left-[92.29%] md:-translate-x-1/2 top-[92px] sm:top-[98px] md:top-[9%] z-20 flex items-center"
+          className="absolute right-4 sm:right-6 md:right-auto md:left-[92.29%] md:-translate-x-1/2 top-3 sm:top-4 md:top-[3%] z-20 flex items-center"
         >
           <img
             src={topLogo}
@@ -362,15 +362,9 @@ export default function Hero() {
         </a>
       </div>
 
-      {/* Tilted "ABOUT ME" Animated Marquee Ribbon on bottom of Hero section */}
-      <div className="relative w-full mt-3 sm:mt-5 pt-1 pb-4 sm:pb-6 z-30 select-none overflow-hidden">
-        <div className="w-[108%] -ml-[4%] -rotate-[2deg] sm:-rotate-[2.5deg] hover:rotate-0 transition-transform duration-500 shadow-[0_12px_36px_rgba(0,0,0,0.85)]">
-          <MarqueeBar
-            variant="roles"
-            items={['ABOUT ME']}
-            className="border-y-2 border-black bg-white text-black shadow-2xl"
-          />
-        </div>
+      {/* "ABOUT" Dual Marquee Ribbon (Red Bar + Black Checkered Bar) below Hero section */}
+      <div className="relative w-full mt-4 sm:mt-6 z-30 select-none">
+        <AboutMarquee />
       </div>
     </section>
   )
