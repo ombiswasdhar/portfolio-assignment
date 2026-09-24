@@ -5,6 +5,7 @@ import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
+import MarqueeBar from './MarqueeBar'
 
 const projectsData = [
   {
@@ -236,10 +237,13 @@ export default function ContentsSection() {
         </div>
       </section>
 
+      {/* Animated Marquee Bar between Disclaimer and Explore My Work */}
+      <MarqueeBar className="border-t border-black relative z-10" />
+
       {/* ========================================================================= */}
       {/* FEATURED WORKS ONWARDS: DOTTED GRID BACKGROUND CANVAS (WHITE & BLACK DOTS) */}
       {/* ========================================================================= */}
-      <div data-theme="light" className="relative w-full ca-dotted-grid-bg text-neutral-900 border-t border-black/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
+      <div data-theme="light" className="relative w-full ca-dotted-grid-bg text-neutral-900 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
         {/* Dotted Grid Pattern Layer */}
         <div className="ca-dotted-grid-pattern" aria-hidden="true" />
 
