@@ -185,7 +185,7 @@ export default function ContentsSection() {
       {/* ========================================================================= */}
       <section
         aria-label="Coursework Disclaimer"
-        className="relative min-h-[60vh] sm:min-h-[70vh] w-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 pt-10 sm:pt-16 pb-12 sm:pb-16 gap-6 sm:gap-8"
+        className="relative w-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 py-10 sm:py-14 md:py-16"
       >
         <div
           ref={disclaimerRef}
@@ -212,7 +212,7 @@ export default function ContentsSection() {
           </div>
 
           {/* Scroll down button */}
-          <div className="mt-8 flex flex-col items-center justify-center">
+          <div className="mt-6 sm:mt-7 flex flex-col items-center justify-center">
             <a
               href="#featured-works"
               onClick={scrollToWorks}
