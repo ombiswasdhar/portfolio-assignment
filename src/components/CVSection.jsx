@@ -70,7 +70,7 @@ export default function CVSection() {
     <section
       id="cv"
       aria-label="Curriculum Vitae / Resume section"
-      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-12 sm:pt-16 pb-20 sm:pb-24 md:pb-28"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-12 sm:pt-16 pb-20 sm:pb-24 md:pb-28 scroll-mt-14 sm:scroll-mt-16"
     >
       {/* Decorative ambient background glow */}
       <div

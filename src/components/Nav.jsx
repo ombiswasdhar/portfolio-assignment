@@ -7,7 +7,7 @@ const primaryNavItems = [
   { id: 'about', name: 'About', path: '/#about' },
   { id: 'skills', name: 'Skills', path: '/#skills' },
   { id: 'work', name: 'Work', path: '/#work' },
-  { id: 'cv', name: 'CV', path: '/cv' },
+  { id: 'cv', name: 'CV', path: '/#cv' },
 ]
 
 export default function Nav() {
@@ -23,9 +23,7 @@ export default function Nav() {
 
   // Derive active section directly based on route or scroll position
   const activeSection =
-    location.pathname === '/cv'
-      ? 'cv'
-      : location.pathname === '/contact'
+    location.pathname === '/contact'
       ? 'contact'
       : scrollSection
 
@@ -39,13 +37,16 @@ export default function Nav() {
     const handleScroll = () => {
       setScrollY(window.scrollY)
 
+      const cvEl = document.getElementById('cv')
       const workEl = document.getElementById('work')
       const skillsEl = document.getElementById('skills')
       const aboutEl = document.getElementById('about')
 
       const threshold = window.innerHeight * 0.45
 
-      if (workEl && workEl.getBoundingClientRect().top <= threshold) {
+      if (cvEl && cvEl.getBoundingClientRect().top <= threshold) {
+        setScrollSection('cv')
+      } else if (workEl && workEl.getBoundingClientRect().top <= threshold) {
         setScrollSection('work')
       } else if (skillsEl && skillsEl.getBoundingClientRect().top <= threshold) {
         setScrollSection('skills')
@@ -79,14 +80,6 @@ export default function Nav() {
 
   const handleClick = (e, item) => {
     // Handling dedicated route pages
-    if (item.id === 'cv') {
-      if (location.pathname === '/cv') {
-        e.preventDefault()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-      return
-    }
-
     if (item.id === 'contact') {
       if (location.pathname === '/contact') {
         e.preventDefault()
