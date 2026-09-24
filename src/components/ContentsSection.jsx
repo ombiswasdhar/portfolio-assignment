@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import disclaimerHandwriting from '../assets/work/disclaimer_handwriting.svg'
 import projectCardsImg from '../assets/work/project_cards.jpg'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
@@ -193,13 +192,34 @@ export default function ContentsSection() {
             isDisclaimerVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-8'
           }`}
         >
-          {/* Authentic Symbiosis Handwriting Artwork Vector */}
-          <div className="relative w-full max-w-4xl mx-auto py-2 select-none flex items-center justify-center">
-            <img
-              src={disclaimerHandwriting}
-              alt="disclaimer ! all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework. (yes , that's my handwriting , don't judge)"
-              className="w-full h-auto object-contain select-none pointer-events-none transform scale-100 sm:scale-[1.04] transition-transform duration-500 origin-center filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
-            />
+          {/* Authentic Coursework Disclaimer Typography rendered with user's MyFont */}
+          <div className="relative w-full max-w-3xl mx-auto py-2 select-none flex flex-col items-center text-center">
+            {/* Title */}
+            <h2 className="font-myfont text-4xl sm:text-5xl md:text-6xl text-white font-bold tracking-wide drop-shadow-[0_2px_14px_rgba(255,255,255,0.2)] mb-3 sm:mb-4 lowercase">
+              disclaimer !
+            </h2>
+
+            {/* Main Statement */}
+            <p className="font-myfont text-xl sm:text-2xl md:text-[28px] lg:text-[32px] text-neutral-100 font-medium leading-[1.65] max-w-2xl mx-auto lowercase">
+              all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework.
+            </p>
+
+            {/* Hand-drawn Organic Divider Line */}
+            <div className="w-full max-w-sm sm:max-w-md mx-auto my-3 sm:my-4 flex justify-center opacity-40">
+              <svg className="w-full h-2.5 text-neutral-400" viewBox="0 0 500 6" fill="none" preserveAspectRatio="none">
+                <path
+                  d="M2 3.5 C 90 2, 220 5, 340 3 C 400 2, 460 4.5, 498 3.5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+
+            {/* Handwriting Note */}
+            <p className="font-myfont text-sm sm:text-base md:text-lg text-neutral-400 lowercase tracking-wide">
+              (yes , that's my handwriting , don't judge)
+            </p>
           </div>
 
           {/* Metadata pill */}

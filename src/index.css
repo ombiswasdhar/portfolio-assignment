@@ -614,7 +614,7 @@
 }
 
 .font-myfont {
-  font-family: 'MyFont', cursive, sans-serif;
+  font-family: 'MyFont', 'Caveat', cursive, sans-serif;
 }
 
 @font-face {
