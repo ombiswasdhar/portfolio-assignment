@@ -395,87 +395,71 @@ export default function ContentsSection() {
       <MarqueeBar className="border-t border-black relative z-10" />
 
       {/* ========================================================================= */}
-      {/* PART 2: ELECTRIC PURPLE MANILA FILE FOLDER SHOWCASE (MATCHING IMAGE) */}
+      {/* FEATURED WORKS ONWARDS: DOTTED GRID BACKGROUND CANVAS (WHITE & BLACK DOTS) */}
       {/* ========================================================================= */}
-      <section
-        id="featured-works"
-        className="relative w-full bg-[#5E17EB] text-neutral-900 py-16 sm:py-24 md:py-28 px-4 sm:px-8 overflow-hidden"
-      >
-        {/* Giant White Background Typography: "PROJECTS" sitting behind folder like "Child Edu" */}
-        <div
-          className="absolute top-6 sm:top-10 md:top-12 inset-x-0 flex justify-center pointer-events-none select-none z-0 overflow-hidden"
-          aria-hidden="true"
-        >
-          <span className="font-akira font-black text-white text-[16vw] sm:text-[14vw] md:text-[12.5vw] uppercase tracking-tighter opacity-95 leading-none whitespace-nowrap drop-shadow-[0_4px_30px_rgba(0,0,0,0.18)]">
-            PROJECTS
-          </span>
-        </div>
+      <div data-theme="light" className="relative w-full ca-dotted-grid-bg text-neutral-900 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
+        {/* Dotted Grid Pattern Layer */}
+        <div className="ca-dotted-grid-pattern" aria-hidden="true" />
 
-        {/* Floating Photo Tiles in Purple Background Canvas (from reference image) */}
-        {/* Top-Left Floating Photo */}
-        <div className="absolute top-8 sm:top-12 left-4 sm:left-10 md:left-16 z-0 pointer-events-none select-none hidden sm:block -rotate-[7deg] hover:rotate-0 transition-transform">
-          <div className="w-20 sm:w-28 md:w-36 aspect-[4/3] rounded-2xl border-2 sm:border-3 border-black bg-black shadow-2xl overflow-hidden">
-            <img src={projectCardsImg} alt="Thumbnail preview" className="w-full h-full object-cover" />
-          </div>
-        </div>
-
-        {/* Top-Right Floating Photo */}
-        <div className="absolute top-8 sm:top-12 right-4 sm:right-10 md:right-16 z-0 pointer-events-none select-none hidden sm:block rotate-[6deg] hover:rotate-0 transition-transform">
-          <div className="w-20 sm:w-28 md:w-36 aspect-[4/3] rounded-2xl border-2 sm:border-3 border-black bg-black shadow-2xl overflow-hidden">
-            <img src={projectAureausImg} alt="Thumbnail preview" className="w-full h-full object-cover" />
-          </div>
-        </div>
-
-        {/* Mid-Left Floating Photo Peeking from Screen Edge */}
-        <div className="absolute top-1/2 -left-6 sm:-left-4 z-0 pointer-events-none select-none hidden md:block rotate-[10deg]">
-          <div className="w-24 sm:w-32 aspect-[4/3] rounded-2xl border-2 sm:border-3 border-black bg-black shadow-2xl overflow-hidden">
-            <img src={projectMelodyImg} alt="Thumbnail preview" className="w-full h-full object-cover" />
-          </div>
-        </div>
-
-        {/* Mid-Right Floating Photo Peeking from Screen Edge */}
-        <div className="absolute top-1/2 -right-6 sm:-right-4 z-0 pointer-events-none select-none hidden md:block -rotate-[8deg]">
-          <div className="w-24 sm:w-32 aspect-[4/3] rounded-2xl border-2 sm:border-3 border-black bg-black shadow-2xl overflow-hidden">
-            <img src={projectPlaystaplesImg} alt="Thumbnail preview" className="w-full h-full object-cover" />
-          </div>
-        </div>
-
-        {/* Bottom-Left Floating Photo Peeking */}
-        <div className="absolute -bottom-6 left-8 sm:left-24 z-0 pointer-events-none select-none hidden lg:block rotate-[8deg]">
-          <div className="w-24 sm:w-32 aspect-[4/3] rounded-2xl border-2 sm:border-3 border-black bg-black shadow-2xl overflow-hidden">
-            <img src={projectCardsImg} alt="Thumbnail preview" className="w-full h-full object-cover" />
-          </div>
-        </div>
-
-        {/* Main Interactive Manila Folder Container */}
-        <div className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto mt-16 sm:mt-24 md:mt-28">
-          {/* Header cursive subtitle & sticker above folder */}
+        {/* PART 2: CREATIVE ARTSY SECTION HEADER (WITH LETTER REVEAL) */}
+        <section id="featured-works" className="relative z-10 w-full pt-12 sm:pt-16 pb-8 sm:pb-12 px-4 sm:px-8">
           <div
             ref={headerRef}
-            className={`mx-auto mb-6 flex flex-col items-center text-center transition-all duration-700 ${
-              isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            className={`mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-1000 ${
+              isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
+            {/* Cursive handwritten header with animated handwriting */}
             <div ref={handwritingTriggerRef} className="flex flex-col items-center">
-              <div className="font-myfont text-2xl sm:text-3xl text-white font-medium tracking-wide flex items-center justify-center min-h-[2rem]">
+              <div className="font-myfont text-3xl sm:text-4xl text-neutral-800 font-medium tracking-wide flex items-center justify-center min-h-[2.5rem] sm:min-h-[3rem]">
                 {isHandwritingInView ? (
                   <HandwritingText
                     key={handwritingKey}
-                    text="click the tabs to flip folders!"
+                    text="explore my work!"
                     fontUrl="/fonts/Myfont-Regular.ttf"
                     height="1.15em"
-                    duration={1.5}
-                    delay={0.1}
+                    duration={1.6}
+                    delay={0.15}
                     strokeWidth={1.8}
-                    className="text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]"
+                    className="text-neutral-900"
                   />
                 ) : (
-                  <span className="opacity-0">click the tabs to flip folders!</span>
+                  <span className="opacity-0">explore my work!</span>
                 )}
               </div>
+              {/* Hand-drawn double squiggle SVG */}
+              <svg
+                viewBox="0 0 64 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                className={`mt-1 h-3.5 w-24 sm:w-28 text-[#E84A4A] transition-all duration-700 delay-300 ${
+                  isHandwritingInView ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+                }`}
+                aria-hidden="true"
+              >
+                <path d="M3 4c18-3 40-3 58 0" />
+                <path d="M9 9c14-2.5 32-2.5 46 0" />
+              </svg>
+            </div>
+
+            {/* Akira Expanded display headline */}
+            <h2 className="mt-6 font-akira text-[26px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight text-neutral-950 uppercase font-black text-center">
+              FEATURED WORKS
+            </h2>
+
+            {/* Angled Washi Tape Sticker Banner */}
+            <div className="mt-8 max-w-md -rotate-[3.6deg] hover:rotate-0 transition-transform duration-300">
+              <span className="ca-tape-clip inline-block px-6 py-2.5 text-xs sm:text-sm font-ca-mono font-bold uppercase tracking-wider text-black bg-[#FFE57F] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-amber-300/60">
+                A few products I helped make simpler, calmer, and easier to trust.
+              </span>
             </div>
           </div>
+        </section>
 
+        {/* Main Interactive Manila Folder Showcase Container */}
+        <div className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-8 pb-20 sm:pb-28">
           {/* ========================================================================= */}
           {/* PHYSICAL MANILA FOLDER COMPONENT (EXACT GEOMETRY FROM IMAGE) */}
           {/* ========================================================================= */}
@@ -689,15 +673,15 @@ export default function ContentsSection() {
           </div>
 
           {/* Quick Project Switcher Pill Bar below Folder */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 z-10 relative">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 z-10 relative">
             {projectsData.map((p, idx) => (
               <button
                 key={p.id}
                 onClick={() => setActiveTabIdx(idx)}
                 className={`px-4 sm:px-5 py-2 rounded-full border-2 border-black font-poppins text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                   idx === activeTabIdx
-                    ? 'bg-white text-black shadow-lg scale-105'
-                    : 'bg-black/40 text-white/80 hover:bg-black/60 hover:text-white'
+                    ? 'bg-black text-white shadow-lg scale-105'
+                    : 'bg-white text-neutral-800 hover:bg-neutral-100 hover:border-black'
                 }`}
               >
                 0{idx + 1} {p.title}
@@ -705,7 +689,7 @@ export default function ContentsSection() {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       {/* ========================================================================= */}
       {/* CASE STUDY DETAIL MODAL */}
