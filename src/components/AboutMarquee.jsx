@@ -49,9 +49,9 @@ export default function AboutMarquee({ className = '' }) {
         </div>
       </div>
 
-      {/* Bottom Tier: Tilted White Ribbon (Portfolio Theme with Akira font + Crimson Stars ✦) */}
-      <div className="relative w-full overflow-hidden pt-2 sm:pt-3 pb-4 sm:pb-5 z-20">
-        <div className="w-[108%] -ml-[4%] -rotate-[2deg] sm:-rotate-[2.5deg] shadow-[0_12px_36px_rgba(0,0,0,0.85)]">
+      {/* Overlapping Top Layer: Tilted White Ribbon Layered ON TOP of the Red Marquee */}
+      <div className="relative w-full overflow-hidden -mt-3.5 sm:-mt-4 md:-mt-5 pt-1 pb-4 sm:pb-5 z-20 pointer-events-auto">
+        <div className="w-[108%] -ml-[4%] -rotate-[2deg] sm:-rotate-[2.5deg] shadow-[0_14px_40px_rgba(0,0,0,0.9)]">
           <div className="relative w-full h-9 sm:h-10 bg-white text-black flex items-stretch overflow-hidden border-y-2 border-black">
             {/* Soft edge gradient fades from white */}
             <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-14 z-10 bg-gradient-to-r from-white to-transparent" />
