@@ -523,27 +523,13 @@ export default function ContentsSection() {
               className="relative w-full rounded-3xl sm:rounded-[40px] border-2 sm:border-3 border-black shadow-[0_25px_80px_rgba(0,0,0,0.4)] overflow-hidden transition-colors duration-500 p-6 sm:p-10 lg:p-12 min-h-[540px] flex flex-col justify-between select-none"
               style={{ backgroundColor: currentProject.folderColor }}
             >
-              {/* Retro Cartoon Mascot Stickers on the Folder */}
-              {/* 1. Pink Fluffy Cloud Mascot (Top-Left) */}
-              <div className="absolute top-3 sm:top-5 left-4 sm:left-8 z-10 pointer-events-none select-none hover:scale-110 transition-transform">
-                <CloudMascot className="w-14 h-14 sm:w-18 sm:h-18 drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]" />
-              </div>
-
-              {/* 2. White Cartoon Hand Mascot (Far Right) */}
-              <div className="absolute top-12 sm:top-16 -right-2 sm:right-6 z-10 pointer-events-none select-none -rotate-[8deg] hover:rotate-0 transition-transform hidden sm:block">
+              {/* Retro Cartoon Mascot Stickers on the Right of Folder (Clear of text) */}
+              {/* 1. White Cartoon Hand Mascot (Far Right) */}
+              <div className="absolute top-10 sm:top-14 -right-2 sm:right-6 z-10 pointer-events-none select-none -rotate-[8deg] hover:rotate-0 transition-transform hidden sm:block">
                 <HandMascot className="w-14 h-14 sm:w-18 sm:h-18 drop-shadow-[0_4px_14px_rgba(0,0,0,0.15)]" />
               </div>
 
-              {/* 3. Thinking Cartoon Mascot Peeking (Bottom-Left) */}
-              <div className="absolute -bottom-2 sm:bottom-2 left-4 sm:left-6 z-10 pointer-events-none select-none hidden md:block">
-                <img
-                  src={charThinkingImg}
-                  alt="Cartoon mascot"
-                  className="w-16 sm:w-20 h-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
-                />
-              </div>
-
-              {/* 4. Red/Pink Spiky Starburst Mascot (Bottom-Right) */}
+              {/* 2. Red/Pink Spiky Starburst Mascot (Bottom-Right) */}
               <div className="absolute bottom-3 sm:bottom-5 right-4 sm:right-8 z-10 pointer-events-none select-none rotate-[10deg] hover:rotate-0 transition-transform hidden sm:block">
                 <StarburstMascot className="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-[0_6px_16px_rgba(0,0,0,0.2)]" />
               </div>
@@ -581,10 +567,6 @@ export default function ContentsSection() {
                       {currentProject.subtitle}
                     </p>
 
-                    {/* Description in Poppins Regular */}
-                    <p className="mt-4 max-w-lg text-base sm:text-lg leading-relaxed font-poppins font-normal text-neutral-900/95">
-                      {currentProject.description}
-                    </p>
 
                     {/* Action Buttons in Poppins Light */}
                     <div className="mt-6 flex flex-wrap items-center gap-4">
