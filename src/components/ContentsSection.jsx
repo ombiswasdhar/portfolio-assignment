@@ -448,7 +448,7 @@ export default function ContentsSection() {
         </div>
 
         {/* Main Interactive Manila Folder Container */}
-        <div className="relative z-10 max-w-5xl mx-auto mt-16 sm:mt-24 md:mt-28">
+        <div className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto mt-16 sm:mt-24 md:mt-28">
           {/* Header cursive subtitle & sticker above folder */}
           <div
             ref={headerRef}
@@ -518,128 +518,167 @@ export default function ContentsSection() {
               })}
             </div>
 
-            {/* Folder Body Canvas */}
+            {/* Folder Body Canvas with 2-Column Info & Framed Imagery */}
             <div
-              className="relative w-full rounded-3xl sm:rounded-[40px] border-2 sm:border-3 border-black shadow-[0_25px_80px_rgba(0,0,0,0.4)] overflow-hidden transition-colors duration-500 p-6 sm:p-10 md:p-14 min-h-[500px] sm:min-h-[580px] md:min-h-[640px] flex flex-col justify-between items-center text-center select-none"
+              className="relative w-full rounded-3xl sm:rounded-[40px] border-2 sm:border-3 border-black shadow-[0_25px_80px_rgba(0,0,0,0.4)] overflow-hidden transition-colors duration-500 p-6 sm:p-10 lg:p-12 min-h-[540px] flex flex-col justify-between select-none"
               style={{ backgroundColor: currentProject.folderColor }}
             >
-              {/* Retro Cartoon Mascot Stickers on the Folder (Matching Reference Image) */}
-
+              {/* Retro Cartoon Mascot Stickers on the Folder */}
               {/* 1. Pink Fluffy Cloud Mascot (Top-Left) */}
-              <div className="absolute top-4 sm:top-7 left-4 sm:left-8 z-10 pointer-events-none select-none hover:scale-110 transition-transform">
-                <CloudMascot className="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]" />
+              <div className="absolute top-3 sm:top-5 left-4 sm:left-8 z-10 pointer-events-none select-none hover:scale-110 transition-transform">
+                <CloudMascot className="w-14 h-14 sm:w-18 sm:h-18 drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]" />
               </div>
 
-              {/* 2. White Cartoon Hand Mascot (Right Shoulder) */}
-              <div className="absolute top-1/3 -right-2 sm:right-6 md:right-10 z-10 pointer-events-none select-none -rotate-[8deg] hover:rotate-0 transition-transform">
-                <HandMascot className="w-16 h-16 sm:w-22 sm:h-22 drop-shadow-[0_4px_14px_rgba(0,0,0,0.15)]" />
+              {/* 2. White Cartoon Hand Mascot (Far Right) */}
+              <div className="absolute top-12 sm:top-16 -right-2 sm:right-6 z-10 pointer-events-none select-none -rotate-[8deg] hover:rotate-0 transition-transform hidden sm:block">
+                <HandMascot className="w-14 h-14 sm:w-18 sm:h-18 drop-shadow-[0_4px_14px_rgba(0,0,0,0.15)]" />
               </div>
 
               {/* 3. Thinking Cartoon Mascot Peeking (Bottom-Left) */}
-              <div className="absolute bottom-2 sm:bottom-4 left-3 sm:left-7 z-10 pointer-events-none select-none">
+              <div className="absolute -bottom-2 sm:bottom-2 left-4 sm:left-6 z-10 pointer-events-none select-none hidden md:block">
                 <img
                   src={charThinkingImg}
                   alt="Cartoon mascot"
-                  className="w-16 sm:w-20 md:w-24 h-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
+                  className="w-16 sm:w-20 h-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
                 />
               </div>
 
               {/* 4. Red/Pink Spiky Starburst Mascot (Bottom-Right) */}
-              <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-8 z-10 pointer-events-none select-none rotate-[10deg] hover:rotate-0 transition-transform">
-                <StarburstMascot className="w-18 h-18 sm:w-24 sm:h-24 drop-shadow-[0_6px_16px_rgba(0,0,0,0.2)]" />
+              <div className="absolute bottom-3 sm:bottom-5 right-4 sm:right-8 z-10 pointer-events-none select-none rotate-[10deg] hover:rotate-0 transition-transform hidden sm:block">
+                <StarburstMascot className="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-[0_6px_16px_rgba(0,0,0,0.2)]" />
               </div>
 
               {/* Folder Top Metadata Row */}
-              <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/70 pb-4 border-b border-black/15 z-10">
-                <span className="bg-black/10 px-3 py-1 rounded-full border border-black/15">
-                  FOLDER // 0{activeTabIdx + 1}
-                </span>
-                <span className="font-poppins-light font-medium tracking-widest text-[11px] sm:text-xs">
-                  {currentProject.category} • {currentProject.date}
-                </span>
+              <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/80 pb-4 border-b border-black/15 z-10">
+                <div className="flex items-center gap-3">
+                  <span className="bg-black/10 px-3.5 py-1 rounded-full border border-black/15 text-neutral-950 font-poppins-light font-light text-xs tracking-widest inline-flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-neutral-950" />
+                    {currentProject.date}
+                  </span>
+                  <span className="font-poppins-light font-light text-xs tracking-widest uppercase text-neutral-800 hidden sm:inline-block">
+                    FOLDER // 0{activeTabIdx + 1}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-poppins-light font-light text-xs uppercase tracking-wider text-neutral-800">
+                    {currentProject.category}
+                  </span>
+                </div>
               </div>
 
-              {/* Center Main Composition */}
-              <div className="relative z-10 my-auto py-8 sm:py-10 flex flex-col items-center justify-center max-w-3xl mx-auto">
-                {/* Floating Tilted Artwork Chip 1: Top-Left of Title */}
-                <div
-                  onClick={() => setActiveProject(currentProject)}
-                  className="absolute -top-6 sm:-top-8 left-0 sm:left-4 md:-left-4 z-20 cursor-pointer -rotate-[8deg] hover:rotate-0 hover:scale-105 transition-all group/chip"
-                  title="Inspect artwork"
-                >
-                  <div className="w-24 sm:w-36 md:w-44 aspect-[4/3] rounded-xl sm:rounded-2xl border-2 sm:border-3 border-black bg-black shadow-xl overflow-hidden">
-                    <img
-                      src={currentProject.thumbnail}
-                      alt={currentProject.title}
-                      className="w-full h-full object-cover group-hover/chip:scale-110 transition-transform duration-500"
-                    />
+              {/* Main 2-Column Content Layout (from Previous Iteration) */}
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 sm:gap-10 lg:gap-12 py-6 sm:py-8 items-center text-left">
+                {/* Left Column: Title, Subtitle, Full Description, Actions, Tags */}
+                <div className="flex flex-col justify-between h-full">
+                  <div>
+                    {/* Massive Title in Akira Expanded */}
+                    <h2 className="font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.08] tracking-tight text-neutral-950">
+                      {currentProject.title}
+                    </h2>
+
+                    {/* Subtitle in Poppins Light */}
+                    <p className="mt-2 text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
+                      {currentProject.subtitle}
+                    </p>
+
+                    {/* Description in Poppins Regular */}
+                    <p className="mt-4 max-w-lg text-base sm:text-lg leading-relaxed font-poppins font-normal text-neutral-900/95">
+                      {currentProject.description}
+                    </p>
+
+                    {/* Action Buttons in Poppins Light */}
+                    <div className="mt-6 flex flex-wrap items-center gap-4">
+                      <button
+                        onClick={() => setActiveProject(currentProject)}
+                        className="font-poppins-light font-light inline-flex items-center gap-2.5 pb-1 border-b-2 border-neutral-950 text-sm uppercase tracking-[0.2em] cursor-pointer text-neutral-950 hover:text-black/70 transition-all group/cta font-medium"
+                      >
+                        View project
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.4"
+                          className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
+                          aria-hidden="true"
+                        >
+                          <path d="M7 17 17 7M9 7h8v8" />
+                        </svg>
+                      </button>
+
+                      {currentProject.figmaUrl && (
+                        <a
+                          href={currentProject.figmaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-poppins-light font-light inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black transition-all text-xs uppercase tracking-wider group/figma shadow-sm"
+                          title="Open design file in Figma"
+                        >
+                          <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
+                          </svg>
+                          <span>Figma File</span>
+                          <svg className="w-3 h-3 group-hover/figma:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M7 17 17 7M9 7h8v8" />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Tags Badges in Poppins Light */}
+                  <div className="mt-8 flex flex-wrap gap-2 pt-2">
+                    {currentProject.tags.map((tag, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="font-poppins-light font-light text-xs sm:text-sm px-3.5 py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                {/* Floating Tilted Artwork Chip 2: Centered near Title */}
-                <div
-                  onClick={() => setActiveProject(currentProject)}
-                  className="absolute -bottom-8 sm:-bottom-10 right-4 sm:right-12 md:right-8 z-20 cursor-pointer rotate-[6deg] hover:rotate-0 hover:scale-105 transition-all group/chip"
-                  title="Inspect artwork"
-                >
-                  <div className="w-24 sm:w-36 md:w-44 aspect-[4/3] rounded-xl sm:rounded-2xl border-2 sm:border-3 border-black bg-black shadow-xl overflow-hidden">
-                    <img
-                      src={currentProject.thumbnail}
-                      alt={currentProject.title}
-                      className="w-full h-full object-cover group-hover/chip:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                </div>
+                {/* Right Column: Framed Thumbnail Artwork with Washi Tape Mounts */}
+                <div className="relative">
+                  {/* Washi masking tape: Top-Left */}
+                  <span
+                    aria-hidden="true"
+                    className="washi-tape absolute -left-5 -top-3 z-20 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                  />
+                  {/* Washi masking tape: Top-Right */}
+                  <span
+                    aria-hidden="true"
+                    className="washi-tape absolute -right-5 -top-3 z-20 h-6 w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                  />
 
-                {/* Massive Display Title (like "MELLOW ©") */}
-                <h2 className="font-akira font-black uppercase text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-black tracking-tight leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)] px-4">
-                  {currentProject.displayTitle}
-                </h2>
-
-                {/* Iconic Mascot Eyes Pill Badge (Direct from Reference Image) */}
-                <div className="my-4 sm:my-5">
-                  <CartoonEyesBadge />
-                </div>
-
-                {/* Action Buttons: Pill "Inspect Case Study" & "Figma File" */}
-                <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-                  <button
+                  {/* Tactile Framed Artwork Box */}
+                  <div
                     onClick={() => setActiveProject(currentProject)}
-                    className="px-8 sm:px-10 py-3 sm:py-3.5 rounded-full bg-black text-white hover:bg-neutral-900 active:scale-95 transition-all font-poppins text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-[0_8px_24px_rgba(0,0,0,0.3)] inline-flex items-center gap-2.5 cursor-pointer group/cta"
+                    className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-[4/3] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
+                    title="Inspect Case Study"
                   >
-                    <span>Inspect Case Study</span>
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform"
-                    >
-                      <path d="M7 17 17 7M9 7h8v8" />
-                    </svg>
-                  </button>
+                    <div className="relative overflow-hidden h-full w-full">
+                      <img
+                        src={currentProject.thumbnail}
+                        alt={currentProject.title}
+                        className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out"
+                      />
+                    </div>
 
-                  {currentProject.figmaUrl && (
-                    <a
-                      href={currentProject.figmaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-white text-black border-2 border-black hover:bg-neutral-100 active:scale-95 transition-all font-poppins text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-md inline-flex items-center gap-2 cursor-pointer"
-                    >
-                      <span>Figma File</span>
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M7 17 17 7M9 7h8v8" />
-                      </svg>
-                    </a>
-                  )}
+                    {/* Hover Pill */}
+                    <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                      <span className="px-5 py-2.5 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-widest uppercase shadow-2xl">
+                        Inspect Case Study 🔍
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Bottom Metadata Summary: Safe • Caring Teachers • Play-Based Learning */}
-              <div className="w-full pt-4 border-t border-black/15 z-10">
-                <p className="font-poppins-light font-medium text-xs sm:text-sm text-neutral-900 tracking-wider uppercase">
-                  {currentProject.bulletSummary}
-                </p>
+              {/* Folder Bottom Row */}
+              <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase">
+                <span>{currentProject.bulletSummary}</span>
+                <span className="font-semibold text-neutral-800 hidden sm:inline">Press ← → to flip files</span>
               </div>
             </div>
 
