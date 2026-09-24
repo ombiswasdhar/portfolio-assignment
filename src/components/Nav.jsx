@@ -110,7 +110,7 @@ export default function Nav() {
       style={{ transform: `translate3d(0, -${marqueeOffset}px, 0)` }}
     >
       {/* Top Tier: Animated White Marquee Bar (scrolls up and away as page scrolls) */}
-      <MarqueeBar />
+      <MarqueeBar variant="roles" />
 
       {/* Main Tier: Editorial Navigation Bar (sticks to the top when marquee scrolls away) */}
       <div

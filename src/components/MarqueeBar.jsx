@@ -2,10 +2,43 @@ import React from 'react'
 import mentorsityLogo from '../assets/nav/mentorsity_logo.png'
 import playStaplesLogo from '../assets/nav/play_staples_logo.png'
 
-export default function MarqueeBar({ className = '', direction = 'left', reverse = false }) {
-  const isReverse = direction === 'right' || reverse
+const DEFAULT_ROLES = [
+  'UI/UX DESIGNER',
+  'GRAPHIC DESIGNER',
+  'ILLUSTRATOR',
+  'CHARACTER DESIGNER',
+  'VISUAL ARTIST',
+  'PRODUCT DESIGNER',
+]
 
-  // A single repeating pair: Mentorsity Logo cell + Play Staples Logo cell
+export default function MarqueeBar({
+  className = '',
+  direction = 'left',
+  reverse = false,
+  variant = 'logos',
+  items,
+}) {
+  const isReverse = direction === 'right' || reverse
+  const isRoles = variant === 'roles'
+
+  const rolesList = items && items.length > 0 ? items : DEFAULT_ROLES
+
+  // Roles cell rendering
+  const renderRoleCell = (role, key) => (
+    <div
+      key={key}
+      className="flex items-center gap-3 sm:gap-4 px-5 sm:px-7 h-full border-r border-black/15 hover:bg-neutral-100/80 transition-all duration-200 group/role cursor-pointer shrink-0"
+    >
+      <span className="font-akira font-black text-[10px] sm:text-[11px] md:text-xs tracking-wider uppercase text-neutral-900 group-hover/role:text-[#DE2020] transition-colors">
+        {role}
+      </span>
+      <span className="text-[#DE2020] text-xs font-bold shrink-0 drop-shadow-[0_0_6px_rgba(222,32,32,0.4)]">
+        ✦
+      </span>
+    </div>
+  )
+
+  // Logos cell rendering
   const renderLogoPair = (key) => (
     <React.Fragment key={key}>
       {/* Mentorsity Logo Cell */}
@@ -34,30 +67,38 @@ export default function MarqueeBar({ className = '', direction = 'left', reverse
     </React.Fragment>
   )
 
-  // Repeat the 2-logo pair 8 times per half for a completely seamless infinite loop
-  const loopCount = 8
-  const loopIndexes = Array.from({ length: loopCount }, (_, i) => i)
+  // Duplication counts for seamless infinite loop
+  const roleCycles = [0, 1, 2] // 3 repeats of the roles array per half
+  const logoCycles = Array.from({ length: 8 }, (_, i) => i)
 
   return (
     <div
-      aria-label="Partner Logos Animated Marquee Bar"
+      aria-label={isRoles ? 'Creative Roles Animated Marquee Bar' : 'Partner Logos Animated Marquee Bar'}
       className={`relative w-full h-9 bg-white text-black border-b border-black select-none flex items-stretch overflow-hidden shadow-xs ${className}`}
     >
       {/* Soft edge gradient fades for smooth edge entry and exit */}
       <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-12 z-10 bg-gradient-to-r from-white to-transparent" />
       <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-12 z-10 bg-gradient-to-l from-white to-transparent" />
 
-      {/* Infinite Scrolling Track (Duplicated 2-half loop for seamless translateX) */}
+      {/* Infinite Scrolling Track */}
       <div className="relative w-full overflow-hidden h-full flex items-center">
         <div className={`${isReverse ? 'animate-marquee-scroll-reverse' : 'animate-marquee-scroll'} flex items-center h-full`}>
           {/* Half 1 */}
           <div className="flex items-center h-full shrink-0">
-            {loopIndexes.map((idx) => renderLogoPair(`h1-${idx}`))}
+            {isRoles
+              ? roleCycles.map((cycleIdx) =>
+                  rolesList.map((role, rIdx) => renderRoleCell(role, `h1-${cycleIdx}-${rIdx}`))
+                )
+              : logoCycles.map((idx) => renderLogoPair(`h1-${idx}`))}
           </div>
 
           {/* Half 2 (Exact duplicate for seamless infinite loop) */}
           <div className="flex items-center h-full shrink-0" aria-hidden="true">
-            {loopIndexes.map((idx) => renderLogoPair(`h2-${idx}`))}
+            {isRoles
+              ? roleCycles.map((cycleIdx) =>
+                  rolesList.map((role, rIdx) => renderRoleCell(role, `h2-${cycleIdx}-${rIdx}`))
+                )
+              : logoCycles.map((idx) => renderLogoPair(`h2-${idx}`))}
           </div>
         </div>
       </div>
