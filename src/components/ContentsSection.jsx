@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import projectCardsImg from '../assets/work/project_cards.jpg'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
+import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import Auralis from '@/components/ui/auralis'
@@ -86,6 +87,35 @@ const projectsData = [
     highlights:
       'Designed an intuitive booking funnel that eliminates cart friction, illustrated with floating 3D spheres and bold chromatic accents.',
     tools: ['Figma', 'UI/UX Design', 'User Flow'],
+  },
+  {
+    id: 'playstaples',
+    num: '04',
+    tabLabel: 'Project 04',
+    tabBg: '#FACC15',
+    tabTextColor: 'text-neutral-950',
+    cardBg: '#121214',
+    accentColor: '#FACC15',
+    date: 'FEB 20, 2026',
+    title: 'PlayStaples',
+    subtitle: 'Kaali Peeli Toy Design & Brand Experience',
+    category: 'Toy Design & Branding',
+    description:
+      'PlayStaples celebrates iconic Indian street culture through tactile collectible design. "Kaali Peeli" reimagines the legendary Mumbai Premier Padmini taxi as a handcrafted wooden toy—celebrating nostalgia "for the ones who carved dreams on the trunk." Developed with 3D product visualization, custom taxi livery, physical packaging, and brand storytelling.',
+    thumbnail: projectPlaystaplesImg,
+    tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
+    deliverables: [
+      'Handcrafted wooden toy conceptualization & 3D CAD modeling',
+      'Authentic "Kaali Peeli" Mumbai taxi colorway & livery details',
+      'Custom rooftop luggage rack & tactile wooden wheel proportions',
+      'Complete retail packaging design, hangtags & typography',
+      'Interactive 3D renders & lifestyle product scene staging',
+    ],
+    highlights:
+      'Transformed an ubiquitous Mumbai cultural emblem into a sleek, nostalgic collectible wooden toy—blending warm organic wood grain with pop-art industrial styling and playful brand identity.',
+    tools: ['Figma', '3D Modeling', 'Photoshop', 'Packaging Design'],
+    figmaUrl:
+      'https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0',
   },
 ]
 
@@ -208,7 +238,7 @@ export default function ContentsSection() {
 
             {/* Main Statement */}
             <p className="font-myfont text-xl sm:text-2xl md:text-[28px] lg:text-[32px] text-neutral-100 font-medium leading-[1.65] max-w-2xl mx-auto lowercase">
-              all the projects showcased here are my 2nd year college assignments (3 projects) which i created as part of my coursework.
+              all the projects showcased here are my 2nd year college assignments (4 projects) which i created as part of my coursework.
             </p>
 
             {/* Hand-drawn Organic Divider Line */}
@@ -371,7 +401,7 @@ export default function ContentsSection() {
                 <button
                   onClick={() => scrollToCard(proj.id)}
                   className={`ca-mono inline-flex items-center gap-2 py-3.5 pr-14 text-xs font-bold uppercase tracking-[0.2em] sm:gap-3.5 sm:py-6 sm:pr-28 sm:text-base cursor-pointer hover:brightness-105 transition-all shadow-[0_-2px_10px_rgba(0,0,0,0.06)] ${
-                    isLight ? 'text-[#180A2E]' : 'text-white'
+                    proj.tabTextColor || (isLight ? 'text-[#180A2E]' : 'text-white')
                   } ${
                     isFirst
                       ? 'pl-5 [clip-path:polygon(0_0,calc(100%-44px)_0,100%_100%,0_100%)] sm:pl-9 sm:[clip-path:polygon(0_0,calc(100%-76px)_0,100%_100%,0_100%)]'
@@ -382,7 +412,7 @@ export default function ContentsSection() {
                   <svg
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className={`h-3 w-3 sm:h-4 sm:w-4 ${isLight ? 'text-[#180A2E]' : 'text-white'}`}
+                    className={`h-3 w-3 sm:h-4 sm:w-4 ${proj.tabTextColor || (isLight ? 'text-[#180A2E]' : 'text-white')}`}
                     aria-hidden="true"
                   >
                     <path d="M12 2c1 5 4 8 9 9-5 1-8 4-9 9-1-5-4-8-9-9 5-1 8-4 9-9Z" />
@@ -435,28 +465,48 @@ export default function ContentsSection() {
                       {proj.description}
                     </p>
 
-                    {/* View project action link */}
-                    <button
-                      onClick={() => setActiveProject(proj)}
-                      className={`font-poppins-light font-light mt-8 inline-flex items-center gap-2.5 self-start border-b-2 pb-1 text-sm uppercase tracking-[0.2em] cursor-pointer transition-all group/cta ${
-                        isLight
-                          ? 'text-[#180A2E] hover:text-[#180A2E]/70'
-                          : 'text-white hover:text-white/80'
-                      }`}
-                      style={{ borderColor: isLight ? '#180A2E' : '#ffffff' }}
-                    >
-                      View project
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.4"
-                        className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
-                        aria-hidden="true"
+                    {/* View project & Figma action links */}
+                    <div className="mt-8 flex flex-wrap items-center gap-4">
+                      <button
+                        onClick={() => setActiveProject(proj)}
+                        className={`font-poppins-light font-light inline-flex items-center gap-2.5 self-start border-b-2 pb-1 text-sm uppercase tracking-[0.2em] cursor-pointer transition-all group/cta ${
+                          isLight
+                            ? 'text-[#180A2E] hover:text-[#180A2E]/70'
+                            : 'text-white hover:text-white/80'
+                        }`}
+                        style={{ borderColor: isLight ? '#180A2E' : (proj.accentColor || '#ffffff') }}
                       >
-                        <path d="M7 17 17 7M9 7h8v8" />
-                      </svg>
-                    </button>
+                        View project
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.4"
+                          className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
+                          aria-hidden="true"
+                        >
+                          <path d="M7 17 17 7M9 7h8v8" />
+                        </svg>
+                      </button>
+
+                      {proj.figmaUrl && (
+                        <a
+                          href={proj.figmaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-poppins-light font-light inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-yellow-400/40 bg-yellow-400/10 text-yellow-300 hover:bg-yellow-400 hover:text-black transition-all text-xs uppercase tracking-wider group/figma"
+                          title="Open design file in Figma"
+                        >
+                          <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
+                          </svg>
+                          <span>Figma File</span>
+                          <svg className="w-3 h-3 group-hover/figma:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M7 17 17 7M9 7h8v8" />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
                   </div>
 
                   {/* Polygon Clipped Tags */}
@@ -539,7 +589,7 @@ export default function ContentsSection() {
               <div className="flex flex-col gap-1">
                 <div className="font-poppins-light font-light inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400">
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeProject.accentColor }} />
-                  <span>{activeProject.num} / 03 • {activeProject.category}</span>
+                  <span>{activeProject.num} / 0{projectsData.length} • {activeProject.category}</span>
                 </div>
                 <h3 className="font-akira font-black uppercase text-xl sm:text-3xl tracking-tight text-white">
                   {activeProject.title}
@@ -627,7 +677,7 @@ export default function ContentsSection() {
                   </p>
                 </div>
 
-                {/* Tools used */}
+                {/* Tools used & Actions */}
                 <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex flex-wrap gap-1.5">
                     {activeProject.tools.map((tool, idx) => (
@@ -640,12 +690,28 @@ export default function ContentsSection() {
                     ))}
                   </div>
 
-                  <button
-                    onClick={() => setActiveProject(null)}
-                    className="px-4 py-2 rounded-xl bg-white text-black font-ca-mono font-bold text-xs uppercase tracking-wider hover:bg-neutral-200 transition-colors cursor-pointer"
-                  >
-                    Done Reading
-                  </button>
+                  <div className="flex items-center gap-2.5">
+                    {activeProject.figmaUrl && (
+                      <a
+                        href={activeProject.figmaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 rounded-xl bg-[#FACC15] text-black font-ca-mono font-bold text-xs uppercase tracking-wider hover:bg-[#EAB308] transition-colors cursor-pointer inline-flex items-center gap-2 shadow-lg"
+                      >
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
+                        </svg>
+                        <span>Open in Figma</span>
+                      </a>
+                    )}
+
+                    <button
+                      onClick={() => setActiveProject(null)}
+                      className="px-4 py-2 rounded-xl bg-white text-black font-ca-mono font-bold text-xs uppercase tracking-wider hover:bg-neutral-200 transition-colors cursor-pointer"
+                    >
+                      Done Reading
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
