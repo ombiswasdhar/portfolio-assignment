@@ -67,8 +67,9 @@ export default function MarqueeBar({
     </React.Fragment>
   )
 
-  // Duplication counts for seamless infinite loop
-  const roleCycles = [0, 1, 2] // 3 repeats of the roles array per half
+  // Duplication counts for seamless infinite loop (guaranteeing at least 20 items per half)
+  const cycleCount = Math.max(3, Math.ceil(20 / rolesList.length))
+  const roleCycles = Array.from({ length: cycleCount }, (_, i) => i)
   const logoCycles = Array.from({ length: 8 }, (_, i) => i)
 
   return (
