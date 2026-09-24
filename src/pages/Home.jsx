@@ -4,6 +4,7 @@ import Nav from '../components/Nav'
 import Hero from '../components/Hero'
 import AboutSection from '../components/AboutSection'
 import SkillSetSection from '../components/SkillSetSection'
+import MarqueeBar from '../components/MarqueeBar'
 import ContentsSection from '../components/ContentsSection'
 import ScrollProgressBar from '../components/ScrollProgressBar'
 import ConstellationGrid from '@/components/ui/constellation-grid'
@@ -47,6 +48,7 @@ export default function Home() {
         <Hero />
         <AboutSection />
         <SkillSetSection />
+        <MarqueeBar className="border-t border-black relative z-10" />
         <ContentsSection />
       </main>
     </div>

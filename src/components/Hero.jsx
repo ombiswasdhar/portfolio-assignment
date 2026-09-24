@@ -103,23 +103,23 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      {/* 1440x1024 Canvas Container */}
-      <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/1024] min-h-[560px] sm:min-h-[640px] md:min-h-[850px] lg:min-h-[1024px]">
+      {/* 1440x940 Canvas Container */}
+      <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/940] min-h-[500px] sm:min-h-[580px] md:min-h-[740px] lg:min-h-[860px]">
         
         {/* ================= TOP ROW ================= */}
-        {/* 2025 - Akira / Unbounded font */}
+        {/* 2026 - Akira Expanded font */}
         <div
-          className="absolute left-4 sm:left-6 md:left-[2.29%] top-16 sm:top-14 md:top-[3.81%] z-20 flex items-center"
-          title="Year 2025"
+          className="absolute left-4 sm:left-6 md:left-[2.29%] top-[92px] sm:top-[98px] md:top-[9%] z-20 flex items-center"
+          title="Year 2026"
         >
-          <span className="font-display font-black text-lg sm:text-2xl md:text-[28px] leading-none tracking-[0.08em] text-white">
-            2025
+          <span className="font-akira font-black text-lg sm:text-2xl md:text-[28px] leading-none tracking-[0.08em] text-white">
+            2026
           </span>
         </div>
 
         {/* portfolio - Handwritten cursive script */}
         <div
-          className="absolute left-1/2 top-16 sm:top-14 md:top-[4.00%] -translate-x-1/2 z-20 flex items-center pointer-events-none"
+          className="absolute left-1/2 top-[92px] sm:top-[98px] md:top-[9%] -translate-x-1/2 z-20 flex items-center pointer-events-none"
         >
           <span className="font-script text-2xl sm:text-3xl md:text-[34px] font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-center">
             portfolio
@@ -128,7 +128,7 @@ export default function Hero() {
 
         {/* Top-Right OM Badge */}
         <div
-          className="absolute right-4 sm:right-6 md:right-auto md:left-[92.29%] md:-translate-x-1/2 top-16 sm:top-14 md:top-[4.00%] z-20 flex items-center"
+          className="absolute right-4 sm:right-6 md:right-auto md:left-[92.29%] md:-translate-x-1/2 top-[92px] sm:top-[98px] md:top-[9%] z-20 flex items-center"
         >
           <img
             src={topLogo}
@@ -268,12 +268,10 @@ export default function Hero() {
 
         </div>
 
-        {/* ================= DESKTOP BOTTOM ROW (md and up, exact Figma layout) ================= */}
-        <div className="hidden md:block">
+        {/* ================= DESKTOP BOTTOM ROW (md and up) ================= */}
+        <div className="hidden md:flex absolute bottom-4 lg:bottom-6 left-[2.50%] right-[2.50%] items-center justify-between z-20 pointer-events-none">
           {/* Left: Symbiosis Institute of Design */}
-          <div
-            className="absolute left-[2.50%] top-[90.92%] max-w-[280px] z-20"
-          >
+          <div className="max-w-[280px]">
             <p className="font-fredoka font-normal text-base lg:text-[20px] leading-snug text-white">
               Symbiosis Institute
               <br />
@@ -281,31 +279,27 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Center: Barcode */}
-          <div
-            className="absolute left-[41.81%] top-[90.43%] w-[16.32%] z-20 flex justify-center items-center"
-          >
+          {/* Center: Barcode - sized identically to Symbiosis Institute of Design text height */}
+          <div className="flex justify-center items-center">
             <img
               src={barcode}
               alt="Barcode"
-              className="w-full max-w-[235px] h-auto object-contain filter invert brightness-200 pointer-events-none"
+              className="h-10 lg:h-12 w-auto object-contain filter invert brightness-200 pointer-events-none"
             />
           </div>
 
           {/* Right: Arrow Monogram Logo */}
-          <div
-            className="absolute left-[92.22%] top-[88.09%] w-[5.49%] z-20 flex items-center justify-end"
-          >
+          <div className="flex items-center justify-end pointer-events-auto">
             <img
               src={arrowLogo}
               alt="Arrow monogram"
-              className="w-full max-w-[79px] h-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300 cursor-pointer"
+              className="h-10 lg:h-12 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300 cursor-pointer"
             />
           </div>
         </div>
 
-        {/* ================= MOBILE BOTTOM ROW (< md, zero overlap clean flex row) ================= */}
-        <div className="md:hidden absolute bottom-3 sm:bottom-4 left-0 right-0 px-3 sm:px-6 z-20 flex items-center justify-between gap-2">
+        {/* ================= MOBILE BOTTOM ROW (< md) ================= */}
+        <div className="md:hidden absolute bottom-3 sm:bottom-4 left-0 right-0 px-3 sm:px-6 z-20 flex items-center justify-between gap-2 pointer-events-none">
           {/* Left: Symbiosis Institute of Design text */}
           <div className="shrink-0 max-w-[130px] sm:max-w-[180px]">
             <p className="font-fredoka font-normal text-[10px] sm:text-xs leading-tight text-neutral-300">
@@ -315,21 +309,21 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Center: Barcode */}
+          {/* Center: Barcode - sized identically to Symbiosis Institute text height */}
           <div className="flex-1 flex justify-center items-center px-1">
             <img
               src={barcode}
               alt="Barcode"
-              className="w-20 sm:w-28 h-auto object-contain filter invert brightness-200 pointer-events-none"
+              className="h-6 sm:h-7 w-auto object-contain filter invert brightness-200 pointer-events-none"
             />
           </div>
 
           {/* Right: Arrow Monogram Logo */}
-          <div className="shrink-0 flex items-center justify-end">
+          <div className="shrink-0 flex items-center justify-end pointer-events-auto">
             <img
               src={arrowLogo}
               alt="Arrow monogram"
-              className="w-7 sm:w-8 h-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300 cursor-pointer"
+              className="h-6 sm:h-7 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300 cursor-pointer"
             />
           </div>
         </div>
@@ -337,7 +331,7 @@ export default function Hero() {
       </div>
 
       {/* Symmetrical White Line Divider below barcode with animated scroll down cue */}
-      <div className="w-full flex flex-col items-center justify-center mt-6 sm:mt-8 md:mt-10 mb-4 sm:mb-6 md:mb-8">
+      <div className="w-full flex flex-col items-center justify-center mt-2 sm:mt-3 md:mt-4 mb-2 sm:mb-3 md:mb-4">
         <div
           className="w-[88%] sm:w-[75%] md:w-[60.28%] max-w-[868px] h-[1px] bg-white/20"
           aria-hidden="true"
@@ -346,7 +340,7 @@ export default function Hero() {
         {/* Subtle Animated Scroll Indicator */}
         <a
           href="#about"
-          className="group flex flex-col items-center gap-1 mt-3 sm:mt-4 text-neutral-400 hover:text-white transition-colors duration-300 pointer-events-auto select-none"
+          className="group flex flex-col items-center gap-1 mt-2 text-neutral-400 hover:text-white transition-colors duration-300 pointer-events-auto select-none"
           aria-label="Scroll down to About Me section"
         >
           <span className="text-[10px] sm:text-[11px] font-mono tracking-widest uppercase opacity-60 group-hover:opacity-100 transition-opacity">

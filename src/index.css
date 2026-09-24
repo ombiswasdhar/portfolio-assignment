@@ -184,7 +184,7 @@
 }
 
 .font-display {
-  font-family: 'Unbounded', sans-serif;
+  font-family: 'Akira Expanded', 'Unbounded', sans-serif;
 }
 
 .font-serif-display {
@@ -380,6 +380,27 @@
   width: max-content;
   animation: tape-marquee 22s linear infinite;
   will-change: transform;
+}
+
+/* ================= Top Header Marquee Scroll ================= */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-scroll {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-scroll:hover {
+  animation-play-state: paused;
 }
 
 /* ================= Custom Cyberpunk Cursor Styles ================= */
@@ -596,6 +617,59 @@
   font-family: 'MyFont', cursive, sans-serif;
 }
 
+@font-face {
+  font-family: 'Akira Expanded';
+  src: url('/fonts/Akira-Expanded.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-akira {
+  font-family: 'Akira Expanded', 'Unbounded', sans-serif;
+}
+
+@font-face {
+  font-family: 'Thunder';
+  src: url('/fonts/Thunder-VF.ttf') format('truetype'),
+       url('/fonts/Thunder-SemiBoldHC.woff2') format('woff2'),
+       url('/fonts/Thunder-SemiBoldHC.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thunder';
+  src: url('/fonts/Thunder-SemiBoldHC.woff2') format('woff2'),
+       url('/fonts/Thunder-SemiBoldHC.ttf') format('truetype');
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thunder';
+  src: url('/fonts/Thunder-BoldHC.woff2') format('woff2'),
+       url('/fonts/Thunder-BoldHC.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thunder';
+  src: url('/fonts/Thunder-BlackHC.woff2') format('woff2'),
+       url('/fonts/Thunder-BlackHC.ttf') format('truetype');
+  font-weight: 800 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-thunder {
+  font-family: 'Thunder', 'Akira Expanded', sans-serif;
+}
+
 
 .ca-tape-clip {
   clip-path: polygon(1.5% 0, 100% 8%, 98.5% 100%, 0 92%);
@@ -628,4 +702,19 @@
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(1px);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2), inset 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+/* Dotted Grid Background Canvas for Featured Works onwards */
+.ca-dotted-grid-bg {
+  position: relative;
+  background-color: #ffffff;
+}
+
+.ca-dotted-grid-pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.22) 1.25px, transparent 1.25px);
+  background-size: 28px 28px;
+  background-position: center top;
 }

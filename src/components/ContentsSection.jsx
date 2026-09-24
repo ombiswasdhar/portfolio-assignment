@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import disclaimerHandwriting from '../assets/work/disclaimer_handwriting.svg'
 import projectCardsImg from '../assets/work/project_cards.jpg'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import { HandwritingText } from '@/components/ui/handwriting-text'
 
 const projectsData = [
   {
     id: 'business-cards',
     num: '01',
     tabLabel: 'Project 01',
-    tabBg: '#4338CA',
-    cardBg: '#1E1B4B',
-    accentColor: '#A78BFA',
+    tabBg: '#CB9DE2',
+    cardBg: '#CB9DE2',
+    accentColor: '#8B5CF6',
+    isLight: true,
     date: 'MAR 19, 2026',
     title: 'Oni Design Studios',
     subtitle: 'Brand Identity & Print Design',
@@ -91,6 +93,40 @@ export default function ContentsSection() {
   const [activeImageZoom, setActiveImageZoom] = useState(null)
   const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
   const [headerRef, isHeaderVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
+
+  // Bi-directional viewport tracker: resets handwriting animation whenever scrolled past or scrolled above
+  const [isHandwritingInView, setIsHandwritingInView] = useState(false)
+  const [handwritingKey, setHandwritingKey] = useState(0)
+  const handwritingTriggerRef = useRef(null)
+
+  useEffect(() => {
+    const el = handwritingTriggerRef.current
+    if (!el) return
+
+    if (typeof IntersectionObserver === 'undefined') {
+      setIsHandwritingInView(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsHandwritingInView(true)
+          setHandwritingKey((prev) => prev + 1)
+        } else {
+          // Reset animation whenever scrolled past it (down) or scrolled above it (up)
+          setIsHandwritingInView(false)
+        }
+      },
+      {
+        threshold: 0.15,
+        rootMargin: '-20px 0px -40px 0px',
+      }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   // ESC key closes modal
   useEffect(() => {
@@ -201,20 +237,38 @@ export default function ContentsSection() {
       </section>
 
       {/* ========================================================================= */}
-      {/* PART 2: CREATIVE ARTSY SECTION HEADER (WITH LETTER REVEAL) */}
+      {/* FEATURED WORKS ONWARDS: DOTTED GRID BACKGROUND CANVAS (WHITE & BLACK DOTS) */}
       {/* ========================================================================= */}
-      <section id="featured-works" className="relative w-full pt-12 sm:pt-16 pb-12 sm:pb-20 px-4 sm:px-8">
+      <div data-theme="light" className="relative w-full ca-dotted-grid-bg text-neutral-900 border-t border-black/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
+        {/* Dotted Grid Pattern Layer */}
+        <div className="ca-dotted-grid-pattern" aria-hidden="true" />
+
+        {/* PART 2: CREATIVE ARTSY SECTION HEADER (WITH LETTER REVEAL) */}
+        <section id="featured-works" className="relative z-10 w-full pt-12 sm:pt-16 pb-12 sm:pb-20 px-4 sm:px-8">
         <div
           ref={headerRef}
           className={`mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-1000 ${
             isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          {/* Cursive handwritten header */}
-          <div className="flex flex-col items-center">
-            <p className="font-ca-hand text-3xl sm:text-4xl text-neutral-200 font-medium tracking-wide">
-              explore my work!
-            </p>
+          {/* Cursive handwritten header with animated handwriting */}
+          <div ref={handwritingTriggerRef} className="flex flex-col items-center">
+            <div className="font-myfont text-3xl sm:text-4xl text-neutral-800 font-medium tracking-wide flex items-center justify-center min-h-[2.5rem] sm:min-h-[3rem]">
+              {isHandwritingInView ? (
+                <HandwritingText
+                  key={handwritingKey}
+                  text="explore my work!"
+                  fontUrl="/fonts/Myfont-Regular.ttf"
+                  height="1.15em"
+                  duration={1.6}
+                  delay={0.15}
+                  strokeWidth={1.8}
+                  className="text-neutral-900"
+                />
+              ) : (
+                <span className="opacity-0">explore my work!</span>
+              )}
+            </div>
             {/* Hand-drawn double squiggle SVG */}
             <svg
               viewBox="0 0 64 12"
@@ -222,7 +276,9 @@ export default function ContentsSection() {
               stroke="currentColor"
               strokeWidth="1.8"
               strokeLinecap="round"
-              className="mt-1 h-3.5 w-24 sm:w-28 text-[#E84A4A]"
+              className={`mt-1 h-3.5 w-24 sm:w-28 text-[#E84A4A] transition-all duration-700 delay-300 ${
+                isHandwritingInView ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+              }`}
               aria-hidden="true"
             >
               <path d="M3 4c18-3 40-3 58 0" />
@@ -231,13 +287,13 @@ export default function ContentsSection() {
           </div>
 
           {/* Chunky massive display headline */}
-          <h2 className="mt-6 font-ca-display text-6xl leading-[0.92] tracking-tight text-white sm:text-8xl lg:text-9xl uppercase font-black">
+          <h2 className="mt-6 font-ca-display text-6xl leading-[0.92] tracking-tight text-neutral-950 sm:text-8xl lg:text-9xl uppercase font-black">
             FEATURED WORKS
           </h2>
 
           {/* Angled Washi Tape Sticker Banner */}
           <div className="mt-8 max-w-md -rotate-[3.6deg] hover:rotate-0 transition-transform duration-300">
-            <span className="ca-tape-clip inline-block px-6 py-2.5 text-xs sm:text-sm font-ca-mono font-bold uppercase tracking-wider text-black bg-[#FFE57F] shadow-[0_8px_24px_rgba(0,0,0,0.6)]">
+            <span className="ca-tape-clip inline-block px-6 py-2.5 text-xs sm:text-sm font-ca-mono font-bold uppercase tracking-wider text-black bg-[#FFE57F] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-amber-300/60">
               A few products I helped make simpler, calmer, and easier to trust.
             </span>
           </div>
@@ -250,6 +306,7 @@ export default function ContentsSection() {
       <div className="flex flex-col gap-16 px-4 sm:px-8 lg:px-20 lg:gap-[14vh] pb-32 max-w-[1400px] mx-auto">
         {projectsData.map((proj, idx) => {
           const isFirst = idx === 0
+          const isLight = Boolean(proj.isLight)
           // Exact tab offset calculation from portfoliofy.io
           const tabMarginDesktop = isFirst
             ? '0px'
@@ -282,7 +339,9 @@ export default function ContentsSection() {
                 </style>
                 <button
                   onClick={() => scrollToCard(proj.id)}
-                  className={`ca-mono inline-flex items-center gap-2 py-3.5 pr-14 text-xs font-bold uppercase tracking-[0.2em] sm:gap-3.5 sm:py-6 sm:pr-28 sm:text-base text-white cursor-pointer hover:brightness-110 transition-all ${
+                  className={`ca-mono inline-flex items-center gap-2 py-3.5 pr-14 text-xs font-bold uppercase tracking-[0.2em] sm:gap-3.5 sm:py-6 sm:pr-28 sm:text-base cursor-pointer hover:brightness-105 transition-all shadow-[0_-2px_10px_rgba(0,0,0,0.06)] ${
+                    isLight ? 'text-[#180A2E]' : 'text-white'
+                  } ${
                     isFirst
                       ? 'pl-5 [clip-path:polygon(0_0,calc(100%-44px)_0,100%_100%,0_100%)] sm:pl-9 sm:[clip-path:polygon(0_0,calc(100%-76px)_0,100%_100%,0_100%)]'
                       : 'pl-16 [clip-path:polygon(44px_0,calc(100%-44px)_0,100%_100%,0_100%)] sm:pl-[6.75rem] sm:[clip-path:polygon(76px_0,calc(100%-76px)_0,100%_100%,0_100%)]'
@@ -292,7 +351,7 @@ export default function ContentsSection() {
                   <svg
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="h-3 w-3 sm:h-4 sm:w-4 text-white"
+                    className={`h-3 w-3 sm:h-4 sm:w-4 ${isLight ? 'text-[#180A2E]' : 'text-white'}`}
                     aria-hidden="true"
                   >
                     <path d="M12 2c1 5 4 8 9 9-5 1-8 4-9 9-1-5-4-8-9-9 5-1 8-4 9-9Z" />
@@ -303,38 +362,57 @@ export default function ContentsSection() {
 
               {/* Card Body with Full Viewport Height Stack */}
               <div
-                className="grid grid-cols-1 gap-6 p-6 sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12 lg:p-14 lg:min-h-[calc(100vh-14rem)] shadow-[0_-12px_36px_rgba(0,0,0,0.7),0_30px_70px_rgba(0,0,0,0.9)] border border-white/10"
+                className={`grid grid-cols-1 gap-6 p-6 sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12 lg:p-14 lg:min-h-[calc(100vh-14rem)] ${
+                  isLight
+                    ? 'shadow-[0_24px_55px_rgba(110,60,150,0.18),0_4px_16px_rgba(0,0,0,0.06)] border border-purple-900/15'
+                    : 'shadow-[0_24px_55px_rgba(0,0,0,0.22),0_4px_16px_rgba(0,0,0,0.08)] border border-white/15'
+                }`}
                 style={{ backgroundColor: proj.cardBg }}
               >
                 {/* Left Column: Metadata, Title, Description, Link, Tags */}
                 <div className="flex flex-col justify-between">
                   <div>
                     {/* Date / Pill */}
-                    <span className="ca-mono inline-flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] text-white">
-                      <span className="h-3 w-3 rounded-full" style={{ backgroundColor: '#ffffff' }} />
+                    <span className={`ca-mono inline-flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] ${
+                      isLight ? 'text-[#2E0854]' : 'text-white'
+                    }`}>
+                      <span
+                        className="h-3 w-3 rounded-full"
+                        style={{ backgroundColor: isLight ? '#2E0854' : '#ffffff' }}
+                      />
                       {proj.date}
                     </span>
 
                     {/* Massive Title */}
-                    <h2 className="mt-6 text-5xl font-semibold tracking-tight sm:text-6xl xl:text-7xl text-white">
+                    <h2 className={`mt-6 text-5xl font-semibold tracking-tight sm:text-6xl xl:text-7xl ${
+                      isLight ? 'text-[#130722]' : 'text-white'
+                    }`}>
                       {proj.title}
                     </h2>
 
                     {/* Subtitle / Category */}
-                    <p className="mt-2 text-sm sm:text-base font-ca-mono text-neutral-300 font-semibold">
+                    <p className={`mt-2 text-sm sm:text-base font-ca-mono font-semibold ${
+                      isLight ? 'text-[#3B1560]' : 'text-neutral-300'
+                    }`}>
                       {proj.subtitle}
                     </p>
 
                     {/* Description */}
-                    <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/90">
+                    <p className={`mt-5 max-w-lg text-lg leading-relaxed ${
+                      isLight ? 'text-[#240C38]' : 'text-white/90'
+                    }`}>
                       {proj.description}
                     </p>
 
                     {/* View project action link */}
                     <button
                       onClick={() => setActiveProject(proj)}
-                      className="ca-mono mt-8 inline-flex items-center gap-2.5 self-start border-b-2 pb-1 text-sm font-bold uppercase tracking-[0.2em] text-white cursor-pointer hover:text-white/80 hover:border-white/80 transition-all group/cta"
-                      style={{ borderColor: '#ffffff' }}
+                      className={`ca-mono mt-8 inline-flex items-center gap-2.5 self-start border-b-2 pb-1 text-sm font-bold uppercase tracking-[0.2em] cursor-pointer transition-all group/cta ${
+                        isLight
+                          ? 'text-[#180A2E] hover:text-[#180A2E]/70'
+                          : 'text-white hover:text-white/80'
+                      }`}
+                      style={{ borderColor: isLight ? '#180A2E' : '#ffffff' }}
                     >
                       View project
                       <svg
@@ -355,7 +433,11 @@ export default function ContentsSection() {
                     {proj.tags.map((tag, tIdx) => (
                       <span
                         key={tIdx}
-                        className="ca-mono px-4 pb-2 pt-2.5 text-base font-bold uppercase tracking-wide [clip-path:polygon(0_28%,12%_0,100%_0,100%_100%,0_100%)] text-[var(--ca-ink,#111)] bg-white shadow-sm"
+                        className={`ca-mono px-4 pb-2 pt-2.5 text-base font-bold uppercase tracking-wide [clip-path:polygon(0_28%,12%_0,100%_0,100%_100%,0_100%)] shadow-sm ${
+                          isLight
+                            ? 'text-[#180A2E] bg-white border border-purple-900/10'
+                            : 'text-[var(--ca-ink,#111)] bg-white'
+                        }`}
                       >
                         {tag}
                       </span>
@@ -403,6 +485,7 @@ export default function ContentsSection() {
             </article>
           )
         })}
+      </div>
       </div>
 
       {/* ========================================================================= */}

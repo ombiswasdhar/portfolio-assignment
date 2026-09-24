@@ -18,7 +18,7 @@ export default function CV() {
       <Nav />
 
       {/* Top back navigation bar */}
-      <header className="relative z-20 max-w-5xl mx-auto w-full px-4 sm:px-6 pt-8 sm:pt-10 flex items-center justify-between">
+      <header className="relative z-20 max-w-5xl mx-auto w-full px-4 sm:px-6 pt-20 sm:pt-24 flex items-center justify-between">
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-neutral-300 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10 shadow-sm active:scale-95"

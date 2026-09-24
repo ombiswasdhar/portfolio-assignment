@@ -61,18 +61,18 @@ export default function SkillSetSection() {
     <section
       id="skills"
       aria-label="My Skill Set section"
-      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-4 sm:pb-6 md:pb-8"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-0"
     >
       {/* Container aligned flush with AboutSection card */}
       <div
         ref={sectionRef}
-        className={`relative w-full max-w-[1380px] mx-auto px-3 sm:px-6 md:px-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+        className={`relative w-full max-w-[1440px] mx-auto px-2 sm:px-4 md:px-6 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
           isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
         }`}
       >
         
-        {/* ================= POSTER CARD (Seamless zero gap with AboutSection) ================= */}
-        <div className="relative w-full max-w-[1240px] mx-auto rounded-b-[24px] sm:rounded-b-[28px] lg:rounded-b-[36px] rounded-t-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-[#F2F0EA] text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20">
+        {/* ================= POSTER CARD (Seamless flat bottom corners) ================= */}
+        <div className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-[#F2F0EA] text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20">
           
           {/* Subtle Paper Grain Overlay */}
           <svg
@@ -89,7 +89,7 @@ export default function SkillSetSection() {
 
           {/* ================= TOP ROW: TITLE & CORNER MONOGRAM ================= */}
           <div className="relative w-full flex items-center justify-center">
-            <h2 className="font-serif-display text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-bold text-center tracking-tight text-neutral-950">
+            <h2 className="font-thunder text-5xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[98px] font-semibold text-center tracking-wide uppercase text-neutral-950 leading-none">
               My Skill Set
             </h2>
 
@@ -108,7 +108,7 @@ export default function SkillSetSection() {
           <div className="w-full mt-8 sm:mt-10 md:mt-12">
             {/* Section Pill Badge with Interactive Hover State & Shimmer */}
             <div className="flex justify-center mb-7 sm:mb-9 md:mb-10">
-              <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm text-sm sm:text-base md:text-lg font-medium text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
+              <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm font-fredoka font-normal text-sm sm:text-base md:text-lg text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
                 <span className="relative z-10">Digital</span>
                 <span className="pointer-events-none absolute inset-0 -translate-x-full group-hover/pill:animate-[shimmer-sweep_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/35 to-transparent" />
               </span>
@@ -196,7 +196,7 @@ export default function SkillSetSection() {
                 >
                   <div className="relative overflow-hidden w-full max-w-[270px] sm:max-w-[290px] md:max-w-[310px] rounded-xl sm:rounded-2xl border border-neutral-900/90 bg-white/50 backdrop-blur-sm px-4 md:px-5 py-2 sm:py-2.5 flex items-center justify-between shadow-[0_4px_14px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.12)] hover:bg-white/80 hover:-translate-y-1 transition-all duration-300 group/big3">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xl sm:text-2xl font-bold font-sans tracking-tight text-neutral-950 whitespace-nowrap">
+                      <span className="font-fredoka font-normal text-xl sm:text-2xl tracking-normal text-neutral-950 whitespace-nowrap leading-none">
                         Big 3
                       </span>
                       <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" title="Core Stack" />
@@ -243,7 +243,7 @@ export default function SkillSetSection() {
                 <div className="w-full flex justify-center pt-2">
                   <div className="relative overflow-hidden w-full max-w-[280px] rounded-xl border border-neutral-900 bg-white/50 px-4 py-2.5 flex items-center justify-between shadow-sm hover:bg-white/80 transition-all">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xl font-bold font-sans tracking-tight text-neutral-950">
+                      <span className="font-fredoka font-normal text-xl tracking-normal text-neutral-950 leading-none">
                         Big 3
                       </span>
                       <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" />
@@ -263,7 +263,7 @@ export default function SkillSetSection() {
           <div className="w-full mt-12 sm:mt-16 md:mt-20">
             {/* Section Pill Badge with Interactive Hover State & Shimmer */}
             <div className="flex justify-center mb-8 sm:mb-10 md:mb-12">
-              <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm text-sm sm:text-base md:text-lg font-medium text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
+              <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm font-fredoka font-normal text-sm sm:text-base md:text-lg text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
                 <span className="relative z-10">Other</span>
                 <span className="pointer-events-none absolute inset-0 -translate-x-full group-hover/pill:animate-[shimmer-sweep_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/35 to-transparent" />
               </span>

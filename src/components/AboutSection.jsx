@@ -26,19 +26,19 @@ export default function AboutSection() {
 
       <div
         ref={cardRef}
-        className={`relative w-full max-w-[1380px] mx-auto px-3 sm:px-6 md:px-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+        className={`relative w-full max-w-[1440px] mx-auto px-2 sm:px-4 md:px-6 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
           isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
         }`}
       >
         
         {/* ================= DESKTOP / TABLET VIEW (md and up) ================= */}
         <div className="hidden md:block w-full">
-          <div className="relative w-full max-w-[1240px] mx-auto aspect-[1024/768] rounded-t-[28px] lg:rounded-t-[36px] rounded-b-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-t border-x border-white/10 group transition-all duration-500 hover:border-white/20">
+          <div className="relative w-full max-w-[1440px] mx-auto aspect-[1024/768] rounded-t-[28px] lg:rounded-t-[36px] rounded-b-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-t border-x border-white/10 group transition-all duration-500 hover:border-white/20">
             {/* Pristine Figma Frame Canvas with clean base for animated layers */}
             <img
               src={aboutFullFrameCanvas}
               alt="About Me - Om, UI/UX Designer, Illustrator, Artist based in Shillong, India. Age 21 Years."
-              className="w-full h-full object-cover lg:object-contain object-center select-none pointer-events-none"
+              className="w-full h-full object-cover object-center select-none pointer-events-none"
             />
 
             {/* Interactive Animated Characters & "Hello, i'm OM." */}
@@ -181,7 +181,7 @@ export default function AboutSection() {
         </div>
 
         {/* ================= MOBILE VIEW (Stacked column in original form) ================= */}
-        <div className="md:hidden flex flex-col items-center gap-6 sm:gap-8 w-full max-w-[500px] mx-auto">
+        <div className="md:hidden flex flex-col items-center gap-6 sm:gap-8 w-full max-w-[580px] mx-auto">
           {/* Top 'portfolio' cursive text with mobile tap hint */}
           <div className="flex flex-col items-center gap-1">
             <span className="font-script text-3xl sm:text-4xl font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
