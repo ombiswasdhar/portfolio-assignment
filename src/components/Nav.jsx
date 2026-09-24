@@ -5,8 +5,8 @@ import MarqueeBar from './MarqueeBar'
 
 const primaryNavItems = [
   { id: 'about', name: 'About', path: '/#about' },
-  { id: 'work', name: 'Work', path: '/#work' },
   { id: 'skills', name: 'Skills', path: '/#skills' },
+  { id: 'work', name: 'Work', path: '/#work' },
   { id: 'cv', name: 'CV', path: '/cv' },
 ]
 
