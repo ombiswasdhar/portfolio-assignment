@@ -649,6 +649,15 @@
   font-family: 'Akira Expanded', 'Unbounded', sans-serif;
 }
 
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-poppins-light {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+}
+
 @font-face {
   font-family: 'Thunder';
   src: url('/fonts/Thunder-VF.ttf') format('truetype'),

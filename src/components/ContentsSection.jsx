@@ -397,7 +397,9 @@ export default function ContentsSection() {
                 <div className="flex flex-col justify-between">
                   <div>
                     {/* Date / Pill */}
-                    <span className={`ca-mono inline-flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] ${
+                    <span className={`${
+                      isFirst ? 'font-poppins-light font-light' : 'ca-mono font-bold'
+                    } inline-flex items-center gap-3 text-sm uppercase tracking-[0.2em] ${
                       isLight ? 'text-[#2E0854]' : 'text-white'
                     }`}>
                       <span
@@ -408,21 +410,29 @@ export default function ContentsSection() {
                     </span>
 
                     {/* Massive Title */}
-                    <h2 className={`mt-6 text-5xl font-semibold tracking-tight sm:text-6xl xl:text-7xl ${
+                    <h2 className={`mt-6 ${
+                      isFirst
+                        ? 'font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[48px] xl:text-[56px] leading-[1.08] tracking-tight'
+                        : 'text-5xl font-semibold tracking-tight sm:text-6xl xl:text-7xl'
+                    } ${
                       isLight ? 'text-[#130722]' : 'text-white'
                     }`}>
                       {proj.title}
                     </h2>
 
                     {/* Subtitle / Category */}
-                    <p className={`mt-2 text-sm sm:text-base font-ca-mono font-semibold ${
+                    <p className={`mt-2.5 text-sm sm:text-base ${
+                      isFirst ? 'font-poppins-light font-light tracking-wider uppercase' : 'font-ca-mono font-semibold'
+                    } ${
                       isLight ? 'text-[#3B1560]' : 'text-neutral-300'
                     }`}>
                       {proj.subtitle}
                     </p>
 
                     {/* Description */}
-                    <p className={`mt-5 max-w-lg text-lg leading-relaxed ${
+                    <p className={`mt-5 max-w-lg text-base sm:text-lg leading-relaxed ${
+                      isFirst ? 'font-poppins font-normal' : ''
+                    } ${
                       isLight ? 'text-[#240C38]' : 'text-white/90'
                     }`}>
                       {proj.description}
@@ -431,7 +441,9 @@ export default function ContentsSection() {
                     {/* View project action link */}
                     <button
                       onClick={() => setActiveProject(proj)}
-                      className={`ca-mono mt-8 inline-flex items-center gap-2.5 self-start border-b-2 pb-1 text-sm font-bold uppercase tracking-[0.2em] cursor-pointer transition-all group/cta ${
+                      className={`${
+                        isFirst ? 'font-poppins-light font-light' : 'ca-mono font-bold'
+                      } mt-8 inline-flex items-center gap-2.5 self-start border-b-2 pb-1 text-sm uppercase tracking-[0.2em] cursor-pointer transition-all group/cta ${
                         isLight
                           ? 'text-[#180A2E] hover:text-[#180A2E]/70'
                           : 'text-white hover:text-white/80'
@@ -457,7 +469,9 @@ export default function ContentsSection() {
                     {proj.tags.map((tag, tIdx) => (
                       <span
                         key={tIdx}
-                        className={`ca-mono px-4 pb-2 pt-2.5 text-base font-bold uppercase tracking-wide [clip-path:polygon(0_28%,12%_0,100%_0,100%_100%,0_100%)] shadow-sm ${
+                        className={`${
+                          isFirst ? 'font-poppins-light font-light text-sm' : 'ca-mono font-bold text-base'
+                        } px-4 pb-2 pt-2.5 uppercase tracking-wide [clip-path:polygon(0_28%,12%_0,100%_0,100%_100%,0_100%)] shadow-sm ${
                           isLight
                             ? 'text-[#180A2E] bg-white border border-purple-900/10'
                             : 'text-[var(--ca-ink,#111)] bg-white'
@@ -530,14 +544,22 @@ export default function ContentsSection() {
             {/* Modal Header */}
             <div className="flex items-start justify-between gap-4 pb-6 border-b border-white/10">
               <div className="flex flex-col gap-1">
-                <div className="inline-flex items-center gap-2 text-xs font-ca-mono font-bold tracking-widest text-neutral-400 uppercase">
+                <div className={`inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400 ${
+                  activeProject.id === 'business-cards' ? 'font-poppins-light font-light' : 'font-ca-mono font-bold'
+                }`}>
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeProject.accentColor }} />
                   <span>{activeProject.num} / 03 • {activeProject.category}</span>
                 </div>
-                <h3 className="font-ca-display text-2xl sm:text-4xl font-bold tracking-tight text-white">
+                <h3 className={`${
+                  activeProject.id === 'business-cards'
+                    ? 'font-akira font-black uppercase text-xl sm:text-3xl tracking-tight'
+                    : 'font-ca-display text-2xl sm:text-4xl font-bold tracking-tight'
+                } text-white`}>
                   {activeProject.title}
                 </h3>
-                <p className="text-xs sm:text-sm font-ca-mono text-neutral-400">
+                <p className={`text-xs sm:text-sm ${
+                  activeProject.id === 'business-cards' ? 'font-poppins-light font-light text-neutral-300' : 'font-ca-mono text-neutral-400'
+                }`}>
                   {activeProject.subtitle}
                 </p>
               </div>
@@ -586,10 +608,14 @@ export default function ContentsSection() {
               <div className="flex flex-col gap-6">
                 {/* Coursework Assignment Context */}
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h4 className="text-xs font-ca-mono font-bold uppercase tracking-widest text-neutral-300 mb-2">
+                  <h4 className={`text-xs uppercase tracking-widest text-neutral-300 mb-2 ${
+                    activeProject.id === 'business-cards' ? 'font-poppins-light font-medium' : 'font-ca-mono font-bold'
+                  }`}>
                     Coursework Brief
                   </h4>
-                  <p className="text-xs sm:text-sm text-neutral-200 leading-relaxed">
+                  <p className={`text-xs sm:text-sm text-neutral-200 leading-relaxed ${
+                    activeProject.id === 'business-cards' ? 'font-poppins font-normal' : ''
+                  }`}>
                     {activeProject.description}
                   </p>
                 </div>
