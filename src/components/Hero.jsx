@@ -9,6 +9,7 @@ import crown from '../assets/hero/crown_rendered.png'
 import doodle from '../assets/hero/doodle_rendered.png'
 import barcode from '../assets/hero/barcode.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
+import MarqueeBar from './MarqueeBar'
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
@@ -359,6 +360,17 @@ export default function Hero() {
             <polyline points="7 6 12 11 17 6" />
           </svg>
         </a>
+      </div>
+
+      {/* Tilted "ABOUT ME" Animated Marquee Ribbon on bottom of Hero section */}
+      <div className="relative w-full mt-3 sm:mt-5 pt-1 pb-4 sm:pb-6 z-30 select-none overflow-hidden">
+        <div className="w-[108%] -ml-[4%] -rotate-[2deg] sm:-rotate-[2.5deg] hover:rotate-0 transition-transform duration-500 shadow-[0_12px_36px_rgba(0,0,0,0.85)]">
+          <MarqueeBar
+            variant="roles"
+            items={['ABOUT ME']}
+            className="border-y-2 border-black bg-white text-black shadow-2xl"
+          />
+        </div>
       </div>
     </section>
   )

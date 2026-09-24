@@ -1,4 +1,5 @@
 import React from 'react'
+import { cn } from '@/lib/utils'
 import mentorsityLogo from '../assets/nav/mentorsity_logo.png'
 import playStaplesLogo from '../assets/nav/play_staples_logo.png'
 
@@ -75,7 +76,7 @@ export default function MarqueeBar({
   return (
     <div
       aria-label={isRoles ? 'Creative Roles Animated Marquee Bar' : 'Partner Logos Animated Marquee Bar'}
-      className={`relative w-full h-9 bg-white text-black border-b border-black select-none flex items-stretch overflow-hidden shadow-xs ${className}`}
+      className={cn('relative w-full h-9 bg-white text-black border-b border-black select-none flex items-stretch overflow-hidden shadow-xs', className)}
     >
       {/* Soft edge gradient fades for smooth edge entry and exit */}
       <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-12 z-10 bg-gradient-to-r from-white to-transparent" />

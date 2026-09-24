@@ -40,7 +40,6 @@ export default function Home() {
       <Nav />
       <main className="w-full relative z-10 flex flex-col">
         <Hero />
-        <MarqueeBar variant="roles" items={['ABOUT ME']} className="border-y border-black relative z-10" />
         <AboutSection />
         <SkillSetSection />
         <MarqueeBar direction="right" className="border-t border-black relative z-10" />
