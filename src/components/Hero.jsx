@@ -9,6 +9,36 @@ import crown from '../assets/hero/crown_rendered.png'
 import doodle from '../assets/hero/doodle_rendered.png'
 import barcode from '../assets/hero/barcode.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
+import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
+import {
+  Palette,
+  Crown,
+  PenTool,
+  Smile,
+  Sparkles,
+  Brush,
+  Layers,
+  Zap,
+  Camera,
+  Music,
+  Globe,
+  Rocket,
+} from 'lucide-react'
+
+const heroIcons = [
+  { id: 1, icon: Palette, className: 'top-[10%] left-[8%]' },
+  { id: 2, icon: Crown, className: 'top-[14%] right-[8%]' },
+  { id: 3, icon: PenTool, className: 'top-[78%] left-[7%]' },
+  { id: 4, icon: Smile, className: 'bottom-[10%] right-[7%]' },
+  { id: 5, icon: Sparkles, className: 'top-[8%] left-[32%]' },
+  { id: 6, icon: Brush, className: 'top-[8%] right-[32%]' },
+  { id: 7, icon: Layers, className: 'bottom-[12%] left-[22%]' },
+  { id: 8, icon: Zap, className: 'top-[42%] left-[3%]' },
+  { id: 9, icon: Camera, className: 'top-[76%] right-[22%]' },
+  { id: 10, icon: Music, className: 'top-[46%] right-[3%]' },
+  { id: 11, icon: Globe, className: 'top-[58%] left-[3%]' },
+  { id: 12, icon: Rocket, className: 'top-[26%] right-[14%]' },
+]
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
@@ -102,6 +132,18 @@ export default function Hero() {
         }}
         aria-hidden="true"
       />
+
+      {/* 6. Interactive Floating Icons Hero Background (ambient floating icons without center text) */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-[1] overflow-hidden">
+        <FloatingIconsHero
+          title=""
+          subtitle=""
+          ctaText=""
+          ctaHref="#"
+          icons={heroIcons}
+          className="w-full h-full min-h-0 bg-transparent [&_.relative.z-10]:hidden pointer-events-auto"
+        />
+      </div>
 
       {/* 1440x940 Canvas Container */}
       <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/940] min-h-[500px] sm:min-h-[580px] md:min-h-[740px] lg:min-h-[860px]">
