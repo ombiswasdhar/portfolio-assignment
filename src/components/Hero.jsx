@@ -105,6 +105,8 @@ export default function Hero() {
 
       {/* 1440x940 Canvas Container */}
       <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/940] min-h-[500px] sm:min-h-[580px] md:min-h-[740px] lg:min-h-[860px]">
+        {/* Semantic SEO Primary Heading */}
+        <h1 className="sr-only">OMİs Brain — Om Biswas Portfolio | Visual &amp; Product Designer</h1>
         
         {/* ================= TOP ROW ================= */}
         {/* 2026 - Akira Expanded font */}

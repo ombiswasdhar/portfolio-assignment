@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portfolio-assignment-uedp.vercel.app/sitemap.xml
