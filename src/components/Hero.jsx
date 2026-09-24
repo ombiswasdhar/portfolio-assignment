@@ -9,7 +9,6 @@ import crown from '../assets/hero/crown_rendered.png'
 import doodle from '../assets/hero/doodle_rendered.png'
 import barcode from '../assets/hero/barcode.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
-import AboutMarquee from './AboutMarquee'
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
@@ -360,11 +359,6 @@ export default function Hero() {
             <polyline points="7 6 12 11 17 6" />
           </svg>
         </a>
-      </div>
-
-      {/* "ABOUT" Dual Marquee Ribbon (Red Bar + Black Checkered Bar) below Hero section */}
-      <div className="relative w-full mt-4 sm:mt-6 z-30 select-none">
-        <AboutMarquee />
       </div>
     </section>
   )

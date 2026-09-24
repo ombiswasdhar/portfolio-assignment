@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Hero from '../components/Hero'
+import AboutMarquee from '../components/AboutMarquee'
 import AboutSection from '../components/AboutSection'
 import SkillSetSection from '../components/SkillSetSection'
 import MarqueeBar from '../components/MarqueeBar'
@@ -40,6 +41,7 @@ export default function Home() {
       <Nav />
       <main className="w-full relative z-10 flex flex-col">
         <Hero />
+        <AboutMarquee />
         <AboutSection />
         <SkillSetSection />
         <MarqueeBar direction="right" className="border-t border-black relative z-10" />
