@@ -57,7 +57,7 @@ export default function MusicPlayer() {
   // Loaded metadata for duration
   const handleLoadedMetadata = () => {
     if (!audioRef.current) return
-    setDuration(audioRef.current.duration || 35)
+    setDuration(audioRef.current.duration || 158)
   }
 
   // Loop back seamlessly on ended
@@ -97,7 +97,7 @@ export default function MusicPlayer() {
   }
 
   // SVG Circular Progress Calculations
-  // CD disc diameter: 154px (radius: 77px), outer ring radius: 82px
+  // CD disc diameter: 154px (radius: 77px), outer ring radius: 81px
   const ringRadius = 81
   const circumference = 2 * Math.PI * ringRadius
   const progressRatio = duration > 0 ? currentTime / duration : 0
@@ -105,16 +105,19 @@ export default function MusicPlayer() {
 
   return (
     <>
-      {/* HTML5 Audio playing strictly the Instrumental version */}
+      {/* HTML5 Audio playing strictly the Official Instrumental from YouTube (https://youtu.be/3ApM0HfNtV4) */}
       <audio
         ref={audioRef}
-        src="/sunflower.mp3"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
         preload="metadata"
         loop
-      />
+      >
+        <source src="/sunflower.webm" type="audio/webm" />
+        <source src="/sunflower.m4a" type="audio/mp4" />
+        <source src="/sunflower.mp3" type="audio/mpeg" />
+      </audio>
 
       {/* Floating CD Music Widget Container (Memory Lane Style) */}
       <div
@@ -124,7 +127,7 @@ export default function MusicPlayer() {
           setIsHovered(false)
           setShowVolumeSlider(false)
         }}
-        aria-label="Sunflower Instrumental Music Player"
+        aria-label="Sunflower Official Instrumental Music Player"
       >
         {/* ================= FLOATING GLASS CONTROL PILL (SLIDES OUT ON HOVER) ================= */}
         <div
@@ -169,7 +172,7 @@ export default function MusicPlayer() {
                 Sunflower
               </span>
               <span className="text-[10px] text-neutral-500 dark:text-neutral-400 font-medium truncate mt-0.5">
-                Instrumental • {formatTime(currentTime)} / {formatTime(duration)}
+                Official Instrumental • {formatTime(currentTime)} / {formatTime(duration)}
               </span>
             </div>
 
@@ -316,7 +319,7 @@ export default function MusicPlayer() {
                 className="text-[8px] sm:text-[9px] uppercase tracking-widest text-amber-300 font-bold"
                 style={{ textShadow: '0 1px 3px rgba(0,0,0,0.9)' }}
               >
-                Instrumental
+                Official Instrumental
               </span>
             </div>
 
