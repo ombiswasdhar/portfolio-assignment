@@ -15,46 +15,47 @@ import textHelloImOm from '../assets/about/text_hello_im_om.png'
  */
 export default function AboutCharacters({ isMobile = false }) {
   // Desktop coordinate mappings (1024 x 768 frame)
+  // Left Card sits at left: 71, top: 98, width: 483, height: 615
   const desktopCoords = {
     hello: {
-      left: '10.65%',
-      top: '9.12%',
-      width: '10.84%',
-      height: '18.91%',
+      left: '11.01%',
+      top: '16.58%',
+      width: '12.05%',
+      height: '17.59%',
     },
     thinking: {
-      left: '31.05%',
-      top: '12.30%',
-      width: '15.68%',
-      height: '25.70%',
+      left: '36.07%',
+      top: '19.24%',
+      width: '14.57%',
+      height: '24.07%',
     },
     pointing: {
-      left: '11.03%',
-      top: '43.24%',
-      width: '12.99%',
-      height: '23.47%',
+      left: '11.44%',
+      top: '49.56%',
+      width: '11.62%',
+      height: '17.47%',
     },
   }
 
-  // Mobile coordinate mappings (804 x 1024 left card)
+  // Mobile coordinate mappings (card container relative to 2720 x 3460)
   const mobileCoords = {
     hello: {
-      left: '8.83%',
-      top: '4.88%',
-      width: '25.12%',
-      height: '21.48%',
+      left: '8.64%',
+      top: '4.77%',
+      width: '25.55%',
+      height: '21.97%',
     },
     thinking: {
-      left: '56.09%',
-      top: '8.50%',
-      width: '36.32%',
-      height: '29.20%',
+      left: '61.76%',
+      top: '8.09%',
+      width: '30.88%',
+      height: '30.06%',
     },
     pointing: {
-      left: '9.70%',
-      top: '43.65%',
-      width: '30.10%',
-      height: '26.66%',
+      left: '9.56%',
+      top: '45.95%',
+      width: '24.63%',
+      height: '21.82%',
     },
   }
 
