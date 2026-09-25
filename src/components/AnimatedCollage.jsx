@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react'
 import aboutRightCollageClean from '../assets/about/about_right_collage_clean.png'
 import collagePolaroid from '../assets/about/collage_polaroid_clean.png'
 import collageHashtag from '../assets/about/collage_hashtag.png'
+import redStarburst from '../assets/about/red_starburst.png'
+import charCrownBoy from '../assets/about/char_crown_boy.png'
 
 /**
  * AnimatedCollage
@@ -72,6 +74,51 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
           className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-0"
         />
       )}
+
+      {/* ================= HIGH-RES RED STARBURST ================= */}
+      <div
+        className="absolute z-[5] pointer-events-none select-none transition-transform duration-300 ease-out"
+        style={{
+          left: '37.10%',
+          top: '1.76%',
+          width: '77.98%',
+          height: '62.47%',
+          transform: tilt.isHovered
+            ? `translate3d(${-tilt.y * 0.35}px, ${tilt.x * 0.35}px, 0) scale(1.02)`
+            : undefined,
+        }}
+        aria-hidden="true"
+      >
+        <img
+          src={redStarburst}
+          alt=""
+          className="w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_8px_24px_rgba(186,31,31,0.35)]"
+        />
+      </div>
+
+      {/* ================= HIGH-RES CROWN BOY CHARACTER ================= */}
+      <div
+        className="absolute z-[10] group/crownboy cursor-pointer transition-all duration-300 ease-out hover:scale-105 active:scale-95"
+        style={{
+          left: '53.17%',
+          top: '-1.08%',
+          width: '60.51%',
+          height: '54.06%',
+          transform: tilt.isHovered
+            ? `translate3d(${-tilt.y * 0.65}px, ${tilt.x * 0.65}px, 0)`
+            : undefined,
+        }}
+        title="Om character doodle with crown"
+        tabIndex={0}
+        role="img"
+        aria-label="Illustration of Om with crown doodle"
+      >
+        <img
+          src={charCrownBoy}
+          alt="Illustration of Om with crown doodle"
+          className="w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_8px_20px_rgba(0,0,0,0.6)] group-hover/crownboy:drop-shadow-[0_12px_28px_rgba(0,0,0,0.8)] transition-all duration-300"
+        />
+      </div>
 
       {/* ================= ANIMATED ROLES TAPE TICKER ================= */}
       <div

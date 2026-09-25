@@ -17,44 +17,44 @@ export default function AboutCharacters({ isMobile = false }) {
   // Desktop coordinate mappings (1024 x 768 frame)
   const desktopCoords = {
     hello: {
-      left: '11.04%',
-      top: '16.67%',
-      width: '11.91%',
-      height: '17.32%',
+      left: '10.65%',
+      top: '9.12%',
+      width: '10.84%',
+      height: '18.91%',
     },
     thinking: {
-      left: '35.94%',
-      top: '19.27%',
-      width: '14.65%',
-      height: '24.09%',
+      left: '31.05%',
+      top: '12.30%',
+      width: '15.68%',
+      height: '25.70%',
     },
     pointing: {
-      left: '11.13%',
-      top: '48.83%',
-      width: '12.70%',
-      height: '18.88%',
+      left: '11.03%',
+      top: '43.24%',
+      width: '12.99%',
+      height: '23.47%',
     },
   }
 
-  // Mobile coordinate mappings (480 x 590 left card)
+  // Mobile coordinate mappings (804 x 1024 left card)
   const mobileCoords = {
     hello: {
-      left: '8.75%',
-      top: '0.51%',
-      width: '25.42%',
-      height: '22.54%',
+      left: '8.83%',
+      top: '4.88%',
+      width: '25.12%',
+      height: '21.48%',
     },
     thinking: {
-      left: '61.88%',
-      top: '3.90%',
-      width: '31.25%',
-      height: '31.36%',
+      left: '56.09%',
+      top: '8.50%',
+      width: '36.32%',
+      height: '29.20%',
     },
     pointing: {
-      left: '8.96%',
-      top: '42.37%',
-      width: '27.08%',
-      height: '24.58%',
+      left: '9.70%',
+      top: '43.65%',
+      width: '30.10%',
+      height: '26.66%',
     },
   }
 
