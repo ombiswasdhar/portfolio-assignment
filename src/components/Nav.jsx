@@ -252,29 +252,25 @@ export default function Nav() {
             aria-label="Get in Touch"
           >
             <LiquidButton
+              isActive={activeSection === 'contact'}
+              isLightBg={isLightBg}
               hoverScale={1}
               tapScale={0.98}
-              liquidColor="#BA1F1F"
-              liquidBackgroundColor={
+              className={`h-full px-5 md:px-6 rounded-none flex items-center justify-center cursor-pointer select-none border-l transition-colors duration-200 group ${
+                isLightBg ? 'border-black' : 'border-white/20'
+              } ${
                 activeSection === 'contact'
-                  ? '#BA1F1F'
+                  ? 'text-white font-bold'
                   : isLightBg
-                  ? '#0A0A0E'
-                  : 'transparent'
-              }
-              className={`h-full px-5 md:px-6 rounded-none transition-colors duration-200 flex items-center justify-center cursor-pointer group ${
-                activeSection === 'contact'
-                  ? 'bg-[#BA1F1F] text-white font-bold shadow-inner'
-                  : isLightBg
-                  ? 'bg-transparent hover:bg-[#EAE8E2] text-black hover:text-[#DE2020]'
-                  : 'bg-transparent hover:bg-white/10 text-neutral-200 hover:text-[#FF4A4A]'
+                  ? 'text-black'
+                  : 'text-neutral-200'
               }`}
             >
               <SparklesText
                 sparklesCount={5}
                 colors={{
-                  first: isLightBg ? '#FF8080' : '#BA1F1F',
-                  second: '#FFFFFF',
+                  first: '#FFFFFF',
+                  second: '#FFA8A8',
                 }}
                 className="font-myfont text-[21px] sm:text-[23px] md:text-[25px] tracking-wide leading-none pt-1 transition-transform duration-200 group-hover:scale-105"
               >
@@ -336,17 +332,17 @@ export default function Nav() {
               handleClick(e, { id: 'contact' })
               setMobileMenuOpen(false)
             }}
-            className={`w-full py-4 px-6 flex items-center justify-between cursor-pointer font-bold ${
+            className={`w-full py-4 px-6 flex items-center justify-between cursor-pointer font-bold transition-colors ${
               activeSection === 'contact'
                 ? 'bg-[#DE2020] text-white'
                 : isLightBg
-                ? 'bg-black text-white hover:bg-[#DE2020]'
+                ? 'bg-black text-white hover:bg-[#DE2020] hover:text-white'
                 : 'bg-white text-black hover:bg-[#DE2020] hover:text-white'
             }`}
           >
             <SparklesText
               sparklesCount={5}
-              colors={{ first: '#FF8080', second: '#FFFFFF' }}
+              colors={{ first: '#FFFFFF', second: '#FFA8A8' }}
               className="font-myfont text-2xl tracking-wide"
             >
               Get in Touch
