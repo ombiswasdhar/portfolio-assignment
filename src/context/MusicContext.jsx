@@ -10,19 +10,25 @@ export function MusicProvider({ children }) {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(158)
   const [volume, setVolume] = useState(0.85)
+  const [isAutoplayBlocked, setIsAutoplayBlocked] = useState(false)
 
   const audioRef = useRef(null)
   const userPausedRef = useRef(false)
-  const isMutedForAutoplayRef = useRef(false)
+  const isPlayingRef = useRef(false)
+
+  // Keep isPlayingRef in sync with state
+  useEffect(() => {
+    isPlayingRef.current = isPlaying
+  }, [isPlaying])
 
   // Sync volume with audio element
   useEffect(() => {
-    if (audioRef.current && !isMutedForAutoplayRef.current) {
+    if (audioRef.current) {
       audioRef.current.volume = volume
     }
   }, [volume])
 
-  // Bulletproof Autoplay on launch and on page refresh
+  // Robust AutoPlay on Launch & Refresh
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
@@ -30,142 +36,93 @@ export function MusicProvider({ children }) {
     userPausedRef.current = false
     let isCancelled = false
 
-    const unmuteAndPlay = () => {
-      if (!audioRef.current || userPausedRef.current) return
-
-      if (isMutedForAutoplayRef.current) {
-        audioRef.current.muted = false
-        audioRef.current.volume = volume
-        isMutedForAutoplayRef.current = false
-        setIsMuted(false)
-      }
-
-      const p = audioRef.current.play()
-      if (p !== undefined) {
-        p.then(() => {
-          if (!isCancelled && !userPausedRef.current) {
-            setIsPlaying(true)
-          }
-        }).catch(() => {})
-      }
-      removeGestureListeners()
-    }
-
-    const removeGestureListeners = () => {
-      const events = [
-        'pointerdown',
-        'mousedown',
-        'click',
-        'keydown',
-        'touchstart',
-        'touchend',
-        'scroll',
-        'wheel',
-        'mousemove',
-      ]
-      events.forEach((evt) => {
-        window.removeEventListener(evt, unmuteAndPlay)
-        document.removeEventListener(evt, unmuteAndPlay)
-      })
-    }
-
-    const attachGestureListeners = () => {
-      const events = [
-        'pointerdown',
-        'mousedown',
-        'click',
-        'keydown',
-        'touchstart',
-        'touchend',
-        'scroll',
-        'wheel',
-        'mousemove',
-      ]
-      events.forEach((evt) => {
-        window.addEventListener(evt, unmuteAndPlay, { once: true, passive: true })
-        document.addEventListener(evt, unmuteAndPlay, { once: true, passive: true })
-      })
-    }
-
-    const attemptAutoplay = () => {
+    const playAudio = () => {
       if (!audioRef.current || userPausedRef.current || isCancelled) return
 
-      // Stage 1: Attempt direct unmuted playback (works if domain has permission or on reload after interaction)
       audioRef.current.muted = false
       audioRef.current.volume = volume
-      const playPromise = audioRef.current.play()
 
-      if (playPromise !== undefined) {
-        playPromise
+      const promise = audioRef.current.play()
+      if (promise !== undefined) {
+        promise
           .then(() => {
             if (!isCancelled && !userPausedRef.current) {
               setIsPlaying(true)
-              isMutedForAutoplayRef.current = false
-              removeGestureListeners()
+              setIsAutoplayBlocked(false)
+              cleanupListeners()
             }
           })
           .catch((err) => {
-            console.log('Direct autoplay restricted by browser policy, using muted fallback until gesture:', err?.message || err)
-            if (isCancelled || userPausedRef.current || !audioRef.current) return
-
-            // Stage 2: Start playing immediately in muted state (allowed 100% by all browsers on refresh)
-            audioRef.current.muted = true
-            isMutedForAutoplayRef.current = true
-            const mutedPromise = audioRef.current.play()
-            if (mutedPromise !== undefined) {
-              mutedPromise
-                .then(() => {
-                  if (!isCancelled && !userPausedRef.current) {
-                    setIsPlaying(true)
-                  }
-                })
-                .catch(() => {})
+            // Browser blocked unmuted autoplay without a user gesture on this page load
+            console.log('Autoplay deferred by browser policy, awaiting first user interaction:', err?.message || err)
+            if (!isCancelled && !userPausedRef.current) {
+              setIsPlaying(false)
+              setIsAutoplayBlocked(true)
             }
-
-            // Stage 3: The very instant user makes ANY gesture (even moves mouse cursor), unmute smoothly!
-            attachGestureListeners()
+            // KEEP LISTENERS ACTIVE until audio actually starts playing!
           })
       }
     }
 
-    // Run autoplay on mount and when audio resource is ready
-    if (audio.readyState >= 2) {
-      attemptAutoplay()
-    } else {
-      audio.addEventListener('canplay', attemptAutoplay, { once: true })
-      audio.addEventListener('loadeddata', attemptAutoplay, { once: true })
-      // Also try immediately in case already buffered
-      attemptAutoplay()
+    const onUserGesture = () => {
+      if (userPausedRef.current) return
+      playAudio()
     }
 
-    // Also attach gesture listeners as safety net
-    attachGestureListeners()
+    const cleanupListeners = () => {
+      const gestureEvents = ['pointerdown', 'mousedown', 'click', 'keydown', 'touchstart']
+      gestureEvents.forEach((evt) => {
+        window.removeEventListener(evt, onUserGesture, true)
+        document.removeEventListener(evt, onUserGesture, true)
+      })
+    }
+
+    const attachListeners = () => {
+      const gestureEvents = ['pointerdown', 'mousedown', 'click', 'keydown', 'touchstart']
+      gestureEvents.forEach((evt) => {
+        window.addEventListener(evt, onUserGesture, { capture: true, passive: true })
+        document.addEventListener(evt, onUserGesture, { capture: true, passive: true })
+      })
+    }
+
+    // Attach interaction listeners immediately so the very first click anywhere on refresh triggers sound
+    attachListeners()
+
+    // Try playing immediately
+    if (audio.readyState >= 2) {
+      playAudio()
+    } else {
+      audio.addEventListener('canplay', playAudio, { once: true })
+      audio.addEventListener('loadedmetadata', playAudio, { once: true })
+      playAudio()
+    }
 
     return () => {
       isCancelled = true
-      removeGestureListeners()
+      cleanupListeners()
     }
   }, [volume])
 
   const togglePlay = useCallback(() => {
     if (!audioRef.current) return
+
     if (isPlaying) {
       userPausedRef.current = true
       audioRef.current.pause()
       setIsPlaying(false)
+      setIsAutoplayBlocked(false)
     } else {
       userPausedRef.current = false
-      if (isMutedForAutoplayRef.current) {
-        audioRef.current.muted = false
-        isMutedForAutoplayRef.current = false
-        setIsMuted(false)
-      }
+      audioRef.current.muted = false
       audioRef.current.volume = volume
       audioRef.current
         .play()
-        .then(() => setIsPlaying(true))
+        .then(() => {
+          setIsPlaying(true)
+          setIsAutoplayBlocked(false)
+        })
         .catch((err) => {
-          console.warn('Playback error:', err)
+          console.warn('Playback request error:', err)
           setIsPlaying(false)
         })
     }
@@ -175,21 +132,22 @@ export function MusicProvider({ children }) {
     if (!audioRef.current) return
     const nextMuted = !isMuted
     audioRef.current.muted = nextMuted
-    isMutedForAutoplayRef.current = false
     setIsMuted(nextMuted)
   }, [isMuted])
 
   const restartTrack = useCallback(() => {
     if (!audioRef.current) return
     userPausedRef.current = false
-    isMutedForAutoplayRef.current = false
     audioRef.current.muted = false
     audioRef.current.volume = volume
     audioRef.current.currentTime = 0
     setCurrentTime(0)
     audioRef.current
       .play()
-      .then(() => setIsPlaying(true))
+      .then(() => {
+        setIsPlaying(true)
+        setIsAutoplayBlocked(false)
+      })
       .catch(() => {})
   }, [volume])
 
@@ -218,6 +176,7 @@ export function MusicProvider({ children }) {
         currentTime,
         duration,
         volume,
+        isAutoplayBlocked,
         setVolume,
         togglePlay,
         toggleMute,
@@ -227,12 +186,18 @@ export function MusicProvider({ children }) {
       {/* Global Audio Element for Sunflower Official Instrumental */}
       <audio
         ref={audioRef}
-        src="/sunflower.webm"
-        autoPlay
-        playsInline
+        src="/sunflower.m4a"
         preload="auto"
         loop
-        onPlay={() => setIsPlaying(true)}
+        playsInline
+        onPlay={() => {
+          setIsPlaying(true)
+          setIsAutoplayBlocked(false)
+        }}
+        onPlaying={() => {
+          setIsPlaying(true)
+          setIsAutoplayBlocked(false)
+        }}
         onPause={() => {
           if (userPausedRef.current) {
             setIsPlaying(false)
@@ -242,9 +207,29 @@ export function MusicProvider({ children }) {
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
       >
-        <source src="/sunflower.webm" type="audio/webm" />
         <source src="/sunflower.m4a" type="audio/mp4" />
+        <source src="/sunflower.webm" type="audio/webm" />
       </audio>
+
+      {/* Floating Gentle Prompt if Browser Blocks Autoplay on Refresh */}
+      {isAutoplayBlocked && !isPlaying && (
+        <div
+          onClick={togglePlay}
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/90 text-white backdrop-blur-xl border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:scale-105 active:scale-95 transition-all animate-bounce select-none pointer-events-auto"
+          title="Click to play music"
+          role="button"
+          tabIndex={0}
+        >
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DE2020] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#DE2020]" />
+          </span>
+          <span className="text-xs font-semibold tracking-wide">
+            Click anywhere to play Sunflower ♫
+          </span>
+        </div>
+      )}
+
       {children}
     </MusicContext.Provider>
   )
@@ -259,6 +244,7 @@ export function useMusic() {
       currentTime: 0,
       duration: 158,
       volume: 0.85,
+      isAutoplayBlocked: false,
       setVolume: () => {},
       togglePlay: () => {},
       toggleMute: () => {},
