@@ -215,19 +215,57 @@ export default function ContentsSection() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Framer Motion Drag and Swipe physics handler matching morphing-card-stack
+  const handleNext = () => {
+    setActiveTabIdx((prev) => (prev < projectsData.length - 1 ? prev + 1 : 0))
+  }
+
+  const handlePrev = () => {
+    setActiveTabIdx((prev) => (prev > 0 ? prev - 1 : projectsData.length - 1))
+  }
+
+  const SWIPE_THRESHOLD = 30
+
+  // Framer Motion Drag and Swipe physics handler
   const handleDragEnd = (_e, info) => {
     const { offset, velocity } = info
     const swipePower = Math.abs(offset.x) * velocity.x
 
-    if (offset.x < -SWIPE_THRESHOLD || swipePower < -800) {
+    if (offset.x < -SWIPE_THRESHOLD || velocity.x < -0.2 || swipePower < -200) {
       // Swiped Left -> Next project
-      setActiveTabIdx((prev) => (prev < projectsData.length - 1 ? prev + 1 : 0))
-    } else if (offset.x > SWIPE_THRESHOLD || swipePower > 800) {
+      handleNext()
+    } else if (offset.x > SWIPE_THRESHOLD || velocity.x > 0.2 || swipePower > 200) {
       // Swiped Right -> Previous project
-      setActiveTabIdx((prev) => (prev > 0 ? prev - 1 : projectsData.length - 1))
+      handlePrev()
     }
-    setTimeout(() => setIsDragging(false), 60)
+    setTimeout(() => setIsDragging(false), 80)
+  }
+
+  // Native mobile touch swipe listeners for 100% reliable swipe on phones & tablets
+  const touchStartXRef = useRef(null)
+  const touchStartYRef = useRef(null)
+
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX
+    touchStartYRef.current = e.touches[0].clientY
+  }
+
+  const handleTouchEnd = (e) => {
+    if (touchStartXRef.current === null) return
+    const touchEndX = e.changedTouches[0].clientX
+    const touchEndY = e.changedTouches[0].clientY
+    const diffX = touchStartXRef.current - touchEndX
+    const diffY = touchStartYRef.current - touchEndY
+
+    // Only trigger swipe if horizontal movement is dominant and > 30px
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+      if (diffX > 0) {
+        handleNext()
+      } else {
+        handlePrev()
+      }
+    }
+    touchStartXRef.current = null
+    touchStartYRef.current = null
   }
 
   // Bi-directional viewport tracker: resets handwriting animation whenever scrolled past or scrolled above
@@ -768,16 +806,17 @@ export default function ContentsSection() {
                         animate={{
                           opacity: 1,
                           scale: 1,
-                          x: 0,
                           ...posStyle,
                         }}
                         transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-                        drag={isTop ? 'x' : false}
+                        drag={isTop && layoutMode === 'stack' ? 'x' : false}
                         dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.7}
+                        dragElastic={0.95}
                         onDragStart={() => setIsDragging(true)}
                         onDragEnd={handleDragEnd}
-                        whileDrag={{ scale: 1.01, cursor: 'grabbing' }}
+                        onTouchStart={isTop && layoutMode === 'stack' ? handleTouchStart : undefined}
+                        onTouchEnd={isTop && layoutMode === 'stack' ? handleTouchEnd : undefined}
+                        whileDrag={{ scale: 1.02, cursor: 'grabbing' }}
                         className={`absolute inset-x-0 top-10 sm:top-14 w-full select-none touch-pan-y ${
                           isTop ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'
                         }`}
@@ -967,7 +1006,8 @@ export default function ContentsSection() {
                                   <img
                                     src={card.thumbnail}
                                     alt={card.title}
-                                    className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out"
+                                    draggable="false"
+                                    className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out select-none pointer-events-none"
                                   />
                                 </div>
 
@@ -984,10 +1024,10 @@ export default function ContentsSection() {
                           <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
                             <span>{card.bulletSummary}</span>
                             <span className="font-semibold text-neutral-800 hidden sm:inline">
-                              {isTop ? 'Drag file horizontally or press ← → to flip' : 'Click bookmark or file to bring to front'}
+                              {isTop ? 'Swipe or drag file horizontally to flip • Press ← →' : 'Click bookmark or file to bring to front'}
                             </span>
                             <span className="font-semibold text-neutral-800 sm:hidden">
-                              {isTop ? 'Swipe horizontally to flip' : 'Click to view'}
+                              {isTop ? 'Swipe file to flip' : 'Click to view'}
                             </span>
                           </div>
                         </div>
