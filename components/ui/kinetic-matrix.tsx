@@ -75,38 +75,6 @@ export function KineticMatrix({
     const shockwavesRef = useRef<GravitationalShockwave[]>([]);
     const dimensionsRef = useRef({ width: 0, height: 0, cols: 0, rows: 0, spacing: 52 });
 
-    // Helper: draw lattice strand between two nodes (subtle, delicate intensity from previous iteration)
-    const drawLatticeLink = useCallback((
-        ctx: CanvasRenderingContext2D,
-        n1: MatrixNode,
-        n2: MatrixNode,
-        restLen: number,
-        isDark: boolean,
-        nodeColor: string
-    ) => {
-        const dx = n1.x - n2.x;
-        const dy = n1.y - n2.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const stretch = Math.abs(dist - restLen) / restLen;
-        const isTensioned = n1.tension > 0.05 || n2.tension > 0.05 || stretch > 0.1;
-
-        if (isTensioned) {
-            const glow = Math.max(n1.tension, n2.tension, stretch * 2);
-            ctx.strokeStyle = isDark
-                ? `rgba(255, 255, 255, ${Math.min(1, 0.25 + glow * 0.75)})`
-                : `rgba(0, 0, 0, ${Math.min(1, 0.25 + glow * 0.75)})`;
-            ctx.lineWidth = 0.8 + glow * 1.4;
-        } else {
-            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.08 : 0.05})`;
-            ctx.lineWidth = 0.65;
-        }
-
-        ctx.beginPath();
-        ctx.moveTo(n1.x, n1.y);
-        ctx.lineTo(n2.x, n2.y);
-        ctx.stroke();
-    }, []);
-
     // Grid lattice initializer
     const buildLattice = useCallback((width: number, height: number) => {
         const spacing = 52;
@@ -140,7 +108,7 @@ export function KineticMatrix({
         pulsesRef.current = [];
     }, []);
 
-    // Canvas Resize Observer with immediate initial sync
+    // Canvas Resize Observer with subpixel rounding correction
     useEffect(() => {
         const container = containerRef.current;
         const canvas = canvasRef.current;
@@ -149,27 +117,19 @@ export function KineticMatrix({
         const ctx = canvas.getContext('2d', { alpha: false });
         if (!ctx) return;
 
-        const syncSize = (w: number, h: number) => {
-            if (w <= 0 || h <= 0) return;
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            canvas.width = Math.floor(w * dpr);
-            canvas.height = Math.floor(h * dpr);
-            canvas.style.width = `${w}px`;
-            canvas.style.height = `${h}px`;
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.scale(dpr, dpr);
-            buildLattice(w, h);
-        };
-
-        const initialRect = container.getBoundingClientRect();
-        if (initialRect.width > 0 && initialRect.height > 0) {
-            syncSize(initialRect.width, initialRect.height);
-        }
-
         const resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 const rect = entry.contentRect;
-                syncSize(rect.width, rect.height);
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+                canvas.width = Math.floor(rect.width * dpr);
+                canvas.height = Math.floor(rect.height * dpr);
+                canvas.style.width = `${rect.width}px`;
+                canvas.style.height = `${rect.height}px`;
+
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.scale(dpr, dpr);
+                buildLattice(rect.width, rect.height);
             }
         });
 
@@ -177,68 +137,7 @@ export function KineticMatrix({
         return () => resizeObserver.disconnect();
     }, [buildLattice]);
 
-    // Window-level unified pointer tracking (mouse, touch, stylus)
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const handlePointer = (clientX: number, clientY: number) => {
-            const rect = container.getBoundingClientRect();
-            if (
-                clientX >= rect.left - 50 &&
-                clientX <= rect.right + 50 &&
-                clientY >= rect.top - 50 &&
-                clientY <= rect.bottom + 50
-            ) {
-                pointerRef.current.x = clientX - rect.left;
-                pointerRef.current.y = clientY - rect.top;
-            } else {
-                pointerRef.current.x = -2000;
-                pointerRef.current.y = -2000;
-            }
-        };
-
-        const onPointerMove = (e: PointerEvent) => {
-            handlePointer(e.clientX, e.clientY);
-        };
-
-        const onPointerDown = (e: PointerEvent) => {
-            const rect = container.getBoundingClientRect();
-            if (
-                e.clientX >= rect.left &&
-                e.clientX <= rect.right &&
-                e.clientY >= rect.top &&
-                e.clientY <= rect.bottom
-            ) {
-                pointerRef.current.isDown = true;
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                shockwavesRef.current.push({
-                    x,
-                    y,
-                    radius: 8,
-                    maxRadius: Math.max(rect.width, rect.height) * 0.7,
-                    power: 1.2,
-                });
-            }
-        };
-
-        const onPointerUp = () => {
-            pointerRef.current.isDown = false;
-        };
-
-        window.addEventListener('pointermove', onPointerMove, { passive: true });
-        window.addEventListener('pointerdown', onPointerDown);
-        window.addEventListener('pointerup', onPointerUp);
-
-        return () => {
-            window.removeEventListener('pointermove', onPointerMove);
-            window.removeEventListener('pointerdown', onPointerDown);
-            window.removeEventListener('pointerup', onPointerUp);
-        };
-    }, []);
-
-    // Main Simulation & Rendering Loop
+    // Main High-Performance Simulation & Rendering Loop
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -289,20 +188,13 @@ export function KineticMatrix({
                 }
             }
 
-            // 2. Physics Step (Hooke's Spring-Mass Lattice with Gentle Breathing Wave)
+            // 2. Physics Step (Hooke's Spring-Mass Lattice)
             const SPRING_K = 26;
             const DAMPING = 0.85;
 
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
                 n.pulsePhase += dt * 3.2;
-
-                // Subtle, gentle breathing wave (1.5px amplitude)
-                const ambientWave = Math.sin(now * 0.0012 + n.col * 0.3 + n.pulsePhase * 0.2) * 1.6
-                                  + Math.cos(now * 0.0009 + n.row * 0.25) * 1.2;
-
-                const targetBaseX = n.baseX;
-                const targetBaseY = n.baseY + ambientWave;
 
                 const dx = pointer.x - n.x;
                 const dy = pointer.y - n.y;
@@ -334,8 +226,8 @@ export function KineticMatrix({
                     }
                 }
 
-                const hx = targetBaseX - n.x;
-                const hy = targetBaseY - n.y;
+                const hx = n.baseX - n.x;
+                const hy = n.baseY - n.y;
                 n.vx += hx * SPRING_K * dt;
                 n.vy += hy * SPRING_K * dt;
 
@@ -347,7 +239,7 @@ export function KineticMatrix({
                 n.tension = Math.max(0, n.tension - dt * 0.9);
             }
 
-            // 3. Spawn Random Synaptic Traveling Pulses (Subtle frequency)
+            // 3. Spawn Random Synaptic Traveling Pulses
             if (Math.random() < 0.3 && nodes.length > 0 && pulses.length < 40) {
                 const fromIdx = Math.floor(Math.random() * nodes.length);
                 const fromNode = nodes[fromIdx];
@@ -395,7 +287,7 @@ export function KineticMatrix({
                 }
             }
 
-            // 5. Render Synaptic Data Pulses (Subtle white packets from previous iteration)
+            // 5. Render Synaptic Data Pulses
             for (let p = pulses.length - 1; p >= 0; p--) {
                 const pulse = pulses[p];
                 pulse.progress += dt * pulse.speed;
@@ -418,7 +310,7 @@ export function KineticMatrix({
                 ctx.fill();
             }
 
-            // 6. Render Nodes & HUD Elements (Exact delicate intensity from previous iteration)
+            // 6. Render Nodes & HUD Elements
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
                 const dx = pointer.x - n.x;
@@ -466,7 +358,38 @@ export function KineticMatrix({
 
         animId = requestAnimationFrame(render);
         return () => cancelAnimationFrame(animId);
-    }, [isRunning, isDarkMode, drawLatticeLink]);
+    }, [isRunning, isDarkMode]);
+
+    const drawLatticeLink = (
+        ctx: CanvasRenderingContext2D,
+        n1: MatrixNode,
+        n2: MatrixNode,
+        restLen: number,
+        isDark: boolean,
+        nodeColor: string
+    ) => {
+        const dx = n1.x - n2.x;
+        const dy = n1.y - n2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const stretch = Math.abs(dist - restLen) / restLen;
+        const isTensioned = n1.tension > 0.05 || n2.tension > 0.05 || stretch > 0.1;
+
+        if (isTensioned) {
+            const glow = Math.max(n1.tension, n2.tension, stretch * 2);
+            ctx.strokeStyle = isDark
+                ? `rgba(255, 255, 255, ${Math.min(1, 0.25 + glow * 0.75)})`
+                : `rgba(0, 0, 0, ${Math.min(1, 0.25 + glow * 0.75)})`;
+            ctx.lineWidth = 0.8 + glow * 1.4;
+        } else {
+            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.08 : 0.05})`;
+            ctx.lineWidth = 0.65;
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(n1.x, n1.y);
+        ctx.lineTo(n2.x, n2.y);
+        ctx.stroke();
+    };
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const container = containerRef.current;
@@ -529,16 +452,16 @@ export function KineticMatrix({
             )}
         >
             {/* Absolute Edge-to-Edge Canvas Viewport */}
-            <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full pointer-events-none" />
+            <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full cursor-crosshair" />
 
             {/* Content Deck Wrapper with Safe Padding */}
-            <div className="relative z-20 flex h-full w-full flex-col justify-between p-6 md:p-10 pointer-events-none">
+            <div className="relative z-20 flex h-full w-full flex-col justify-between p-6 md:p-10">
                 {/* Top Header Deck */}
-                <header className="flex w-full items-center justify-between font-mono text-[11px] text-neutral-500 dark:text-neutral-400 pointer-events-auto">
+                <header className="flex w-full items-center justify-between font-mono text-[11px] text-neutral-500 dark:text-neutral-400">
                     <div className="flex items-center gap-2">
                         <button
                             onClick={triggerCentralImpulse}
-                            className="flex items-center gap-1.5 rounded-lg border border-neutral-300/80 bg-white/70 px-2.5 py-1.5 backdrop-blur-md transition-all hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/70 dark:hover:bg-neutral-800 cursor-pointer"
+                            className="flex items-center gap-1.5 rounded-lg border border-neutral-300/80 bg-white/70 px-2.5 py-1.5 backdrop-blur-md transition-all hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/70 dark:hover:bg-neutral-800"
                             title="Trigger Shockwave"
                         >
                             <Sparkles className="size-3 text-neutral-800 dark:text-neutral-200" />
@@ -547,7 +470,7 @@ export function KineticMatrix({
 
                         <button
                             onClick={() => setIsRunning((prev) => !prev)}
-                            className="flex items-center gap-1.5 rounded-lg border border-neutral-300/80 bg-white/70 px-2.5 py-1.5 backdrop-blur-md transition-all hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/70 dark:hover:bg-neutral-800 cursor-pointer"
+                            className="flex items-center gap-1.5 rounded-lg border border-neutral-300/80 bg-white/70 px-2.5 py-1.5 backdrop-blur-md transition-all hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/70 dark:hover:bg-neutral-800"
                         >
                             {isRunning ? <Pause className="size-3" /> : <Play className="size-3" />}
                             <span className="font-mono text-[10px]">{isRunning ? "FREEZE" : "RUN"}</span>

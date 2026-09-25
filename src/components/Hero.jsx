@@ -47,8 +47,8 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
-      {/* Background: NedDev Kinetic Matrix - Pushed firmly behind every single element */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+      {/* Background: NedDev Kinetic Matrix */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
         <KineticMatrix
           title=""
           className="w-full h-full bg-[#06070a] [&_header]:hidden [&_main]:hidden"
@@ -57,24 +57,22 @@ export default function Hero() {
 
       {/* Cinematic Edge Vignette to blend into section boundaries */}
       <div
-        className="absolute inset-0 pointer-events-none select-none -z-10"
+        className="absolute inset-0 pointer-events-none select-none z-[1]"
         style={{
           background: 'radial-gradient(circle at 50% 50%, transparent 65%, rgba(5, 5, 7, 0.75) 100%)',
         }}
         aria-hidden="true"
       />
 
-      {/* Hero Foreground Content Layer (Firmly above background matrix) */}
-      <div className="relative z-10 w-full flex flex-col items-center">
-        {/* 1440x940 Canvas Container */}
-        <div className="relative z-10 w-full max-w-[1440px] mx-auto aspect-[1440/940] min-h-[500px] sm:min-h-[580px] md:min-h-[740px] lg:min-h-[860px] pointer-events-none">
+      {/* 1440x940 Canvas Container */}
+      <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/940] min-h-[500px] sm:min-h-[580px] md:min-h-[740px] lg:min-h-[860px]">
         {/* Semantic SEO Primary Heading */}
         <h1 className="sr-only">OMİs Brain — Om Biswas Portfolio | Visual &amp; Product Designer</h1>
         
         {/* ================= TOP ROW ================= */}
         {/* 2026 - Akira Expanded font */}
         <div
-          className="absolute left-4 sm:left-6 md:left-[2.29%] top-3 sm:top-4 md:top-[3%] z-20 flex items-center pointer-events-none"
+          className="absolute left-4 sm:left-6 md:left-[2.29%] top-3 sm:top-4 md:top-[3%] z-20 flex items-center"
           title="Year 2026"
         >
           <span className="font-akira font-black text-lg sm:text-2xl md:text-[28px] leading-none tracking-[0.08em] text-white">
@@ -93,7 +91,7 @@ export default function Hero() {
 
         {/* Top-Right OM Badge */}
         <div
-          className="absolute right-4 sm:right-6 md:right-auto md:left-[92.29%] md:-translate-x-1/2 top-3 sm:top-4 md:top-[3%] z-20 flex items-center pointer-events-auto"
+          className="absolute right-4 sm:right-6 md:right-auto md:left-[92.29%] md:-translate-x-1/2 top-3 sm:top-4 md:top-[3%] z-20 flex items-center"
         >
           <img
             src={topLogo}
@@ -118,7 +116,7 @@ export default function Hero() {
         {/* ================= CENTERPIECE BANNER ================= */}
         {/* Banner Area: responsive width on mobile, exact Figma coordinate on desktop */}
         <div
-          className="absolute left-[4%] sm:left-[6%] md:left-[9.17%] top-[25%] sm:top-[25.5%] md:top-[25.88%] w-[92%] sm:w-[88%] md:w-[81.67%] h-[46%] md:h-[47.75%] z-10 pointer-events-none"
+          className="absolute left-[4%] sm:left-[6%] md:left-[9.17%] top-[25%] sm:top-[25.5%] md:top-[25.88%] w-[92%] sm:w-[88%] md:w-[81.67%] h-[46%] md:h-[47.75%] z-10"
           style={{
             transform: `perspective(1200px) rotateX(${-mousePos.y * 0.35}deg) rotateY(${mousePos.x * 0.35}deg) scale(${bannerScale})`,
             opacity: bannerOpacity,
@@ -127,7 +125,7 @@ export default function Hero() {
           }}
         >
           {/* Base Rounded Banner (Red background + Lucy anime + Halftone) */}
-          <div className="relative w-full h-full rounded-[20px] sm:rounded-[32px] md:rounded-[50px] overflow-hidden bg-[#BA1F1F] shadow-[0_20px_60px_rgba(186,31,31,0.25)] pointer-events-none">
+          <div className="relative w-full h-full rounded-[20px] sm:rounded-[32px] md:rounded-[50px] overflow-hidden bg-[#BA1F1F] shadow-[0_20px_60px_rgba(186,31,31,0.25)]">
             {/* Cyberpunk Lucy Anime Illustration (Left portion) */}
             <img
               src={frame41}
@@ -149,7 +147,7 @@ export default function Hero() {
 
           {/* 1. Metallic Smiley Sticker (top-left, breaking out of banner) */}
           <div
-            className="absolute -left-[4%] sm:-left-[5.87%] -top-[14%] sm:-top-[16.36%] w-[17%] sm:w-[14.65%] z-30 group cursor-pointer transition-transform duration-300 ease-out hover:scale-110 drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)] pointer-events-auto"
+            className="absolute -left-[4%] sm:-left-[5.87%] -top-[14%] sm:-top-[16.36%] w-[17%] sm:w-[14.65%] z-30 group cursor-pointer transition-transform duration-300 ease-out hover:scale-110 drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
             title="Smiley sticker"
             style={{
               transform: `translate3d(${mousePos.x * 0.9}px, ${mousePos.y * 0.9}px, 0)`,
@@ -180,7 +178,7 @@ export default function Hero() {
 
           {/* 3. Center OM Badge (replacing the 'O' in PORTFOLiO) */}
           <div
-            className="absolute left-[53.49%] top-[32.11%] w-[11%] md:w-[10.54%] z-25 group cursor-pointer pointer-events-auto"
+            className="absolute left-[53.49%] top-[32.11%] w-[11%] md:w-[10.54%] z-25 group cursor-pointer"
             title="OM Logo"
           >
             <img
@@ -324,7 +322,6 @@ export default function Hero() {
             <polyline points="7 6 12 11 17 6" />
           </svg>
         </a>
-      </div>
       </div>
     </section>
   )
