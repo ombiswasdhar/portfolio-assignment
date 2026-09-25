@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import ParallaxComponent from './ui/parallax-scrolling'
 import frame41 from '../assets/hero/frame41.png'
 import halftone from '../assets/hero/halftone.png'
 import portfolioText from '../assets/hero/portfolio_text.svg'
@@ -40,12 +41,32 @@ export default function Hero() {
   const bannerOpacity = Math.max(0.85, 1 - (scrollY / 4000))
 
   return (
-    <section
+    <ParallaxComponent
       id="hero"
-      aria-label="Hero section"
-      onMouseMove={handleMouseMove}
-      className="relative w-full bg-[#050507]/60 text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
+      title={<>OM<span className="text-[#BA1F1F]">İ</span>'S BRAIN</>}
+      topBadge={
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/20 bg-black/60 backdrop-blur-md text-[11px] sm:text-xs tracking-[0.2em] uppercase font-mono text-white/90 shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
+          <span className="w-2 h-2 rounded-full bg-[#BA1F1F] animate-pulse" />
+          PORTFOLIO // 2026
+        </div>
+      }
+      subtitle={
+        <div className="flex flex-col items-center gap-1.5">
+          <p className="text-xs sm:text-sm md:text-base font-fredoka font-normal tracking-widest uppercase text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+            Visual &amp; Product Designer • Coursework Portfolio
+          </p>
+          <span className="text-[10px] sm:text-xs font-mono text-neutral-300/80 tracking-widest uppercase">
+            Scroll to dive into the work ↓
+          </span>
+        </div>
+      }
     >
+      <section
+        id="hero-showcase"
+        aria-label="Portfolio centerpiece showcase"
+        onMouseMove={handleMouseMove}
+        className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-8 sm:pt-12 md:pt-16 pb-8"
+      >
       {/* 1. Dynamic Parallax Ambient Crimson Glow (tracking cursor) */}
       <div
         className="absolute inset-0 pointer-events-none transition-all duration-300 ease-out"
@@ -363,5 +384,6 @@ export default function Hero() {
         </a>
       </div>
     </section>
+  </ParallaxComponent>
   )
 }
