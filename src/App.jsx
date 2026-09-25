@@ -8,6 +8,7 @@ import CV from './pages/CV'
 import Contact from './pages/Contact'
 import CustomCursor from './components/CustomCursor'
 import ConstellationGrid from '@/components/ui/constellation-grid'
+import MusicPlayer from './components/MusicPlayer'
 
 // Ensure browser does not auto-restore scrolled positions on reload
 if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
@@ -29,6 +30,7 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <CustomCursor />
+      <MusicPlayer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/work" element={<Work />} />
