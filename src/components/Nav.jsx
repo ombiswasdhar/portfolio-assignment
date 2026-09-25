@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import omMonogramImg from '../assets/nav/om_monogram.png'
 import MarqueeBar from './MarqueeBar'
+import SparklesText from './ui/sparkles-text'
+import LiquidButton from './ui/liquid-button'
 
 const primaryNavItems = [
   { id: 'about', name: 'About', path: '/#about' },
@@ -241,23 +243,44 @@ export default function Nav() {
           })}
         </div>
 
-        {/* Desktop Cell 6: Call To Action Get in Touch */}
-        <Link
-          to="/contact"
-          onClick={(e) => handleClick(e, { id: 'contact' })}
-          className={`hidden md:flex md:flex-[1.2] px-6 items-center justify-center text-center transition-all duration-200 no-underline cursor-pointer group active:scale-[0.98] ${
-            activeSection === 'contact'
-              ? 'bg-[#DE2020] text-white font-bold'
-              : isLightBg
-              ? 'bg-black text-white hover:bg-[#DE2020] hover:shadow-[0_4px_15px_rgba(222,32,32,0.4)]'
-              : 'bg-white text-black hover:bg-[#DE2020] hover:text-white hover:shadow-[0_4px_15px_rgba(222,32,32,0.4)]'
-          }`}
-          aria-label="Get in Touch"
-        >
-          <span className="font-myfont text-[21px] sm:text-[23px] md:text-[25px] tracking-wide leading-none pt-1 font-bold transition-transform duration-200 group-hover:scale-105">
-            Get in Touch
-          </span>
-        </Link>
+        {/* Desktop Cell 6: Call To Action Get in Touch (Liquid Button + Sparkles Text) */}
+        <div className="hidden md:flex md:flex-[1.2] items-center justify-center px-2.5 sm:px-3">
+          <Link
+            to="/contact"
+            onClick={(e) => handleClick(e, { id: 'contact' })}
+            className="no-underline w-full max-w-[210px] flex items-center justify-center group"
+            aria-label="Get in Touch"
+          >
+            <LiquidButton
+              liquidColor="#BA1F1F"
+              liquidBackgroundColor={
+                activeSection === 'contact'
+                  ? '#BA1F1F'
+                  : isLightBg
+                  ? '#0A0A0E'
+                  : '#FFFFFF'
+              }
+              className={`w-full py-1.5 md:py-2 px-4 rounded-full border shadow-sm transition-all duration-300 ${
+                activeSection === 'contact'
+                  ? 'border-[#BA1F1F] text-white shadow-[0_0_20px_rgba(186,31,31,0.5)]'
+                  : isLightBg
+                  ? 'border-black/25 text-white hover:text-white hover:border-[#BA1F1F] hover:shadow-[0_0_20px_rgba(186,31,31,0.35)]'
+                  : 'border-white/25 text-black hover:text-white hover:border-[#BA1F1F] hover:shadow-[0_0_20px_rgba(186,31,31,0.5)]'
+              }`}
+            >
+              <SparklesText
+                sparklesCount={6}
+                colors={{
+                  first: isLightBg ? '#FF8080' : '#BA1F1F',
+                  second: '#FFFFFF',
+                }}
+                className="font-myfont font-bold text-[19px] sm:text-[21px] md:text-[23px] tracking-wide leading-none pt-0.5"
+              >
+                Get in Touch
+              </SparklesText>
+            </LiquidButton>
+          </Link>
+        </div>
       </div>
 
       {/* Mobile Slide-Down Dropdown Menu & Backdrop (< md) */}
@@ -319,9 +342,13 @@ export default function Nav() {
                 : 'bg-white text-black hover:bg-[#DE2020] hover:text-white'
             }`}
           >
-            <span className="font-myfont text-2xl tracking-wide">
+            <SparklesText
+              sparklesCount={5}
+              colors={{ first: '#FF8080', second: '#FFFFFF' }}
+              className="font-myfont text-2xl tracking-wide"
+            >
               Get in Touch
-            </span>
+            </SparklesText>
             <span className="text-base">✉️</span>
           </Link>
         </div>
