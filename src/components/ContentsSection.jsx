@@ -493,7 +493,7 @@ export default function ContentsSection() {
           {/* ========================================================================= */}
           {/* MORPHING CONTROLS: LAYOUT TOGGLE (STACK / GRID / LIST) */}
           {/* ========================================================================= */}
-          <div className="flex items-center justify-between flex-wrap gap-4 mb-6 sm:mb-8">
+          <div className="relative z-40 flex items-center justify-between flex-wrap gap-4 mb-14 sm:mb-20 -mt-2 sm:-mt-4">
             <div className="flex items-center gap-2.5">
               <span className="font-poppins-light font-light text-xs uppercase tracking-widest text-neutral-700">
                 Layout:
@@ -556,7 +556,7 @@ export default function ContentsSection() {
           {/* ========================================================================= */}
           {/* PHYSICAL MANILA FOLDER COMPONENT (STACK / GRID / LIST ANIMATION) */}
           {/* ========================================================================= */}
-          <div className="relative w-full">
+          <div className="relative z-10 w-full mt-2 sm:mt-4">
             {/* Folder Body Canvas / Morphing Stack Container */}
             <LayoutGroup>
               <div
