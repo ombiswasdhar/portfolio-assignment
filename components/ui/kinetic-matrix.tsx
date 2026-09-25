@@ -58,7 +58,7 @@ export function KineticMatrix({
         return () => mediaQuery.removeEventListener('change', handler);
     }, []);
 
-    // Pointer state with smooth inertia
+    // Pointer state with smooth inertia - refined radius for subtle interaction
     const pointerRef = useRef({
         x: -2000,
         y: -2000,
@@ -66,7 +66,7 @@ export function KineticMatrix({
         prevY: -2000,
         vx: 0,
         vy: 0,
-        radius: 220,
+        radius: 140,
         isDown: false,
     });
 
@@ -108,7 +108,7 @@ export function KineticMatrix({
         pulsesRef.current = [];
     }, []);
 
-    // Canvas Resize Observer with subpixel rounding correction
+    // Canvas Resize Observer with immediate initial mount sizing
     useEffect(() => {
         const container = containerRef.current;
         const canvas = canvasRef.current;
@@ -117,25 +117,125 @@ export function KineticMatrix({
         const ctx = canvas.getContext('2d', { alpha: false });
         if (!ctx) return;
 
+        const updateSize = (w: number, h: number) => {
+            if (w <= 0 || h <= 0) return;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
+            canvas.style.width = `${w}px`;
+            canvas.style.height = `${h}px`;
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+            buildLattice(w, h);
+        };
+
+        const initialRect = container.getBoundingClientRect();
+        if (initialRect.width > 0 && initialRect.height > 0) {
+            updateSize(initialRect.width, initialRect.height);
+        }
+
         const resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 const rect = entry.contentRect;
-                const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-                canvas.width = Math.floor(rect.width * dpr);
-                canvas.height = Math.floor(rect.height * dpr);
-                canvas.style.width = `${rect.width}px`;
-                canvas.style.height = `${rect.height}px`;
-
-                ctx.setTransform(1, 0, 0, 1, 0, 0);
-                ctx.scale(dpr, dpr);
-                buildLattice(rect.width, rect.height);
+                updateSize(rect.width, rect.height);
             }
         });
 
         resizeObserver.observe(container);
         return () => resizeObserver.disconnect();
     }, [buildLattice]);
+
+    // Unified pointer tracking so animation works 100% of the time across overlays
+    useEffect(() => {
+        const onPointerMove = (e: PointerEvent) => {
+            const container = containerRef.current;
+            if (!container) return;
+            const rect = container.getBoundingClientRect();
+            if (
+                e.clientX >= rect.left &&
+                e.clientX <= rect.right &&
+                e.clientY >= rect.top &&
+                e.clientY <= rect.bottom
+            ) {
+                pointerRef.current.x = e.clientX - rect.left;
+                pointerRef.current.y = e.clientY - rect.top;
+            } else {
+                pointerRef.current.x = -2000;
+                pointerRef.current.y = -2000;
+            }
+        };
+
+        const onPointerDown = (e: PointerEvent) => {
+            const container = containerRef.current;
+            if (!container) return;
+            const rect = container.getBoundingClientRect();
+            if (
+                e.clientX >= rect.left &&
+                e.clientX <= rect.right &&
+                e.clientY >= rect.top &&
+                e.clientY <= rect.bottom
+            ) {
+                pointerRef.current.isDown = true;
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                shockwavesRef.current.push({
+                    x,
+                    y,
+                    radius: 8,
+                    maxRadius: Math.max(rect.width, rect.height) * 0.55,
+                    power: 0.6,
+                });
+            }
+        };
+
+        const onPointerUp = () => {
+            pointerRef.current.isDown = false;
+        };
+
+        window.addEventListener('pointermove', onPointerMove, { passive: true });
+        window.addEventListener('pointerdown', onPointerDown);
+        window.addEventListener('pointerup', onPointerUp);
+
+        return () => {
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerdown', onPointerDown);
+            window.removeEventListener('pointerup', onPointerUp);
+        };
+    }, []);
+
+    // Draw connecting lattice strands with refined tension glow
+    const drawLatticeLink = useCallback((
+        ctx: CanvasRenderingContext2D,
+        n1: MatrixNode,
+        n2: MatrixNode,
+        restLen: number,
+        isDark: boolean,
+        nodeColor: string
+    ) => {
+        const dx = n1.x - n2.x;
+        const dy = n1.y - n2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const stretch = Math.abs(dist - restLen) / restLen;
+        const isTensioned = n1.tension > 0.05 || n2.tension > 0.05 || stretch > 0.1;
+
+        if (isTensioned) {
+            const glow = Math.min(1, Math.max(n1.tension, n2.tension, stretch * 1.2));
+            ctx.strokeStyle = isDark
+                ? `rgba(255, 255, 255, ${Math.min(0.5, 0.12 + glow * 0.38)})`
+                : `rgba(0, 0, 0, ${Math.min(0.4, 0.1 + glow * 0.3)})`;
+            ctx.lineWidth = 0.6 + glow * 0.6;
+        } else {
+            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.07 : 0.04})`;
+            ctx.lineWidth = 0.55;
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(n1.x, n1.y);
+        ctx.lineTo(n2.x, n2.y);
+        ctx.stroke();
+    }, []);
 
     // Main High-Performance Simulation & Rendering Loop
     useEffect(() => {
@@ -178,18 +278,18 @@ export function KineticMatrix({
             ctx.fillStyle = bgColor;
             ctx.fillRect(0, 0, width, height);
 
-            // 1. Propagate Shockwaves
+            // 1. Propagate Shockwaves (Smooth, controlled impulse)
             for (let s = shockwaves.length - 1; s >= 0; s--) {
                 const sw = shockwaves[s];
-                sw.radius += 400 * dt;
+                sw.radius += 360 * dt;
                 sw.power *= Math.pow(0.12, dt);
                 if (sw.radius > sw.maxRadius || sw.power < 0.01) {
                     shockwaves.splice(s, 1);
                 }
             }
 
-            // 2. Physics Step (Hooke's Spring-Mass Lattice)
-            const SPRING_K = 26;
+            // 2. Physics Step (Hooke's Spring-Mass Lattice - Calibrated gentle intensity)
+            const SPRING_K = 24;
             const DAMPING = 0.85;
 
             for (let i = 0; i < nodes.length; i++) {
@@ -202,12 +302,13 @@ export function KineticMatrix({
 
                 if (dist < pointer.radius && dist > 0) {
                     const ratio = 1 - dist / pointer.radius;
-                    const force = ratio * (1600 + mouseSpeed * 180 + (pointer.isDown ? 2400 : 0));
+                    // Reduced force intensity by ~70% for fluid, silky glide
+                    const force = ratio * (480 + mouseSpeed * 50 + (pointer.isDown ? 750 : 0));
                     const angle = Math.atan2(dy, dx);
 
                     n.vx -= Math.cos(angle) * force * dt;
                     n.vy -= Math.sin(angle) * force * dt;
-                    n.tension = Math.min(1, n.tension + ratio * 0.5);
+                    n.tension = Math.min(0.55, n.tension + ratio * 0.2);
                 }
 
                 for (let s = 0; s < shockwaves.length; s++) {
@@ -218,11 +319,11 @@ export function KineticMatrix({
                     const delta = Math.abs(swDist - sw.radius);
 
                     if (delta < 55) {
-                        const force = (1 - delta / 55) * sw.power * 2800;
+                        const force = (1 - delta / 55) * sw.power * 1200;
                         const angle = Math.atan2(swDy, swDx);
                         n.vx += Math.cos(angle) * force * dt;
                         n.vy += Math.sin(angle) * force * dt;
-                        n.tension = 1.0;
+                        n.tension = 0.6;
                     }
                 }
 
@@ -296,7 +397,7 @@ export function KineticMatrix({
                 const n2 = nodes[pulse.toNode];
 
                 if (!n1 || !n2 || pulse.progress >= 1) {
-                    if (n2) n2.tension = Math.min(1, n2.tension + 0.35);
+                    if (n2) n2.tension = Math.min(0.6, n2.tension + 0.3);
                     pulses.splice(p, 1);
                     continue;
                 }
@@ -310,7 +411,7 @@ export function KineticMatrix({
                 ctx.fill();
             }
 
-            // 6. Render Nodes & HUD Elements
+            // 6. Render Nodes & HUD Elements (Refined subtle radius & glow)
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
                 const dx = pointer.x - n.x;
@@ -319,37 +420,37 @@ export function KineticMatrix({
                 const isNear = dist < pointer.radius;
 
                 const currentRadius = isNear
-                    ? n.radius * 2.2 + n.tension * 1.5
-                    : n.radius + Math.sin(n.pulsePhase) * 0.25;
+                    ? n.radius * 1.5 + n.tension * 0.8
+                    : n.radius + Math.sin(n.pulsePhase) * 0.18;
 
-                if (isNear || n.tension > 0.1) {
-                    ctx.fillStyle = `rgba(${accentGlow}, ${Math.min(1, 0.25 + n.tension * 0.65)})`;
+                if (isNear || n.tension > 0.12) {
+                    ctx.fillStyle = `rgba(${accentGlow}, ${Math.min(0.4, 0.12 + n.tension * 0.3)})`;
                     ctx.beginPath();
-                    ctx.arc(n.x, n.y, currentRadius * 2.2, 0, Math.PI * 2);
+                    ctx.arc(n.x, n.y, currentRadius * 1.8, 0, Math.PI * 2);
                     ctx.fill();
                 }
 
-                ctx.fillStyle = isNear || n.tension > 0.1
+                ctx.fillStyle = isNear || n.tension > 0.12
                     ? (isDark ? '#ffffff' : '#000000')
-                    : `rgba(${nodeColor}, ${isDark ? 0.28 : 0.2})`;
+                    : `rgba(${nodeColor}, ${isDark ? 0.25 : 0.18})`;
 
                 ctx.beginPath();
-                ctx.arc(n.x, n.y, Math.max(0.8, currentRadius), 0, Math.PI * 2);
+                ctx.arc(n.x, n.y, Math.max(0.7, currentRadius), 0, Math.PI * 2);
                 ctx.fill();
 
-                if (dist < 90) {
-                    const radarRing = ((n.pulsePhase * 20) % 32) + 4;
-                    const ringAlpha = (1 - radarRing / 36) * 0.35;
+                if (dist < 65) {
+                    const radarRing = ((n.pulsePhase * 20) % 28) + 4;
+                    const ringAlpha = (1 - radarRing / 32) * 0.22;
 
                     ctx.strokeStyle = `rgba(${accentGlow}, ${ringAlpha})`;
-                    ctx.lineWidth = 1;
+                    ctx.lineWidth = 0.75;
                     ctx.beginPath();
                     ctx.arc(n.x, n.y, radarRing, 0, Math.PI * 2);
                     ctx.stroke();
 
-                    ctx.font = '8px ui-monospace, SFMono-Regular, Consolas, monospace';
-                    ctx.fillStyle = `rgba(${accentGlow}, 0.85)`;
-                    ctx.fillText(n.label, n.x + 9, n.y - 9);
+                    ctx.font = '7px ui-monospace, SFMono-Regular, Consolas, monospace';
+                    ctx.fillStyle = `rgba(${accentGlow}, 0.55)`;
+                    ctx.fillText(n.label, n.x + 8, n.y - 8);
                 }
             }
 
@@ -358,38 +459,7 @@ export function KineticMatrix({
 
         animId = requestAnimationFrame(render);
         return () => cancelAnimationFrame(animId);
-    }, [isRunning, isDarkMode]);
-
-    const drawLatticeLink = (
-        ctx: CanvasRenderingContext2D,
-        n1: MatrixNode,
-        n2: MatrixNode,
-        restLen: number,
-        isDark: boolean,
-        nodeColor: string
-    ) => {
-        const dx = n1.x - n2.x;
-        const dy = n1.y - n2.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const stretch = Math.abs(dist - restLen) / restLen;
-        const isTensioned = n1.tension > 0.05 || n2.tension > 0.05 || stretch > 0.1;
-
-        if (isTensioned) {
-            const glow = Math.max(n1.tension, n2.tension, stretch * 2);
-            ctx.strokeStyle = isDark
-                ? `rgba(255, 255, 255, ${Math.min(1, 0.25 + glow * 0.75)})`
-                : `rgba(0, 0, 0, ${Math.min(1, 0.25 + glow * 0.75)})`;
-            ctx.lineWidth = 0.8 + glow * 1.4;
-        } else {
-            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.08 : 0.05})`;
-            ctx.lineWidth = 0.65;
-        }
-
-        ctx.beginPath();
-        ctx.moveTo(n1.x, n1.y);
-        ctx.lineTo(n2.x, n2.y);
-        ctx.stroke();
-    };
+    }, [isRunning, isDarkMode, drawLatticeLink]);
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const container = containerRef.current;
@@ -413,8 +483,8 @@ export function KineticMatrix({
             x,
             y,
             radius: 8,
-            maxRadius: 420,
-            power: 1.2,
+            maxRadius: Math.max(rect.width, rect.height) * 0.55,
+            power: 0.6,
         });
     };
 
@@ -434,8 +504,8 @@ export function KineticMatrix({
             x: width / 2,
             y: height / 2,
             radius: 10,
-            maxRadius: Math.max(width, height) * 0.85,
-            power: 1.4,
+            maxRadius: Math.max(width, height) * 0.6,
+            power: 0.7,
         });
     };
 
@@ -455,13 +525,13 @@ export function KineticMatrix({
             <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full cursor-crosshair" />
 
             {/* Content Deck Wrapper with Safe Padding */}
-            <div className="relative z-20 flex h-full w-full flex-col justify-between p-6 md:p-10">
+            <div className="relative z-20 flex h-full w-full flex-col justify-between p-6 md:p-10 pointer-events-none">
                 {/* Top Header Deck */}
-                <header className="flex w-full items-center justify-between font-mono text-[11px] text-neutral-500 dark:text-neutral-400">
+                <header className="flex w-full items-center justify-between font-mono text-[11px] text-neutral-500 dark:text-neutral-400 pointer-events-auto">
                     <div className="flex items-center gap-2">
                         <button
                             onClick={triggerCentralImpulse}
-                            className="flex items-center gap-1.5 rounded-lg border border-neutral-300/80 bg-white/70 px-2.5 py-1.5 backdrop-blur-md transition-all hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/70 dark:hover:bg-neutral-800"
+                            className="flex items-center gap-1.5 rounded-lg border border-neutral-300/80 bg-white/70 px-2.5 py-1.5 backdrop-blur-md transition-all hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/70 dark:hover:bg-neutral-800 cursor-pointer"
                             title="Trigger Shockwave"
                         >
                             <Sparkles className="size-3 text-neutral-800 dark:text-neutral-200" />
@@ -470,7 +540,7 @@ export function KineticMatrix({
 
                         <button
                             onClick={() => setIsRunning((prev) => !prev)}
-                            className="flex items-center gap-1.5 rounded-lg border border-neutral-300/80 bg-white/70 px-2.5 py-1.5 backdrop-blur-md transition-all hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/70 dark:hover:bg-neutral-800"
+                            className="flex items-center gap-1.5 rounded-lg border border-neutral-300/80 bg-white/70 px-2.5 py-1.5 backdrop-blur-md transition-all hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/70 dark:hover:bg-neutral-800 cursor-pointer"
                         >
                             {isRunning ? <Pause className="size-3" /> : <Play className="size-3" />}
                             <span className="font-mono text-[10px]">{isRunning ? "FREEZE" : "RUN"}</span>
