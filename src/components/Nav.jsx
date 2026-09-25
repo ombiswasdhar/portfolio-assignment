@@ -181,7 +181,7 @@ export default function Nav() {
               handleClick(e, { id: 'contact' })
               setMobileMenuOpen(false)
             }}
-            className={`px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-colors ${
+            className={`px-3 py-1 rounded-none text-xs font-mono font-bold uppercase tracking-wider transition-colors ${
               activeSection === 'contact'
                 ? 'bg-[#DE2020] text-white'
                 : isLightBg
@@ -244,37 +244,39 @@ export default function Nav() {
         </div>
 
         {/* Desktop Cell 6: Call To Action Get in Touch (Liquid Button + Sparkles Text) */}
-        <div className="hidden md:flex md:flex-[1.2] items-center justify-center px-2.5 sm:px-3">
+        <div className="hidden md:flex items-stretch shrink-0">
           <Link
             to="/contact"
             onClick={(e) => handleClick(e, { id: 'contact' })}
-            className="no-underline w-full max-w-[210px] flex items-center justify-center group"
+            className="no-underline flex items-stretch h-full"
             aria-label="Get in Touch"
           >
             <LiquidButton
+              hoverScale={1}
+              tapScale={0.98}
               liquidColor="#BA1F1F"
               liquidBackgroundColor={
                 activeSection === 'contact'
                   ? '#BA1F1F'
                   : isLightBg
                   ? '#0A0A0E'
-                  : '#FFFFFF'
+                  : 'transparent'
               }
-              className={`w-full py-1.5 md:py-2 px-4 rounded-full border shadow-sm transition-all duration-300 ${
+              className={`h-full px-5 md:px-6 rounded-none transition-colors duration-200 flex items-center justify-center cursor-pointer group ${
                 activeSection === 'contact'
-                  ? 'border-[#BA1F1F] text-white shadow-[0_0_20px_rgba(186,31,31,0.5)]'
+                  ? 'bg-[#BA1F1F] text-white font-bold shadow-inner'
                   : isLightBg
-                  ? 'border-black/25 text-white hover:text-white hover:border-[#BA1F1F] hover:shadow-[0_0_20px_rgba(186,31,31,0.35)]'
-                  : 'border-white/25 text-black hover:text-white hover:border-[#BA1F1F] hover:shadow-[0_0_20px_rgba(186,31,31,0.5)]'
+                  ? 'bg-transparent hover:bg-[#EAE8E2] text-black hover:text-[#DE2020]'
+                  : 'bg-transparent hover:bg-white/10 text-neutral-200 hover:text-[#FF4A4A]'
               }`}
             >
               <SparklesText
-                sparklesCount={6}
+                sparklesCount={5}
                 colors={{
                   first: isLightBg ? '#FF8080' : '#BA1F1F',
                   second: '#FFFFFF',
                 }}
-                className="font-myfont font-bold text-[19px] sm:text-[21px] md:text-[23px] tracking-wide leading-none pt-0.5"
+                className="font-myfont text-[21px] sm:text-[23px] md:text-[25px] tracking-wide leading-none pt-1 transition-transform duration-200 group-hover:scale-105"
               >
                 Get in Touch
               </SparklesText>

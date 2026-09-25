@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import KineticMatrix from '@/components/ui/kinetic-matrix'
 import frame41 from '../assets/hero/frame41.png'
 import halftone from '../assets/hero/halftone.png'
 import portfolioText from '../assets/hero/portfolio_text.svg'
@@ -44,61 +45,21 @@ export default function Hero() {
       id="hero"
       aria-label="Hero section"
       onMouseMove={handleMouseMove}
-      className="relative w-full bg-[#050507]/60 text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
+      className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
-      {/* 1. Dynamic Parallax Ambient Crimson Glow (tracking cursor) */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-all duration-300 ease-out"
-        style={{
-          background: `radial-gradient(900px circle at calc(50% + ${mousePos.x * 16}px) calc(46% + ${mousePos.y * 16}px), rgba(186, 31, 31, 0.18) 0%, rgba(90, 12, 22, 0.08) 38%, transparent 72%)`,
-        }}
-        aria-hidden="true"
-      />
-
-      {/* 2. Secondary Atmospheric Nebula Glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[750px] bg-gradient-to-b from-[#BA1F1F]/10 via-[#3a0814]/15 to-transparent blur-[140px] rounded-full pointer-events-none opacity-80"
-        aria-hidden="true"
-      />
-
-      {/* 3. Cyberpunk Geometric Matrix & Dot Grid */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen select-none"
-        style={{
-          maskImage: 'radial-gradient(circle at 50% 48%, black 30%, transparent 78%)',
-          WebkitMaskImage: 'radial-gradient(circle at 50% 48%, black 30%, transparent 78%)',
-        }}
-        aria-hidden="true"
-      >
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="cyberGrid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.75" />
-              <circle cx="0" cy="0" r="1.2" fill="rgba(255,255,255,0.2)" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#cyberGrid)" />
-        </svg>
+      {/* Background: NedDev Kinetic Matrix */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
+        <KineticMatrix
+          title=""
+          className="w-full h-full bg-[#06070a] [&_header]:hidden [&_main]:hidden"
+        />
       </div>
 
-      {/* 4. Analog Film Grain & Paper Noise Texture Overlay */}
-      <svg
-        className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.15] mix-blend-overlay select-none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <filter id="heroNoise">
-          <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#heroNoise)" />
-      </svg>
-
-      {/* 5. Soft Cinematic Edge Vignette */}
+      {/* Cinematic Edge Vignette to blend into section boundaries */}
       <div
-        className="absolute inset-0 pointer-events-none select-none"
+        className="absolute inset-0 pointer-events-none select-none z-[1]"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.8) 100%)',
+          background: 'radial-gradient(circle at 50% 50%, transparent 65%, rgba(5, 5, 7, 0.75) 100%)',
         }}
         aria-hidden="true"
       />
@@ -281,8 +242,8 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Center: Barcode - sized identically to Symbiosis Institute of Design text height */}
-          <div className="flex justify-center items-center">
+          {/* Center: Barcode - center-aligned horizontally */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-center pointer-events-none">
             <img
               src={barcode}
               alt="Barcode"
@@ -311,8 +272,8 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Center: Barcode - sized identically to Symbiosis Institute text height */}
-          <div className="flex-1 flex justify-center items-center px-1">
+          {/* Center: Barcode - center-aligned horizontally */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-center pointer-events-none">
             <img
               src={barcode}
               alt="Barcode"
