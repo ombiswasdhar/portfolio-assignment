@@ -200,7 +200,9 @@ export default function ContentsSection() {
   const [isDragging, setIsDragging] = useState(false)
   const [activeProject, setActiveProject] = useState(null)
   const [activeImageZoom, setActiveImageZoom] = useState(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth < 640 : false
+  )
 
   const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
   const [headerRef, isHeaderVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
@@ -225,47 +227,17 @@ export default function ContentsSection() {
 
   const SWIPE_THRESHOLD = 30
 
-  // Framer Motion Drag and Swipe physics handler
+  // Framer Motion Drag and Swipe physics handler for responsive touch & mouse drag
   const handleDragEnd = (_e, info) => {
     const { offset, velocity } = info
     const swipePower = Math.abs(offset.x) * velocity.x
 
-    if (offset.x < -SWIPE_THRESHOLD || velocity.x < -0.2 || swipePower < -200) {
-      // Swiped Left -> Next project
+    if (offset.x < -SWIPE_THRESHOLD || velocity.x < -0.2 || swipePower < -100) {
       handleNext()
-    } else if (offset.x > SWIPE_THRESHOLD || velocity.x > 0.2 || swipePower > 200) {
-      // Swiped Right -> Previous project
+    } else if (offset.x > SWIPE_THRESHOLD || velocity.x > 0.2 || swipePower > 100) {
       handlePrev()
     }
     setTimeout(() => setIsDragging(false), 80)
-  }
-
-  // Native mobile touch swipe listeners for 100% reliable swipe on phones & tablets
-  const touchStartXRef = useRef(null)
-  const touchStartYRef = useRef(null)
-
-  const handleTouchStart = (e) => {
-    touchStartXRef.current = e.touches[0].clientX
-    touchStartYRef.current = e.touches[0].clientY
-  }
-
-  const handleTouchEnd = (e) => {
-    if (touchStartXRef.current === null) return
-    const touchEndX = e.changedTouches[0].clientX
-    const touchEndY = e.changedTouches[0].clientY
-    const diffX = touchStartXRef.current - touchEndX
-    const diffY = touchStartYRef.current - touchEndY
-
-    // Only trigger swipe if horizontal movement is dominant and > 30px
-    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
-      if (diffX > 0) {
-        handleNext()
-      } else {
-        handlePrev()
-      }
-    }
-    touchStartXRef.current = null
-    touchStartYRef.current = null
   }
 
   // Bi-directional viewport tracker: resets handwriting animation whenever scrolled past or scrolled above
@@ -356,11 +328,11 @@ export default function ContentsSection() {
   const getPositionStyle = (stackPosition) => {
     switch (layoutMode) {
       case 'stack': {
-        const topOffset = isMobile ? 8 : 12
+        const yOffset = isMobile ? 8 : 12
         const xOffset = isMobile ? 4 : 8
         const rot = stackPosition === 0 ? 0 : (stackPosition - 1) * 1.8 + 1
         return {
-          top: stackPosition * topOffset,
+          y: stackPosition * yOffset, // 100% GPU transform (zero layout reflow!)
           x: (stackPosition % 2 === 1 ? 1 : -1) * (stackPosition * xOffset),
           zIndex: 30 - stackPosition,
           rotate: rot,
@@ -368,7 +340,7 @@ export default function ContentsSection() {
       }
       case 'grid':
       case 'list':
-        return { top: 0, x: 0, zIndex: 1, rotate: 0 }
+        return { y: 0, x: 0, zIndex: 1, rotate: 0 }
     }
   }
 
@@ -802,22 +774,21 @@ export default function ContentsSection() {
                       <motion.div
                         key={card.id}
                         layoutId={`project-card-${card.id}`}
-                        layout
+                        layout={layoutMode !== 'stack'}
                         animate={{
                           opacity: 1,
                           scale: 1,
                           ...posStyle,
                         }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+                        transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                         drag={isTop && layoutMode === 'stack' ? 'x' : false}
+                        dragDirectionLock={true}
                         dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.95}
+                        dragElastic={isMobile ? 0.6 : 0.85}
                         onDragStart={() => setIsDragging(true)}
                         onDragEnd={handleDragEnd}
-                        onTouchStart={isTop && layoutMode === 'stack' ? handleTouchStart : undefined}
-                        onTouchEnd={isTop && layoutMode === 'stack' ? handleTouchEnd : undefined}
-                        whileDrag={{ scale: 1.02, cursor: 'grabbing' }}
-                        className={`absolute inset-x-0 top-10 sm:top-14 w-full select-none touch-pan-y ${
+                        whileDrag={{ scale: 1.015, cursor: 'grabbing' }}
+                        className={`absolute inset-x-0 top-10 sm:top-14 w-full select-none touch-pan-y transform-gpu will-change-transform ${
                           isTop ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'
                         }`}
                         style={{
@@ -864,13 +835,17 @@ export default function ContentsSection() {
 
                         {/* Manila Folder Body Canvas */}
                         <div
-                          className="relative w-full rounded-2xl sm:rounded-[40px] border-2 sm:border-3 border-black shadow-[0_25px_80px_rgba(0,0,0,0.35)] overflow-hidden transition-colors duration-500 p-5 sm:p-10 lg:p-12 min-h-[460px] sm:min-h-[540px] flex flex-col justify-between"
+                          className={`relative w-full rounded-2xl sm:rounded-[40px] border-2 sm:border-3 border-black overflow-hidden transition-colors duration-300 p-5 sm:p-10 lg:p-12 min-h-[460px] sm:min-h-[540px] flex flex-col justify-between ${
+                            isTop
+                              ? 'shadow-[0_12px_32px_rgba(0,0,0,0.22)] sm:shadow-[0_25px_80px_rgba(0,0,0,0.35)]'
+                              : 'shadow-[0_6px_16px_rgba(0,0,0,0.12)]'
+                          }`}
                           style={{ backgroundColor: card.folderColor }}
                         >
-                          {/* Background Card Tint Overlay for depth & click-to-bring-to-front */}
-                          {!isTop && (
+                          {!isTop ? (
+                            /* Lightweight shell for background cards: zero images, zero heavy DOM, instant GPU rendering */
                             <div
-                              className="absolute inset-0 z-30 bg-black/10 hover:bg-black/5 rounded-2xl sm:rounded-[40px] transition-colors cursor-pointer"
+                              className="absolute inset-0 z-30 bg-black/[0.08] hover:bg-black/[0.03] transition-colors cursor-pointer flex flex-col justify-between p-5 sm:p-10"
                               onClick={(e) => {
                                 e.stopPropagation()
                                 if (!isDragging) {
@@ -878,12 +853,29 @@ export default function ContentsSection() {
                                 }
                               }}
                               title={`Bring ${card.title} to front`}
-                            />
-                          )}
-
-                          {/* Retro Cartoon Mascot Stickers on the Right of Folder (only on top card) */}
-                          {isTop && (
+                            >
+                              <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/70 pb-4 border-b border-black/15">
+                                <span className="font-poppins-light font-light text-xs tracking-widest uppercase text-neutral-800">
+                                  FOLDER // 0{card.originalIndex + 1}
+                                </span>
+                                <span className="font-poppins-light font-light text-xs uppercase tracking-wider text-neutral-800">
+                                  {card.category}
+                                </span>
+                              </div>
+                              <div className="flex-1 flex items-center justify-center pointer-events-none">
+                                <span className="font-akira text-black/15 text-3xl sm:text-5xl font-black uppercase select-none">
+                                  {card.title}
+                                </span>
+                              </div>
+                              <div className="w-full pt-4 border-t border-black/15 flex items-center justify-between text-xs font-poppins-light text-neutral-800 tracking-wider uppercase">
+                                <span>Click bookmark or file to bring to front</span>
+                                <span>0{card.originalIndex + 1}</span>
+                              </div>
+                            </div>
+                          ) : (
+                            /* Full interactive contents ONLY for the active top card */
                             <>
+                              {/* Retro Cartoon Mascot Stickers on the Right of Folder */}
                               <div className="absolute top-10 sm:top-14 -right-2 sm:right-6 z-10 pointer-events-none select-none -rotate-[8deg] hover:rotate-0 transition-transform hidden sm:block">
                                 <HandMascot className="w-14 h-14 sm:w-18 sm:h-18 drop-shadow-[0_4px_14px_rgba(0,0,0,0.15)]" />
                               </div>
@@ -891,145 +883,145 @@ export default function ContentsSection() {
                               <div className="absolute bottom-3 sm:bottom-5 right-4 sm:right-8 z-10 pointer-events-none select-none rotate-[10deg] hover:rotate-0 transition-transform hidden sm:block">
                                 <StarburstMascot className="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-[0_6px_16px_rgba(0,0,0,0.2)]" />
                               </div>
-                            </>
-                          )}
 
-                          {/* Folder Top Metadata Row */}
-                          <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/80 pb-4 border-b border-black/15 z-10">
-                            <div className="flex items-center gap-3">
-                              <span className="bg-black/10 px-3.5 py-1 rounded-full border border-black/15 text-neutral-950 font-poppins-light font-light text-xs tracking-widest inline-flex items-center gap-2">
-                                <span className="h-2 w-2 rounded-full bg-neutral-950" />
-                                {card.date}
-                              </span>
-                              <span className="font-poppins-light font-light text-xs tracking-widest uppercase text-neutral-800 hidden sm:inline-block">
-                                FOLDER // 0{card.originalIndex + 1}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-poppins-light font-light text-xs uppercase tracking-wider text-neutral-800">
-                                {card.category}
-                              </span>
-                            </div>
-                          </div>
+                              {/* Folder Top Metadata Row */}
+                              <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/80 pb-4 border-b border-black/15 z-10">
+                                <div className="flex items-center gap-3">
+                                  <span className="bg-black/10 px-3.5 py-1 rounded-full border border-black/15 text-neutral-950 font-poppins-light font-light text-xs tracking-widest inline-flex items-center gap-2">
+                                    <span className="h-2 w-2 rounded-full bg-neutral-950" />
+                                    {card.date}
+                                  </span>
+                                  <span className="font-poppins-light font-light text-xs tracking-widest uppercase text-neutral-800 hidden sm:inline-block">
+                                    FOLDER // 0{card.originalIndex + 1}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-poppins-light font-light text-xs uppercase tracking-wider text-neutral-800">
+                                    {card.category}
+                                  </span>
+                                </div>
+                              </div>
 
-                          {/* Main 2-Column Content Layout */}
-                          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 sm:gap-10 lg:gap-12 py-6 sm:py-8 items-center text-left">
-                            {/* Left Column: Title, Subtitle, Full Description, Actions, Tags */}
-                            <div className="flex flex-col justify-between h-full">
-                              <div>
-                                <h2 className="font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.08] tracking-tight text-neutral-950">
-                                  {card.title}
-                                </h2>
+                              {/* Main 2-Column Content Layout */}
+                              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 sm:gap-10 lg:gap-12 py-6 sm:py-8 items-center text-left">
+                                {/* Left Column: Title, Subtitle, Full Description, Actions, Tags */}
+                                <div className="flex flex-col justify-between h-full">
+                                  <div>
+                                    <h2 className="font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.08] tracking-tight text-neutral-950">
+                                      {card.title}
+                                    </h2>
 
-                                <p className="mt-2 text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
-                                  {card.subtitle}
-                                </p>
+                                    <p className="mt-2 text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
+                                      {card.subtitle}
+                                    </p>
 
-                                {/* Action Buttons */}
-                                <div className="mt-6 flex flex-wrap items-center gap-4">
-                                  <button
+                                    {/* Action Buttons */}
+                                    <div className="mt-6 flex flex-wrap items-center gap-4">
+                                      <button
+                                        onClick={(e) => {
+                                          if (isDragging) return
+                                          e.stopPropagation()
+                                          setActiveProject(card)
+                                        }}
+                                        className="font-poppins-light font-light inline-flex items-center gap-2.5 pb-1 border-b-2 border-neutral-950 text-sm uppercase tracking-[0.2em] cursor-pointer text-neutral-950 hover:text-black/70 transition-all group/cta font-medium"
+                                      >
+                                        View project
+                                        <svg
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          strokeWidth="2.4"
+                                          className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
+                                          aria-hidden="true"
+                                        >
+                                          <path d="M7 17 17 7M9 7h8v8" />
+                                        </svg>
+                                      </button>
+
+                                      {card.figmaUrl && (
+                                        <a
+                                          href={card.figmaUrl}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          onClick={(e) => e.stopPropagation()}
+                                          className="font-poppins-light font-light inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black transition-all text-xs uppercase tracking-wider group/figma shadow-sm"
+                                          title="Open design file in Figma"
+                                        >
+                                          <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
+                                          </svg>
+                                          <span>Figma File</span>
+                                          <svg className="w-3 h-3 group-hover/figma:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                            <path d="M7 17 17 7M9 7h8v8" />
+                                          </svg>
+                                        </a>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {/* Tags Badges */}
+                                  <div className="mt-8 flex flex-wrap gap-2 pt-2">
+                                    {card.tags.map((tag, tIdx) => (
+                                      <span
+                                        key={tIdx}
+                                        className="font-poppins-light font-light text-xs sm:text-sm px-3.5 py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
+                                      >
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                {/* Right Column: Framed Thumbnail Artwork with Washi Tape Mounts */}
+                                <div className="relative">
+                                  <span
+                                    aria-hidden="true"
+                                    className="washi-tape absolute -left-5 -top-3 z-20 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                                  />
+                                  <span
+                                    aria-hidden="true"
+                                    className="washi-tape absolute -right-5 -top-3 z-20 h-6 w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                                  />
+
+                                  <div
                                     onClick={(e) => {
                                       if (isDragging) return
                                       e.stopPropagation()
                                       setActiveProject(card)
                                     }}
-                                    className="font-poppins-light font-light inline-flex items-center gap-2.5 pb-1 border-b-2 border-neutral-950 text-sm uppercase tracking-[0.2em] cursor-pointer text-neutral-950 hover:text-black/70 transition-all group/cta font-medium"
+                                    className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-[4/3] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
+                                    title="Inspect Case Study"
                                   >
-                                    View project
-                                    <svg
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="2.4"
-                                      className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
-                                      aria-hidden="true"
-                                    >
-                                      <path d="M7 17 17 7M9 7h8v8" />
-                                    </svg>
-                                  </button>
+                                    <div className="relative overflow-hidden h-full w-full">
+                                      <img
+                                        src={card.thumbnail}
+                                        alt={card.title}
+                                        draggable="false"
+                                        className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out select-none pointer-events-none"
+                                      />
+                                    </div>
 
-                                  {card.figmaUrl && (
-                                    <a
-                                      href={card.figmaUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      onClick={(e) => e.stopPropagation()}
-                                      className="font-poppins-light font-light inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black transition-all text-xs uppercase tracking-wider group/figma shadow-sm"
-                                      title="Open design file in Figma"
-                                    >
-                                      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
-                                      </svg>
-                                      <span>Figma File</span>
-                                      <svg className="w-3 h-3 group-hover/figma:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M7 17 17 7M9 7h8v8" />
-                                      </svg>
-                                    </a>
-                                  )}
+                                    <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                      <span className="px-5 py-2.5 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-widest uppercase shadow-2xl">
+                                        Inspect Case Study 🔍
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
 
-                              {/* Tags Badges */}
-                              <div className="mt-8 flex flex-wrap gap-2 pt-2">
-                                {card.tags.map((tag, tIdx) => (
-                                  <span
-                                    key={tIdx}
-                                    className="font-poppins-light font-light text-xs sm:text-sm px-3.5 py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
+                              {/* Folder Bottom Row */}
+                              <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
+                                <span>{card.bulletSummary}</span>
+                                <span className="font-semibold text-neutral-800 hidden sm:inline">
+                                  Swipe or drag file horizontally to flip • Press ← →
+                                </span>
+                                <span className="font-semibold text-neutral-800 sm:hidden">
+                                  Swipe file to flip
+                                </span>
                               </div>
-                            </div>
-
-                            {/* Right Column: Framed Thumbnail Artwork with Washi Tape Mounts */}
-                            <div className="relative">
-                              <span
-                                aria-hidden="true"
-                                className="washi-tape absolute -left-5 -top-3 z-20 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
-                              />
-                              <span
-                                aria-hidden="true"
-                                className="washi-tape absolute -right-5 -top-3 z-20 h-6 w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
-                              />
-
-                              <div
-                                onClick={(e) => {
-                                  if (isDragging) return
-                                  e.stopPropagation()
-                                  setActiveProject(card)
-                                }}
-                                className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-[4/3] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
-                                title="Inspect Case Study"
-                              >
-                                <div className="relative overflow-hidden h-full w-full">
-                                  <img
-                                    src={card.thumbnail}
-                                    alt={card.title}
-                                    draggable="false"
-                                    className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out select-none pointer-events-none"
-                                  />
-                                </div>
-
-                                <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                                  <span className="px-5 py-2.5 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-widest uppercase shadow-2xl">
-                                    Inspect Case Study 🔍
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Folder Bottom Row */}
-                          <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
-                            <span>{card.bulletSummary}</span>
-                            <span className="font-semibold text-neutral-800 hidden sm:inline">
-                              {isTop ? 'Swipe or drag file horizontally to flip • Press ← →' : 'Click bookmark or file to bring to front'}
-                            </span>
-                            <span className="font-semibold text-neutral-800 sm:hidden">
-                              {isTop ? 'Swipe file to flip' : 'Click to view'}
-                            </span>
-                          </div>
+                            </>
+                          )}
                         </div>
                       </motion.div>
                     )
