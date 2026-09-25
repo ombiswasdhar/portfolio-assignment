@@ -345,13 +345,15 @@ export default function ContentsSection() {
   }
 
   // Staggered horizontal cut positions for Manila folder bookmark tabs
-  const getTabLeft = (idx) => {
+  const getTabStyle = (idx) => {
     if (isMobile) {
-      const mobileOffsets = ['2%', '26%', '50%', '74%']
-      return mobileOffsets[idx] || '0%'
+      if (idx === 3) return { right: '2%', left: 'auto' }
+      if (idx === 2) return { left: '48%', right: 'auto' }
+      if (idx === 1) return { left: '25%', right: 'auto' }
+      return { left: '2%', right: 'auto' }
     }
     const desktopOffsets = ['3%', '26%', '49%', '72%']
-    return desktopOffsets[idx] || '0%'
+    return { left: desktopOffsets[idx] || '0%', right: 'auto' }
   }
 
   const displayCards =
@@ -572,7 +574,7 @@ export default function ContentsSection() {
               <div
                 className={
                   layoutMode === 'stack'
-                    ? 'relative w-full pt-10 sm:pt-14 min-h-[620px] xs:min-h-[600px] sm:min-h-[680px] lg:min-h-[640px]'
+                    ? 'relative w-full pt-10 sm:pt-14 min-h-[670px] xs:min-h-[650px] sm:min-h-[680px] lg:min-h-[640px]'
                     : layoutMode === 'grid'
                     ? 'grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full'
                     : 'flex flex-col gap-4 sm:gap-5 w-full'
@@ -803,13 +805,13 @@ export default function ContentsSection() {
                               setActiveTabIdx(card.originalIndex)
                             }
                           }}
-                          className={`absolute -top-9 sm:-top-12 z-20 inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-t-xl sm:rounded-t-3xl border-t-2 sm:border-t-3 border-x-2 sm:border-x-3 border-black font-akira font-black text-[10px] xs:text-[11px] sm:text-xs md:text-[13px] uppercase tracking-wider cursor-pointer select-none transition-all shadow-[0_-4px_12px_rgba(0,0,0,0.15)] ${
+                          className={`absolute -top-9 sm:-top-12 z-20 inline-flex items-center gap-1 sm:gap-2 px-2.5 xs:px-3 sm:px-6 py-2 sm:py-3 rounded-t-xl sm:rounded-t-3xl border-t-2 sm:border-t-3 border-x-2 sm:border-x-3 border-black font-akira font-black text-[9px] xs:text-[10px] sm:text-xs md:text-[13px] uppercase tracking-wider cursor-pointer select-none transition-all shadow-[0_-4px_12px_rgba(0,0,0,0.15)] ${
                             isTop
                               ? 'text-black shadow-[0_-6px_16px_rgba(0,0,0,0.22)]'
                               : 'text-neutral-900 opacity-95 hover:opacity-100 hover:-translate-y-0.5'
                           }`}
                           style={{
-                            left: getTabLeft(card.originalIndex),
+                            ...getTabStyle(card.originalIndex),
                             backgroundColor: card.folderColor,
                             borderBottom: `3.5px solid ${card.folderColor}`,
                             marginBottom: '-3.5px',
@@ -835,7 +837,7 @@ export default function ContentsSection() {
 
                         {/* Manila Folder Body Canvas */}
                         <div
-                          className={`relative w-full rounded-2xl sm:rounded-[40px] border-2 sm:border-3 border-black overflow-hidden transition-colors duration-300 p-5 sm:p-10 lg:p-12 min-h-[460px] sm:min-h-[540px] flex flex-col justify-between ${
+                          className={`relative w-full rounded-2xl sm:rounded-[40px] border-2 sm:border-3 border-black overflow-hidden transition-colors duration-300 p-5 sm:p-10 lg:p-12 min-h-[500px] sm:min-h-[540px] flex flex-col justify-between ${
                             isTop
                               ? 'shadow-[0_12px_32px_rgba(0,0,0,0.22)] sm:shadow-[0_25px_80px_rgba(0,0,0,0.35)]'
                               : 'shadow-[0_6px_16px_rgba(0,0,0,0.12)]'
@@ -862,9 +864,9 @@ export default function ContentsSection() {
                                   {card.category}
                                 </span>
                               </div>
-                              <div className="flex-1 flex items-center justify-center pointer-events-none">
-                                <span className="font-akira text-black/15 text-3xl sm:text-5xl font-black uppercase select-none">
-                                  {card.title}
+                              <div className="flex-1 flex items-center justify-center pointer-events-none px-2">
+                                <span className="font-akira text-black/15 text-2xl xs:text-3xl sm:text-5xl font-black uppercase select-none truncate max-w-full text-center">
+                                  {card.displayTitle || card.title}
                                 </span>
                               </div>
                               <div className="w-full pt-4 border-t border-black/15 flex items-center justify-between text-xs font-poppins-light text-neutral-800 tracking-wider uppercase">
@@ -885,10 +887,10 @@ export default function ContentsSection() {
                               </div>
 
                               {/* Folder Top Metadata Row */}
-                              <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/80 pb-4 border-b border-black/15 z-10">
-                                <div className="flex items-center gap-3">
-                                  <span className="bg-black/10 px-3.5 py-1 rounded-full border border-black/15 text-neutral-950 font-poppins-light font-light text-xs tracking-widest inline-flex items-center gap-2">
-                                    <span className="h-2 w-2 rounded-full bg-neutral-950" />
+                              <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/80 pb-3 sm:pb-4 border-b border-black/15 z-10">
+                                <div className="flex items-center gap-2.5 sm:gap-3">
+                                  <span className="bg-black/10 px-3 py-1 rounded-full border border-black/15 text-neutral-950 font-poppins-light font-light text-[11px] sm:text-xs tracking-widest inline-flex items-center gap-1.5 sm:gap-2">
+                                    <span className="h-1.5 sm:h-2 w-1.5 sm:w-2 rounded-full bg-neutral-950" />
                                     {card.date}
                                   </span>
                                   <span className="font-poppins-light font-light text-xs tracking-widest uppercase text-neutral-800 hidden sm:inline-block">
@@ -896,27 +898,27 @@ export default function ContentsSection() {
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  <span className="font-poppins-light font-light text-xs uppercase tracking-wider text-neutral-800">
+                                  <span className="font-poppins-light font-light text-[11px] sm:text-xs uppercase tracking-wider text-neutral-800">
                                     {card.category}
                                   </span>
                                 </div>
                               </div>
 
                               {/* Main 2-Column Content Layout (On mobile: artwork at top order-1, text below order-2) */}
-                              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 sm:gap-10 lg:gap-12 py-4 sm:py-8 items-center text-left">
+                              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-4 sm:gap-10 lg:gap-12 py-3 sm:py-8 items-center text-left">
                                 {/* Details Column: Title, Subtitle, Full Description, Actions, Tags (order-2 on mobile, order-1 on desktop) */}
                                 <div className="order-2 lg:order-1 flex flex-col justify-between h-full">
                                   <div>
-                                    <h2 className="font-akira font-black uppercase text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.08] tracking-tight text-neutral-950">
+                                    <h2 className="font-akira font-black uppercase text-lg xs:text-xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.1] tracking-tight text-neutral-950">
                                       {card.title}
                                     </h2>
 
-                                    <p className="mt-1.5 sm:mt-2 text-xs xs:text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
+                                    <p className="mt-1 sm:mt-2 text-xs xs:text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
                                       {card.subtitle}
                                     </p>
 
                                     {/* Action Buttons */}
-                                    <div className="mt-4 sm:mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
+                                    <div className="mt-3.5 sm:mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
                                       <button
                                         onClick={(e) => {
                                           if (isDragging) return
@@ -960,11 +962,11 @@ export default function ContentsSection() {
                                   </div>
 
                                   {/* Tags Badges */}
-                                  <div className="mt-4 sm:mt-8 flex flex-wrap gap-1.5 sm:gap-2 pt-1 sm:pt-2">
+                                  <div className="mt-3.5 sm:mt-8 flex flex-wrap gap-1.5 sm:gap-2 pt-1 sm:pt-2">
                                     {card.tags.map((tag, tIdx) => (
                                       <span
                                         key={tIdx}
-                                        className="font-poppins-light font-light text-[11px] sm:text-sm px-2.5 sm:px-3.5 py-1 sm:py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
+                                        className="font-poppins-light font-light text-[10px] xs:text-[11px] sm:text-sm px-2 sm:px-3.5 py-0.5 sm:py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
                                       >
                                         {tag}
                                       </span>
@@ -973,14 +975,14 @@ export default function ContentsSection() {
                                 </div>
 
                                 {/* Artwork Column: Framed Thumbnail Artwork with Washi Tape Mounts (order-1 on mobile, order-2 on desktop) */}
-                                <div className="order-1 lg:order-2 relative mt-2 sm:mt-0">
+                                <div className="order-1 lg:order-2 relative mt-1.5 sm:mt-0">
                                   <span
                                     aria-hidden="true"
-                                    className="washi-tape absolute -left-5 -top-3 z-20 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                                    className="washi-tape absolute -left-4 sm:-left-5 -top-2.5 sm:-top-3 z-20 h-5 sm:h-6 w-20 sm:w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
                                   />
                                   <span
                                     aria-hidden="true"
-                                    className="washi-tape absolute -right-5 -top-3 z-20 h-6 w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                                    className="washi-tape absolute -right-4 sm:-right-5 -top-2.5 sm:-top-3 z-20 h-5 sm:h-6 w-20 sm:w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
                                   />
 
                                   <div
@@ -989,15 +991,15 @@ export default function ContentsSection() {
                                       e.stopPropagation()
                                       setActiveProject(card)
                                     }}
-                                    className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-[16/10] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_14px_36px_rgba(0,0,0,0.22)] sm:shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
+                                    className="relative overflow-hidden border-3 sm:border-6 border-white bg-neutral-950 aspect-[4/3] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_14px_36px_rgba(0,0,0,0.22)] sm:shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
                                     title="Inspect Case Study"
                                   >
-                                    <div className="relative overflow-hidden h-full w-full">
+                                    <div className="relative overflow-hidden h-full w-full bg-neutral-900">
                                       <img
                                         src={card.thumbnail}
                                         alt={card.title}
                                         draggable="false"
-                                        className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out select-none pointer-events-none"
+                                        className="absolute inset-0 h-full w-full object-contain sm:object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out select-none pointer-events-none"
                                       />
                                     </div>
 
@@ -1011,8 +1013,8 @@ export default function ContentsSection() {
                               </div>
 
                               {/* Folder Bottom Row */}
-                              <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
-                                <span>{card.bulletSummary}</span>
+                              <div className="w-full pt-3 sm:pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-[11px] sm:text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
+                                <span className="truncate max-w-[260px] xs:max-w-[300px] sm:max-w-none">{card.bulletSummary}</span>
                                 <span className="font-semibold text-neutral-800 hidden sm:inline">
                                   Swipe or drag file horizontally to flip • Press ← →
                                 </span>
@@ -1025,6 +1027,7 @@ export default function ContentsSection() {
                         </div>
                       </motion.div>
                     )
+
                   })}
                 </AnimatePresence>
               </div>
