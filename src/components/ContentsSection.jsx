@@ -902,28 +902,28 @@ export default function ContentsSection() {
                                 </div>
                               </div>
 
-                              {/* Main 2-Column Content Layout */}
-                              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 sm:gap-10 lg:gap-12 py-6 sm:py-8 items-center text-left">
-                                {/* Left Column: Title, Subtitle, Full Description, Actions, Tags */}
-                                <div className="flex flex-col justify-between h-full">
+                              {/* Main 2-Column Content Layout (On mobile: artwork at top order-1, text below order-2) */}
+                              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 sm:gap-10 lg:gap-12 py-4 sm:py-8 items-center text-left">
+                                {/* Details Column: Title, Subtitle, Full Description, Actions, Tags (order-2 on mobile, order-1 on desktop) */}
+                                <div className="order-2 lg:order-1 flex flex-col justify-between h-full">
                                   <div>
-                                    <h2 className="font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.08] tracking-tight text-neutral-950">
+                                    <h2 className="font-akira font-black uppercase text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.08] tracking-tight text-neutral-950">
                                       {card.title}
                                     </h2>
 
-                                    <p className="mt-2 text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
+                                    <p className="mt-1.5 sm:mt-2 text-xs xs:text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
                                       {card.subtitle}
                                     </p>
 
                                     {/* Action Buttons */}
-                                    <div className="mt-6 flex flex-wrap items-center gap-4">
+                                    <div className="mt-4 sm:mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
                                       <button
                                         onClick={(e) => {
                                           if (isDragging) return
                                           e.stopPropagation()
                                           setActiveProject(card)
                                         }}
-                                        className="font-poppins-light font-light inline-flex items-center gap-2.5 pb-1 border-b-2 border-neutral-950 text-sm uppercase tracking-[0.2em] cursor-pointer text-neutral-950 hover:text-black/70 transition-all group/cta font-medium"
+                                        className="font-poppins-light font-light inline-flex items-center gap-2 pb-1 border-b-2 border-neutral-950 text-xs sm:text-sm uppercase tracking-[0.2em] cursor-pointer text-neutral-950 hover:text-black/70 transition-all group/cta font-medium"
                                       >
                                         View project
                                         <svg
@@ -931,7 +931,7 @@ export default function ContentsSection() {
                                           fill="none"
                                           stroke="currentColor"
                                           strokeWidth="2.4"
-                                          className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
+                                          className="h-3.5 w-3.5 sm:h-4 sm:w-4 group-hover/cta:translate-x-1 transition-transform"
                                           aria-hidden="true"
                                         >
                                           <path d="M7 17 17 7M9 7h8v8" />
@@ -944,7 +944,7 @@ export default function ContentsSection() {
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           onClick={(e) => e.stopPropagation()}
-                                          className="font-poppins-light font-light inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black transition-all text-xs uppercase tracking-wider group/figma shadow-sm"
+                                          className="font-poppins-light font-light inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black transition-all text-xs uppercase tracking-wider group/figma shadow-sm"
                                           title="Open design file in Figma"
                                         >
                                           <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
@@ -960,11 +960,11 @@ export default function ContentsSection() {
                                   </div>
 
                                   {/* Tags Badges */}
-                                  <div className="mt-8 flex flex-wrap gap-2 pt-2">
+                                  <div className="mt-4 sm:mt-8 flex flex-wrap gap-1.5 sm:gap-2 pt-1 sm:pt-2">
                                     {card.tags.map((tag, tIdx) => (
                                       <span
                                         key={tIdx}
-                                        className="font-poppins-light font-light text-xs sm:text-sm px-3.5 py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
+                                        className="font-poppins-light font-light text-[11px] sm:text-sm px-2.5 sm:px-3.5 py-1 sm:py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
                                       >
                                         {tag}
                                       </span>
@@ -972,8 +972,8 @@ export default function ContentsSection() {
                                   </div>
                                 </div>
 
-                                {/* Right Column: Framed Thumbnail Artwork with Washi Tape Mounts */}
-                                <div className="relative">
+                                {/* Artwork Column: Framed Thumbnail Artwork with Washi Tape Mounts (order-1 on mobile, order-2 on desktop) */}
+                                <div className="order-1 lg:order-2 relative mt-2 sm:mt-0">
                                   <span
                                     aria-hidden="true"
                                     className="washi-tape absolute -left-5 -top-3 z-20 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
@@ -989,7 +989,7 @@ export default function ContentsSection() {
                                       e.stopPropagation()
                                       setActiveProject(card)
                                     }}
-                                    className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-[4/3] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
+                                    className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-[16/10] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_14px_36px_rgba(0,0,0,0.22)] sm:shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
                                     title="Inspect Case Study"
                                   >
                                     <div className="relative overflow-hidden h-full w-full">
