@@ -4,55 +4,31 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import {
   Play,
   Pause,
-  SkipBack,
-  SkipForward,
+  RotateCcw,
   Volume2,
   VolumeX,
-  Minimize2,
-  Maximize2,
-  Music,
 } from 'lucide-react'
 import sunflowerCover from '/sunflower_cover.jpg'
 
-const TRACKS = [
-  {
-    title: 'Sunflower (Instrumental)',
-    artist: 'Post Malone, Swae Lee',
-    src: '/sunflower.mp3',
-    cover: sunflowerCover,
-  },
-  {
-    title: 'Sunflower (Full Version)',
-    artist: 'Post Malone, Swae Lee',
-    src: '/sunflower_full.mp3',
-    cover: sunflowerCover,
-  },
-]
-
 export default function MusicPlayer() {
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [isMinimized, setIsMinimized] = useState(false)
+  const [volume, setVolume] = useState(0.85)
+  const [isHovered, setIsHovered] = useState(false)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
-  const [volume, setVolume] = useState(0.8)
 
   const audioRef = useRef(null)
-  const progressRef = useRef(null)
-  const isDraggingRef = useRef(false)
 
-  const track = TRACKS[currentTrackIndex]
-
-  // Initialize audio volume
+  // Initialize and sync volume
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume
     }
   }, [volume])
 
-  // Handle play / pause toggle
+  // Play / Pause toggle
   const togglePlay = useCallback(() => {
     if (!audioRef.current) return
 
@@ -66,25 +42,25 @@ export default function MusicPlayer() {
           setIsPlaying(true)
         })
         .catch((err) => {
-          console.warn('Audio play request interrupted or blocked:', err)
+          console.warn('Audio play prevented or interrupted:', err)
           setIsPlaying(false)
         })
     }
   }, [isPlaying])
 
-  // Track time updates
+  // Time update listener
   const handleTimeUpdate = () => {
-    if (!audioRef.current || isDraggingRef.current) return
+    if (!audioRef.current) return
     setCurrentTime(audioRef.current.currentTime)
   }
 
-  // Loaded metadata handler for track duration
+  // Loaded metadata for duration
   const handleLoadedMetadata = () => {
     if (!audioRef.current) return
-    setDuration(audioRef.current.duration || 0)
+    setDuration(audioRef.current.duration || 35)
   }
 
-  // Handle song ending -> loop or go next
+  // Loop back seamlessly on ended
   const handleEnded = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0
@@ -92,287 +68,305 @@ export default function MusicPlayer() {
     }
   }
 
-  // Seek bar click / drag handler
-  const handleSeek = (e) => {
-    if (!progressRef.current || !audioRef.current || !duration) return
-    const rect = progressRef.current.getBoundingClientRect()
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX
-    const clickRatio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
-    const targetTime = clickRatio * duration
-    audioRef.current.currentTime = targetTime
-    setCurrentTime(targetTime)
+  // Restart track
+  const handleRestart = (e) => {
+    e.stopPropagation()
+    if (!audioRef.current) return
+    audioRef.current.currentTime = 0
+    setCurrentTime(0)
+    if (!isPlaying) {
+      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {})
+    }
   }
 
-  // Toggle Mute
-  const toggleMute = () => {
+  // Toggle mute
+  const toggleMute = (e) => {
+    e.stopPropagation()
     if (!audioRef.current) return
     const nextMuted = !isMuted
     audioRef.current.muted = nextMuted
     setIsMuted(nextMuted)
   }
 
-  // Switch Track (Previous / Next)
-  const handleNextTrack = () => {
-    setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length)
+  // Format time (0:14)
+  const formatTime = (secs) => {
+    if (!secs || isNaN(secs)) return '0:00'
+    const m = Math.floor(secs / 60)
+    const s = Math.floor(secs % 60)
+    return `${m}:${s < 10 ? '0' : ''}${s}`
   }
 
-  const handlePrevTrack = () => {
-    if (audioRef.current && audioRef.current.currentTime > 3) {
-      audioRef.current.currentTime = 0
-      setCurrentTime(0)
-    } else {
-      setCurrentTrackIndex((prev) => (prev - 1 + TRACKS.length) % TRACKS.length)
-    }
-  }
-
-  // Automatically start playback when switching tracks if already playing
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.load()
-      if (isPlaying) {
-        audioRef.current.play().catch(() => setIsPlaying(false))
-      }
-    }
-  }, [currentTrackIndex])
-
-  const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0
+  // SVG Circular Progress Calculations
+  // CD disc diameter: 154px (radius: 77px), outer ring radius: 82px
+  const ringRadius = 81
+  const circumference = 2 * Math.PI * ringRadius
+  const progressRatio = duration > 0 ? currentTime / duration : 0
+  const strokeDashoffset = circumference - progressRatio * circumference
 
   return (
     <>
-      {/* Hidden HTML5 Audio Element */}
+      {/* HTML5 Audio playing strictly the Instrumental version */}
       <audio
         ref={audioRef}
-        src={track.src}
+        src="/sunflower.mp3"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
         preload="metadata"
+        loop
       />
 
-      {/* Floating Music Player Widget */}
+      {/* Floating CD Music Widget Container (Memory Lane Style) */}
       <div
-        className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 select-none font-sans transition-all duration-300"
-        style={{
-          filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.22))',
+        className="fixed bottom-6 right-6 z-50 select-none font-sans flex flex-col items-end gap-3 group"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => {
+          setIsHovered(false)
+          setShowVolumeSlider(false)
         }}
-        aria-label="Sunflower Music Player"
+        aria-label="Sunflower Instrumental Music Player"
       >
-        {isMinimized ? (
-          /* ================= MINIMIZED FLOATING BADGE ================= */
-          <button
-            type="button"
-            onClick={() => setIsMinimized(false)}
-            className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-white dark:bg-[#121216] border border-black/10 dark:border-white/20 shadow-2xl cursor-pointer hover:scale-110 active:scale-95 transition-all duration-200"
-            title="Open Music Player (Sunflower Instrumental)"
-            aria-label="Expand Music Player"
-          >
-            {/* Spinning Vinyl in badge */}
-            <div
-              className="w-12 h-12 rounded-full overflow-hidden relative shadow-inner"
-              style={{
-                animation: 'spin 8s linear infinite',
-                animationPlayState: isPlaying ? 'running' : 'paused',
-              }}
-            >
-              <img
-                src={track.cover}
-                alt="Sunflower Vinyl"
-                className="w-full h-full object-cover object-center"
+        {/* ================= FLOATING GLASS CONTROL PILL (SLIDES OUT ON HOVER) ================= */}
+        <div
+          className={`transition-all duration-300 transform origin-bottom-right ${
+            isHovered || isPlaying
+              ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
+              : 'opacity-0 translate-y-3 scale-95 pointer-events-none'
+          }`}
+        >
+          <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/95 dark:bg-[#111116]/95 backdrop-blur-xl border border-black/10 dark:border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.22)]">
+            {/* Equalizer Waveform Bars (Bouncing when playing) */}
+            <div className="flex items-end gap-0.5 h-4 w-4 shrink-0" aria-hidden="true">
+              <span
+                className={`w-0.5 bg-[#DE2020] rounded-full transition-all ${
+                  isPlaying ? 'h-full animate-pulse' : 'h-1.5'
+                }`}
+                style={{ animationDuration: '0.6s' }}
               />
-              <span className="absolute inset-0 rounded-full border border-black/30 pointer-events-none" />
-              {/* Spindle hole */}
-              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white border border-neutral-400 flex items-center justify-center">
-                <span className="w-1 h-1 rounded-full bg-neutral-900" />
+              <span
+                className={`w-0.5 bg-[#DE2020] rounded-full transition-all ${
+                  isPlaying ? 'h-3.5 animate-pulse' : 'h-2.5'
+                }`}
+                style={{ animationDuration: '0.4s', animationDelay: '0.15s' }}
+              />
+              <span
+                className={`w-0.5 bg-[#DE2020] rounded-full transition-all ${
+                  isPlaying ? 'h-full animate-pulse' : 'h-1'
+                }`}
+                style={{ animationDuration: '0.7s', animationDelay: '0.3s' }}
+              />
+              <span
+                className={`w-0.5 bg-[#DE2020] rounded-full transition-all ${
+                  isPlaying ? 'h-3 animate-pulse' : 'h-2'
+                }`}
+                style={{ animationDuration: '0.5s', animationDelay: '0.45s' }}
+              />
+            </div>
+
+            {/* Song Details */}
+            <div className="flex flex-col leading-none min-w-[120px] max-w-[170px]">
+              <span className="font-bold text-[13px] text-neutral-900 dark:text-neutral-100 truncate tracking-tight">
+                Sunflower
+              </span>
+              <span className="text-[10px] text-neutral-500 dark:text-neutral-400 font-medium truncate mt-0.5">
+                Instrumental • {formatTime(currentTime)} / {formatTime(duration)}
               </span>
             </div>
 
-            {/* Glowing active indicator */}
-            {isPlaying && (
-              <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DE2020] opacity-75" />
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-[#DE2020] items-center justify-center text-[8px] text-white">
-                  ♫
-                </span>
-              </span>
-            )}
-          </button>
-        ) : (
-          /* ================= EXPANDED CARD (MATCHING PINTEREST GIF) ================= */
-          <div className="relative flex items-center">
-            {/* 1. OVERLAPPING SPINNING VINYL RECORD DISC (Left Side) */}
-            <div
-              onClick={togglePlay}
-              title={isPlaying ? 'Pause music' : 'Play Sunflower'}
-              className="absolute -left-9 sm:-left-10 z-20 w-20 h-20 sm:w-[86px] sm:h-[86px] cursor-pointer group hover:scale-105 active:scale-95 transition-transform duration-200"
-            >
-              {/* Vinyl Disc Container */}
-              <div
-                className="w-full h-full rounded-full overflow-hidden relative shadow-[0_10px_25px_rgba(0,0,0,0.35)] bg-neutral-900"
-                style={{
-                  animation: 'spin 8s linear infinite',
-                  animationPlayState: isPlaying ? 'running' : 'paused',
-                }}
+            {/* Controls: Restart & Volume */}
+            <div className="flex items-center gap-1.5 border-l border-neutral-200 dark:border-neutral-800 pl-2">
+              {/* Restart button */}
+              <button
+                type="button"
+                onClick={handleRestart}
+                className="p-1 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+                title="Restart track"
+                aria-label="Restart track"
               >
-                {/* Album Cover Art */}
-                <img
-                  src={track.cover}
-                  alt="Sunflower Cover Art"
-                  className="w-full h-full object-cover object-center filter saturate-110"
-                />
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
 
-                {/* Subtle Concentric Vinyl Grooves Overlay */}
-                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,transparent_30%,rgba(0,0,0,0.35)_70%,rgba(0,0,0,0.65)_100%)] pointer-events-none" />
-                <div className="absolute inset-1.5 rounded-full border border-white/10 pointer-events-none" />
-                <div className="absolute inset-3.5 rounded-full border border-black/25 pointer-events-none" />
-                <div className="absolute inset-5 rounded-full border border-white/15 pointer-events-none" />
-
-                {/* Vinyl Glossy Sheen Highlight */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-black/20 via-transparent to-white/30 mix-blend-overlay pointer-events-none" />
-
-                {/* Turntable Center Spindle Hole */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border border-neutral-300 shadow-md flex items-center justify-center z-10">
-                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-900" />
-                </div>
-              </div>
-
-              {/* Play hover badge over vinyl */}
-              <div className="absolute inset-0 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/25 backdrop-blur-[1px]">
-                {isPlaying ? (
-                  <Pause className="w-5 h-5 text-white fill-white drop-shadow-md" />
-                ) : (
-                  <Play className="w-5 h-5 text-white fill-white drop-shadow-md ml-0.5" />
-                )}
-              </div>
-            </div>
-
-            {/* 2. MAIN PLAYER CARD (Horizontal Pill) */}
-            <div className="relative pl-[54px] sm:pl-[58px] pr-4 sm:pr-5 py-3.5 sm:py-4 bg-white/95 dark:bg-[#121216]/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 w-[275px] sm:w-[310px] shadow-2xl flex flex-col justify-between gap-2.5">
-              {/* Top Row: Track Name & Volume / Minimize */}
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0 pr-1">
-                  <h4 className="font-sans font-bold text-[14px] sm:text-[15px] leading-tight text-neutral-900 dark:text-neutral-100 truncate tracking-tight">
-                    {track.title}
-                  </h4>
-                  <p className="text-[11px] sm:text-[12px] font-medium text-neutral-500 dark:text-neutral-400 truncate mt-0.5 leading-none">
-                    {track.artist}
-                  </p>
-                </div>
-
-                {/* Top Right Controls (Mute & Minimize) */}
-                <div className="flex items-center gap-1 shrink-0 text-neutral-500 dark:text-neutral-400">
-                  {/* Volume Slider Popout */}
-                  <div
-                    className="relative flex items-center"
-                    onMouseEnter={() => setShowVolumeSlider(true)}
-                    onMouseLeave={() => setShowVolumeSlider(false)}
-                  >
-                    <button
-                      type="button"
-                      onClick={toggleMute}
-                      className="p-1 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
-                      title={isMuted ? 'Unmute' : 'Mute'}
-                      aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
-                    >
-                      {isMuted || volume === 0 ? (
-                        <VolumeX className="w-4 h-4 text-red-500" />
-                      ) : (
-                        <Volume2 className="w-4 h-4" />
-                      )}
-                    </button>
-
-                    {showVolumeSlider && (
-                      <div className="absolute right-0 bottom-6 bg-white dark:bg-[#1f1f27] px-2 py-1.5 rounded-lg shadow-xl border border-black/10 dark:border-white/10 flex items-center z-30 animate-fadeIn">
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={isMuted ? 0 : volume}
-                          onChange={(e) => {
-                            const val = parseFloat(e.target.value)
-                            setVolume(val)
-                            if (isMuted && val > 0) setIsMuted(false)
-                          }}
-                          className="w-16 h-1 accent-[#3b82f6] cursor-pointer"
-                          aria-label="Volume slider"
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Minimize Button */}
-                  <button
-                    type="button"
-                    onClick={() => setIsMinimized(true)}
-                    className="p-1 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
-                    title="Minimize player"
-                    aria-label="Minimize player"
-                  >
-                    <Minimize2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Middle Row: Sleek Progress Bar (Matching Blue Accent from GIF) */}
+              {/* Volume / Mute Toggle */}
               <div
-                ref={progressRef}
-                onClick={handleSeek}
-                className="w-full py-1 cursor-pointer group"
-                title="Seek audio track"
+                className="relative flex items-center"
+                onMouseEnter={() => setShowVolumeSlider(true)}
+                onMouseLeave={() => setShowVolumeSlider(false)}
               >
-                <div className="w-full h-1 sm:h-1.5 bg-neutral-200 dark:bg-neutral-800 rounded-full relative overflow-hidden transition-all group-hover:h-2">
-                  <div
-                    className="h-full bg-blue-600 dark:bg-blue-500 rounded-full transition-[width] duration-100 relative"
-                    style={{ width: `${progressPercent}%` }}
-                  >
-                    {/* Glowing head of progress bar */}
-                    <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Row: Playback Controls (Matching GIF) */}
-              <div className="flex items-center justify-center gap-6 sm:gap-7 pt-0.5">
-                {/* Previous Button */}
                 <button
                   type="button"
-                  onClick={handlePrevTrack}
-                  className="text-neutral-900 dark:text-neutral-100 hover:text-blue-600 dark:hover:text-blue-400 hover:scale-110 active:scale-95 transition-all cursor-pointer p-1"
-                  title="Previous / Restart Track"
-                  aria-label="Previous track"
+                  onClick={toggleMute}
+                  className="p-1 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+                  title={isMuted ? 'Unmute' : 'Mute'}
+                  aria-label={isMuted ? 'Unmute' : 'Mute'}
                 >
-                  <SkipBack className="w-4 h-4 fill-current" />
-                </button>
-
-                {/* Big Center Play / Pause Button */}
-                <button
-                  type="button"
-                  onClick={togglePlay}
-                  className="w-8 h-8 flex items-center justify-center text-neutral-900 dark:text-neutral-100 hover:text-blue-600 dark:hover:text-blue-400 hover:scale-115 active:scale-90 transition-all cursor-pointer"
-                  title={isPlaying ? 'Pause' : 'Play Sunflower'}
-                  aria-label={isPlaying ? 'Pause music' : 'Play music'}
-                >
-                  {isPlaying ? (
-                    <Pause className="w-5 h-5 fill-current" />
+                  {isMuted || volume === 0 ? (
+                    <VolumeX className="w-3.5 h-3.5 text-[#DE2020]" />
                   ) : (
-                    <Play className="w-5 h-5 fill-current ml-0.5" />
+                    <Volume2 className="w-3.5 h-3.5" />
                   )}
                 </button>
 
-                {/* Next Button (With Circular Border Plate from GIF) */}
-                <button
-                  type="button"
-                  onClick={handleNextTrack}
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-neutral-300 dark:border-neutral-700 flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:scale-110 active:scale-95 transition-all cursor-pointer"
-                  title="Next Track"
-                  aria-label="Next track"
-                >
-                  <SkipForward className="w-3.5 h-3.5 fill-current" />
-                </button>
+                {/* Volume Slider Popout */}
+                {showVolumeSlider && (
+                  <div className="absolute right-0 bottom-7 bg-white dark:bg-[#1a1a22] px-2.5 py-1.5 rounded-lg shadow-xl border border-black/10 dark:border-white/10 flex items-center z-40 animate-fadeIn">
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.05"
+                      value={isMuted ? 0 : volume}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value)
+                        setVolume(val)
+                        if (isMuted && val > 0) setIsMuted(false)
+                      }}
+                      className="w-16 h-1 accent-[#DE2020] cursor-pointer"
+                      aria-label="Volume slider"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        )}
+        </div>
+
+        {/* ================= REALISTIC CD DISC (MEMORY LANE PIN STYLE) ================= */}
+        <div
+          onClick={togglePlay}
+          className="relative w-[150px] h-[150px] sm:w-[164px] sm:h-[164px] cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 group/cd"
+          title={isPlaying ? 'Click to pause' : 'Click to play Sunflower (Instrumental)'}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+              e.preventDefault()
+              togglePlay()
+            }
+          }}
+          aria-label={isPlaying ? 'Pause music' : 'Play music'}
+        >
+          {/* Circular Progress Ring (Outer border tracks playback) */}
+          <svg
+            className="absolute -inset-[9px] w-[calc(100%+18px)] h-[calc(100%+18px)] pointer-events-none transform -rotate-90 z-30"
+            viewBox="0 0 182 182"
+          >
+            {/* Background ring track */}
+            <circle
+              cx="91"
+              cy="91"
+              r={ringRadius}
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.15)"
+              strokeWidth="2"
+            />
+            {/* Active progress stroke */}
+            <circle
+              cx="91"
+              cy="91"
+              r={ringRadius}
+              fill="none"
+              stroke="#DE2020"
+              strokeWidth="2.5"
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+              strokeLinecap="round"
+              className="transition-[stroke-dashoffset] duration-150"
+            />
+          </svg>
+
+          {/* Deep Ambient CD Drop Shadow */}
+          <div
+            className="absolute inset-0 rounded-full shadow-[0_22px_45px_rgba(0,0,0,0.42),0_8px_16px_rgba(0,0,0,0.25)] pointer-events-none"
+            aria-hidden="true"
+          />
+
+          {/* THE ROTATING CD DISC */}
+          <div
+            className="w-full h-full rounded-full overflow-hidden relative border border-white/30 dark:border-white/20 ring-1 ring-black/30"
+            style={{
+              animation: 'spin 6s linear infinite',
+              animationPlayState: isPlaying ? 'running' : 'paused',
+            }}
+          >
+            {/* 1. Album Artwork Background */}
+            <img
+              src={sunflowerCover}
+              alt="Sunflower Cover Art"
+              className="w-full h-full object-cover object-center filter contrast-105 saturate-110 select-none pointer-events-none"
+            />
+
+            {/* 2. Authentic Editorial Handwriting Text Printed on CD (Matching Pin Style) */}
+            <div className="absolute top-[18%] left-[14%] right-[14%] flex flex-col items-start z-10 pointer-events-none select-none text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]">
+              <span
+                className="font-myfont text-white text-[17px] sm:text-[19px] font-bold tracking-wide leading-none"
+                style={{ textShadow: '0 2px 4px rgba(0,0,0,0.9)' }}
+              >
+                Sunflower
+              </span>
+              <span
+                className="text-[10px] sm:text-[11px] text-white/90 font-medium tracking-tight mt-0.5 leading-none"
+                style={{ textShadow: '0 1px 3px rgba(0,0,0,0.9)' }}
+              >
+                Post Malone & Swae Lee
+              </span>
+            </div>
+
+            <div className="absolute bottom-[16%] left-0 right-0 flex flex-col items-center z-10 pointer-events-none select-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]">
+              <span
+                className="text-[8px] sm:text-[9px] uppercase tracking-widest text-amber-300 font-bold"
+                style={{ textShadow: '0 1px 3px rgba(0,0,0,0.9)' }}
+              >
+                Instrumental
+              </span>
+            </div>
+
+            {/* 3. Holographic Rainbow CD Specular Sheen (Iridescent light reflection) */}
+            <div
+              className="absolute inset-0 rounded-full pointer-events-none mix-blend-screen opacity-25"
+              style={{
+                background:
+                  'conic-gradient(from 45deg, transparent 0deg, rgba(255,100,100,0.3) 45deg, rgba(255,255,120,0.35) 90deg, rgba(120,255,180,0.3) 135deg, rgba(120,220,255,0.35) 180deg, transparent 225deg, rgba(255,120,255,0.3) 270deg, transparent 360deg)',
+              }}
+              aria-hidden="true"
+            />
+
+            {/* 4. Fine Concentric CD Grooves */}
+            <div className="absolute inset-0 rounded-full border border-black/20 pointer-events-none" />
+            <div className="absolute inset-2 rounded-full border border-white/10 pointer-events-none" />
+            <div className="absolute inset-4 rounded-full border border-black/15 pointer-events-none" />
+
+            {/* 5. Authentic Polycarbonate Inner Clamping Hub (CD Center Ring) */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[42%] h-[42%] rounded-full bg-gradient-to-br from-neutral-200/90 via-neutral-100/75 to-neutral-300/85 dark:from-neutral-800/90 dark:via-neutral-700/80 dark:to-neutral-900/90 border border-neutral-300/80 dark:border-neutral-600/80 shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] flex items-center justify-center z-10 pointer-events-none">
+              {/* Micro-etched Matrix & Serial Ring */}
+              <div className="w-[78%] h-[78%] rounded-full border border-neutral-300 dark:border-neutral-600 flex items-center justify-center relative">
+                <span className="absolute inset-0 rounded-full border border-dashed border-neutral-400/40" />
+
+                {/* Clear Polycarbonate Inner Ring */}
+                <div className="w-[62%] h-[62%] rounded-full bg-neutral-100/70 dark:bg-neutral-900/70 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center">
+                  {/* Center Spindle Cutout Hole (Through which background peeks) */}
+                  <div className="w-[52%] h-[52%] rounded-full bg-white dark:bg-[#0A0A0E] border border-black/30 dark:border-white/20 shadow-inner" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ================= CENTER PLAY/PAUSE INTERACTIVE OVERLAY ================= */}
+          <div
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 ${
+              isHovered || !isPlaying
+                ? 'opacity-100 scale-100'
+                : 'opacity-0 scale-90 pointer-events-none'
+            }`}
+          >
+            <div className="w-10 h-10 rounded-full bg-black/60 dark:bg-black/75 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform">
+              {isPlaying ? (
+                <Pause className="w-4 h-4 fill-white" />
+              ) : (
+                <Play className="w-4 h-4 fill-white ml-0.5" />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   )
