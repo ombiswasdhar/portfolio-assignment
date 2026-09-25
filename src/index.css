@@ -653,6 +653,18 @@
   font-family: 'Akira Expanded', 'Unbounded', sans-serif;
 }
 
+@font-face {
+  font-family: 'Dirtyline';
+  src: url('/fonts/Dirtyline-36daysoftype-2022.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-dirtyline {
+  font-family: 'Dirtyline', 'Dirtyline 36Daysoftype 2022', cursive, sans-serif;
+}
+
 .font-poppins {
   font-family: 'Poppins', sans-serif;
 }

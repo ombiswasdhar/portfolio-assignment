@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import aboutFullFrameCanvas from '../assets/about/about_full_frame_canvas.png'
 import aboutLeftCardCanvas from '../assets/about/about_left_card_canvas.png'
-import wordSince from '../assets/about/word_since.png'
-import wordAs from '../assets/about/word_as.png'
-import wordFlourishA from '../assets/about/word_flourish_a.png'
 import AnimatedCollage from './AnimatedCollage'
 import AboutCharacters from './AboutCharacters'
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -67,11 +64,9 @@ export default function AboutSection() {
               aria-label="Tagline: ui-ux designer / illustrator / artist based in SHILLONG , INDIA."
             >
               <div className="w-full h-full p-2.5 flex items-center gap-2 text-[10px] lg:text-xs text-neutral-200 font-fredoka font-normal">
-                <img
-                  src={wordFlourishA}
-                  alt="a"
-                  className="w-[12px] h-[14px] object-contain inline-block shrink-0 -mb-0.5"
-                />
+                <span className="font-dirtyline text-white text-[15px] lg:text-[18px] leading-none inline-block shrink-0 select-none">
+                  a
+                </span>
                 <span>
                   ui-ux designer / illustrator / artist based in{' '}
                   <strong className="font-semibold text-white">SHILLONG , INDIA.</strong>
@@ -89,11 +84,9 @@ export default function AboutSection() {
             >
               <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
                 <div className="flex items-baseline gap-1.5 flex-wrap">
-                  <img
-                    src={wordSince}
-                    alt="SINCE"
-                    className="h-[15px] lg:h-[18px] object-contain inline-block align-baseline -mb-0.5 shrink-0"
-                  />
+                  <span className="font-dirtyline text-white text-[17px] lg:text-[20px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide">
+                    SINCE
+                  </span>
                   <span>
                     8th grade my knack for{' '}
                     <strong className="font-bold text-white">illustrations</strong> ,{' '}
@@ -133,11 +126,9 @@ export default function AboutSection() {
               aria-label="Description paragraph 3"
             >
               <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug flex items-baseline gap-2">
-                <img
-                  src={wordAs}
-                  alt="as"
-                  className="h-[14px] lg:h-[16px] object-contain inline-block align-baseline -mb-0.5 shrink-0"
-                />
+                <span className="font-dirtyline text-white text-[16px] lg:text-[19px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide">
+                  as
+                </span>
                 <span>
                   a new and curious artist, I'm always exploring different styles and mediums , it's
                   how I learn and evolve.
@@ -216,7 +207,9 @@ export default function AboutSection() {
               role="article"
             >
               <div className="w-full h-full p-2.5 flex items-center gap-1.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka">
-                <img src={wordFlourishA} alt="a" className="w-[11px] h-[13px] object-contain shrink-0" />
+                <span className="font-dirtyline text-white text-[14px] sm:text-[16px] leading-none inline-block shrink-0 select-none">
+                  a
+                </span>
                 <span>
                   ui-ux designer / illustrator / artist based in{' '}
                   <strong className="font-semibold text-white">SHILLONG , INDIA.</strong>
@@ -238,7 +231,9 @@ export default function AboutSection() {
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <div className="flex items-baseline gap-1 flex-wrap">
-                  <img src={wordSince} alt="SINCE" className="h-[14px] object-contain shrink-0" />
+                  <span className="font-dirtyline text-white text-[16px] sm:text-[18px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide">
+                    SINCE
+                  </span>
                   <span>
                     8th grade my knack for{' '}
                     <strong className="font-bold text-white">illustrations</strong> ,{' '}
@@ -284,7 +279,9 @@ export default function AboutSection() {
               role="article"
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug flex items-baseline gap-1.5">
-                <img src={wordAs} alt="as" className="h-[13px] object-contain shrink-0" />
+                <span className="font-dirtyline text-white text-[15px] sm:text-[17px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide">
+                  as
+                </span>
                 <span>
                   a new and curious artist, I'm always exploring different styles and mediums , it's how I learn and evolve.
                 </span>
