@@ -13,69 +13,139 @@ export function MusicProvider({ children }) {
 
   const audioRef = useRef(null)
   const userPausedRef = useRef(false)
+  const isMutedForAutoplayRef = useRef(false)
 
-  // Volume sync
+  // Sync volume with audio element
   useEffect(() => {
-    if (audioRef.current) {
+    if (audioRef.current && !isMutedForAutoplayRef.current) {
       audioRef.current.volume = volume
     }
   }, [volume])
 
-  // Autoplay on launch (immediate + fallback on first interaction if blocked by browser policy)
+  // Bulletproof Autoplay on launch and on page refresh
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
 
-    let cleanedUp = false
+    userPausedRef.current = false
+    let isCancelled = false
 
-    const attemptPlay = () => {
-      if (cleanedUp || userPausedRef.current || !audioRef.current) return
+    const unmuteAndPlay = () => {
+      if (!audioRef.current || userPausedRef.current) return
 
+      if (isMutedForAutoplayRef.current) {
+        audioRef.current.muted = false
+        audioRef.current.volume = volume
+        isMutedForAutoplayRef.current = false
+        setIsMuted(false)
+      }
+
+      const p = audioRef.current.play()
+      if (p !== undefined) {
+        p.then(() => {
+          if (!isCancelled && !userPausedRef.current) {
+            setIsPlaying(true)
+          }
+        }).catch(() => {})
+      }
+      removeGestureListeners()
+    }
+
+    const removeGestureListeners = () => {
+      const events = [
+        'pointerdown',
+        'mousedown',
+        'click',
+        'keydown',
+        'touchstart',
+        'touchend',
+        'scroll',
+        'wheel',
+        'mousemove',
+      ]
+      events.forEach((evt) => {
+        window.removeEventListener(evt, unmuteAndPlay)
+        document.removeEventListener(evt, unmuteAndPlay)
+      })
+    }
+
+    const attachGestureListeners = () => {
+      const events = [
+        'pointerdown',
+        'mousedown',
+        'click',
+        'keydown',
+        'touchstart',
+        'touchend',
+        'scroll',
+        'wheel',
+        'mousemove',
+      ]
+      events.forEach((evt) => {
+        window.addEventListener(evt, unmuteAndPlay, { once: true, passive: true })
+        document.addEventListener(evt, unmuteAndPlay, { once: true, passive: true })
+      })
+    }
+
+    const attemptAutoplay = () => {
+      if (!audioRef.current || userPausedRef.current || isCancelled) return
+
+      // Stage 1: Attempt direct unmuted playback (works if domain has permission or on reload after interaction)
+      audioRef.current.muted = false
+      audioRef.current.volume = volume
       const playPromise = audioRef.current.play()
+
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
-            if (!cleanedUp && !userPausedRef.current) {
+            if (!isCancelled && !userPausedRef.current) {
               setIsPlaying(true)
-              removeListeners()
+              isMutedForAutoplayRef.current = false
+              removeGestureListeners()
             }
           })
           .catch((err) => {
-            // Browser blocked unmuted autoplay without prior interaction.
-            // Listen for the first user interaction to start playing.
-            console.log('Autoplay pending user gesture:', err.message || err)
+            console.log('Direct autoplay restricted by browser policy, using muted fallback until gesture:', err?.message || err)
+            if (isCancelled || userPausedRef.current || !audioRef.current) return
+
+            // Stage 2: Start playing immediately in muted state (allowed 100% by all browsers on refresh)
+            audioRef.current.muted = true
+            isMutedForAutoplayRef.current = true
+            const mutedPromise = audioRef.current.play()
+            if (mutedPromise !== undefined) {
+              mutedPromise
+                .then(() => {
+                  if (!isCancelled && !userPausedRef.current) {
+                    setIsPlaying(true)
+                  }
+                })
+                .catch(() => {})
+            }
+
+            // Stage 3: The very instant user makes ANY gesture (even moves mouse cursor), unmute smoothly!
+            attachGestureListeners()
           })
       }
     }
 
-    const handleFirstGesture = () => {
-      if (userPausedRef.current) return
-      attemptPlay()
+    // Run autoplay on mount and when audio resource is ready
+    if (audio.readyState >= 2) {
+      attemptAutoplay()
+    } else {
+      audio.addEventListener('canplay', attemptAutoplay, { once: true })
+      audio.addEventListener('loadeddata', attemptAutoplay, { once: true })
+      // Also try immediately in case already buffered
+      attemptAutoplay()
     }
 
-    const removeListeners = () => {
-      window.removeEventListener('click', handleFirstGesture)
-      window.removeEventListener('pointerdown', handleFirstGesture)
-      window.removeEventListener('keydown', handleFirstGesture)
-      window.removeEventListener('touchstart', handleFirstGesture)
-      window.removeEventListener('scroll', handleFirstGesture)
-    }
-
-    // Try playing immediately
-    attemptPlay()
-
-    // Listen for any gesture as a fallback
-    window.addEventListener('click', handleFirstGesture, { once: true, passive: true })
-    window.addEventListener('pointerdown', handleFirstGesture, { once: true, passive: true })
-    window.addEventListener('keydown', handleFirstGesture, { once: true, passive: true })
-    window.addEventListener('touchstart', handleFirstGesture, { once: true, passive: true })
-    window.addEventListener('scroll', handleFirstGesture, { once: true, passive: true })
+    // Also attach gesture listeners as safety net
+    attachGestureListeners()
 
     return () => {
-      cleanedUp = true
-      removeListeners()
+      isCancelled = true
+      removeGestureListeners()
     }
-  }, [])
+  }, [volume])
 
   const togglePlay = useCallback(() => {
     if (!audioRef.current) return
@@ -85,33 +155,43 @@ export function MusicProvider({ children }) {
       setIsPlaying(false)
     } else {
       userPausedRef.current = false
+      if (isMutedForAutoplayRef.current) {
+        audioRef.current.muted = false
+        isMutedForAutoplayRef.current = false
+        setIsMuted(false)
+      }
+      audioRef.current.volume = volume
       audioRef.current
         .play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
-          console.warn('Audio playback failed or prevented:', err)
+          console.warn('Playback error:', err)
           setIsPlaying(false)
         })
     }
-  }, [isPlaying])
+  }, [isPlaying, volume])
 
   const toggleMute = useCallback(() => {
     if (!audioRef.current) return
     const nextMuted = !isMuted
     audioRef.current.muted = nextMuted
+    isMutedForAutoplayRef.current = false
     setIsMuted(nextMuted)
   }, [isMuted])
 
   const restartTrack = useCallback(() => {
     if (!audioRef.current) return
     userPausedRef.current = false
+    isMutedForAutoplayRef.current = false
+    audioRef.current.muted = false
+    audioRef.current.volume = volume
     audioRef.current.currentTime = 0
     setCurrentTime(0)
     audioRef.current
       .play()
       .then(() => setIsPlaying(true))
       .catch(() => {})
-  }, [])
+  }, [volume])
 
   const handleTimeUpdate = () => {
     if (!audioRef.current) return
@@ -147,13 +227,20 @@ export function MusicProvider({ children }) {
       {/* Global Audio Element for Sunflower Official Instrumental */}
       <audio
         ref={audioRef}
+        src="/sunflower.webm"
         autoPlay
         playsInline
+        preload="auto"
+        loop
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => {
+          if (userPausedRef.current) {
+            setIsPlaying(false)
+          }
+        }}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
-        preload="auto"
-        loop
       >
         <source src="/sunflower.webm" type="audio/webm" />
         <source src="/sunflower.m4a" type="audio/mp4" />
