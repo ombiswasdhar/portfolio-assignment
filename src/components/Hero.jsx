@@ -47,11 +47,11 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
-      {/* Background: NedDev Kinetic Matrix */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
+      {/* Background: NedDev Kinetic Matrix (Passive ambient mode - hover animation deactivated) */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <KineticMatrix
           title=""
-          className="w-full h-full bg-[#06070a] [&_header]:hidden [&_main]:hidden"
+          className="w-full h-full bg-[#06070a] pointer-events-none [&_header]:hidden [&_main]:hidden"
         />
       </div>
 
