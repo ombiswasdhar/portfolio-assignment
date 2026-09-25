@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
+import { Layers, Grid3X3, LayoutList } from 'lucide-react'
 import projectCardsImg from '../assets/work/project_cards.jpg'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
 import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
-import charThinkingImg from '../assets/about/char_thinking_perfect.png'
-import charPointingImg from '../assets/about/char_pointing_perfect.png'
-import smileyImg from '../assets/hero/smiley_rendered.png'
-import crownImg from '../assets/hero/crown_rendered.png'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import Auralis from '@/components/ui/auralis'
@@ -15,33 +13,6 @@ import MarqueeBar from './MarqueeBar'
 /* ========================================================================= */
 /* RETRO CARTOON MASCOT CHARACTERS MATCHING REFERENCE IMAGE */
 /* ========================================================================= */
-
-// Pink Fluffy Cloud Mascot with Cartoon Eyes (Top-Left of Folder)
-function CloudMascot({ className = 'w-16 h-16' }) {
-  return (
-    <svg viewBox="0 0 100 90" className={className} fill="none" aria-hidden="true">
-      <path
-        d="M25 65 C15 65 10 55 12 45 C10 32 20 25 32 28 C38 15 55 12 65 22 C75 16 88 24 88 36 C95 44 94 56 86 64 C80 70 70 68 65 65 C55 72 35 72 25 65 Z"
-        fill="#FF6584"
-        stroke="#111"
-        strokeWidth="3.5"
-        strokeLinejoin="round"
-      />
-      {/* Left Cartoon Eye */}
-      <ellipse cx="42" cy="42" rx="6.5" ry="8.5" fill="#FFF" stroke="#111" strokeWidth="2.5" />
-      <ellipse cx="43.5" cy="40" rx="3.5" ry="4.5" fill="#111" />
-      <circle cx="45" cy="38" r="1.5" fill="#FFF" />
-      {/* Right Cartoon Eye */}
-      <ellipse cx="58" cy="42" rx="6.5" ry="8.5" fill="#FFF" stroke="#111" strokeWidth="2.5" />
-      <ellipse cx="59.5" cy="40" rx="3.5" ry="4.5" fill="#111" />
-      <circle cx="61" cy="38" r="1.5" fill="#FFF" />
-      {/* Cute Smile */}
-      <path d="M46 54 Q50 58 54 54" stroke="#111" strokeWidth="2.5" strokeLinecap="round" />
-      {/* Little Hands Clutched */}
-      <ellipse cx="50" cy="62" rx="5" ry="3.5" fill="#FF8DA1" stroke="#111" strokeWidth="2" />
-    </svg>
-  )
-}
 
 // White 4-Finger Cartoon Glove Hand Mascot with Cute Face (Right of Folder)
 function HandMascot({ className = 'w-16 h-16' }) {
@@ -94,24 +65,6 @@ function StarburstMascot({ className = 'w-18 h-18' }) {
       <circle cx="57" cy="52" r="2.8" fill="#111" />
       <circle cx="58" cy="50.5" r="1" fill="#FFF" />
     </svg>
-  )
-}
-
-// The Iconic Black Cartoon Eyes Badge with Yellow Border
-function CartoonEyesBadge({ className = '' }) {
-  return (
-    <div className={`relative inline-flex items-center justify-center p-1.5 bg-[#EAB854] rounded-full border-2 border-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] select-none ${className}`}>
-      <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-black rounded-full">
-        {/* Left eye */}
-        <div className="w-5 h-6 bg-black rounded-full border-2 border-white flex items-center justify-center overflow-hidden">
-          <div className="w-2.5 h-3.5 bg-white rounded-full translate-x-0.5 -translate-y-0.5" />
-        </div>
-        {/* Right eye */}
-        <div className="w-5 h-6 bg-black rounded-full border-2 border-white flex items-center justify-center overflow-hidden">
-          <div className="w-2.5 h-3.5 bg-white rounded-full translate-x-0.5 -translate-y-0.5" />
-        </div>
-      </div>
-    </div>
   )
 }
 
@@ -239,37 +192,42 @@ const projectsData = [
   },
 ]
 
+const SWIPE_THRESHOLD = 50
+
 export default function ContentsSection() {
+  const [layoutMode, setLayoutMode] = useState('stack') // 'stack' | 'grid' | 'list'
   const [activeTabIdx, setActiveTabIdx] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
   const [activeProject, setActiveProject] = useState(null)
   const [activeImageZoom, setActiveImageZoom] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
+
   const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
   const [headerRef, isHeaderVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
 
-  // Mobile touch swipe gestures for intuitive project flipping
-  const [touchStartX, setTouchStartX] = useState(null)
-  const [touchEndX, setTouchEndX] = useState(null)
-  const minSwipeDistance = 45
+  // Screen size listener for responsive stack offsets
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(typeof window !== 'undefined' ? window.innerWidth < 640 : false)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
-  const handleTouchStart = (e) => {
-    setTouchEndX(null)
-    setTouchStartX(e.targetTouches[0].clientX)
-  }
+  // Framer Motion Drag and Swipe physics handler matching morphing-card-stack
+  const handleDragEnd = (_e, info) => {
+    const { offset, velocity } = info
+    const swipePower = Math.abs(offset.x) * velocity.x
 
-  const handleTouchMove = (e) => {
-    setTouchEndX(e.targetTouches[0].clientX)
-  }
-
-  const handleTouchEnd = () => {
-    if (!touchStartX || !touchEndX) return
-    const distance = touchStartX - touchEndX
-    if (distance > minSwipeDistance) {
+    if (offset.x < -SWIPE_THRESHOLD || swipePower < -800) {
       // Swiped Left -> Next project
       setActiveTabIdx((prev) => (prev < projectsData.length - 1 ? prev + 1 : 0))
-    } else if (distance < -minSwipeDistance) {
+    } else if (offset.x > SWIPE_THRESHOLD || swipePower > 800) {
       // Swiped Right -> Previous project
       setActiveTabIdx((prev) => (prev > 0 ? prev - 1 : projectsData.length - 1))
     }
+    setTimeout(() => setIsDragging(false), 60)
   }
 
   // Bi-directional viewport tracker: resets handwriting animation whenever scrolled past or scrolled above
@@ -311,7 +269,7 @@ export default function ContentsSection() {
       if (e.key === 'Escape') {
         setActiveProject(null)
         setActiveImageZoom(null)
-      } else if (!activeProject && !activeImageZoom) {
+      } else if (!activeProject && !activeImageZoom && layoutMode === 'stack') {
         if (e.key === 'ArrowRight') {
           setActiveTabIdx((prev) => (prev < projectsData.length - 1 ? prev + 1 : 0))
         } else if (e.key === 'ArrowLeft') {
@@ -321,7 +279,7 @@ export default function ContentsSection() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [activeProject, activeImageZoom])
+  }, [activeProject, activeImageZoom, layoutMode])
 
   // Lock body scroll when modal is active
   useEffect(() => {
@@ -343,7 +301,43 @@ export default function ContentsSection() {
     }
   }
 
-  const currentProject = projectsData[activeTabIdx]
+  // 3D Staggered calculations matching morphing-card-stack
+  const getStackedCards = () => {
+    const stacked = []
+    for (let i = 0; i < projectsData.length; i++) {
+      const idx = (activeTabIdx + i) % projectsData.length
+      stacked.push({
+        ...projectsData[idx],
+        originalIndex: idx,
+        stackPosition: i,
+      })
+    }
+    return stacked.reverse() // DOM order: position 0 renders last so it is on top
+  }
+
+  const getPositionStyle = (stackPosition) => {
+    switch (layoutMode) {
+      case 'stack': {
+        const topOffset = isMobile ? 8 : 12
+        const xOffset = isMobile ? 4 : 8
+        const rot = stackPosition === 0 ? 0 : (stackPosition - 1) * 1.8 + 1
+        return {
+          top: stackPosition * topOffset,
+          x: (stackPosition % 2 === 1 ? 1 : -1) * (stackPosition * xOffset),
+          zIndex: 30 - stackPosition,
+          rotate: rot,
+        }
+      }
+      case 'grid':
+      case 'list':
+        return { top: 0, x: 0, zIndex: 1, rotate: 0 }
+    }
+  }
+
+  const displayCards =
+    layoutMode === 'stack'
+      ? getStackedCards()
+      : projectsData.map((p, i) => ({ ...p, originalIndex: i, stackPosition: i }))
 
   return (
     <div className="relative w-full bg-black text-white selection:bg-black selection:text-white">
@@ -484,240 +478,584 @@ export default function ContentsSection() {
           </div>
         </section>
 
-        {/* Main Interactive Manila Folder Showcase Container */}
+        {/* Main Interactive Morphing Manila Folder Showcase Container */}
         <div className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-8 pb-20 sm:pb-28">
           {/* ========================================================================= */}
-          {/* PHYSICAL MANILA FOLDER COMPONENT (EXACT GEOMETRY FROM IMAGE) */}
+          {/* MORPHING CONTROLS: LAYOUT TOGGLE (STACK / GRID / LIST) */}
+          {/* ========================================================================= */}
+          <div className="flex items-center justify-between flex-wrap gap-4 mb-6 sm:mb-8">
+            <div className="flex items-center gap-2.5">
+              <span className="font-poppins-light font-light text-xs uppercase tracking-widest text-neutral-700">
+                Layout:
+              </span>
+              <div className="inline-flex items-center p-1 rounded-full bg-white/90 backdrop-blur-md border-2 border-black shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                <button
+                  type="button"
+                  onClick={() => setLayoutMode('stack')}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-akira tracking-wider transition-all cursor-pointer ${
+                    layoutMode === 'stack'
+                      ? 'bg-black text-white shadow-sm'
+                      : 'text-neutral-700 hover:text-black hover:bg-black/5'
+                  }`}
+                  title="Stack 3D Deck View"
+                  aria-label="Switch to stack layout"
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span className="hidden xs:inline">Stack</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLayoutMode('grid')}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-akira tracking-wider transition-all cursor-pointer ${
+                    layoutMode === 'grid'
+                      ? 'bg-black text-white shadow-sm'
+                      : 'text-neutral-700 hover:text-black hover:bg-black/5'
+                  }`}
+                  title="2-Column Grid View"
+                  aria-label="Switch to grid layout"
+                >
+                  <Grid3X3 className="w-3.5 h-3.5" />
+                  <span className="hidden xs:inline">Grid</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLayoutMode('list')}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-akira tracking-wider transition-all cursor-pointer ${
+                    layoutMode === 'list'
+                      ? 'bg-black text-white shadow-sm'
+                      : 'text-neutral-700 hover:text-black hover:bg-black/5'
+                  }`}
+                  title="Editorial List View"
+                  aria-label="Switch to list layout"
+                >
+                  <LayoutList className="w-3.5 h-3.5" />
+                  <span className="hidden xs:inline">List</span>
+                </button>
+              </div>
+            </div>
+
+            {/* In Stack mode, show swipe hint */}
+            {layoutMode === 'stack' && (
+              <div className="flex items-center gap-2 text-xs font-poppins-light text-neutral-600 bg-white/70 px-3.5 py-1.5 rounded-full border border-black/10 shadow-xs">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Drag card to flip • Press ← →</span>
+              </div>
+            )}
+          </div>
+
+          {/* ========================================================================= */}
+          {/* PHYSICAL MANILA FOLDER COMPONENT (STACK / GRID / LIST ANIMATION) */}
           {/* ========================================================================= */}
           <div className="relative w-full">
-            {/* Top Folder Tabs Bar */}
-            <div className="relative z-20 flex items-end gap-1.5 sm:gap-2 px-3 sm:px-8 -mb-[2.5px] overflow-x-auto no-scrollbar">
-              {projectsData.map((p, idx) => {
-                const isActive = idx === activeTabIdx
-                return (
+            {/* Top Folder Tabs Bar (in Stack mode) */}
+            {layoutMode === 'stack' && (
+              <div className="relative z-20 flex items-end gap-1.5 sm:gap-2 px-3 sm:px-8 -mb-[2.5px] overflow-x-auto no-scrollbar">
+                {projectsData.map((p, idx) => {
+                  const isActive = idx === activeTabIdx
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => setActiveTabIdx(idx)}
+                      className={`group relative inline-flex items-center gap-2 sm:gap-2.5 px-4 sm:px-7 py-2.5 sm:py-3.5 rounded-t-2xl sm:rounded-t-3xl border-t-2 sm:border-t-3 border-x-2 sm:border-x-3 border-black font-akira font-black text-xs sm:text-[13px] uppercase tracking-wider cursor-pointer transition-all duration-200 select-none shrink-0 whitespace-nowrap ${
+                        isActive
+                          ? 'z-30 text-black shadow-[0_-4px_14px_rgba(0,0,0,0.18)]'
+                          : 'z-10 text-neutral-900 opacity-90 hover:opacity-100 hover:-translate-y-0.5'
+                      }`}
+                      style={{
+                        backgroundColor: p.folderColor,
+                        borderBottom: isActive ? `3.5px solid ${p.folderColor}` : '2.5px solid #000',
+                      }}
+                      title={`Open ${p.title} folder`}
+                    >
+                      {/* Active Tab Mascot Eyes Icon */}
+                      {isActive ? (
+                        <span className="flex items-center -space-x-0.5">
+                          <span className="w-2.5 h-3 bg-black rounded-full border border-white flex items-center justify-center">
+                            <span className="w-1 h-1 bg-white rounded-full translate-x-0.5 -translate-y-0.5" />
+                          </span>
+                          <span className="w-2.5 h-3 bg-black rounded-full border border-white flex items-center justify-center">
+                            <span className="w-1 h-1 bg-white rounded-full translate-x-0.5 -translate-y-0.5" />
+                          </span>
+                        </span>
+                      ) : (
+                        <span className="w-2 h-2 rounded-full bg-black/60 group-hover:bg-black" />
+                      )}
+                      <span>{p.tabTitle}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* Folder Body Canvas / Morphing Stack Container */}
+            <LayoutGroup>
+              <div
+                className={
+                  layoutMode === 'stack'
+                    ? 'relative w-full min-h-[580px] xs:min-h-[560px] sm:min-h-[620px] lg:min-h-[560px]'
+                    : layoutMode === 'grid'
+                    ? 'grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full'
+                    : 'flex flex-col gap-4 sm:gap-5 w-full'
+                }
+              >
+                <AnimatePresence mode="popLayout">
+                  {displayCards.map((card) => {
+                    const posStyle = getPositionStyle(card.stackPosition)
+                    const isTop = layoutMode === 'stack' && card.stackPosition === 0
+
+                    // 1. GRID LAYOUT MODE CARD
+                    if (layoutMode === 'grid') {
+                      return (
+                        <motion.div
+                          key={card.id}
+                          layoutId={`project-card-${card.id}`}
+                          layout
+                          transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+                          className="relative w-full rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-black shadow-[0_12px_36px_rgba(0,0,0,0.18)] p-5 sm:p-7 flex flex-col justify-between overflow-hidden select-none hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] transition-all duration-300"
+                          style={{ backgroundColor: card.folderColor }}
+                        >
+                          {/* Top Tab Bar inside Grid Card */}
+                          <div className="flex items-center justify-between pb-3 border-b border-black/15">
+                            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/10 border border-black/15 text-xs font-akira font-black uppercase text-neutral-950">
+                              <span className="w-2 h-2 rounded-full bg-neutral-950" />
+                              <span>{card.tabTitle}</span>
+                            </div>
+                            <span className="font-poppins-light font-light text-xs tracking-widest text-neutral-800 uppercase">
+                              {card.date} • {card.category}
+                            </span>
+                          </div>
+
+                          {/* Card Body: Title, Subtitle, Framed Artwork, Tags */}
+                          <div className="py-5 flex flex-col gap-4">
+                            <div>
+                              <h3 className="font-akira font-black uppercase text-xl sm:text-2xl lg:text-3xl leading-tight text-neutral-950">
+                                {card.title}
+                              </h3>
+                              <p className="mt-1.5 text-xs sm:text-sm font-poppins-light font-light text-neutral-800 line-clamp-2">
+                                {card.subtitle}
+                              </p>
+                            </div>
+
+                            {/* Framed Thumbnail with Washi Tape */}
+                            <div
+                              onClick={() => setActiveProject(card)}
+                              className="relative overflow-hidden border-3 sm:border-4 border-white bg-neutral-950 aspect-[16/10] w-full cursor-pointer group/thumb shadow-[0_10px_30px_rgba(0,0,0,0.2)] rounded-xs my-1"
+                            >
+                              <img
+                                src={card.thumbnail}
+                                alt={card.title}
+                                className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500"
+                              />
+                              <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
+                                <span className="px-4 py-2 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-wider uppercase">
+                                  Inspect Case Study 🔍
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Tags */}
+                            <div className="flex flex-wrap gap-1.5">
+                              {card.tags.slice(0, 4).map((tag, tIdx) => (
+                                <span
+                                  key={tIdx}
+                                  className="font-poppins-light font-light text-[11px] px-2.5 py-1 uppercase tracking-wide bg-white/90 text-neutral-950 border border-black/15 rounded-md"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                              {card.tags.length > 4 && (
+                                <span className="font-poppins-light font-light text-[11px] px-2 py-1 text-neutral-800">
+                                  +{card.tags.length - 4}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Bottom Row CTA */}
+                          <div className="pt-3 border-t border-black/15 flex items-center justify-between gap-3">
+                            <button
+                              onClick={() => setActiveProject(card)}
+                              className="font-poppins-light font-light inline-flex items-center gap-2 pb-0.5 border-b-2 border-neutral-950 text-xs sm:text-sm uppercase tracking-[0.18em] cursor-pointer text-neutral-950 hover:text-black/70 font-medium group/cta"
+                            >
+                              <span>View project</span>
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-3.5 w-3.5 group-hover/cta:translate-x-1 transition-transform">
+                                <path d="M7 17 17 7M9 7h8v8" />
+                              </svg>
+                            </button>
+
+                            {card.figmaUrl && (
+                              <a
+                                href={card.figmaUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="font-poppins-light font-light inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black text-[11px] uppercase tracking-wider"
+                              >
+                                <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
+                                </svg>
+                                <span>Figma</span>
+                              </a>
+                            )}
+                          </div>
+                        </motion.div>
+                      )
+                    }
+
+                    // 2. LIST LAYOUT MODE CARD
+                    if (layoutMode === 'list') {
+                      return (
+                        <motion.div
+                          key={card.id}
+                          layoutId={`project-card-${card.id}`}
+                          layout
+                          transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+                          className="relative w-full rounded-2xl border-2 sm:border-3 border-black shadow-[0_8px_24px_rgba(0,0,0,0.12)] p-4 sm:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 overflow-hidden select-none hover:translate-x-1.5 hover:shadow-[0_14px_36px_rgba(0,0,0,0.18)] transition-all duration-300"
+                          style={{ backgroundColor: card.folderColor }}
+                        >
+                          {/* Left: Project Number, Tab Badge, Title, Subtitle, Tags */}
+                          <div className="flex flex-col gap-2 max-w-xl">
+                            <div className="flex items-center gap-3">
+                              <span className="font-akira font-black text-sm text-black/60">
+                                {card.num}
+                              </span>
+                              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-black/10 border border-black/15 text-[11px] font-akira font-black uppercase text-neutral-950">
+                                <span className="w-1.5 h-1.5 rounded-full bg-neutral-950" />
+                                <span>{card.tabTitle}</span>
+                              </div>
+                              <span className="font-poppins-light font-light text-xs tracking-wider text-neutral-800 uppercase">
+                                {card.category}
+                              </span>
+                            </div>
+
+                            <h3 className="font-akira font-black uppercase text-lg sm:text-2xl text-neutral-950">
+                              {card.title}
+                            </h3>
+
+                            <p className="text-xs sm:text-sm font-poppins-light font-light text-neutral-800 line-clamp-1">
+                              {card.subtitle}
+                            </p>
+
+                            <div className="flex flex-wrap gap-1.5 pt-1">
+                              {card.tags.slice(0, 4).map((tag, tIdx) => (
+                                <span
+                                  key={tIdx}
+                                  className="font-poppins-light font-light text-[11px] px-2.5 py-0.5 uppercase tracking-wide bg-white/90 text-neutral-950 border border-black/15 rounded"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Right: Small Thumbnail & Actions */}
+                          <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-black/15">
+                            <div
+                              onClick={() => setActiveProject(card)}
+                              className="relative overflow-hidden border-2 border-white bg-neutral-950 w-28 sm:w-36 aspect-[16/10] rounded-xs cursor-pointer group/listThumb shadow-md shrink-0"
+                            >
+                              <img
+                                src={card.thumbnail}
+                                alt={card.title}
+                                className="w-full h-full object-cover group-hover/listThumb:scale-105 transition-transform duration-300"
+                              />
+                            </div>
+
+                            <div className="flex flex-col gap-2 items-end">
+                              <button
+                                onClick={() => setActiveProject(card)}
+                                className="font-poppins-light font-light inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-black text-white hover:bg-neutral-800 text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer"
+                              >
+                                <span>Inspect</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-3 w-3">
+                                  <path d="M7 17 17 7M9 7h8v8" />
+                                </svg>
+                              </button>
+
+                              {card.figmaUrl && (
+                                <a
+                                  href={card.figmaUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="font-poppins-light font-light text-[11px] underline uppercase tracking-wider text-neutral-900 hover:text-black"
+                                >
+                                  Figma File ↗
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )
+                    }
+
+                    // 3. STACK LAYOUT MODE CARD (MORPHING 3D DECK WITH DRAG-AND-SWIPE)
+                    return (
+                      <motion.div
+                        key={card.id}
+                        layoutId={`project-card-${card.id}`}
+                        layout
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                          x: 0,
+                          ...posStyle,
+                        }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+                        drag={isTop ? 'x' : false}
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.7}
+                        onDragStart={() => setIsDragging(true)}
+                        onDragEnd={handleDragEnd}
+                        whileDrag={{ scale: 1.01, cursor: 'grabbing' }}
+                        className={`absolute inset-x-0 top-0 w-full rounded-2xl sm:rounded-[40px] border-2 sm:border-3 border-black shadow-[0_25px_80px_rgba(0,0,0,0.35)] overflow-hidden transition-colors duration-500 p-5 sm:p-10 lg:p-12 min-h-[460px] sm:min-h-[540px] flex flex-col justify-between select-none touch-pan-y ${
+                          isTop ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'
+                        }`}
+                        style={{
+                          backgroundColor: card.folderColor,
+                          zIndex: posStyle.zIndex,
+                        }}
+                      >
+                        {/* Background Card Tint Overlay & Click-to-promote Badge */}
+                        {!isTop && (
+                          <div
+                            className="absolute inset-0 z-30 bg-black/10 hover:bg-black/5 rounded-2xl sm:rounded-[40px] transition-colors cursor-pointer flex items-start justify-end p-4 sm:p-6"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (!isDragging) {
+                                setActiveTabIdx(card.originalIndex)
+                              }
+                            }}
+                            title={`Bring ${card.title} to front`}
+                          >
+                            <div className="bg-white/95 text-black px-3.5 py-1.5 rounded-full border-2 border-black font-akira text-[11px] sm:text-xs uppercase tracking-wider shadow-md transform -rotate-3 hover:rotate-0 transition-transform">
+                              0{card.originalIndex + 1} {card.tabTitle} ↗
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Retro Cartoon Mascot Stickers on the Right of Folder (only on top card) */}
+                        {isTop && (
+                          <>
+                            <div className="absolute top-10 sm:top-14 -right-2 sm:right-6 z-10 pointer-events-none select-none -rotate-[8deg] hover:rotate-0 transition-transform hidden sm:block">
+                              <HandMascot className="w-14 h-14 sm:w-18 sm:h-18 drop-shadow-[0_4px_14px_rgba(0,0,0,0.15)]" />
+                            </div>
+
+                            <div className="absolute bottom-3 sm:bottom-5 right-4 sm:right-8 z-10 pointer-events-none select-none rotate-[10deg] hover:rotate-0 transition-transform hidden sm:block">
+                              <StarburstMascot className="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-[0_6px_16px_rgba(0,0,0,0.2)]" />
+                            </div>
+                          </>
+                        )}
+
+                        {/* Folder Top Metadata Row */}
+                        <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/80 pb-4 border-b border-black/15 z-10">
+                          <div className="flex items-center gap-3">
+                            <span className="bg-black/10 px-3.5 py-1 rounded-full border border-black/15 text-neutral-950 font-poppins-light font-light text-xs tracking-widest inline-flex items-center gap-2">
+                              <span className="h-2 w-2 rounded-full bg-neutral-950" />
+                              {card.date}
+                            </span>
+                            <span className="font-poppins-light font-light text-xs tracking-widest uppercase text-neutral-800 hidden sm:inline-block">
+                              FOLDER // 0{card.originalIndex + 1}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-poppins-light font-light text-xs uppercase tracking-wider text-neutral-800">
+                              {card.category}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Main 2-Column Content Layout */}
+                        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 sm:gap-10 lg:gap-12 py-6 sm:py-8 items-center text-left">
+                          {/* Left Column: Title, Subtitle, Full Description, Actions, Tags */}
+                          <div className="flex flex-col justify-between h-full">
+                            <div>
+                              <h2 className="font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.08] tracking-tight text-neutral-950">
+                                {card.title}
+                              </h2>
+
+                              <p className="mt-2 text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
+                                {card.subtitle}
+                              </p>
+
+                              {/* Action Buttons */}
+                              <div className="mt-6 flex flex-wrap items-center gap-4">
+                                <button
+                                  onClick={(e) => {
+                                    if (isDragging) return
+                                    e.stopPropagation()
+                                    setActiveProject(card)
+                                  }}
+                                  className="font-poppins-light font-light inline-flex items-center gap-2.5 pb-1 border-b-2 border-neutral-950 text-sm uppercase tracking-[0.2em] cursor-pointer text-neutral-950 hover:text-black/70 transition-all group/cta font-medium"
+                                >
+                                  View project
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.4"
+                                    className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
+                                    aria-hidden="true"
+                                  >
+                                    <path d="M7 17 17 7M9 7h8v8" />
+                                  </svg>
+                                </button>
+
+                                {card.figmaUrl && (
+                                  <a
+                                    href={card.figmaUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="font-poppins-light font-light inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black transition-all text-xs uppercase tracking-wider group/figma shadow-sm"
+                                    title="Open design file in Figma"
+                                  >
+                                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                      <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
+                                    </svg>
+                                    <span>Figma File</span>
+                                    <svg className="w-3 h-3 group-hover/figma:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                      <path d="M7 17 17 7M9 7h8v8" />
+                                    </svg>
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Tags Badges */}
+                            <div className="mt-8 flex flex-wrap gap-2 pt-2">
+                              {card.tags.map((tag, tIdx) => (
+                                <span
+                                  key={tIdx}
+                                  className="font-poppins-light font-light text-xs sm:text-sm px-3.5 py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Right Column: Framed Thumbnail Artwork with Washi Tape Mounts */}
+                          <div className="relative">
+                            <span
+                              aria-hidden="true"
+                              className="washi-tape absolute -left-5 -top-3 z-20 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                            />
+                            <span
+                              aria-hidden="true"
+                              className="washi-tape absolute -right-5 -top-3 z-20 h-6 w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
+                            />
+
+                            <div
+                              onClick={(e) => {
+                                if (isDragging) return
+                                e.stopPropagation()
+                                setActiveProject(card)
+                              }}
+                              className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-[4/3] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
+                              title="Inspect Case Study"
+                            >
+                              <div className="relative overflow-hidden h-full w-full">
+                                <img
+                                  src={card.thumbnail}
+                                  alt={card.title}
+                                  className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out"
+                                />
+                              </div>
+
+                              <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                <span className="px-5 py-2.5 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-widest uppercase shadow-2xl">
+                                  Inspect Case Study 🔍
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Folder Bottom Row */}
+                        <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
+                          <span>{card.bulletSummary}</span>
+                          <span className="font-semibold text-neutral-800 hidden sm:inline">
+                            {isTop ? 'Drag card horizontally or press ← → to flip' : 'Click to bring to front'}
+                          </span>
+                          <span className="font-semibold text-neutral-800 sm:hidden">
+                            {isTop ? 'Swipe horizontally to flip' : 'Click to view'}
+                          </span>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
+                </AnimatePresence>
+              </div>
+            </LayoutGroup>
+
+            {/* Left & Right Circular Arrow Navigation Controls (in Stack mode) */}
+            {layoutMode === 'stack' && (
+              <>
+                <button
+                  onClick={() => setActiveTabIdx((prev) => (prev > 0 ? prev - 1 : projectsData.length - 1))}
+                  className="absolute -left-2 sm:-left-6 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-13 sm:h-13 min-w-[36px] min-h-[36px] sm:min-w-[52px] sm:min-h-[52px] rounded-full bg-white text-black border-2 sm:border-3 border-black shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                  title="Previous project"
+                  aria-label="Previous project"
+                >
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                <button
+                  onClick={() => setActiveTabIdx((prev) => (prev < projectsData.length - 1 ? prev + 1 : 0))}
+                  className="absolute -right-2 sm:-right-6 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-13 sm:h-13 min-w-[36px] min-h-[36px] sm:min-w-[52px] sm:min-h-[52px] rounded-full bg-white text-black border-2 sm:border-3 border-black shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                  title="Next project"
+                  aria-label="Next project"
+                >
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Quick Project Switcher & Pagination Dots below Folder (in Stack mode) */}
+          {layoutMode === 'stack' && (
+            <div className="mt-12 flex flex-col items-center justify-center gap-4 z-10 relative">
+              {/* Pagination Dots matching morphing-card-stack */}
+              <div className="flex items-center justify-center gap-2">
+                {projectsData.map((p, idx) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setActiveTabIdx(idx)}
+                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer border border-black ${
+                      idx === activeTabIdx
+                        ? 'w-8 bg-black shadow-sm'
+                        : 'w-2.5 bg-neutral-300 hover:bg-neutral-500'
+                    }`}
+                    aria-label={`Go to ${p.title}`}
+                    title={`Go to ${p.title}`}
+                  />
+                ))}
+              </div>
+
+              {/* Project Pill Buttons */}
+              <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+                {projectsData.map((p, idx) => (
                   <button
                     key={p.id}
                     onClick={() => setActiveTabIdx(idx)}
-                    className={`group relative inline-flex items-center gap-2 sm:gap-2.5 px-4 sm:px-7 py-2.5 sm:py-3.5 rounded-t-2xl sm:rounded-t-3xl border-t-2 sm:border-t-3 border-x-2 sm:border-x-3 border-black font-akira font-black text-xs sm:text-[13px] uppercase tracking-wider cursor-pointer transition-all duration-200 select-none shrink-0 whitespace-nowrap ${
-                      isActive
-                        ? 'z-30 text-black shadow-[0_-4px_14px_rgba(0,0,0,0.18)]'
-                        : 'z-10 text-neutral-900 opacity-90 hover:opacity-100 hover:-translate-y-0.5'
+                    className={`px-4 sm:px-5 py-2 rounded-full border-2 border-black font-poppins text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                      idx === activeTabIdx
+                        ? 'bg-black text-white shadow-lg scale-105'
+                        : 'bg-white text-neutral-800 hover:bg-neutral-100 hover:border-black'
                     }`}
-                    style={{
-                      backgroundColor: p.folderColor,
-                      borderBottom: isActive ? `3.5px solid ${p.folderColor}` : '2.5px solid #000',
-                    }}
-                    title={`Open ${p.title} folder`}
                   >
-                    {/* Active Tab Mascot Eyes Icon */}
-                    {isActive ? (
-                      <span className="flex items-center -space-x-0.5">
-                        <span className="w-2.5 h-3 bg-black rounded-full border border-white flex items-center justify-center">
-                          <span className="w-1 h-1 bg-white rounded-full translate-x-0.5 -translate-y-0.5" />
-                        </span>
-                        <span className="w-2.5 h-3 bg-black rounded-full border border-white flex items-center justify-center">
-                          <span className="w-1 h-1 bg-white rounded-full translate-x-0.5 -translate-y-0.5" />
-                        </span>
-                      </span>
-                    ) : (
-                      <span className="w-2 h-2 rounded-full bg-black/60 group-hover:bg-black" />
-                    )}
-                    <span>{p.tabTitle}</span>
+                    0{idx + 1} {p.title}
                   </button>
-                )
-              })}
-            </div>
-
-            {/* Folder Body Canvas with 2-Column Info & Framed Imagery */}
-            <div
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              className="relative w-full rounded-2xl sm:rounded-[40px] border-2 sm:border-3 border-black shadow-[0_25px_80px_rgba(0,0,0,0.4)] overflow-hidden transition-colors duration-500 p-5 sm:p-10 lg:p-12 min-h-[460px] sm:min-h-[540px] flex flex-col justify-between select-none touch-pan-y"
-              style={{ backgroundColor: currentProject.folderColor }}
-            >
-              {/* Retro Cartoon Mascot Stickers on the Right of Folder (Clear of text) */}
-              {/* 1. White Cartoon Hand Mascot (Far Right) */}
-              <div className="absolute top-10 sm:top-14 -right-2 sm:right-6 z-10 pointer-events-none select-none -rotate-[8deg] hover:rotate-0 transition-transform hidden sm:block">
-                <HandMascot className="w-14 h-14 sm:w-18 sm:h-18 drop-shadow-[0_4px_14px_rgba(0,0,0,0.15)]" />
-              </div>
-
-              {/* 2. Red/Pink Spiky Starburst Mascot (Bottom-Right) */}
-              <div className="absolute bottom-3 sm:bottom-5 right-4 sm:right-8 z-10 pointer-events-none select-none rotate-[10deg] hover:rotate-0 transition-transform hidden sm:block">
-                <StarburstMascot className="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-[0_6px_16px_rgba(0,0,0,0.2)]" />
-              </div>
-
-              {/* Folder Top Metadata Row */}
-              <div className="w-full flex items-center justify-between text-xs sm:text-sm font-akira font-black uppercase tracking-wider text-black/80 pb-4 border-b border-black/15 z-10">
-                <div className="flex items-center gap-3">
-                  <span className="bg-black/10 px-3.5 py-1 rounded-full border border-black/15 text-neutral-950 font-poppins-light font-light text-xs tracking-widest inline-flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-neutral-950" />
-                    {currentProject.date}
-                  </span>
-                  <span className="font-poppins-light font-light text-xs tracking-widest uppercase text-neutral-800 hidden sm:inline-block">
-                    FOLDER // 0{activeTabIdx + 1}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-poppins-light font-light text-xs uppercase tracking-wider text-neutral-800">
-                    {currentProject.category}
-                  </span>
-                </div>
-              </div>
-
-              {/* Main 2-Column Content Layout (from Previous Iteration) */}
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 sm:gap-10 lg:gap-12 py-6 sm:py-8 items-center text-left">
-                {/* Left Column: Title, Subtitle, Full Description, Actions, Tags */}
-                <div className="flex flex-col justify-between h-full">
-                  <div>
-                    {/* Massive Title in Akira Expanded */}
-                    <h2 className="font-akira font-black uppercase text-2xl sm:text-4xl md:text-5xl lg:text-[40px] xl:text-[46px] leading-[1.08] tracking-tight text-neutral-950">
-                      {currentProject.title}
-                    </h2>
-
-                    {/* Subtitle in Poppins Light */}
-                    <p className="mt-2 text-sm sm:text-base font-poppins-light font-light tracking-wider uppercase text-neutral-800">
-                      {currentProject.subtitle}
-                    </p>
-
-
-                    {/* Action Buttons in Poppins Light */}
-                    <div className="mt-6 flex flex-wrap items-center gap-4">
-                      <button
-                        onClick={() => setActiveProject(currentProject)}
-                        className="font-poppins-light font-light inline-flex items-center gap-2.5 pb-1 border-b-2 border-neutral-950 text-sm uppercase tracking-[0.2em] cursor-pointer text-neutral-950 hover:text-black/70 transition-all group/cta font-medium"
-                      >
-                        View project
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.4"
-                          className="h-4 w-4 group-hover/cta:translate-x-1 transition-transform"
-                          aria-hidden="true"
-                        >
-                          <path d="M7 17 17 7M9 7h8v8" />
-                        </svg>
-                      </button>
-
-                      {currentProject.figmaUrl && (
-                        <a
-                          href={currentProject.figmaUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-poppins-light font-light inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/25 bg-black/90 text-white hover:bg-black transition-all text-xs uppercase tracking-wider group/figma shadow-sm"
-                          title="Open design file in Figma"
-                        >
-                          <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
-                          </svg>
-                          <span>Figma File</span>
-                          <svg className="w-3 h-3 group-hover/figma:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M7 17 17 7M9 7h8v8" />
-                          </svg>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Tags Badges in Poppins Light */}
-                  <div className="mt-8 flex flex-wrap gap-2 pt-2">
-                    {currentProject.tags.map((tag, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="font-poppins-light font-light text-xs sm:text-sm px-3.5 py-1.5 uppercase tracking-wide bg-white/95 text-neutral-950 border border-black/15 rounded-md shadow-xs"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Right Column: Framed Thumbnail Artwork with Washi Tape Mounts */}
-                <div className="relative">
-                  {/* Washi masking tape: Top-Left */}
-                  <span
-                    aria-hidden="true"
-                    className="washi-tape absolute -left-5 -top-3 z-20 h-6 w-24 -rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
-                  />
-                  {/* Washi masking tape: Top-Right */}
-                  <span
-                    aria-hidden="true"
-                    className="washi-tape absolute -right-5 -top-3 z-20 h-6 w-24 rotate-[9deg] shadow-[0_1px_3px_rgba(17,18,18,0.25)] pointer-events-none"
-                  />
-
-                  {/* Tactile Framed Artwork Box */}
-                  <div
-                    onClick={() => setActiveProject(currentProject)}
-                    className="relative overflow-hidden border-4 sm:border-6 border-white bg-neutral-950 aspect-[4/3] sm:aspect-[16/11] md:aspect-[4/3] w-full cursor-pointer group/thumb shadow-[0_20px_50px_rgba(0,0,0,0.28)] rounded-xs"
-                    title="Inspect Case Study"
-                  >
-                    <div className="relative overflow-hidden h-full w-full">
-                      <img
-                        src={currentProject.thumbnail}
-                        alt={currentProject.title}
-                        className="absolute inset-0 h-full w-full object-cover group-hover/thumb:scale-105 transition-transform duration-700 ease-out"
-                      />
-                    </div>
-
-                    {/* Hover Pill */}
-                    <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                      <span className="px-5 py-2.5 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-widest uppercase shadow-2xl">
-                        Inspect Case Study 🔍
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Folder Bottom Row */}
-              <div className="w-full pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
-                <span>{currentProject.bulletSummary}</span>
-                <span className="font-semibold text-neutral-800 hidden sm:inline">Press ← → to flip files</span>
-                <span className="font-semibold text-neutral-800 sm:hidden">Swipe ← → to flip</span>
+                ))}
               </div>
             </div>
-
-            {/* Left & Right Circular Arrow Navigation Controls */}
-            <button
-              onClick={() => setActiveTabIdx((prev) => (prev > 0 ? prev - 1 : projectsData.length - 1))}
-              className="absolute -left-2 sm:-left-6 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-13 sm:h-13 min-w-[36px] min-h-[36px] sm:min-w-[52px] sm:min-h-[52px] rounded-full bg-white text-black border-2 sm:border-3 border-black shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
-              title="Previous project"
-              aria-label="Previous project"
-            >
-              <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <button
-              onClick={() => setActiveTabIdx((prev) => (prev < projectsData.length - 1 ? prev + 1 : 0))}
-              className="absolute -right-2 sm:-right-6 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-13 sm:h-13 min-w-[36px] min-h-[36px] sm:min-w-[52px] sm:min-h-[52px] rounded-full bg-white text-black border-2 sm:border-3 border-black shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
-              title="Next project"
-              aria-label="Next project"
-            >
-              <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Quick Project Switcher Pill Bar below Folder */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 z-10 relative">
-            {projectsData.map((p, idx) => (
-              <button
-                key={p.id}
-                onClick={() => setActiveTabIdx(idx)}
-                className={`px-4 sm:px-5 py-2 rounded-full border-2 border-black font-poppins text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
-                  idx === activeTabIdx
-                    ? 'bg-black text-white shadow-lg scale-105'
-                    : 'bg-white text-neutral-800 hover:bg-neutral-100 hover:border-black'
-                }`}
-              >
-                0{idx + 1} {p.title}
-              </button>
-            ))}
-          </div>
+          )}
         </div>
       </div>
 
@@ -824,7 +1162,7 @@ export default function ContentsSection() {
                       className="font-poppins-light font-light inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-yellow-400 text-black hover:bg-yellow-300 transition-all font-semibold text-xs uppercase tracking-wider shadow-lg"
                     >
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
+                        <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
                       </svg>
                       <span>Open Live Figma Design File</span>
                       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
