@@ -9,6 +9,7 @@ import Contact from './pages/Contact'
 import CustomCursor from './components/CustomCursor'
 import ConstellationGrid from '@/components/ui/constellation-grid'
 import MusicPlayer from './components/MusicPlayer'
+import { MusicProvider } from './context/MusicContext'
 
 // Ensure browser does not auto-restore scrolled positions on reload
 if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
@@ -28,20 +29,22 @@ function ScrollToTop() {
 function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <CustomCursor />
-      <MusicPlayer />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/work" element={<Work />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/skills" element={<Skills />} />
-        <Route path="/cv" element={<CV />} />
-        <Route path="/resume" element={<CV />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/demo" element={<ConstellationGrid />} />
-        <Route path="/constellation" element={<ConstellationGrid />} />
-      </Routes>
+      <MusicProvider>
+        <ScrollToTop />
+        <CustomCursor />
+        <MusicPlayer />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/work" element={<Work />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/cv" element={<CV />} />
+          <Route path="/resume" element={<CV />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/demo" element={<ConstellationGrid />} />
+          <Route path="/constellation" element={<ConstellationGrid />} />
+        </Routes>
+      </MusicProvider>
     </BrowserRouter>
   )
 }

@@ -10,6 +10,7 @@ import crown from '../assets/hero/crown_rendered.png'
 import doodle from '../assets/hero/doodle_rendered.png'
 import barcode from '../assets/hero/barcode.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
+import HeroCD from './HeroCD'
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
@@ -164,6 +165,9 @@ export default function Hero() {
               }}
             />
           </div>
+
+          {/* 1b. Sunflower Instrumental CD Music Player (top-right, opposite corner of smiley) */}
+          <HeroCD mousePos={mousePos} />
 
           {/* 2. Custom Typography: "PORTFOLIO" Vector Art */}
           <div
