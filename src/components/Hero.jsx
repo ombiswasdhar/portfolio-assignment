@@ -47,8 +47,8 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
-      {/* Background: NedDev Kinetic Matrix */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
+      {/* Background: NedDev Kinetic Matrix - Pushed firmly behind every single element */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
         <KineticMatrix
           title=""
           className="w-full h-full bg-[#06070a] [&_header]:hidden [&_main]:hidden"
@@ -57,15 +57,17 @@ export default function Hero() {
 
       {/* Cinematic Edge Vignette to blend into section boundaries */}
       <div
-        className="absolute inset-0 pointer-events-none select-none z-[1]"
+        className="absolute inset-0 pointer-events-none select-none -z-10"
         style={{
           background: 'radial-gradient(circle at 50% 50%, transparent 65%, rgba(5, 5, 7, 0.75) 100%)',
         }}
         aria-hidden="true"
       />
 
-      {/* 1440x940 Canvas Container */}
-      <div className="relative w-full max-w-[1440px] mx-auto aspect-[1440/940] min-h-[500px] sm:min-h-[580px] md:min-h-[740px] lg:min-h-[860px] pointer-events-none">
+      {/* Hero Foreground Content Layer (Firmly above background matrix) */}
+      <div className="relative z-10 w-full flex flex-col items-center">
+        {/* 1440x940 Canvas Container */}
+        <div className="relative z-10 w-full max-w-[1440px] mx-auto aspect-[1440/940] min-h-[500px] sm:min-h-[580px] md:min-h-[740px] lg:min-h-[860px] pointer-events-none">
         {/* Semantic SEO Primary Heading */}
         <h1 className="sr-only">OMİs Brain — Om Biswas Portfolio | Visual &amp; Product Designer</h1>
         
@@ -322,6 +324,7 @@ export default function Hero() {
             <polyline points="7 6 12 11 17 6" />
           </svg>
         </a>
+      </div>
       </div>
     </section>
   )

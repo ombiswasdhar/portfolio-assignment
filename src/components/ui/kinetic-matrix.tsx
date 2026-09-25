@@ -75,7 +75,7 @@ export function KineticMatrix({
     const shockwavesRef = useRef<GravitationalShockwave[]>([]);
     const dimensionsRef = useRef({ width: 0, height: 0, cols: 0, rows: 0, spacing: 52 });
 
-    // Helper: draw lattice strand between two nodes
+    // Helper: draw lattice strand between two nodes (subtle, delicate intensity from previous iteration)
     const drawLatticeLink = useCallback((
         ctx: CanvasRenderingContext2D,
         n1: MatrixNode,
@@ -88,17 +88,17 @@ export function KineticMatrix({
         const dy = n1.y - n2.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const stretch = Math.abs(dist - restLen) / restLen;
-        const isTensioned = n1.tension > 0.04 || n2.tension > 0.04 || stretch > 0.08;
+        const isTensioned = n1.tension > 0.05 || n2.tension > 0.05 || stretch > 0.1;
 
         if (isTensioned) {
             const glow = Math.max(n1.tension, n2.tension, stretch * 2);
             ctx.strokeStyle = isDark
-                ? `rgba(255, 255, 255, ${Math.min(1, 0.32 + glow * 0.68)})`
-                : `rgba(0, 0, 0, ${Math.min(1, 0.32 + glow * 0.68)})`;
-            ctx.lineWidth = 0.9 + glow * 1.5;
+                ? `rgba(255, 255, 255, ${Math.min(1, 0.25 + glow * 0.75)})`
+                : `rgba(0, 0, 0, ${Math.min(1, 0.25 + glow * 0.75)})`;
+            ctx.lineWidth = 0.8 + glow * 1.4;
         } else {
-            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.18 : 0.12})`;
-            ctx.lineWidth = 0.75;
+            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.08 : 0.05})`;
+            ctx.lineWidth = 0.65;
         }
 
         ctx.beginPath();
@@ -127,7 +127,7 @@ export function KineticMatrix({
                     baseY: y,
                     col: c,
                     row: r,
-                    radius: 1.8,
+                    radius: 1.4,
                     label: `0x${((c * 17 + r * 31) % 256).toString(16).padStart(2, '0').toUpperCase()}`,
                     tension: 0,
                     pulsePhase: Math.random() * Math.PI * 2,
@@ -161,7 +161,6 @@ export function KineticMatrix({
             buildLattice(w, h);
         };
 
-        // Immediate initial check
         const initialRect = container.getBoundingClientRect();
         if (initialRect.width > 0 && initialRect.height > 0) {
             syncSize(initialRect.width, initialRect.height);
@@ -217,9 +216,9 @@ export function KineticMatrix({
                 shockwavesRef.current.push({
                     x,
                     y,
-                    radius: 12,
+                    radius: 8,
                     maxRadius: Math.max(rect.width, rect.height) * 0.7,
-                    power: 1.6,
+                    power: 1.2,
                 });
             }
         };
@@ -239,24 +238,7 @@ export function KineticMatrix({
         };
     }, []);
 
-    // Initial shockwave ripple on mount
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            const { width, height } = dimensionsRef.current;
-            if (width > 0 && height > 0) {
-                shockwavesRef.current.push({
-                    x: width / 2,
-                    y: height / 2,
-                    radius: 10,
-                    maxRadius: Math.max(width, height) * 0.7,
-                    power: 1.4,
-                });
-            }
-        }, 350);
-        return () => clearTimeout(timer);
-    }, []);
-
-    // Main High-Performance Simulation & Rendering Loop
+    // Main Simulation & Rendering Loop
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -300,27 +282,26 @@ export function KineticMatrix({
             // 1. Propagate Shockwaves
             for (let s = shockwaves.length - 1; s >= 0; s--) {
                 const sw = shockwaves[s];
-                sw.radius += 450 * dt;
-                sw.power *= Math.pow(0.14, dt);
+                sw.radius += 400 * dt;
+                sw.power *= Math.pow(0.12, dt);
                 if (sw.radius > sw.maxRadius || sw.power < 0.01) {
                     shockwaves.splice(s, 1);
                 }
             }
 
-            // 2. Physics Step (Hooke's Spring-Mass Lattice with Ambient Kinetic Wave)
+            // 2. Physics Step (Hooke's Spring-Mass Lattice with Gentle Breathing Wave)
             const SPRING_K = 26;
-            const DAMPING = 0.86;
+            const DAMPING = 0.85;
 
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
-                n.pulsePhase += dt * 2.8;
+                n.pulsePhase += dt * 3.2;
 
-                // Ambient kinetic wave motion across the mesh surface
-                const ambientWave = Math.sin(now * 0.0016 + n.col * 0.38 + n.pulsePhase * 0.4) * 6
-                                  + Math.cos(now * 0.0012 + n.row * 0.35) * 5;
-                const waveX = Math.cos(now * 0.0010 + n.row * 0.28) * 3;
+                // Subtle, gentle breathing wave (1.5px amplitude)
+                const ambientWave = Math.sin(now * 0.0012 + n.col * 0.3 + n.pulsePhase * 0.2) * 1.6
+                                  + Math.cos(now * 0.0009 + n.row * 0.25) * 1.2;
 
-                const targetBaseX = n.baseX + waveX;
+                const targetBaseX = n.baseX;
                 const targetBaseY = n.baseY + ambientWave;
 
                 const dx = pointer.x - n.x;
@@ -344,8 +325,8 @@ export function KineticMatrix({
                     const swDist = Math.sqrt(swDx * swDx + swDy * swDy);
                     const delta = Math.abs(swDist - sw.radius);
 
-                    if (delta < 60) {
-                        const force = (1 - delta / 60) * sw.power * 3000;
+                    if (delta < 55) {
+                        const force = (1 - delta / 55) * sw.power * 2800;
                         const angle = Math.atan2(swDy, swDx);
                         n.vx += Math.cos(angle) * force * dt;
                         n.vy += Math.sin(angle) * force * dt;
@@ -363,11 +344,11 @@ export function KineticMatrix({
                 n.x += n.vx * dt * 60;
                 n.y += n.vy * dt * 60;
 
-                n.tension = Math.max(0, n.tension - dt * 0.85);
+                n.tension = Math.max(0, n.tension - dt * 0.9);
             }
 
-            // 3. Spawn Random Synaptic Traveling Pulses
-            if (Math.random() < 0.45 && nodes.length > 0 && pulses.length < 50) {
+            // 3. Spawn Random Synaptic Traveling Pulses (Subtle frequency)
+            if (Math.random() < 0.3 && nodes.length > 0 && pulses.length < 40) {
                 const fromIdx = Math.floor(Math.random() * nodes.length);
                 const fromNode = nodes[fromIdx];
                 const possibleDirections = [
@@ -387,7 +368,7 @@ export function KineticMatrix({
                             fromNode: fromIdx,
                             toNode: toIdx,
                             progress: 0,
-                            speed: 1.8 + Math.random() * 2.4,
+                            speed: 1.6 + Math.random() * 2.2,
                         });
                     }
                 }
@@ -414,7 +395,7 @@ export function KineticMatrix({
                 }
             }
 
-            // 5. Render Synaptic Data Pulses (Vibrant Glowing Crimson & White)
+            // 5. Render Synaptic Data Pulses (Subtle white packets from previous iteration)
             for (let p = pulses.length - 1; p >= 0; p--) {
                 const pulse = pulses[p];
                 pulse.progress += dt * pulse.speed;
@@ -423,7 +404,7 @@ export function KineticMatrix({
                 const n2 = nodes[pulse.toNode];
 
                 if (!n1 || !n2 || pulse.progress >= 1) {
-                    if (n2) n2.tension = Math.min(1, n2.tension + 0.4);
+                    if (n2) n2.tension = Math.min(1, n2.tension + 0.35);
                     pulses.splice(p, 1);
                     continue;
                 }
@@ -431,20 +412,13 @@ export function KineticMatrix({
                 const px = n1.x + (n2.x - n1.x) * pulse.progress;
                 const py = n1.y + (n2.y - n1.y) * pulse.progress;
 
-                // Crimson pulse aura
-                ctx.fillStyle = isDark ? '#FF4A4A' : '#DE2020';
+                ctx.fillStyle = isDark ? '#ffffff' : '#000000';
                 ctx.beginPath();
-                ctx.arc(px, py, 2.5, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Core white node
-                ctx.fillStyle = '#ffffff';
-                ctx.beginPath();
-                ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+                ctx.arc(px, py, 2.0, 0, Math.PI * 2);
                 ctx.fill();
             }
 
-            // 6. Render Nodes & HUD Elements
+            // 6. Render Nodes & HUD Elements (Exact delicate intensity from previous iteration)
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
                 const dx = pointer.x - n.x;
@@ -453,27 +427,27 @@ export function KineticMatrix({
                 const isNear = dist < pointer.radius;
 
                 const currentRadius = isNear
-                    ? n.radius * 2.3 + n.tension * 1.5
-                    : n.radius + Math.sin(n.pulsePhase) * 0.35;
+                    ? n.radius * 2.2 + n.tension * 1.5
+                    : n.radius + Math.sin(n.pulsePhase) * 0.25;
 
-                if (isNear || n.tension > 0.08) {
-                    ctx.fillStyle = `rgba(${accentGlow}, ${Math.min(1, 0.28 + n.tension * 0.72)})`;
+                if (isNear || n.tension > 0.1) {
+                    ctx.fillStyle = `rgba(${accentGlow}, ${Math.min(1, 0.25 + n.tension * 0.65)})`;
                     ctx.beginPath();
                     ctx.arc(n.x, n.y, currentRadius * 2.2, 0, Math.PI * 2);
                     ctx.fill();
                 }
 
-                ctx.fillStyle = isNear || n.tension > 0.08
+                ctx.fillStyle = isNear || n.tension > 0.1
                     ? (isDark ? '#ffffff' : '#000000')
-                    : `rgba(${nodeColor}, ${isDark ? 0.38 : 0.28})`;
+                    : `rgba(${nodeColor}, ${isDark ? 0.28 : 0.2})`;
 
                 ctx.beginPath();
-                ctx.arc(n.x, n.y, Math.max(0.9, currentRadius), 0, Math.PI * 2);
+                ctx.arc(n.x, n.y, Math.max(0.8, currentRadius), 0, Math.PI * 2);
                 ctx.fill();
 
-                if (dist < 95) {
+                if (dist < 90) {
                     const radarRing = ((n.pulsePhase * 20) % 32) + 4;
-                    const ringAlpha = (1 - radarRing / 36) * 0.4;
+                    const ringAlpha = (1 - radarRing / 36) * 0.35;
 
                     ctx.strokeStyle = `rgba(${accentGlow}, ${ringAlpha})`;
                     ctx.lineWidth = 1;
@@ -517,7 +491,7 @@ export function KineticMatrix({
             y,
             radius: 8,
             maxRadius: 420,
-            power: 1.4,
+            power: 1.2,
         });
     };
 
@@ -555,7 +529,7 @@ export function KineticMatrix({
             )}
         >
             {/* Absolute Edge-to-Edge Canvas Viewport */}
-            <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full cursor-crosshair" />
+            <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full pointer-events-none" />
 
             {/* Content Deck Wrapper with Safe Padding */}
             <div className="relative z-20 flex h-full w-full flex-col justify-between p-6 md:p-10 pointer-events-none">
