@@ -240,6 +240,68 @@ export default function ContentsSection() {
     setTimeout(() => setIsDragging(false), 80)
   }
 
+  // Laptop Trackpad: 2-finger horizontal swipe gesture listener
+  const stackContainerRef = useRef(null)
+  const wheelAccumulatorRef = useRef(0)
+  const wheelCooldownRef = useRef(false)
+  const wheelTimerRef = useRef(null)
+
+  useEffect(() => {
+    const container = stackContainerRef.current
+    if (!container) return
+
+    const handleWheel = (e) => {
+      // Only handle horizontal trackpad gestures in 'stack' layout mode when no modals are open
+      if (layoutMode !== 'stack' || activeProject || activeImageZoom) return
+
+      const absX = Math.abs(e.deltaX)
+      const absY = Math.abs(e.deltaY)
+
+      // Detect predominant horizontal swipe gesture on trackpad (leaving vertical scroll completely natural)
+      if (absX > absY && absX > 4) {
+        // Prevent default browser back/forward history navigation gesture on laptops
+        e.preventDefault()
+
+        // If currently in gesture cooldown after a card flip, ignore residual trackpad inertia
+        if (wheelCooldownRef.current) return
+
+        wheelAccumulatorRef.current += e.deltaX
+
+        // Reset accumulator if the user pauses gesture
+        if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current)
+        wheelTimerRef.current = setTimeout(() => {
+          wheelAccumulatorRef.current = 0
+        }, 160)
+
+        const TRACKPAD_SWIPE_THRESHOLD = 28 // Responsive threshold for two-finger swipe
+
+        if (wheelAccumulatorRef.current > TRACKPAD_SWIPE_THRESHOLD) {
+          // Swiped left on trackpad -> Next project file
+          handleNext()
+          wheelCooldownRef.current = true
+          wheelAccumulatorRef.current = 0
+          setTimeout(() => {
+            wheelCooldownRef.current = false
+          }, 360)
+        } else if (wheelAccumulatorRef.current < -TRACKPAD_SWIPE_THRESHOLD) {
+          // Swiped right on trackpad -> Previous project file
+          handlePrev()
+          wheelCooldownRef.current = true
+          wheelAccumulatorRef.current = 0
+          setTimeout(() => {
+            wheelCooldownRef.current = false
+          }, 360)
+        }
+      }
+    }
+
+    container.addEventListener('wheel', handleWheel, { passive: false })
+    return () => {
+      container.removeEventListener('wheel', handleWheel)
+      if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current)
+    }
+  }, [layoutMode, activeProject, activeImageZoom])
+
   // Bi-directional viewport tracker: resets handwriting animation whenever scrolled past or scrolled above
   const [isHandwritingInView, setIsHandwritingInView] = useState(false)
   const [handwritingKey, setHandwritingKey] = useState(0)
@@ -501,7 +563,7 @@ export default function ContentsSection() {
         </section>
 
         {/* Main Interactive Morphing Manila Folder Showcase Container */}
-        <div className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-8 pb-20 sm:pb-28">
+        <div ref={stackContainerRef} className="relative z-10 max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-8 pb-20 sm:pb-28">
           {/* ========================================================================= */}
           {/* MORPHING CONTROLS: LAYOUT TOGGLE (STACK / GRID / LIST) */}
           {/* ========================================================================= */}
@@ -560,7 +622,7 @@ export default function ContentsSection() {
             {layoutMode === 'stack' && (
               <div className="flex items-center gap-2 text-xs font-poppins-light text-neutral-600 bg-white/70 px-3.5 py-1.5 rounded-full border border-black/10 shadow-xs">
                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Drag file or click bookmarks to flip • Press ← →</span>
+                <span>Swipe on trackpad or drag file to flip • Press ← →</span>
               </div>
             )}
           </div>
@@ -1016,7 +1078,7 @@ export default function ContentsSection() {
                               <div className="w-full pt-3 sm:pt-4 border-t border-black/15 z-10 flex flex-wrap items-center justify-between text-[11px] sm:text-xs font-poppins-light text-neutral-900 tracking-wider uppercase gap-2">
                                 <span className="truncate max-w-[260px] xs:max-w-[300px] sm:max-w-none">{card.bulletSummary}</span>
                                 <span className="font-semibold text-neutral-800 hidden sm:inline">
-                                  Swipe or drag file horizontally to flip • Press ← →
+                                  Swipe on trackpad or drag file to flip • Press ← →
                                 </span>
                                 <span className="font-semibold text-neutral-800 sm:hidden">
                                   Swipe file to flip
