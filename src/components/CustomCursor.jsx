@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
-import arrowCursorImg from '../assets/cursor/pink_purple_floral_arrow.png'
-import pointerCursorImg from '../assets/cursor/pink_purple_floral_pointer.png'
+import React, { useEffect, useState, useCallback } from 'react'
 
 /**
  * CustomCursor
  * 
- * 1. Cursor Visual: Authentic "Pink and Purple Floral Pattern Cursor" from the user's reference image:
- *    - Default state: Floral Arrow Cursor with hot pink / deep purple split and ornamental damask floral vine flourish
- *    - Hover state: Floral Hand Pointer with pointing index finger for interactive elements
- *    - High performance: Instantaneous 144Hz direct RAF translate3d updates
+ * 1. Cursor Visual:
+ *    The authentic "Pink and Purple Floral Pattern Cursor" is embedded directly in CSS (src/index.css)
+ *    using hardware-accelerated base64 data URIs for 0ms latency, zero glitching, and 100% reliability:
+ *    - Default: Floral Arrow Cursor with hot pink and deep purple split and damask floral flourish
+ *    - Hover: Floral Hand Pointer with pointing index finger for interactive elements
  * 
- * 2. Click Animation: Exact replica of the "wavy" burst click effect from https://jackiezhang.co.za/:
+ * 2. Click Animation:
+ *    Exact replica of the Framer "wavy" burst click effect from https://jackiezhang.co.za/:
  *    - 8 radiating squiggly wavy bezier paths (M ... Q ... T ...)
- *    - 0.7s duration with outward travel, strokeDashoffset expansion, strokeWidth taper, and subtle burst rotation
+ *    - 0.7s duration with outward travel, strokeDashoffset expansion, strokeWidth taper, and subtle rotation
  *    - Dual-tone gradient stroke in matching vibrant pink (#ff2a85) and royal purple (#9333ea)
  */
 
@@ -40,9 +40,6 @@ const WAVY_PATHS = WAVY_ANGLES.map((deg) => {
 })
 
 export default function CustomCursor() {
-  const cursorRef = useRef(null)
-  const arrowImgRef = useRef(null)
-  const pointerImgRef = useRef(null)
   const [bursts, setBursts] = useState([])
 
   const removeBurst = useCallback((id) => {
@@ -51,181 +48,40 @@ export default function CustomCursor() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const isFinePointer = window.matchMedia('(pointer: fine)').matches
-    if (!isFinePointer) return
 
-    const cursor = cursorRef.current
-    const arrowImg = arrowImgRef.current
-    const pointerImg = pointerImgRef.current
-    if (!cursor) return
-
-    let mouseX = -200
-    let mouseY = -200
-    let isHovered = false
-    let isMouseDown = false
-    let isVisible = false
-    let animId = null
-
-    // Mark active on first mouse movement
-    const enableCustomCursor = () => {
-      if (!document.body.classList.contains('custom-cursor-enabled')) {
-        document.body.classList.add('custom-cursor-enabled')
-      }
-    }
-
-    const handleMouseMove = (e) => {
-      mouseX = e.clientX
-      mouseY = e.clientY
-
-      if (!isVisible) {
-        isVisible = true
-        cursor.style.opacity = '1'
-        enableCustomCursor()
-      }
-
-      // Detect interactive clickable elements
-      const target = e.target
-      const interactive = Boolean(
-        target &&
-        (target.closest('a') ||
-         target.closest('button') ||
-         target.closest('[role="button"]') ||
-         target.closest('.cursor-pointer') ||
-         target.closest('input') ||
-         target.closest('textarea') ||
-         target.closest('select') ||
-         target.closest('label') ||
-         target.closest('summary') ||
-         target.closest('[data-clickable]') ||
-         target.closest('.group') ||
-         target.closest('.rcard') ||
-         target.closest('.comic-overlay-bubble'))
-      )
-
-      if (interactive !== isHovered) {
-        isHovered = interactive
-        if (arrowImg && pointerImg) {
-          if (isHovered) {
-            arrowImg.style.opacity = '0'
-            pointerImg.style.opacity = '1'
-            cursor.dataset.type = 'pointer'
-          } else {
-            arrowImg.style.opacity = '1'
-            pointerImg.style.opacity = '0'
-            cursor.dataset.type = 'arrow'
-          }
-        }
-      }
-    }
-
-    const handleMouseDown = (e) => {
-      isMouseDown = true
-
-      // Spawn Jackie Zhang wavy click burst at exact click position
+    // Spawn Jackie Zhang wavy click burst at exact click position
+    const handlePointerDown = (e) => {
+      // Don't trigger on touch drag if unintended, but fine pointers and clicks trigger cleanly
       const newBurst = {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         x: e.clientX,
         y: e.clientY,
       }
-      setBursts((prev) => [...prev.slice(-12), newBurst])
+      setBursts((prev) => [...prev.slice(-15), newBurst])
     }
 
-    const handleMouseUp = () => {
-      isMouseDown = false
-    }
-
-    const handleMouseLeave = () => {
-      isVisible = false
-      cursor.style.opacity = '0'
-    }
-
-    const handleMouseEnter = () => {
-      isVisible = true
-      cursor.style.opacity = '1'
-      enableCustomCursor()
-    }
-
-    // High performance RAF loop
-    const render = () => {
-      if (isVisible) {
-        // Arrow tip hotspot is at (-2px, -1px)
-        // Hand pointer index fingertip hotspot is at (-11px, -1px)
-        const offsetX = cursor.dataset.type === 'pointer' ? 11 : 2
-        const offsetY = 1
-        const scale = isMouseDown ? 'scale(0.88)' : 'scale(1)'
-        cursor.style.transform = `translate3d(${mouseX - offsetX}px, ${mouseY - offsetY}px, 0) ${scale}`
-      }
-      animId = window.requestAnimationFrame(render)
-    }
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: true })
-    window.addEventListener('mousedown', handleMouseDown, { passive: true })
-    window.addEventListener('mouseup', handleMouseUp, { passive: true })
-    document.addEventListener('mouseleave', handleMouseLeave, { passive: true })
-    document.addEventListener('mouseenter', handleMouseEnter, { passive: true })
-
-    animId = window.requestAnimationFrame(render)
+    window.addEventListener('pointerdown', handlePointerDown, { passive: true })
 
     return () => {
-      document.body.classList.remove('custom-cursor-enabled')
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mousedown', handleMouseDown)
-      window.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('mouseleave', handleMouseLeave)
-      document.removeEventListener('mouseenter', handleMouseEnter)
-      if (animId) window.cancelAnimationFrame(animId)
+      window.removeEventListener('pointerdown', handlePointerDown)
     }
   }, [])
 
   return (
-    <>
-      {/* 1. Main Custom Cursor (Pink & Purple Floral Pattern) */}
-      <div
-        ref={cursorRef}
-        data-type="arrow"
-        aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 z-[9999999] opacity-0 will-change-transform select-none"
-        style={{
-          transition: 'opacity 0.15s ease',
-        }}
-      >
-        {/* Floral Arrow Cursor */}
-        <img
-          ref={arrowImgRef}
-          src={arrowCursorImg}
-          alt=""
-          className="absolute top-0 left-0 w-[36px] h-[39.6px] object-contain drop-shadow-[0_2px_10px_rgba(147,51,234,0.45)] transition-opacity duration-120"
-          style={{ opacity: 1 }}
-          draggable="false"
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[9999999] overflow-hidden select-none"
+    >
+      {bursts.map((burst) => (
+        <WavyClickBurst
+          key={burst.id}
+          id={burst.id}
+          x={burst.x}
+          y={burst.y}
+          onComplete={removeBurst}
         />
-
-        {/* Floral Pointer Hand Cursor */}
-        <img
-          ref={pointerImgRef}
-          src={pointerCursorImg}
-          alt=""
-          className="absolute top-0 left-0 w-[33px] h-[44.1px] object-contain drop-shadow-[0_2px_10px_rgba(255,42,133,0.45)] transition-opacity duration-120"
-          style={{ opacity: 0 }}
-          draggable="false"
-        />
-      </div>
-
-      {/* 2. Jackie Zhang Wavy Burst Clicking Effect */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-[9999990] overflow-hidden select-none"
-      >
-        {bursts.map((burst) => (
-          <WavyClickBurst
-            key={burst.id}
-            id={burst.id}
-            x={burst.x}
-            y={burst.y}
-            onComplete={removeBurst}
-          />
-        ))}
-      </div>
-    </>
+      ))}
+    </div>
   )
 }
 
@@ -242,20 +98,20 @@ function WavyClickBurst({ id, x, y, onComplete }) {
 
   return (
     <div
+      className="animate-wavy-burst"
       style={{
         position: 'absolute',
         left: x,
         top: y,
         width: `${EFFECT_SIZE}px`,
         height: `${EFFECT_SIZE}px`,
-        transform: 'translate(-50%, -50%)',
         pointerEvents: 'none',
         overflow: 'visible',
       }}
     >
       <svg
         viewBox={`0 0 ${EFFECT_SIZE} ${EFFECT_SIZE}`}
-        className="w-full h-full overflow-visible animate-wavy-burst"
+        className="w-full h-full overflow-visible"
         style={{
           transformOrigin: 'center center',
         }}

@@ -427,44 +427,6 @@
   animation-play-state: paused;
 }
 
-/* ================= Custom Cyberpunk Cursor Styles ================= */
-@media (pointer: fine) {
-  body, a, button, [role="button"], .cursor-pointer, input, textarea, select {
-    cursor: none !important;
-  }
-}
-
-.cursor-ring--hover {
-  width: 52px !important;
-  height: 52px !important;
-  margin-left: -26px !important;
-  margin-top: -26px !important;
-  border-color: #ba1f1f !important;
-  background-color: rgba(186, 31, 31, 0.18) !important;
-  box-shadow: 0 0 24px rgba(186, 31, 31, 0.5), inset 0 0 10px rgba(186, 31, 31, 0.2) !important;
-  backdrop-filter: blur(1.5px) !important;
-  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              height 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              margin 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease,
-              background-color 0.2s ease,
-              box-shadow 0.2s ease !important;
-}
-
-.cursor-ring--click {
-  transform: scale(0.75) !important;
-}
-
-.cursor-dot--hover {
-  transform: scale(0.7) !important;
-  background-color: #ffffff !important;
-  box-shadow: 0 0 12px #ffffff, 0 0 24px #ba1f1f !important;
-}
-
-.cursor-dot--click {
-  transform: scale(1.3) !important;
-}
-
 /* ================= 3D Screen Deck & Cinematic Scroll Utilities ================= */
 .deck-viewport {
   perspective: 1400px;
@@ -806,54 +768,58 @@
   background-size: 28px 28px;
   background-position: center top;
 }
+
 /* ================= PINK & PURPLE FLORAL CURSOR & WAVY CLICK ANIMATION ================= */
-@media (pointer: fine) {
-  html, body {
-    cursor: url('/assets/cursor/arrow_32.png') 2 1, auto;
-  }
-  a, button, [role="button"], input, textarea, select, label, summary, .cursor-pointer {
-    cursor: url('/assets/cursor/pointer_32.png') 11 1, pointer;
-  }
-  body.custom-cursor-enabled,
-  body.custom-cursor-enabled * {
-    cursor: none !important;
-  }
+/* ================= PINK & PURPLE FLORAL CURSOR & WAVY CLICK ANIMATION ================= */
+:root {
+  --cursor-arrow: url("data:image/png;base64,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") 1 1, url("/assets/cursor/arrow_32.png") 1 1, default;
+  --cursor-pointer: url("data:image/png;base64,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") 12 1, url("/assets/cursor/pointer_32.png") 12 1, pointer;
+}
+
+/* Universal application - custom cursor is guaranteed active and visible everywhere */
+*, *::before, *::after {
+  cursor: var(--cursor-arrow);
+}
+
+/* Interactive elements get the Pointer Hand Cursor */
+a, button, [role="button"], input, textarea, select, label, summary, .cursor-pointer, [data-clickable], .rcard, .rcard *, [tabindex]:not([tabindex="-1"]) {
+  cursor: var(--cursor-pointer) !important;
 }
 
 @keyframes wavyBurstScale {
- 0% {
- transform: scale(0.65) rotate(0deg);
- }
- 100% {
- transform: scale(1.3) rotate(10deg);
- }
+  0% {
+    transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.35) rotate(12deg);
+  }
 }
 
 @keyframes wavyStrokeMotion {
- 0% {
- stroke-dasharray: 2 70;
- stroke-dashoffset: 0;
- stroke-width: 3.5px;
- opacity: 1;
- }
- 50% {
- stroke-dasharray: 40 70;
- stroke-dashoffset: -15;
- stroke-width: 2.8px;
- opacity: 0.95;
- }
- 100% {
- stroke-dasharray: 40 70;
- stroke-dashoffset: -45;
- stroke-width: 0px;
- opacity: 0;
- }
+  0% {
+    stroke-dasharray: 2 70;
+    stroke-dashoffset: 0;
+    stroke-width: 3.5px;
+    opacity: 1;
+  }
+  50% {
+    stroke-dasharray: 40 70;
+    stroke-dashoffset: -15;
+    stroke-width: 2.8px;
+    opacity: 0.95;
+  }
+  100% {
+    stroke-dasharray: 40 70;
+    stroke-dashoffset: -45;
+    stroke-width: 0px;
+    opacity: 0;
+  }
 }
 
 .animate-wavy-burst {
- animation: wavyBurstScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: wavyBurstScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-wavy-stroke {
- animation: wavyStrokeMotion 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: wavyStrokeMotion 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
