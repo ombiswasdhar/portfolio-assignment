@@ -81,12 +81,12 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* portfolio - Handwritten cursive script */}
+        {/* brain - Handwritten cursive script */}
         <div
           className="absolute left-1/2 top-3 sm:top-4 md:top-[3%] -translate-x-1/2 z-20 flex items-center pointer-events-none"
         >
           <span className="font-script text-2xl sm:text-3xl md:text-[34px] font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-center">
-            portfolio
+            brain
           </span>
         </div>
 
