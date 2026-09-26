@@ -5,10 +5,10 @@ import pointerCursorImg from '../assets/cursor/pink_purple_floral_pointer.png'
 /**
  * CustomCursor
  * 
- * 1. Cursor Visual: Authentic "Pink and Purple Floral Pattern Cursor" matching the user's design:
- *    - Default state: Floral Arrow Cursor with hot pink / deep purple dual-tone and ornate damask flourish
+ * 1. Cursor Visual: Authentic "Pink and Purple Floral Pattern Cursor" from the user's reference image:
+ *    - Default state: Floral Arrow Cursor with hot pink / deep purple split and ornamental damask floral vine flourish
  *    - Hover state: Floral Hand Pointer with pointing index finger for interactive elements
- *    - High performance: 144Hz direct RAF translate3d updates with zero re-render overhead during movement
+ *    - High performance: Instantaneous 144Hz direct RAF translate3d updates
  * 
  * 2. Click Animation: Exact replica of the "wavy" burst click effect from https://jackiezhang.co.za/:
  *    - 8 radiating squiggly wavy bezier paths (M ... Q ... T ...)
@@ -18,11 +18,11 @@ import pointerCursorImg from '../assets/cursor/pink_purple_floral_pointer.png'
 
 // 8 radiating directions matching Jackie Zhang's wavy starburst (every 45 degrees)
 const WAVY_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
-const EFFECT_SIZE = 85 // o
-const HALF_SIZE = EFFECT_SIZE / 2 // r = 42.5, a = 42.5
-const INNER_OFFSET = EFFECT_SIZE * 0.1 // s = 8.5
-const OUTER_OFFSET = EFFECT_SIZE * 0.52 // c = 44.2
-const WAVE_AMPLITUDE = EFFECT_SIZE * 0.06 // g = 5.1
+const EFFECT_SIZE = 85
+const HALF_SIZE = EFFECT_SIZE / 2
+const INNER_OFFSET = EFFECT_SIZE * 0.1
+const OUTER_OFFSET = EFFECT_SIZE * 0.52
+const WAVE_AMPLITUDE = EFFECT_SIZE * 0.06
 
 // Pre-compute 8 wavy paths matching M ${u} ${d} Q ${qx} ${qy} ${m} ${h} T ${f} ${p}
 const WAVY_PATHS = WAVY_ANGLES.map((deg) => {
@@ -54,8 +54,6 @@ export default function CustomCursor() {
     const isFinePointer = window.matchMedia('(pointer: fine)').matches
     if (!isFinePointer) return
 
-    document.body.classList.add('custom-cursor-enabled')
-
     const cursor = cursorRef.current
     const arrowImg = arrowImgRef.current
     const pointerImg = pointerImgRef.current
@@ -68,6 +66,13 @@ export default function CustomCursor() {
     let isVisible = false
     let animId = null
 
+    // Mark active on first mouse movement
+    const enableCustomCursor = () => {
+      if (!document.body.classList.contains('custom-cursor-enabled')) {
+        document.body.classList.add('custom-cursor-enabled')
+      }
+    }
+
     const handleMouseMove = (e) => {
       mouseX = e.clientX
       mouseY = e.clientY
@@ -75,6 +80,7 @@ export default function CustomCursor() {
       if (!isVisible) {
         isVisible = true
         cursor.style.opacity = '1'
+        enableCustomCursor()
       }
 
       // Detect interactive clickable elements
@@ -102,12 +108,10 @@ export default function CustomCursor() {
           if (isHovered) {
             arrowImg.style.opacity = '0'
             pointerImg.style.opacity = '1'
-            // Hand pointer index fingertip hotspot is at (-11px, -1px)
             cursor.dataset.type = 'pointer'
           } else {
             arrowImg.style.opacity = '1'
             pointerImg.style.opacity = '0'
-            // Arrow tip hotspot is at (-2px, -1px)
             cursor.dataset.type = 'arrow'
           }
         }
@@ -116,9 +120,6 @@ export default function CustomCursor() {
 
     const handleMouseDown = (e) => {
       isMouseDown = true
-      if (cursor) {
-        cursor.style.transform = `translate3d(${cursor.dataset.type === 'pointer' ? mouseX - 11 : mouseX - 2}px, ${mouseY - 1}px, 0) scale(0.88)`
-      }
 
       // Spawn Jackie Zhang wavy click burst at exact click position
       const newBurst = {
@@ -131,9 +132,6 @@ export default function CustomCursor() {
 
     const handleMouseUp = () => {
       isMouseDown = false
-      if (cursor) {
-        cursor.style.transform = `translate3d(${cursor.dataset.type === 'pointer' ? mouseX - 11 : mouseX - 2}px, ${mouseY - 1}px, 0) scale(1)`
-      }
     }
 
     const handleMouseLeave = () => {
@@ -144,11 +142,14 @@ export default function CustomCursor() {
     const handleMouseEnter = () => {
       isVisible = true
       cursor.style.opacity = '1'
+      enableCustomCursor()
     }
 
     // High performance RAF loop
     const render = () => {
       if (isVisible) {
+        // Arrow tip hotspot is at (-2px, -1px)
+        // Hand pointer index fingertip hotspot is at (-11px, -1px)
         const offsetX = cursor.dataset.type === 'pointer' ? 11 : 2
         const offsetY = 1
         const scale = isMouseDown ? 'scale(0.88)' : 'scale(1)'
@@ -183,9 +184,9 @@ export default function CustomCursor() {
         ref={cursorRef}
         data-type="arrow"
         aria-hidden="true"
-        className="hidden md:block pointer-events-none fixed top-0 left-0 z-[999999] opacity-0 will-change-transform select-none"
+        className="pointer-events-none fixed top-0 left-0 z-[9999999] opacity-0 will-change-transform select-none"
         style={{
-          transition: 'transform 0.06s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.15s ease',
+          transition: 'opacity 0.15s ease',
         }}
       >
         {/* Floral Arrow Cursor */}
@@ -193,7 +194,7 @@ export default function CustomCursor() {
           ref={arrowImgRef}
           src={arrowCursorImg}
           alt=""
-          className="absolute top-0 left-0 w-[34px] h-[37.4px] object-contain drop-shadow-[0_2px_8px_rgba(147,51,234,0.35)] transition-opacity duration-150"
+          className="absolute top-0 left-0 w-[36px] h-[39.6px] object-contain drop-shadow-[0_2px_10px_rgba(147,51,234,0.45)] transition-opacity duration-120"
           style={{ opacity: 1 }}
           draggable="false"
         />
@@ -203,7 +204,7 @@ export default function CustomCursor() {
           ref={pointerImgRef}
           src={pointerCursorImg}
           alt=""
-          className="absolute top-0 left-0 w-[32px] h-[42.8px] object-contain drop-shadow-[0_2px_8px_rgba(255,42,133,0.38)] transition-opacity duration-150"
+          className="absolute top-0 left-0 w-[33px] h-[44.1px] object-contain drop-shadow-[0_2px_10px_rgba(255,42,133,0.45)] transition-opacity duration-120"
           style={{ opacity: 0 }}
           draggable="false"
         />
@@ -212,7 +213,7 @@ export default function CustomCursor() {
       {/* 2. Jackie Zhang Wavy Burst Clicking Effect */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-[999990] overflow-hidden select-none"
+        className="pointer-events-none fixed inset-0 z-[9999990] overflow-hidden select-none"
       >
         {bursts.map((burst) => (
           <WavyClickBurst
