@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import KineticMatrix from '@/components/ui/kinetic-matrix'
 import frame41 from '../assets/hero/frame41.png'
 import halftone from '../assets/hero/halftone.png'
@@ -16,11 +15,13 @@ import HeroCD from './HeroCD'
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [isDocked, setIsDocked] = useState(false)
   const [isDesktop, setIsDesktop] = useState(
     typeof window !== 'undefined' ? window.innerWidth >= 768 : true
   )
+  const [arrowPos, setArrowPos] = useState({ x: 0, y: 0, rot: 0, ready: false })
   const heroRef = useRef(null)
+  const anchorRef = useRef(null)
+  const anchorDocPos = useRef(null)
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -29,40 +30,86 @@ export default function Hero() {
     })
   }
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 768)
+  const updateAnchorDocPos = () => {
+    if (anchorRef.current) {
+      const rect = anchorRef.current.getBoundingClientRect()
+      anchorDocPos.current = {
+        left: rect.left + window.scrollX,
+        top: rect.top + window.scrollY,
+        width: rect.width || (isDesktop ? 48 : 28),
+        height: rect.height || (isDesktop ? 48 : 28),
+      }
     }
+  }
+
+  const updateArrowPosition = () => {
+    if (!anchorDocPos.current) {
+      updateAnchorDocPos()
+    }
+    if (!anchorDocPos.current) return
+
+    const { left, top, width, height } = anchorDocPos.current
+    const currentScrollY = window.scrollY
+
+    const dockMargin = isDesktop ? 24 : 16
+    const dockX = window.innerWidth - dockMargin - width
+    const dockY = window.innerHeight - dockMargin - height
+
+    // Progress from 0 (top of page) to 1 (scrolled past 200px)
+    const rawProgress = Math.min(1, Math.max(0, currentScrollY / 200))
+    // Cubic smoothstep for extra silky ease-in and ease-out
+    const p = rawProgress * rawProgress * (3 - 2 * rawProgress)
+
+    // Smooth continuous interpolation between hero anchor and fixed corner dock
+    const x = left + (dockX - left) * p
+    const y = (top - currentScrollY) * (1 - p) + dockY * p
+    const rot = p * 45
+
+    setArrowPos({ x, y, rot, ready: true })
+  }
+
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      const desktop = window.innerWidth >= 768
+      setIsDesktop(desktop)
+      updateAnchorDocPos()
+      updateArrowPosition()
+    }
+
+    updateAnchorDocPos()
+    updateArrowPosition()
+
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [isDesktop])
 
   useEffect(() => {
     let ticking = false
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY
-          setScrollY(currentScrollY)
-          if (heroRef.current) {
-            const rect = heroRef.current.getBoundingClientRect()
-            // Smooth hysteresis: docks when scrolled past 140px, stays docked until smoothly returned above 80px
-            setIsDocked((prev) => {
-              if (prev) {
-                return currentScrollY > 80
-              }
-              return currentScrollY > 140 && rect.bottom <= window.innerHeight + 140
-            })
-          }
+          setScrollY(window.scrollY)
+          updateArrowPosition()
           ticking = false
         })
         ticking = true
       }
     }
+
+    // Double-check anchor after fonts / layout settles
+    const timer = setTimeout(() => {
+      updateAnchorDocPos()
+      updateArrowPosition()
+    }, 120)
+
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [isDesktop])
 
   const handleMouseMove = (e) => {
     const { innerWidth, innerHeight } = window
@@ -82,7 +129,6 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
-      <LayoutGroup id="hero-magnetic-arrow">
       {/* Background: NedDev Kinetic Matrix */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
         <KineticMatrix
@@ -290,33 +336,13 @@ export default function Hero() {
             />
           </div>
 
-          {/* Right: Arrow Monogram Logo */}
-          <div className="flex items-center justify-end pointer-events-auto">
-            {isDesktop && !isDocked ? (
-              <motion.button
-                layoutId="magnetic-hero-arrow"
-                onClick={scrollToTop}
-                title="Scroll to top"
-                aria-label="Scroll to top"
-                whileHover={{ scale: 1.15, rotate: 45 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 160,
-                  damping: 24,
-                  mass: 0.85,
-                }}
-                className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center will-change-transform"
-              >
-                <img
-                  src={arrowLogo}
-                  alt="Arrow monogram"
-                  className="h-10 lg:h-12 w-auto object-contain pointer-events-none"
-                />
-              </motion.button>
-            ) : (
-              <div className="h-10 lg:h-12 w-10 lg:w-12 pointer-events-none" aria-hidden="true" />
-            )}
+          {/* Right: Arrow Monogram Logo Anchor */}
+          <div className="flex items-center justify-end pointer-events-none">
+            <div
+              ref={isDesktop ? anchorRef : null}
+              className="h-10 lg:h-12 w-10 lg:w-12 pointer-events-none"
+              aria-hidden="true"
+            />
           </div>
         </div>
 
@@ -340,33 +366,13 @@ export default function Hero() {
             />
           </div>
 
-          {/* Right: Arrow Monogram Logo */}
-          <div className="shrink-0 flex items-center justify-end pointer-events-auto">
-            {!isDesktop && !isDocked ? (
-              <motion.button
-                layoutId="magnetic-hero-arrow"
-                onClick={scrollToTop}
-                title="Scroll to top"
-                aria-label="Scroll to top"
-                whileHover={{ scale: 1.15, rotate: 45 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 160,
-                  damping: 24,
-                  mass: 0.85,
-                }}
-                className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center will-change-transform"
-              >
-                <img
-                  src={arrowLogo}
-                  alt="Arrow monogram"
-                  className="h-6 sm:h-7 w-auto object-contain pointer-events-none"
-                />
-              </motion.button>
-            ) : (
-              <div className="h-6 sm:h-7 w-6 sm:w-7 pointer-events-none" aria-hidden="true" />
-            )}
+          {/* Right: Arrow Monogram Logo Anchor */}
+          <div className="shrink-0 flex items-center justify-end pointer-events-none">
+            <div
+              ref={!isDesktop ? anchorRef : null}
+              className="h-6 sm:h-7 w-6 sm:w-7 pointer-events-none"
+              aria-hidden="true"
+            />
           </div>
         </div>
 
@@ -380,37 +386,32 @@ export default function Hero() {
         />
       </div>
 
-      {/* Docked Floating Back-to-Top Button: magnetically sticks to bottom-right of viewport and acts as a button */}
-      {isDocked && (
-        <motion.button
-          key="docked-scroll-btn"
-          layoutId="magnetic-hero-arrow"
-          onClick={scrollToTop}
-          title="Scroll to top"
-          aria-label="Scroll to top"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.94 }}
-          transition={{
-            type: 'spring',
-            stiffness: 160,
-            damping: 24,
-            mass: 0.85,
+      {/* Floating Back-to-Top Arrow: pure white arrow, smoothly turns up and fixes into place */}
+      <button
+        onClick={scrollToTop}
+        title="Scroll to top"
+        aria-label="Scroll to top"
+        className="fixed left-0 top-0 z-50 p-2 -m-2 bg-transparent border-0 cursor-pointer pointer-events-auto select-none flex items-center justify-center focus:outline-none"
+        style={{
+          transform: `translate3d(${arrowPos.x}px, ${arrowPos.y}px, 0)`,
+          willChange: 'transform',
+          opacity: arrowPos.ready ? 1 : 0,
+          transition: 'opacity 0.2s ease-out',
+        }}
+      >
+        <img
+          src={arrowLogo}
+          alt="Scroll to top"
+          style={{
+            transform: `rotate(${arrowPos.rot}deg)`,
+            transformOrigin: 'center center',
+            transition: 'transform 0.15s ease-out',
           }}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0a0a0e]/90 backdrop-blur-xl border border-white/25 shadow-[0_12px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(186,31,31,0.35)] hover:shadow-[0_14px_40px_rgba(186,31,31,0.65)] hover:border-[#BA1F1F] flex items-center justify-center group cursor-pointer pointer-events-auto select-none transition-colors duration-300 will-change-transform"
-        >
-          {/* Ambient subtle pulse glow */}
-          <span
-            className="absolute inset-0 rounded-full bg-[#BA1F1F]/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75"
-            aria-hidden="true"
-          />
-          <img
-            src={arrowLogo}
-            alt="Scroll to top"
-            className="relative z-10 h-6 sm:h-7 w-auto object-contain rotate-45 transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:brightness-125 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] pointer-events-none"
-          />
-        </motion.button>
-      )}
-    </LayoutGroup>
+          className={`${
+            isDesktop ? 'h-10 lg:h-12' : 'h-6 sm:h-7'
+          } w-auto object-contain filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)] hover:drop-shadow-[0_0_22px_rgba(186,31,31,1)] hover:brightness-125 transition-[filter,transform] duration-200 hover:scale-115 active:scale-95 pointer-events-none`}
+        />
+      </button>
   </section>
   )
 }
