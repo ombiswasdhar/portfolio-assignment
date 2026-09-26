@@ -4,6 +4,7 @@ import aboutLeftCardCanvas from '../assets/about/about_left_card_canvas.png'
 import AnimatedCollage from './AnimatedCollage'
 import AboutCharacters from './AboutCharacters'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import KineticMatrix from '@/components/ui/kinetic-matrix'
 
 export default function AboutSection() {
   const [activeMobileBubble, setActiveMobileBubble] = useState(null)
@@ -15,15 +16,26 @@ export default function AboutSection() {
       aria-label="About Me section"
       className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-0"
     >
+      {/* KineticMatrix — Interactive animated grid background (NedDev, own license) */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-auto overflow-hidden opacity-40"
+        aria-hidden="true"
+      >
+        <KineticMatrix
+          title=""
+          className="w-full h-full bg-transparent [&_header]:hidden [&_main]:hidden"
+        />
+      </div>
+
       {/* Decorative ambient background glow matching the hero banner */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-red-950/20 blur-[140px] rounded-full pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-red-950/20 blur-[140px] rounded-full pointer-events-none z-[1]"
         aria-hidden="true"
       />
 
       <div
         ref={cardRef}
-        className={`relative w-full max-w-[1440px] mx-auto px-2 sm:px-4 md:px-6 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+        className={`relative z-10 w-full max-w-[1440px] mx-auto px-2 sm:px-4 md:px-6 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
           isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
         }`}
       >
