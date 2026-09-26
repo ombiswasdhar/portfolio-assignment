@@ -1,34 +1,68 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
+import arrowCursorImg from '../assets/cursor/pink_purple_floral_arrow.png'
+import pointerCursorImg from '../assets/cursor/pink_purple_floral_pointer.png'
 
 /**
  * CustomCursor
  * 
- * High-performance, 144Hz smooth custom cursor with an authentic cyberpunk crimson aesthetic.
- * Features:
- * - Instantaneous central red dot
- * - Fluid interpolated (lerp) outer glowing magnetic ring
- * - Interactive morphing & scaling over clickable links, buttons, stickers, and cards
- * - Zero React re-renders during mouse movement (direct RAF ref transformation)
- * - Safely disabled on touch devices (@media pointer: fine)
+ * 1. Cursor Visual: Authentic "Pink and Purple Floral Pattern Cursor" matching the user's design:
+ *    - Default state: Floral Arrow Cursor with hot pink / deep purple dual-tone and ornate damask flourish
+ *    - Hover state: Floral Hand Pointer with pointing index finger for interactive elements
+ *    - High performance: 144Hz direct RAF translate3d updates with zero re-render overhead during movement
+ * 
+ * 2. Click Animation: Exact replica of the "wavy" burst click effect from https://jackiezhang.co.za/:
+ *    - 8 radiating squiggly wavy bezier paths (M ... Q ... T ...)
+ *    - 0.7s duration with outward travel, strokeDashoffset expansion, strokeWidth taper, and subtle burst rotation
+ *    - Dual-tone gradient stroke in matching vibrant pink (#ff2a85) and royal purple (#9333ea)
  */
+
+// 8 radiating directions matching Jackie Zhang's wavy starburst (every 45 degrees)
+const WAVY_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
+const EFFECT_SIZE = 85 // o
+const HALF_SIZE = EFFECT_SIZE / 2 // r = 42.5, a = 42.5
+const INNER_OFFSET = EFFECT_SIZE * 0.1 // s = 8.5
+const OUTER_OFFSET = EFFECT_SIZE * 0.52 // c = 44.2
+const WAVE_AMPLITUDE = EFFECT_SIZE * 0.06 // g = 5.1
+
+// Pre-compute 8 wavy paths matching M ${u} ${d} Q ${qx} ${qy} ${m} ${h} T ${f} ${p}
+const WAVY_PATHS = WAVY_ANGLES.map((deg) => {
+  const rad = (deg * Math.PI) / 180
+  const u = HALF_SIZE + INNER_OFFSET * Math.cos(rad)
+  const d = HALF_SIZE - INNER_OFFSET * Math.sin(rad)
+  const f = HALF_SIZE + OUTER_OFFSET * Math.cos(rad)
+  const p = HALF_SIZE - OUTER_OFFSET * Math.sin(rad)
+  const m = (u + f) / 2
+  const h = (d + p) / 2
+  const normalAngle = rad + Math.PI / 2
+  const qx = m + WAVE_AMPLITUDE * Math.cos(normalAngle)
+  const qy = h - WAVE_AMPLITUDE * Math.sin(normalAngle)
+  return `M ${u.toFixed(1)} ${d.toFixed(1)} Q ${qx.toFixed(1)} ${qy.toFixed(1)} ${m.toFixed(1)} ${h.toFixed(1)} T ${f.toFixed(1)} ${p.toFixed(1)}`
+})
+
 export default function CustomCursor() {
-  const dotRef = useRef(null)
-  const ringRef = useRef(null)
+  const cursorRef = useRef(null)
+  const arrowImgRef = useRef(null)
+  const pointerImgRef = useRef(null)
+  const [bursts, setBursts] = useState([])
+
+  const removeBurst = useCallback((id) => {
+    setBursts((prev) => prev.filter((b) => b.id !== id))
+  }, [])
 
   useEffect(() => {
-    // Only activate on devices with a fine pointer (mouse/trackpad)
     if (typeof window === 'undefined') return
     const isFinePointer = window.matchMedia('(pointer: fine)').matches
     if (!isFinePointer) return
 
-    const dot = dotRef.current
-    const ring = ringRef.current
-    if (!dot || !ring) return
+    document.body.classList.add('custom-cursor-enabled')
 
-    let mouseX = -100
-    let mouseY = -100
-    let ringX = -100
-    let ringY = -100
+    const cursor = cursorRef.current
+    const arrowImg = arrowImgRef.current
+    const pointerImg = pointerImgRef.current
+    if (!cursor) return
+
+    let mouseX = -200
+    let mouseY = -200
     let isHovered = false
     let isMouseDown = false
     let isVisible = false
@@ -40,13 +74,12 @@ export default function CustomCursor() {
 
       if (!isVisible) {
         isVisible = true
-        dot.style.opacity = '1'
-        ring.style.opacity = '1'
+        cursor.style.opacity = '1'
       }
 
-      // Check if mouse is hovering an interactive element
+      // Detect interactive clickable elements
       const target = e.target
-      const isInteractive = Boolean(
+      const interactive = Boolean(
         target &&
         (target.closest('a') ||
          target.closest('button') ||
@@ -54,57 +87,73 @@ export default function CustomCursor() {
          target.closest('.cursor-pointer') ||
          target.closest('input') ||
          target.closest('textarea') ||
-         target.closest('.comic-overlay-bubble') ||
-         target.closest('.group'))
+         target.closest('select') ||
+         target.closest('label') ||
+         target.closest('summary') ||
+         target.closest('[data-clickable]') ||
+         target.closest('.group') ||
+         target.closest('.rcard') ||
+         target.closest('.comic-overlay-bubble'))
       )
 
-      if (isInteractive !== isHovered) {
-        isHovered = isInteractive
-        if (isHovered) {
-          ring.classList.add('cursor-ring--hover')
-          dot.classList.add('cursor-dot--hover')
-        } else {
-          ring.classList.remove('cursor-ring--hover')
-          dot.classList.remove('cursor-dot--hover')
+      if (interactive !== isHovered) {
+        isHovered = interactive
+        if (arrowImg && pointerImg) {
+          if (isHovered) {
+            arrowImg.style.opacity = '0'
+            pointerImg.style.opacity = '1'
+            // Hand pointer index fingertip hotspot is at (-11px, -1px)
+            cursor.dataset.type = 'pointer'
+          } else {
+            arrowImg.style.opacity = '1'
+            pointerImg.style.opacity = '0'
+            // Arrow tip hotspot is at (-2px, -1px)
+            cursor.dataset.type = 'arrow'
+          }
         }
       }
     }
 
-    const handleMouseDown = () => {
+    const handleMouseDown = (e) => {
       isMouseDown = true
-      ring.classList.add('cursor-ring--click')
-      dot.classList.add('cursor-dot--click')
+      if (cursor) {
+        cursor.style.transform = `translate3d(${cursor.dataset.type === 'pointer' ? mouseX - 11 : mouseX - 2}px, ${mouseY - 1}px, 0) scale(0.88)`
+      }
+
+      // Spawn Jackie Zhang wavy click burst at exact click position
+      const newBurst = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        x: e.clientX,
+        y: e.clientY,
+      }
+      setBursts((prev) => [...prev.slice(-12), newBurst])
     }
 
     const handleMouseUp = () => {
       isMouseDown = false
-      ring.classList.remove('cursor-ring--click')
-      dot.classList.remove('cursor-dot--click')
+      if (cursor) {
+        cursor.style.transform = `translate3d(${cursor.dataset.type === 'pointer' ? mouseX - 11 : mouseX - 2}px, ${mouseY - 1}px, 0) scale(1)`
+      }
     }
 
     const handleMouseLeave = () => {
       isVisible = false
-      dot.style.opacity = '0'
-      ring.style.opacity = '0'
+      cursor.style.opacity = '0'
     }
 
     const handleMouseEnter = () => {
       isVisible = true
-      dot.style.opacity = '1'
-      ring.style.opacity = '1'
+      cursor.style.opacity = '1'
     }
 
-    // High-performance animation loop (linear interpolation for smooth trailing)
+    // High performance RAF loop
     const render = () => {
-      // Direct instant position for the center dot
-      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
-
-      // Smooth easing (lerp) for the outer trailing ring
-      const ease = 0.2
-      ringX += (mouseX - ringX) * ease
-      ringY += (mouseY - ringY) * ease
-      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`
-
+      if (isVisible) {
+        const offsetX = cursor.dataset.type === 'pointer' ? 11 : 2
+        const offsetY = 1
+        const scale = isMouseDown ? 'scale(0.88)' : 'scale(1)'
+        cursor.style.transform = `translate3d(${mouseX - offsetX}px, ${mouseY - offsetY}px, 0) ${scale}`
+      }
       animId = window.requestAnimationFrame(render)
     }
 
@@ -117,6 +166,7 @@ export default function CustomCursor() {
     animId = window.requestAnimationFrame(render)
 
     return () => {
+      document.body.classList.remove('custom-cursor-enabled')
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mousedown', handleMouseDown)
       window.removeEventListener('mouseup', handleMouseUp)
@@ -128,22 +178,107 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* 1. Fast Central Dot */}
+      {/* 1. Main Custom Cursor (Pink & Purple Floral Pattern) */}
       <div
-        ref={dotRef}
+        ref={cursorRef}
+        data-type="arrow"
         aria-hidden="true"
-        className="hidden md:block pointer-events-none fixed top-0 left-0 -ml-[4px] -mt-[4px] w-2 h-2 rounded-full bg-[#BA1F1F] shadow-[0_0_10px_#ff4d4d,0_0_20px_#ba1f1f] z-[9999] opacity-0 transition-opacity duration-200 will-change-transform"
-      />
-
-      {/* 2. Trailing Interpolated Ring */}
-      <div
-        ref={ringRef}
-        aria-hidden="true"
-        className="hidden md:block pointer-events-none fixed top-0 left-0 -ml-[18px] -mt-[18px] w-9 h-9 rounded-full border border-red-500/50 bg-red-500/5 backdrop-blur-[0.5px] z-[9998] opacity-0 transition-opacity duration-300 will-change-transform flex items-center justify-center"
+        className="hidden md:block pointer-events-none fixed top-0 left-0 z-[999999] opacity-0 will-change-transform select-none"
+        style={{
+          transition: 'transform 0.06s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.15s ease',
+        }}
       >
-        {/* Subtle internal crosshair action accent */}
-        <div className="w-1.5 h-1.5 rounded-full border border-red-400/40 opacity-40 scale-75 transition-transform duration-200" />
+        {/* Floral Arrow Cursor */}
+        <img
+          ref={arrowImgRef}
+          src={arrowCursorImg}
+          alt=""
+          className="absolute top-0 left-0 w-[34px] h-[37.4px] object-contain drop-shadow-[0_2px_8px_rgba(147,51,234,0.35)] transition-opacity duration-150"
+          style={{ opacity: 1 }}
+          draggable="false"
+        />
+
+        {/* Floral Pointer Hand Cursor */}
+        <img
+          ref={pointerImgRef}
+          src={pointerCursorImg}
+          alt=""
+          className="absolute top-0 left-0 w-[32px] h-[42.8px] object-contain drop-shadow-[0_2px_8px_rgba(255,42,133,0.38)] transition-opacity duration-150"
+          style={{ opacity: 0 }}
+          draggable="false"
+        />
+      </div>
+
+      {/* 2. Jackie Zhang Wavy Burst Clicking Effect */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[999990] overflow-hidden select-none"
+      >
+        {bursts.map((burst) => (
+          <WavyClickBurst
+            key={burst.id}
+            id={burst.id}
+            x={burst.x}
+            y={burst.y}
+            onComplete={removeBurst}
+          />
+        ))}
       </div>
     </>
+  )
+}
+
+/**
+ * Individual Wavy Burst instance reproducing the exact Framer animation from https://jackiezhang.co.za/
+ */
+function WavyClickBurst({ id, x, y, onComplete }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onComplete(id)
+    }, 700)
+    return () => clearTimeout(timer)
+  }, [id, onComplete])
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: x,
+        top: y,
+        width: `${EFFECT_SIZE}px`,
+        height: `${EFFECT_SIZE}px`,
+        transform: 'translate(-50%, -50%)',
+        pointerEvents: 'none',
+        overflow: 'visible',
+      }}
+    >
+      <svg
+        viewBox={`0 0 ${EFFECT_SIZE} ${EFFECT_SIZE}`}
+        className="w-full h-full overflow-visible animate-wavy-burst"
+        style={{
+          transformOrigin: 'center center',
+        }}
+      >
+        <defs>
+          <linearGradient id={`wavy-grad-${id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ff2a85" />
+            <stop offset="50%" stopColor="#d946ef" />
+            <stop offset="100%" stopColor="#9333ea" />
+          </linearGradient>
+        </defs>
+
+        {WAVY_PATHS.map((pathD, idx) => (
+          <path
+            key={idx}
+            d={pathD}
+            stroke={`url(#wavy-grad-${id})`}
+            strokeWidth="3.2"
+            strokeLinecap="round"
+            fill="none"
+            className="animate-wavy-stroke"
+          />
+        ))}
+      </svg>
+    </div>
   )
 }
