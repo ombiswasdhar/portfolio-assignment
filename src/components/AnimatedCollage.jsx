@@ -59,7 +59,7 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
-      className={`relative w-full aspect-[504/738] select-none touch-pan-y ${className}`}
+      className={`relative w-full aspect-[504/738] select-none touch-pan-y overflow-visible ${className}`}
       style={{ perspective: '1000px' }}
       role="region"
       aria-label="About Me collage with interactive Polaroid - Om: Age 21 Years, Graphics Designer"
@@ -69,7 +69,7 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
         <img
           src={aboutRightCollageClean}
           alt="About Me - Om, 21 years old Graphics Designer collage"
-          className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-0"
+          className="absolute left-0 top-0 w-[109.127%] h-full max-w-none object-contain object-left-top pointer-events-none select-none z-0"
         />
       )}
 

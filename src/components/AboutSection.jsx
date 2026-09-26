@@ -30,12 +30,12 @@ export default function AboutSection() {
         
         {/* ================= DESKTOP / TABLET VIEW (md and up) ================= */}
         <div className="hidden md:block w-full">
-          <div className="relative w-full max-w-[1440px] mx-auto aspect-[1024/768] rounded-t-[28px] lg:rounded-t-[36px] rounded-b-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-t border-x border-white/10 group transition-all duration-500 hover:border-white/20">
-            {/* Pristine Figma Frame Canvas with clean base for animated layers */}
+          <div className="relative w-full max-w-[1440px] mx-auto aspect-[1024/768] rounded-t-[28px] lg:rounded-t-[36px] rounded-b-none overflow-visible shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-t border-x border-white/10 group transition-all duration-500 hover:border-white/20">
+            {/* Pristine Figma Frame Canvas with clean base and expanded cutouts */}
             <img
               src={aboutFullFrameCanvas}
               alt="About Me - Om, UI/UX Designer, Illustrator, Artist based in Shillong, India. Age 21 Years."
-              className="w-full h-full object-cover object-center select-none pointer-events-none"
+              className="absolute left-0 top-0 h-full w-[104.492%] max-w-none object-contain object-left-top select-none pointer-events-none"
             />
 
             {/* Interactive Animated Characters & "Hello, i'm OM." */}
