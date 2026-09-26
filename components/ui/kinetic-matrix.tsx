@@ -288,9 +288,9 @@ export function KineticMatrix({
                 }
             }
 
-            // 2. Physics Step (Hooke's Spring-Mass Lattice - Calibrated gentle intensity)
-            const SPRING_K = 24;
-            const DAMPING = 0.85;
+            // 2. Physics Step (Hooke's Spring-Mass Lattice - Calibrated smooth, low-jiggle response)
+            const SPRING_K = 20;
+            const DAMPING = 0.80;
 
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
@@ -302,13 +302,13 @@ export function KineticMatrix({
 
                 if (dist < pointer.radius && dist > 0) {
                     const ratio = 1 - dist / pointer.radius;
-                    // Reduced force intensity by ~70% for fluid, silky glide
-                    const force = ratio * (480 + mouseSpeed * 50 + (pointer.isDown ? 750 : 0));
+                    // Calibrated silky glide with reduced wobble/jiggle
+                    const force = ratio * (360 + mouseSpeed * 32 + (pointer.isDown ? 600 : 0));
                     const angle = Math.atan2(dy, dx);
 
                     n.vx -= Math.cos(angle) * force * dt;
                     n.vy -= Math.sin(angle) * force * dt;
-                    n.tension = Math.min(0.55, n.tension + ratio * 0.2);
+                    n.tension = Math.min(0.55, n.tension + ratio * 0.18);
                 }
 
                 for (let s = 0; s < shockwaves.length; s++) {
@@ -319,11 +319,11 @@ export function KineticMatrix({
                     const delta = Math.abs(swDist - sw.radius);
 
                     if (delta < 55) {
-                        const force = (1 - delta / 55) * sw.power * 1200;
+                        const force = (1 - delta / 55) * sw.power * 900;
                         const angle = Math.atan2(swDy, swDx);
                         n.vx += Math.cos(angle) * force * dt;
                         n.vy += Math.sin(angle) * force * dt;
-                        n.tension = 0.6;
+                        n.tension = 0.55;
                     }
                 }
 
