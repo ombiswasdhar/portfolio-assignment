@@ -8,6 +8,7 @@ import CV from './pages/CV'
 import Contact from './pages/Contact'
 import CustomCursor from './components/CustomCursor'
 import ConstellationGrid from '@/components/ui/constellation-grid'
+import QuantumSwarmDemo from './components/examples/quantum-swarm-demo'
 import MusicPlayer from './components/MusicPlayer'
 import { MusicProvider } from './context/MusicContext'
 
@@ -45,6 +46,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/demo" element={<ConstellationGrid />} />
           <Route path="/constellation" element={<ConstellationGrid />} />
+          <Route path="/quantum-swarm" element={<QuantumSwarmDemo />} />
         </Routes>
       </MusicProvider>
     </BrowserRouter>
