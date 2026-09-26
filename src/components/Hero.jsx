@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import KineticMatrix from '@/components/ui/kinetic-matrix'
 import frame41 from '../assets/hero/frame41.png'
 import halftone from '../assets/hero/halftone.png'
@@ -16,7 +16,10 @@ import HeroCD from './HeroCD'
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [isPastHero, setIsPastHero] = useState(false)
+  const [isDocked, setIsDocked] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== 'undefined' ? window.innerWidth >= 768 : true
+  )
   const heroRef = useRef(null)
 
   const scrollToTop = () => {
@@ -27,15 +30,25 @@ export default function Hero() {
   }
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  useEffect(() => {
     let ticking = false
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY)
+          const currentScrollY = window.scrollY
+          setScrollY(currentScrollY)
           if (heroRef.current) {
             const rect = heroRef.current.getBoundingClientRect()
-            // Becomes past hero when bottom of hero is near or above viewport top
-            setIsPastHero(rect.bottom <= 120)
+            // Magnetically docks when user scrolls down and hero bottom approaches or passes viewport bottom
+            const shouldDock = currentScrollY > 120 && rect.bottom <= window.innerHeight + 140
+            setIsDocked(shouldDock)
           }
           ticking = false
         })
@@ -65,6 +78,7 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
+      <LayoutGroup id="hero-magnetic-arrow">
       {/* Background: NedDev Kinetic Matrix */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
         <KineticMatrix
@@ -274,18 +288,36 @@ export default function Hero() {
 
           {/* Right: Arrow Monogram Logo */}
           <div className="flex items-center justify-end pointer-events-auto">
-            <button
-              onClick={scrollToTop}
-              title="Scroll to top"
-              aria-label="Scroll to top"
-              className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center"
-            >
-              <img
-                src={arrowLogo}
-                alt="Arrow monogram"
-                className="h-10 lg:h-12 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300"
-              />
-            </button>
+            {isDesktop && !isDocked ? (
+              <motion.button
+                layoutId="magnetic-hero-arrow"
+                onClick={scrollToTop}
+                title="Scroll to top"
+                aria-label="Scroll to top"
+                transition={{
+                  type: 'spring',
+                  stiffness: 280,
+                  damping: 24,
+                  mass: 0.8,
+                }}
+                className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center"
+              >
+                <motion.img
+                  layoutId="magnetic-hero-arrow-img"
+                  src={arrowLogo}
+                  alt="Arrow monogram"
+                  transition={{
+                    type: 'spring',
+                    stiffness: 280,
+                    damping: 24,
+                    mass: 0.8,
+                  }}
+                  className="h-10 lg:h-12 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300"
+                />
+              </motion.button>
+            ) : (
+              <div className="h-10 lg:h-12 w-10 lg:w-12 pointer-events-none" aria-hidden="true" />
+            )}
           </div>
         </div>
 
@@ -311,18 +343,36 @@ export default function Hero() {
 
           {/* Right: Arrow Monogram Logo */}
           <div className="shrink-0 flex items-center justify-end pointer-events-auto">
-            <button
-              onClick={scrollToTop}
-              title="Scroll to top"
-              aria-label="Scroll to top"
-              className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center"
-            >
-              <img
-                src={arrowLogo}
-                alt="Arrow monogram"
-                className="h-6 sm:h-7 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300"
-              />
-            </button>
+            {!isDesktop && !isDocked ? (
+              <motion.button
+                layoutId="magnetic-hero-arrow"
+                onClick={scrollToTop}
+                title="Scroll to top"
+                aria-label="Scroll to top"
+                transition={{
+                  type: 'spring',
+                  stiffness: 280,
+                  damping: 24,
+                  mass: 0.8,
+                }}
+                className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center"
+              >
+                <motion.img
+                  layoutId="magnetic-hero-arrow-img"
+                  src={arrowLogo}
+                  alt="Arrow monogram"
+                  transition={{
+                    type: 'spring',
+                    stiffness: 280,
+                    damping: 24,
+                    mass: 0.8,
+                  }}
+                  className="h-6 sm:h-7 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300"
+                />
+              </motion.button>
+            ) : (
+              <div className="h-6 sm:h-7 w-6 sm:w-7 pointer-events-none" aria-hidden="true" />
+            )}
           </div>
         </div>
 
@@ -336,33 +386,42 @@ export default function Hero() {
         />
       </div>
 
-      {/* Floating Back-to-Top Button: transforms into a floating button once scrolled out of hero section */}
-      <AnimatePresence>
-        {isPastHero && (
-          <motion.button
-            key="scroll-to-top-btn"
-            initial={{ opacity: 0, scale: 0.6, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.6, y: 20 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            onClick={scrollToTop}
-            className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0a0a0e]/90 backdrop-blur-xl border border-white/20 shadow-[0_12px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(186,31,31,0.35)] hover:shadow-[0_14px_40px_rgba(186,31,31,0.65)] hover:border-[#BA1F1F] flex items-center justify-center group hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer pointer-events-auto select-none"
-            title="Scroll to top"
-            aria-label="Scroll to top"
-          >
-            {/* Ambient subtle pulse glow */}
-            <span
-              className="absolute inset-0 rounded-full bg-[#BA1F1F]/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75"
-              aria-hidden="true"
-            />
-            <img
-              src={arrowLogo}
-              alt="Scroll to top"
-              className="relative z-10 h-6 sm:h-7 w-auto object-contain rotate-45 group-hover:-translate-y-1 group-hover:brightness-125 transition-transform duration-300 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
-            />
-          </motion.button>
-        )}
-      </AnimatePresence>
-    </section>
+      {/* Docked Floating Back-to-Top Button: magnetically sticks to bottom-right of viewport and acts as a button */}
+      {isDocked && (
+        <motion.button
+          key="docked-scroll-btn"
+          layoutId="magnetic-hero-arrow"
+          onClick={scrollToTop}
+          title="Scroll to top"
+          aria-label="Scroll to top"
+          transition={{
+            type: 'spring',
+            stiffness: 280,
+            damping: 24,
+            mass: 0.8,
+          }}
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0a0a0e]/90 backdrop-blur-xl border border-white/25 shadow-[0_12px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(186,31,31,0.35)] hover:shadow-[0_14px_40px_rgba(186,31,31,0.65)] hover:border-[#BA1F1F] flex items-center justify-center group hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer pointer-events-auto select-none"
+        >
+          {/* Ambient subtle pulse glow */}
+          <span
+            className="absolute inset-0 rounded-full bg-[#BA1F1F]/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75"
+            aria-hidden="true"
+          />
+          <motion.img
+            layoutId="magnetic-hero-arrow-img"
+            src={arrowLogo}
+            alt="Scroll to top"
+            transition={{
+              type: 'spring',
+              stiffness: 280,
+              damping: 24,
+              mass: 0.8,
+            }}
+            className="relative z-10 h-6 sm:h-7 w-auto object-contain rotate-45 group-hover:-translate-y-1 group-hover:brightness-125 transition-transform duration-300 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+          />
+        </motion.button>
+      )}
+    </LayoutGroup>
+  </section>
   )
 }
