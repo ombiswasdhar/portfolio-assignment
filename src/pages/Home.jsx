@@ -68,6 +68,7 @@ export default function Home() {
         <Hero />
         <AboutMarquee />
         <AboutSection />
+        <MarqueeBar variant="roles" className="border-t border-b border-black relative z-10" />
         <SkillSetSection />
         <MarqueeBar direction="right" className="border-t border-black relative z-10" />
         <ContentsSection />
