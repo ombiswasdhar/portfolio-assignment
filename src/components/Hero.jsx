@@ -52,7 +52,6 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
         <KineticMatrix
           title=""
-          intensity={0.85}
           className="w-full h-full bg-[#06070a] [&_header]:hidden [&_main]:hidden"
         />
       </div>

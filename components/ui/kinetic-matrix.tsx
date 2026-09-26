@@ -37,24 +37,17 @@ interface GravitationalShockwave {
 export interface KineticMatrixProps {
     title?: string;
     className?: string;
-    intensity?: number;
 }
 
 export function KineticMatrix({
     title = "TOPOLOGY",
     className = "",
-    intensity = 1,
 }: KineticMatrixProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [isRunning, setIsRunning] = useState(true);
-
-    const intensityRef = useRef(intensity);
-    useEffect(() => {
-        intensityRef.current = intensity;
-    }, [intensity]);
 
     // Sync color scheme preference
     useEffect(() => {
@@ -219,8 +212,7 @@ export function KineticMatrix({
         n2: MatrixNode,
         restLen: number,
         isDark: boolean,
-        nodeColor: string,
-        curIntensity: number = 1
+        nodeColor: string
     ) => {
         const dx = n1.x - n2.x;
         const dy = n1.y - n2.y;
@@ -230,16 +222,12 @@ export function KineticMatrix({
 
         if (isTensioned) {
             const glow = Math.min(1, Math.max(n1.tension, n2.tension, stretch * 1.2));
-            const baseAlpha = isDark
-                ? Math.min(0.5, 0.12 + glow * 0.38)
-                : Math.min(0.4, 0.1 + glow * 0.3);
             ctx.strokeStyle = isDark
-                ? `rgba(255, 255, 255, ${baseAlpha * curIntensity})`
-                : `rgba(0, 0, 0, ${baseAlpha * curIntensity})`;
+                ? `rgba(255, 255, 255, ${Math.min(0.5, 0.12 + glow * 0.38)})`
+                : `rgba(0, 0, 0, ${Math.min(0.4, 0.1 + glow * 0.3)})`;
             ctx.lineWidth = 0.6 + glow * 0.6;
         } else {
-            const baseAlpha = isDark ? 0.07 : 0.04;
-            ctx.strokeStyle = `rgba(${nodeColor}, ${baseAlpha * curIntensity})`;
+            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.07 : 0.04})`;
             ctx.lineWidth = 0.55;
         }
 
@@ -274,7 +262,6 @@ export function KineticMatrix({
             const pulses = pulsesRef.current;
             const shockwaves = shockwavesRef.current;
             const pointer = pointerRef.current;
-            const curIntensity = intensityRef.current ?? 1;
 
             // Pointer velocity interpolation
             pointer.vx = (pointer.x - pointer.prevX) / (dt * 1000 || 1);
@@ -315,13 +302,13 @@ export function KineticMatrix({
 
                 if (dist < pointer.radius && dist > 0) {
                     const ratio = 1 - dist / pointer.radius;
-                    // Controlled force intensity scaled with curIntensity
-                    const force = ratio * (380 + mouseSpeed * 40 + (pointer.isDown ? 600 : 0)) * curIntensity;
+                    // Reduced force intensity by ~70% for fluid, silky glide
+                    const force = ratio * (480 + mouseSpeed * 50 + (pointer.isDown ? 750 : 0));
                     const angle = Math.atan2(dy, dx);
 
                     n.vx -= Math.cos(angle) * force * dt;
                     n.vy -= Math.sin(angle) * force * dt;
-                    n.tension = Math.min(0.55, n.tension + ratio * 0.2 * curIntensity);
+                    n.tension = Math.min(0.55, n.tension + ratio * 0.2);
                 }
 
                 for (let s = 0; s < shockwaves.length; s++) {
@@ -332,11 +319,11 @@ export function KineticMatrix({
                     const delta = Math.abs(swDist - sw.radius);
 
                     if (delta < 55) {
-                        const force = (1 - delta / 55) * sw.power * 1000 * curIntensity;
+                        const force = (1 - delta / 55) * sw.power * 1200;
                         const angle = Math.atan2(swDy, swDx);
                         n.vx += Math.cos(angle) * force * dt;
                         n.vy += Math.sin(angle) * force * dt;
-                        n.tension = 0.6 * curIntensity;
+                        n.tension = 0.6;
                     }
                 }
 
@@ -354,7 +341,7 @@ export function KineticMatrix({
             }
 
             // 3. Spawn Random Synaptic Traveling Pulses
-            if (Math.random() < 0.25 * curIntensity && nodes.length > 0 && pulses.length < Math.floor(40 * Math.max(0.3, curIntensity))) {
+            if (Math.random() < 0.3 && nodes.length > 0 && pulses.length < 40) {
                 const fromIdx = Math.floor(Math.random() * nodes.length);
                 const fromNode = nodes[fromIdx];
                 const possibleDirections = [
@@ -390,13 +377,13 @@ export function KineticMatrix({
                     if (c < cols - 1) {
                         const rightIdx = (c + 1) * rows + r;
                         const nr = nodes[rightIdx];
-                        if (nr) drawLatticeLink(ctx, n, nr, spacing, isDark, nodeColor, curIntensity);
+                        if (nr) drawLatticeLink(ctx, n, nr, spacing, isDark, nodeColor);
                     }
 
                     if (r < rows - 1) {
                         const downIdx = c * rows + (r + 1);
                         const nd = nodes[downIdx];
-                        if (nd) drawLatticeLink(ctx, n, nd, spacing, isDark, nodeColor, curIntensity);
+                        if (nd) drawLatticeLink(ctx, n, nd, spacing, isDark, nodeColor);
                     }
                 }
             }
@@ -410,7 +397,7 @@ export function KineticMatrix({
                 const n2 = nodes[pulse.toNode];
 
                 if (!n1 || !n2 || pulse.progress >= 1) {
-                    if (n2) n2.tension = Math.min(0.6, n2.tension + 0.3 * curIntensity);
+                    if (n2) n2.tension = Math.min(0.6, n2.tension + 0.3);
                     pulses.splice(p, 1);
                     continue;
                 }
@@ -418,9 +405,7 @@ export function KineticMatrix({
                 const px = n1.x + (n2.x - n1.x) * pulse.progress;
                 const py = n1.y + (n2.y - n1.y) * pulse.progress;
 
-                ctx.fillStyle = isDark
-                    ? `rgba(255, 255, 255, ${curIntensity})`
-                    : `rgba(0, 0, 0, ${curIntensity})`;
+                ctx.fillStyle = isDark ? '#ffffff' : '#000000';
                 ctx.beginPath();
                 ctx.arc(px, py, 2.0, 0, Math.PI * 2);
                 ctx.fill();
@@ -439,15 +424,15 @@ export function KineticMatrix({
                     : n.radius + Math.sin(n.pulsePhase) * 0.18;
 
                 if (isNear || n.tension > 0.12) {
-                    ctx.fillStyle = `rgba(${accentGlow}, ${Math.min(0.4, 0.12 + n.tension * 0.3) * curIntensity})`;
+                    ctx.fillStyle = `rgba(${accentGlow}, ${Math.min(0.4, 0.12 + n.tension * 0.3)})`;
                     ctx.beginPath();
                     ctx.arc(n.x, n.y, currentRadius * 1.8, 0, Math.PI * 2);
                     ctx.fill();
                 }
 
                 ctx.fillStyle = isNear || n.tension > 0.12
-                    ? (isDark ? `rgba(255, 255, 255, ${curIntensity})` : `rgba(0, 0, 0, ${curIntensity})`)
-                    : `rgba(${nodeColor}, ${(isDark ? 0.25 : 0.18) * curIntensity})`;
+                    ? (isDark ? '#ffffff' : '#000000')
+                    : `rgba(${nodeColor}, ${isDark ? 0.25 : 0.18})`;
 
                 ctx.beginPath();
                 ctx.arc(n.x, n.y, Math.max(0.7, currentRadius), 0, Math.PI * 2);
@@ -455,7 +440,7 @@ export function KineticMatrix({
 
                 if (dist < 65) {
                     const radarRing = ((n.pulsePhase * 20) % 28) + 4;
-                    const ringAlpha = (1 - radarRing / 32) * 0.22 * curIntensity;
+                    const ringAlpha = (1 - radarRing / 32) * 0.22;
 
                     ctx.strokeStyle = `rgba(${accentGlow}, ${ringAlpha})`;
                     ctx.lineWidth = 0.75;
@@ -464,7 +449,7 @@ export function KineticMatrix({
                     ctx.stroke();
 
                     ctx.font = '7px ui-monospace, SFMono-Regular, Consolas, monospace';
-                    ctx.fillStyle = `rgba(${accentGlow}, ${0.55 * curIntensity})`;
+                    ctx.fillStyle = `rgba(${accentGlow}, 0.55)`;
                     ctx.fillText(n.label, n.x + 8, n.y - 8);
                 }
             }
