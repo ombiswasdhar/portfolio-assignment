@@ -49,9 +49,10 @@ export default function Hero() {
       className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
       {/* Background: NedDev Kinetic Matrix */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto opacity-55">
         <KineticMatrix
           title=""
+          intensity={0.5}
           className="w-full h-full bg-[#06070a] [&_header]:hidden [&_main]:hidden"
         />
       </div>
@@ -297,35 +298,12 @@ export default function Hero() {
 
       </div>
 
-      {/* Symmetrical White Line Divider below barcode with animated scroll down cue */}
+      {/* Symmetrical White Line Divider below barcode */}
       <div className="w-full flex flex-col items-center justify-center mt-2 sm:mt-3 md:mt-4 mb-2 sm:mb-3 md:mb-4">
         <div
           className="w-[88%] sm:w-[75%] md:w-[60.28%] max-w-[868px] h-[1px] bg-white/20"
           aria-hidden="true"
         />
-        
-        {/* Subtle Animated Scroll Indicator */}
-        <a
-          href="#about"
-          className="group flex flex-col items-center gap-1 mt-2 text-neutral-400 hover:text-white transition-colors duration-300 pointer-events-auto select-none"
-          aria-label="Scroll down to About Me section"
-        >
-          <span className="text-[10px] sm:text-[11px] font-mono tracking-widest uppercase opacity-60 group-hover:opacity-100 transition-opacity">
-            Scroll to explore
-          </span>
-          <svg
-            className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-scroll-cue text-neutral-400 group-hover:text-[#BA1F1F] transition-colors"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="7 13 12 18 17 13" />
-            <polyline points="7 6 12 11 17 6" />
-          </svg>
-        </a>
       </div>
     </section>
   )
