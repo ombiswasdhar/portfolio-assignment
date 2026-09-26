@@ -51,18 +51,23 @@ export default function Hero() {
     const { left, top, width, height } = anchorDocPos.current
     const currentScrollY = window.scrollY
 
-    const dockMargin = isDesktop ? 24 : 16
-    const dockX = window.innerWidth - dockMargin - width
-    const dockY = window.innerHeight - dockMargin - height
+    const dockMarginRight = isDesktop ? 24 : 16
+    const dockMarginBottom = isDesktop ? 36 : 24
+    const dockX = window.innerWidth - dockMarginRight - width
+    const dockY = window.innerHeight - dockMarginBottom - height
 
     // Progress from 0 (top of page) to 1 (scrolled past 200px)
     const rawProgress = Math.min(1, Math.max(0, currentScrollY / 200))
     // Cubic smoothstep for extra silky ease-in and ease-out
     const p = rawProgress * rawProgress * (3 - 2 * rawProgress)
 
+    // Ensure arrow is always clearly visible on the hero section even on compact viewport heights
+    const maxHeroY = window.innerHeight - dockMarginBottom - height
+    const heroY = Math.min(top, maxHeroY)
+
     // Smooth continuous interpolation between hero anchor and fixed corner dock
     const x = left + (dockX - left) * p
-    const y = (top - currentScrollY) * (1 - p) + dockY * p
+    const y = (heroY - currentScrollY) * (1 - p) + dockY * p
     const rot = p * 45
 
     setArrowPos({ x, y, rot, ready: true })
@@ -127,7 +132,7 @@ export default function Hero() {
       ref={heroRef}
       aria-label="Hero section"
       onMouseMove={handleMouseMove}
-      className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
+      className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-20 sm:pt-24 md:pt-28"
     >
       {/* Background: NedDev Kinetic Matrix */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
@@ -317,7 +322,7 @@ export default function Hero() {
         </div>
 
         {/* ================= DESKTOP BOTTOM ROW (md and up) ================= */}
-        <div className="hidden md:flex absolute bottom-4 lg:bottom-6 left-[2.50%] right-[2.50%] items-center justify-between z-20 pointer-events-none">
+        <div className="hidden md:flex absolute bottom-8 sm:bottom-10 md:bottom-12 lg:bottom-14 left-[2.50%] right-[2.50%] items-center justify-between z-20 pointer-events-none">
           {/* Left: Symbiosis Institute of Design */}
           <div className="max-w-[280px]">
             <p className="font-fredoka font-normal text-base lg:text-[20px] leading-snug text-white">
@@ -347,7 +352,7 @@ export default function Hero() {
         </div>
 
         {/* ================= MOBILE BOTTOM ROW (< md) ================= */}
-        <div className="md:hidden absolute bottom-3 sm:bottom-4 left-0 right-0 px-3 sm:px-6 z-20 flex items-center justify-between gap-2 pointer-events-none">
+        <div className="md:hidden absolute bottom-5 sm:bottom-7 left-0 right-0 px-3 sm:px-6 z-20 flex items-center justify-between gap-2 pointer-events-none">
           {/* Left: Symbiosis Institute of Design text */}
           <div className="shrink-0 max-w-[130px] sm:max-w-[180px]">
             <p className="font-fredoka font-normal text-[10px] sm:text-xs leading-tight text-neutral-300">
