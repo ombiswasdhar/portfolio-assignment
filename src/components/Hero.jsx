@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import KineticMatrix from '@/components/ui/kinetic-matrix'
 import frame41 from '../assets/hero/frame41.png'
 import halftone from '../assets/hero/halftone.png'
@@ -15,6 +16,15 @@ import HeroCD from './HeroCD'
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [isPastHero, setIsPastHero] = useState(false)
+  const heroRef = useRef(null)
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }
 
   useEffect(() => {
     let ticking = false
@@ -22,12 +32,18 @@ export default function Hero() {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           setScrollY(window.scrollY)
+          if (heroRef.current) {
+            const rect = heroRef.current.getBoundingClientRect()
+            // Becomes past hero when bottom of hero is near or above viewport top
+            setIsPastHero(rect.bottom <= 120)
+          }
           ticking = false
         })
         ticking = true
       }
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -44,6 +60,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      ref={heroRef}
       aria-label="Hero section"
       onMouseMove={handleMouseMove}
       className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
@@ -257,11 +274,18 @@ export default function Hero() {
 
           {/* Right: Arrow Monogram Logo */}
           <div className="flex items-center justify-end pointer-events-auto">
-            <img
-              src={arrowLogo}
-              alt="Arrow monogram"
-              className="h-10 lg:h-12 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300 cursor-pointer"
-            />
+            <button
+              onClick={scrollToTop}
+              title="Scroll to top"
+              aria-label="Scroll to top"
+              className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center"
+            >
+              <img
+                src={arrowLogo}
+                alt="Arrow monogram"
+                className="h-10 lg:h-12 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300"
+              />
+            </button>
           </div>
         </div>
 
@@ -287,11 +311,18 @@ export default function Hero() {
 
           {/* Right: Arrow Monogram Logo */}
           <div className="shrink-0 flex items-center justify-end pointer-events-auto">
-            <img
-              src={arrowLogo}
-              alt="Arrow monogram"
-              className="h-6 sm:h-7 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300 cursor-pointer"
-            />
+            <button
+              onClick={scrollToTop}
+              title="Scroll to top"
+              aria-label="Scroll to top"
+              className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center"
+            >
+              <img
+                src={arrowLogo}
+                alt="Arrow monogram"
+                className="h-6 sm:h-7 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300"
+              />
+            </button>
           </div>
         </div>
 
@@ -304,6 +335,34 @@ export default function Hero() {
           aria-hidden="true"
         />
       </div>
+
+      {/* Floating Back-to-Top Button: transforms into a floating button once scrolled out of hero section */}
+      <AnimatePresence>
+        {isPastHero && (
+          <motion.button
+            key="scroll-to-top-btn"
+            initial={{ opacity: 0, scale: 0.6, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.6, y: 20 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            onClick={scrollToTop}
+            className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0a0a0e]/90 backdrop-blur-xl border border-white/20 shadow-[0_12px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(186,31,31,0.35)] hover:shadow-[0_14px_40px_rgba(186,31,31,0.65)] hover:border-[#BA1F1F] flex items-center justify-center group hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer pointer-events-auto select-none"
+            title="Scroll to top"
+            aria-label="Scroll to top"
+          >
+            {/* Ambient subtle pulse glow */}
+            <span
+              className="absolute inset-0 rounded-full bg-[#BA1F1F]/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75"
+              aria-hidden="true"
+            />
+            <img
+              src={arrowLogo}
+              alt="Scroll to top"
+              className="relative z-10 h-6 sm:h-7 w-auto object-contain rotate-45 group-hover:-translate-y-1 group-hover:brightness-125 transition-transform duration-300 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+            />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

@@ -51,7 +51,7 @@ export default function MusicPlayer() {
 
   return (
     <div
-      className="fixed bottom-6 right-6 z-50 select-none font-sans flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/95 dark:bg-[#111116]/95 backdrop-blur-xl border border-black/10 dark:border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.22)] animate-fadeIn transition-all duration-300"
+      className="fixed bottom-6 left-4 sm:left-6 z-50 select-none font-sans flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/95 dark:bg-[#111116]/95 backdrop-blur-xl border border-black/10 dark:border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.22)] animate-fadeIn transition-all duration-300"
       onMouseLeave={() => setShowVolumeSlider(false)}
       role="region"
       aria-label="Sunflower Instrumental Player Controls"
