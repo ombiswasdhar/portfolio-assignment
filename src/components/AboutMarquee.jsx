@@ -49,9 +49,9 @@ export default function AboutMarquee({ className = '' }) {
         </div>
       </div>
 
-      {/* Bottom Tier: Tilted White Ribbon placed directly above About section with zero red marquee overlap */}
-      <div className="relative w-full overflow-hidden pt-12 sm:pt-14 md:pt-16 pb-8 sm:pb-10 md:pb-12 z-20 pointer-events-auto">
-        <div className="w-[108%] -ml-[4%] -rotate-[2deg] sm:-rotate-[2.5deg] shadow-[0_12px_36px_rgba(0,0,0,0.85)]">
+      {/* Bottom Tier: Tilted White Ribbon moved up along with About section, slightly overlapping red marquee on right side */}
+      <div className="relative w-full overflow-visible pt-1.5 sm:pt-2 md:pt-2.5 pb-4 sm:pb-5 md:pb-6 z-20 pointer-events-auto">
+        <div className="w-[108%] -ml-[4%] rotate-[1.3deg] sm:rotate-[1.6deg] md:rotate-[1.8deg] shadow-[0_10px_32px_rgba(0,0,0,0.85)]">
           <div className="relative w-full h-9 sm:h-10 bg-white text-black flex items-stretch overflow-hidden border-y-2 border-black">
             {/* Soft edge gradient fades from white */}
             <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-14 z-10 bg-gradient-to-r from-white to-transparent" />
