@@ -501,12 +501,12 @@ export default function ContentsSection() {
       {/* ========================================================================= */}
       {/* FEATURED WORKS ONWARDS: DOTTED GRID BACKGROUND CANVAS (WHITE & BLACK DOTS) */}
       {/* ========================================================================= */}
-      <div data-theme="light" className="relative w-full ca-dotted-grid-bg text-neutral-900 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
+      <div id="work" data-theme="light" className="relative w-full ca-dotted-grid-bg text-neutral-900 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] scroll-mt-14">
         {/* Dotted Grid Pattern Layer */}
         <div className="ca-dotted-grid-pattern" aria-hidden="true" />
 
         {/* PART 2: CREATIVE ARTSY SECTION HEADER (WITH LETTER REVEAL) */}
-        <section id="featured-works" className="relative z-10 w-full pt-12 sm:pt-16 pb-8 sm:pb-12 px-4 sm:px-8">
+        <section id="featured-works" className="relative z-10 w-full pt-12 sm:pt-16 pb-8 sm:pb-12 px-4 sm:px-8 scroll-mt-16">
           <div
             ref={headerRef}
             className={`mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-1000 ${

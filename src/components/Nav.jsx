@@ -53,7 +53,7 @@ export default function Nav() {
       setScrollY(window.scrollY)
 
       const cvEl = document.getElementById('cv')
-      const workEl = document.getElementById('work')
+      const workEl = document.getElementById('work') || document.getElementById('featured-works')
       const skillsEl = document.getElementById('skills')
       const aboutEl = document.getElementById('about')
 
@@ -107,7 +107,7 @@ export default function Nav() {
 
     // Scrolling to in-page section on Home
     if (location.pathname === '/') {
-      const el = document.getElementById(item.id)
+      const el = document.getElementById(item.id) || (item.id === 'work' ? document.getElementById('featured-works') : null)
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' })
         window.history.pushState(null, '', `/#${item.id}`)

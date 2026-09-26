@@ -45,7 +45,7 @@ export default function Home() {
 
     if (location.hash) {
       const targetId = location.hash.replace('#', '')
-      const el = document.getElementById(targetId)
+      const el = document.getElementById(targetId) || (targetId === 'work' ? document.getElementById('featured-works') : null)
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' })
       }
