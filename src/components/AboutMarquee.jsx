@@ -9,7 +9,7 @@ export default function AboutMarquee({ className = '' }) {
       className={`w-full select-none overflow-hidden flex flex-col ${className}`}
     >
       {/* Top Tier: Solid Red Bar (Straight horizontal, matching the example) */}
-      <div className="relative w-full h-8 sm:h-9 bg-[#DE2020] text-white flex items-stretch overflow-hidden border-t border-black/30 shadow-xs z-10">
+      <div className="relative w-full h-8 sm:h-9 bg-[#DE2020] text-white flex items-stretch overflow-hidden border-y border-black/30 shadow-xs z-10">
         {/* Soft edge gradient fades */}
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-14 z-10 bg-gradient-to-r from-[#DE2020] to-transparent" />
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-14 z-10 bg-gradient-to-l from-[#DE2020] to-transparent" />
@@ -49,9 +49,9 @@ export default function AboutMarquee({ className = '' }) {
         </div>
       </div>
 
-      {/* Bottom Tier: Tilted White Ribbon (Portfolio Theme with Akira font + Crimson Stars ✦) */}
-      <div className="relative w-full overflow-hidden pt-2 sm:pt-3 pb-4 sm:pb-5 z-20">
-        <div className="w-[108%] -ml-[4%] -rotate-[2deg] sm:-rotate-[2.5deg] shadow-[0_12px_36px_rgba(0,0,0,0.85)]">
+      {/* Bottom Tier: Tilted White Ribbon placed above About Me section with zero red marquee overlap */}
+      <div className="relative w-full overflow-hidden pt-8 sm:pt-10 md:pt-12 pb-2 sm:pb-3 -mb-6 sm:-mb-8 md:-mb-10 z-20 pointer-events-auto">
+        <div className="w-[108%] -ml-[4%] -rotate-[2deg] sm:-rotate-[2.5deg] shadow-[0_14px_38px_rgba(0,0,0,0.85)]">
           <div className="relative w-full h-9 sm:h-10 bg-white text-black flex items-stretch overflow-hidden border-y-2 border-black">
             {/* Soft edge gradient fades from white */}
             <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-14 z-10 bg-gradient-to-r from-white to-transparent" />
