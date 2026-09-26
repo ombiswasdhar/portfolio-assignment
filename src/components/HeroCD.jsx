@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { Play, Pause } from 'lucide-react'
 import { useMusic } from '../context/MusicContext'
+const SUNFLOWER_COVER_URL = "https://a5.mzstatic.com/us/r1000/0/Music125/v4/4b/30/2c/4b302cb6-7a14-5464-4e97-0577e9d0be49/18UMGIM82277.rgb.jpg"
 import sunflowerCover from '/sunflower_cover.jpg'
 
 export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
@@ -51,32 +52,29 @@ export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
         {/* 1. Official Sunflower Cover Art Surface */}
         <img
           src={sunflowerCover}
+          onError={(e) => {
+            e.currentTarget.src = SUNFLOWER_COVER_URL
+          }}
           alt="Sunflower CD Disc"
           className="w-full h-full object-cover object-center filter contrast-105 saturate-110 select-none pointer-events-none"
         />
 
         {/* 2. Editorial Typography Printed Directly on CD Face */}
-        <div className="absolute top-[18%] left-[12%] right-[12%] flex flex-col items-start z-10 pointer-events-none select-none text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+        <div className="absolute top-[8%] left-0 right-0 flex flex-col items-center z-10 pointer-events-none select-none text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
           <span
-            className="font-myfont text-white text-[10px] sm:text-[13px] md:text-[15px] font-bold tracking-wide leading-none"
-            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.95)' }}
+            className="font-myfont text-white text-[10px] sm:text-[12px] md:text-[14px] font-bold tracking-wider uppercase leading-none"
+            style={{ textShadow: '0 2px 6px rgba(0,0,0,0.95)' }}
           >
             Sunflower
           </span>
-          <span
-            className="text-[7px] sm:text-[9px] md:text-[10px] text-white/90 font-medium tracking-tight mt-0.5 leading-none"
-            style={{ textShadow: '0 1px 3px rgba(0,0,0,0.95)' }}
-          >
-            Post Malone & Swae Lee
-          </span>
         </div>
 
-        <div className="absolute bottom-[16%] left-0 right-0 flex flex-col items-center z-10 pointer-events-none select-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+        <div className="absolute bottom-[9%] left-0 right-0 flex flex-col items-center z-10 pointer-events-none select-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
           <span
-            className="text-[6px] sm:text-[7px] md:text-[8px] uppercase tracking-widest text-amber-300 font-bold"
+            className="text-[6px] sm:text-[7px] md:text-[8px] uppercase tracking-widest text-[#DE2020] font-bold"
             style={{ textShadow: '0 1px 3px rgba(0,0,0,0.95)' }}
           >
-            Official Instrumental
+            Spider-Verse • Instrumental
           </span>
         </div>
 
