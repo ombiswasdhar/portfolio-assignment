@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import aboutFullFrameCanvas from '../assets/about/about_full_frame_canvas.png'
 import aboutLeftCardCanvas from '../assets/about/about_left_card_canvas.png'
+import redStarOverlay from '../assets/about/red_star_overlay.png'
+import bwPhotoOverlay from '../assets/about/bw_photo_overlay.png'
 import AnimatedCollage from './AnimatedCollage'
 import AboutCharacters from './AboutCharacters'
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -40,6 +42,34 @@ export default function AboutSection() {
 
             {/* Interactive Animated Characters & "Hello, i'm OM." */}
             <AboutCharacters isMobile={false} />
+
+            {/* New Red Star Overlay — replaces old baked-in starburst behind the anime boy */}
+            <img
+              src={redStarOverlay}
+              alt=""
+              aria-hidden="true"
+              className="absolute z-[5] pointer-events-none select-none"
+              style={{
+                right: '-2%',
+                top: '-4%',
+                width: '22%',
+                height: 'auto',
+                transform: 'rotate(-10deg)',
+              }}
+            />
+
+            {/* New B&W Photo Overlay — replaces old baked-in B&W cutout on the right edge */}
+            <img
+              src={bwPhotoOverlay}
+              alt="Om - black and white portrait"
+              className="absolute z-[6] pointer-events-none select-none"
+              style={{
+                right: '-3%',
+                top: '8%',
+                width: '18%',
+                height: 'auto',
+              }}
+            />
 
             {/* Interactive Animated Overlays: 3D Tilting Polaroid & Graphics Designer Marquee Tape */}
             <div

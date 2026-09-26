@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react'
 import aboutRightCollageClean from '../assets/about/about_right_collage_clean.png'
 import collagePolaroid from '../assets/about/collage_polaroid_clean.png'
 import collageHashtag from '../assets/about/collage_hashtag.png'
+import redStarOverlay from '../assets/about/red_star_overlay.png'
+import bwPhotoOverlay from '../assets/about/bw_photo_overlay.png'
 
 /**
  * AnimatedCollage
@@ -72,6 +74,34 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
           className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-0"
         />
       )}
+
+      {/* Red Star Overlay — covers the old baked-in starburst */}
+      <img
+        src={redStarOverlay}
+        alt=""
+        aria-hidden="true"
+        className="absolute z-[2] pointer-events-none select-none"
+        style={{
+          right: '-8%',
+          top: '-6%',
+          width: '38%',
+          height: 'auto',
+          transform: 'rotate(-10deg)',
+        }}
+      />
+
+      {/* B&W Photo Overlay — covers the old baked-in B&W cutout */}
+      <img
+        src={bwPhotoOverlay}
+        alt="Om - black and white portrait"
+        className="absolute z-[3] pointer-events-none select-none"
+        style={{
+          right: '-6%',
+          top: '5%',
+          width: '32%',
+          height: 'auto',
+        }}
+      />
 
       {/* ================= ANIMATED ROLES TAPE TICKER ================= */}
       <div
