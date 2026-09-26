@@ -64,8 +64,16 @@ export default function AboutSection() {
               aria-label="Tagline: ui-ux designer / illustrator / artist based in SHILLONG , INDIA."
             >
               <div className="w-full h-full p-2.5 flex items-center gap-2 text-[10px] lg:text-xs text-neutral-200 font-fredoka font-normal">
-                <span className="font-dirtyline text-white text-[15px] lg:text-[18px] leading-none inline-block shrink-0 select-none">
-                  a
+                <span
+                  className="font-dirtyline text-white text-[15px] lg:text-[18px] leading-none inline-block shrink-0 select-none uppercase"
+                  style={{
+                    fontFamily: "'Dirtyline', 'Dirtyline 36Daysoftype 2022', cursive, sans-serif",
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  A
                 </span>
                 <span>
                   ui-ux designer / illustrator / artist based in{' '}
@@ -77,23 +85,27 @@ export default function AboutSection() {
             {/* Paragraph 1: SINCE 8th grade... */}
             <div
               className="comic-overlay-bubble comic-bubble-tail-left"
-              style={{ left: '23.24%', top: '46.88%', width: '27.34%', minHeight: '10.42%' }}
+              style={{ left: '23.24%', top: '43.23%', width: '27.34%', minHeight: '10.42%' }}
               tabIndex={0}
               role="article"
               aria-label="Description paragraph 1"
             >
               <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
-                <div className="flex items-baseline gap-1.5 flex-wrap">
-                  <span className="font-dirtyline text-white text-[17px] lg:text-[20px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide">
-                    SINCE
-                  </span>
-                  <span>
-                    8th grade my knack for{' '}
-                    <strong className="font-bold text-white">illustrations</strong> ,{' '}
-                    <strong className="font-bold text-white">character design</strong> , and
-                    anything related to design has been constantly growing.
-                  </span>
-                </div>
+                <span
+                  className="font-dirtyline text-white text-[17px] lg:text-[20px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide uppercase mr-1.5"
+                  style={{
+                    fontFamily: "'Dirtyline', 'Dirtyline 36Daysoftype 2022', cursive, sans-serif",
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  SINCE
+                </span>
+                8th grade my knack for{' '}
+                <strong className="font-bold text-white">illustrations</strong> ,{' '}
+                <strong className="font-bold text-white">character design</strong> , and
+                anything related to design has been constantly growing.
               </div>
             </div>
 
@@ -125,14 +137,20 @@ export default function AboutSection() {
               role="article"
               aria-label="Description paragraph 3"
             >
-              <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug flex items-baseline gap-2">
-                <span className="font-dirtyline text-white text-[16px] lg:text-[19px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide">
-                  as
+              <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
+                <span
+                  className="font-dirtyline text-white text-[18px] lg:text-[22px] leading-none inline-block align-baseline shrink-0 select-none tracking-wider uppercase mr-1.5"
+                  style={{
+                    fontFamily: "'Dirtyline', 'Dirtyline 36Daysoftype 2022', cursive, sans-serif",
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  AS
                 </span>
-                <span>
-                  a new and curious artist, I'm always exploring different styles and mediums , it's
-                  how I learn and evolve.
-                </span>
+                a new and curious artist, I'm always exploring different styles and mediums , it's
+                how I learn and evolve.
               </div>
             </div>
 
@@ -207,8 +225,16 @@ export default function AboutSection() {
               role="article"
             >
               <div className="w-full h-full p-2.5 flex items-center gap-1.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka">
-                <span className="font-dirtyline text-white text-[14px] sm:text-[16px] leading-none inline-block shrink-0 select-none">
-                  a
+                <span
+                  className="font-dirtyline text-white text-[14px] sm:text-[16px] leading-none inline-block shrink-0 select-none uppercase"
+                  style={{
+                    fontFamily: "'Dirtyline', 'Dirtyline 36Daysoftype 2022', cursive, sans-serif",
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  A
                 </span>
                 <span>
                   ui-ux designer / illustrator / artist based in{' '}
@@ -230,16 +256,20 @@ export default function AboutSection() {
               role="article"
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
-                <div className="flex items-baseline gap-1 flex-wrap">
-                  <span className="font-dirtyline text-white text-[16px] sm:text-[18px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide">
-                    SINCE
-                  </span>
-                  <span>
-                    8th grade my knack for{' '}
-                    <strong className="font-bold text-white">illustrations</strong> ,{' '}
-                    <strong className="font-bold text-white">character design</strong> , and anything related to design has been constantly growing.
-                  </span>
-                </div>
+                <span
+                  className="font-dirtyline text-white text-[16px] sm:text-[18px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide uppercase mr-1.5"
+                  style={{
+                    fontFamily: "'Dirtyline', 'Dirtyline 36Daysoftype 2022', cursive, sans-serif",
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  SINCE
+                </span>
+                8th grade my knack for{' '}
+                <strong className="font-bold text-white">illustrations</strong> ,{' '}
+                <strong className="font-bold text-white">character design</strong> , and anything related to design has been constantly growing.
               </div>
             </div>
 
@@ -278,13 +308,19 @@ export default function AboutSection() {
               tabIndex={0}
               role="article"
             >
-              <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug flex items-baseline gap-1.5">
-                <span className="font-dirtyline text-white text-[15px] sm:text-[17px] leading-none inline-block align-baseline shrink-0 select-none tracking-wide">
-                  as
+              <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
+                <span
+                  className="font-dirtyline text-white text-[16px] sm:text-[18px] leading-none inline-block align-baseline shrink-0 select-none tracking-wider uppercase mr-1.5"
+                  style={{
+                    fontFamily: "'Dirtyline', 'Dirtyline 36Daysoftype 2022', cursive, sans-serif",
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  AS
                 </span>
-                <span>
-                  a new and curious artist, I'm always exploring different styles and mediums , it's how I learn and evolve.
-                </span>
+                a new and curious artist, I'm always exploring different styles and mediums , it's how I learn and evolve.
               </div>
             </div>
 
