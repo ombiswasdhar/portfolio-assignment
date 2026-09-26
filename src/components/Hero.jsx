@@ -46,9 +46,13 @@ export default function Hero() {
           setScrollY(currentScrollY)
           if (heroRef.current) {
             const rect = heroRef.current.getBoundingClientRect()
-            // Magnetically docks when user scrolls down and hero bottom approaches or passes viewport bottom
-            const shouldDock = currentScrollY > 120 && rect.bottom <= window.innerHeight + 140
-            setIsDocked(shouldDock)
+            // Smooth hysteresis: docks when scrolled past 140px, stays docked until smoothly returned above 80px
+            setIsDocked((prev) => {
+              if (prev) {
+                return currentScrollY > 80
+              }
+              return currentScrollY > 140 && rect.bottom <= window.innerHeight + 140
+            })
           }
           ticking = false
         })
@@ -294,25 +298,20 @@ export default function Hero() {
                 onClick={scrollToTop}
                 title="Scroll to top"
                 aria-label="Scroll to top"
+                whileHover={{ scale: 1.15, rotate: 45 }}
+                whileTap={{ scale: 0.95 }}
                 transition={{
                   type: 'spring',
-                  stiffness: 280,
+                  stiffness: 160,
                   damping: 24,
-                  mass: 0.8,
+                  mass: 0.85,
                 }}
-                className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center"
+                className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center will-change-transform"
               >
-                <motion.img
-                  layoutId="magnetic-hero-arrow-img"
+                <img
                   src={arrowLogo}
                   alt="Arrow monogram"
-                  transition={{
-                    type: 'spring',
-                    stiffness: 280,
-                    damping: 24,
-                    mass: 0.8,
-                  }}
-                  className="h-10 lg:h-12 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300"
+                  className="h-10 lg:h-12 w-auto object-contain pointer-events-none"
                 />
               </motion.button>
             ) : (
@@ -349,25 +348,20 @@ export default function Hero() {
                 onClick={scrollToTop}
                 title="Scroll to top"
                 aria-label="Scroll to top"
+                whileHover={{ scale: 1.15, rotate: 45 }}
+                whileTap={{ scale: 0.95 }}
                 transition={{
                   type: 'spring',
-                  stiffness: 280,
+                  stiffness: 160,
                   damping: 24,
-                  mass: 0.8,
+                  mass: 0.85,
                 }}
-                className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center"
+                className="bg-transparent border-0 p-0 cursor-pointer focus:outline-none flex items-center justify-center will-change-transform"
               >
-                <motion.img
-                  layoutId="magnetic-hero-arrow-img"
+                <img
                   src={arrowLogo}
                   alt="Arrow monogram"
-                  transition={{
-                    type: 'spring',
-                    stiffness: 280,
-                    damping: 24,
-                    mass: 0.8,
-                  }}
-                  className="h-6 sm:h-7 w-auto object-contain hover:scale-120 hover:rotate-45 active:scale-95 transition-all duration-300"
+                  className="h-6 sm:h-7 w-auto object-contain pointer-events-none"
                 />
               </motion.button>
             ) : (
@@ -394,30 +388,25 @@ export default function Hero() {
           onClick={scrollToTop}
           title="Scroll to top"
           aria-label="Scroll to top"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.94 }}
           transition={{
             type: 'spring',
-            stiffness: 280,
+            stiffness: 160,
             damping: 24,
-            mass: 0.8,
+            mass: 0.85,
           }}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0a0a0e]/90 backdrop-blur-xl border border-white/25 shadow-[0_12px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(186,31,31,0.35)] hover:shadow-[0_14px_40px_rgba(186,31,31,0.65)] hover:border-[#BA1F1F] flex items-center justify-center group hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer pointer-events-auto select-none"
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0a0a0e]/90 backdrop-blur-xl border border-white/25 shadow-[0_12px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(186,31,31,0.35)] hover:shadow-[0_14px_40px_rgba(186,31,31,0.65)] hover:border-[#BA1F1F] flex items-center justify-center group cursor-pointer pointer-events-auto select-none transition-colors duration-300 will-change-transform"
         >
           {/* Ambient subtle pulse glow */}
           <span
             className="absolute inset-0 rounded-full bg-[#BA1F1F]/20 animate-ping pointer-events-none opacity-40 group-hover:opacity-75"
             aria-hidden="true"
           />
-          <motion.img
-            layoutId="magnetic-hero-arrow-img"
+          <img
             src={arrowLogo}
             alt="Scroll to top"
-            transition={{
-              type: 'spring',
-              stiffness: 280,
-              damping: 24,
-              mass: 0.8,
-            }}
-            className="relative z-10 h-6 sm:h-7 w-auto object-contain rotate-45 group-hover:-translate-y-1 group-hover:brightness-125 transition-transform duration-300 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+            className="relative z-10 h-6 sm:h-7 w-auto object-contain rotate-45 transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:brightness-125 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] pointer-events-none"
           />
         </motion.button>
       )}
