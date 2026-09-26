@@ -49,10 +49,10 @@ export default function Hero() {
       className="relative w-full bg-[#050507] text-white select-none overflow-hidden pt-24 sm:pt-28 md:pt-32"
     >
       {/* Background: NedDev Kinetic Matrix */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto opacity-55">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
         <KineticMatrix
           title=""
-          intensity={0.5}
+          intensity={0.85}
           className="w-full h-full bg-[#06070a] [&_header]:hidden [&_main]:hidden"
         />
       </div>
