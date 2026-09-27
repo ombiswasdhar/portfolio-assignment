@@ -152,40 +152,27 @@ export default function SkillSetSection() {
         }`}
       >
         
-        {/* ================= POSTER CARD (Seamless flat bottom corners) ================= */}
+        {/* ================= POSTER CARD (Pure white background) ================= */}
         <div
-          className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-white text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
+          style={{ backgroundColor: '#ffffff' }}
+          className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 !bg-white text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
         >
-          
-          {/* Subtle Paper Grain Overlay */}
-          <svg
-            className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.24] mix-blend-multiply select-none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <filter id="paperNoise">
-              <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
-              <feColorMatrix type="saturate" values="0" />
-            </filter>
-            <rect width="100%" height="100%" filter="url(#paperNoise)" />
-          </svg>
-
           {/* ================= NEDDEV HELIX CHRONO MATRIX BACKGROUND ANIMATION ================= */}
           <div
-            className="absolute inset-0 w-full h-full z-0 pointer-events-auto overflow-hidden opacity-65 hover:opacity-90 transition-opacity duration-500"
+            className="absolute inset-0 w-full h-full z-0 pointer-events-auto overflow-hidden opacity-75 hover:opacity-95 transition-opacity duration-500 bg-transparent"
             aria-hidden="true"
           >
             <HelixChronoMatrix
               headline=""
               lineColor="red"
               transparentBg={true}
-              className="w-full h-full bg-transparent [&_header]:hidden [&_main]:hidden"
+              className="w-full h-full !bg-transparent [&_header]:hidden [&_main]:hidden"
             />
           </div>
 
           {/* NedDev Floating Icons Hero Component - Visible in grid mode, seamlessly part of 3D spiral animation in spiral mode */}
           <FloatingIconsHero
-            className={`absolute inset-0 w-full h-full min-h-0 !h-full bg-transparent overflow-hidden z-20 pointer-events-none select-none [&>div.relative.z-10]:hidden transition-opacity duration-500 ${
+            className={`absolute inset-0 w-full h-full min-h-0 !h-full !bg-transparent overflow-hidden z-20 pointer-events-none select-none [&>div.relative.z-10]:hidden transition-opacity duration-500 ${
               isSpiralMode ? 'opacity-0 pointer-events-none' : 'opacity-100'
             }`}
             title=""

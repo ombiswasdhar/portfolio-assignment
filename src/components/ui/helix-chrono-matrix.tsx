@@ -129,7 +129,7 @@ export function HelixChronoMatrix({
         const canvas = canvasRef.current;
         if (!container || !canvas) return;
 
-        const ctx = canvas.getContext('2d', { alpha: false });
+        const ctx = canvas.getContext('2d', { alpha: true });
         if (!ctx) return;
 
         const resizeObserver = new ResizeObserver((entries) => {
@@ -169,7 +169,7 @@ export function HelixChronoMatrix({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext('2d', { alpha: false });
+        const ctx = canvas.getContext('2d', { alpha: true });
         if (!ctx) return;
 
         let animId = 0;
@@ -201,7 +201,10 @@ export function HelixChronoMatrix({
             const strokeBase = lineColor === 'red' ? '220, 38, 38' : (isDark ? '255, 255, 255' : '15, 23, 42');
 
             if (transparentBg) {
-                ctx.clearRect(0, 0, width, height);
+                ctx.save();
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
             } else {
                 ctx.fillStyle = bgColor;
                 ctx.fillRect(0, 0, width, height);
@@ -373,7 +376,7 @@ export function HelixChronoMatrix({
 
         animId = requestAnimationFrame(render);
         return () => cancelAnimationFrame(animId);
-    }, [isRunning, topology, isDarkMode]);
+    }, [isRunning, topology, isDarkMode, transparentBg, lineColor]);
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const container = containerRef.current;
@@ -394,13 +397,15 @@ export function HelixChronoMatrix({
             onMouseMove={handlePointerMove}
             onMouseLeave={handlePointerLeave}
             className={cn(
-                "group relative flex h-full w-full select-none flex-col justify-between overflow-hidden bg-slate-50 transition-colors duration-700 dark:bg-[#090a0f]",
+                "group relative flex h-full w-full select-none flex-col justify-between overflow-hidden transition-colors duration-700",
+                transparentBg ? "!bg-transparent" : "bg-slate-50 dark:bg-[#090a0f]",
                 className
             )}
         >
             <canvas
                 ref={canvasRef}
-                className="absolute inset-0 block h-full w-full cursor-crosshair"
+                className="absolute inset-0 block h-full w-full cursor-crosshair bg-transparent"
+                style={{ backgroundColor: 'transparent' }}
             />
 
             <div className="relative z-20 flex h-full w-full flex-col justify-between p-6 md:p-10">
