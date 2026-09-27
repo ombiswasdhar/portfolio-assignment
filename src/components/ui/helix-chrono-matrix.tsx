@@ -32,6 +32,8 @@ interface Particle {
 export interface HelixChronoMatrixProps {
     headline?: string;
     className?: string;
+    lineColor?: string;
+    transparentBg?: boolean;
 }
 
 type TopologyMode = 'DOUBLE_HELIX' | 'NEURAL_STRATA' | 'QUANTUM_RIBBONS';
@@ -39,6 +41,8 @@ type TopologyMode = 'DOUBLE_HELIX' | 'NEURAL_STRATA' | 'QUANTUM_RIBBONS';
 export function HelixChronoMatrix({
     headline = "STRATA",
     className = "",
+    lineColor = "red",
+    transparentBg = true,
 }: HelixChronoMatrixProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -194,10 +198,14 @@ export function HelixChronoMatrix({
 
             const isDark = document.documentElement.classList.contains('dark') || isDarkMode;
             const bgColor = isDark ? '#090a0f' : '#f8fafc';
-            const strokeBase = isDark ? '255, 255, 255' : '15, 23, 42';
+            const strokeBase = lineColor === 'red' ? '220, 38, 38' : (isDark ? '255, 255, 255' : '15, 23, 42');
 
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(0, 0, width, height);
+            if (transparentBg) {
+                ctx.clearRect(0, 0, width, height);
+            } else {
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, width, height);
+            }
 
             const centerX = width / 2;
             const centerY = height / 2;
@@ -286,13 +294,15 @@ export function HelixChronoMatrix({
                 const isExcited = avgExcitation > 0.05;
 
                 if (isExcited) {
-                    ctx.strokeStyle = isDark
-                        ? `rgba(255, 255, 255, ${Math.min(1, 0.4 + avgExcitation * 0.6)})`
-                        : `rgba(0, 0, 0, ${Math.min(1, 0.4 + avgExcitation * 0.6)})`;
-                    ctx.lineWidth = 1.2 + avgExcitation * 1.5;
+                    ctx.strokeStyle = lineColor === 'red'
+                        ? `rgba(239, 68, 68, ${Math.min(1, 0.7 + avgExcitation * 0.3)})`
+                        : (isDark
+                            ? `rgba(255, 255, 255, ${Math.min(1, 0.4 + avgExcitation * 0.6)})`
+                            : `rgba(0, 0, 0, ${Math.min(1, 0.4 + avgExcitation * 0.6)})`);
+                    ctx.lineWidth = 1.4 + avgExcitation * 1.5;
                 } else {
-                    ctx.strokeStyle = `rgba(${strokeBase}, ${depthAlpha * 0.6})`;
-                    ctx.lineWidth = 0.75;
+                    ctx.strokeStyle = `rgba(${strokeBase}, ${depthAlpha * (lineColor === 'red' ? 0.85 : 0.6)})`;
+                    ctx.lineWidth = lineColor === 'red' ? 1.0 : 0.75;
                 }
 
                 ctx.stroke();
@@ -341,7 +351,9 @@ export function HelixChronoMatrix({
                 ctx.beginPath();
                 ctx.arc(projX, projY, p.size * scale, 0, Math.PI * 2);
 
-                if (isNearHover) {
+                if (lineColor === 'red') {
+                    ctx.fillStyle = isNearHover ? '#ef4444' : '#ba1f1f';
+                } else if (isNearHover) {
                     // Inverted to white (or high contrast) when hovered
                     ctx.fillStyle = isDark ? '#ffffff' : '#000000';
                 } else {
@@ -352,7 +364,7 @@ export function HelixChronoMatrix({
 
                 // Optional soft border outline for high definition clarity
                 ctx.lineWidth = 0.5;
-                ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)';
+                ctx.strokeStyle = lineColor === 'red' ? 'rgba(239, 68, 68, 0.6)' : (isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)');
                 ctx.stroke();
             }
 

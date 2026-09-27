@@ -154,7 +154,7 @@ export default function SkillSetSection() {
         
         {/* ================= POSTER CARD (Seamless flat bottom corners) ================= */}
         <div
-          className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-[#F2F0EA] text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
+          className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-white text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
         >
           
           {/* Subtle Paper Grain Overlay */}
@@ -172,18 +172,22 @@ export default function SkillSetSection() {
 
           {/* ================= NEDDEV HELIX CHRONO MATRIX BACKGROUND ANIMATION ================= */}
           <div
-            className="absolute inset-0 w-full h-full z-0 pointer-events-auto overflow-hidden mix-blend-multiply opacity-55 hover:opacity-80 transition-opacity duration-500 [filter:invert(1)_sepia(100%)_saturate(650%)_hue-rotate(325deg)_brightness(0.72)]"
+            className="absolute inset-0 w-full h-full z-0 pointer-events-auto overflow-hidden opacity-65 hover:opacity-90 transition-opacity duration-500"
             aria-hidden="true"
           >
             <HelixChronoMatrix
               headline=""
-              className="w-full h-full bg-transparent dark:bg-transparent [&_header]:hidden [&_main]:hidden"
+              lineColor="red"
+              transparentBg={true}
+              className="w-full h-full bg-transparent [&_header]:hidden [&_main]:hidden"
             />
           </div>
 
-          {/* NedDev Floating Icons Hero Component - Draggable Ambient App Icons */}
+          {/* NedDev Floating Icons Hero Component - Visible in grid mode, seamlessly part of 3D spiral animation in spiral mode */}
           <FloatingIconsHero
-            className="absolute inset-0 w-full h-full min-h-0 !h-full bg-transparent overflow-hidden z-20 pointer-events-none select-none [&>div.relative.z-10]:hidden"
+            className={`absolute inset-0 w-full h-full min-h-0 !h-full bg-transparent overflow-hidden z-20 pointer-events-none select-none [&>div.relative.z-10]:hidden transition-opacity duration-500 ${
+              isSpiralMode ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            }`}
             title=""
             subtitle=""
             ctaText=""
@@ -236,7 +240,7 @@ export default function SkillSetSection() {
 
             {/* Conditional Display: 3D Helical Spiral Orbit OR Original 2D Grid Layout */}
             {isSpiralMode ? (
-              <div className="w-full max-w-[1020px] mx-auto animate-fadeIn transition-all duration-500">
+              <div className="w-full max-w-[1360px] mx-auto animate-fadeIn transition-all duration-500">
                 <SoftwareLogosSpiral3D
                   apps={allAppsList}
                   onIconClick={(clickedApp) => {

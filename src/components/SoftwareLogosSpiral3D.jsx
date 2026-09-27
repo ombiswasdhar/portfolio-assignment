@@ -10,14 +10,14 @@ export default function SoftwareLogosSpiral3D({
   const [angle, setAngle] = useState(0)
   const [hoveredApp, setHoveredApp] = useState(null)
   const [pointer, setPointer] = useState({ x: 0, y: 0 })
-  const [containerWidth, setContainerWidth] = useState(800)
+  const [containerWidth, setContainerWidth] = useState(1200)
 
   // Track container width for responsive radius & height
   useEffect(() => {
     if (!containerRef.current) return
     const updateWidth = () => {
       if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth || 800)
+        setContainerWidth(containerRef.current.offsetWidth || 1200)
       }
     }
     updateWidth()
@@ -33,8 +33,8 @@ export default function SoftwareLogosSpiral3D({
       const delta = Math.min((currentTime - lastTime) / 1000, 0.1)
       lastTime = currentTime
 
-      // Orbit speed: ~0.44 rad/sec (~14 seconds per full orbit), slows down when hovering
-      const speed = hoveredApp ? 0.08 : 0.44
+      // Smooth orbital speed (~14s per revolution), slows down on hover
+      const speed = hoveredApp ? 0.08 : 0.42
       setAngle((prev) => (prev + speed * delta) % (Math.PI * 2))
 
       animFrameRef.current = requestAnimationFrame(loop)
@@ -67,22 +67,26 @@ export default function SoftwareLogosSpiral3D({
 
   // Responsive dimensions
   const isMobile = containerWidth < 640
-  const isTablet = containerWidth >= 640 && containerWidth < 960
+  const isTablet = containerWidth >= 640 && containerWidth < 1024
 
-  // Radii: Primary spiral + Expanded outer floating ring (bridges space to borders)
-  const radiusPrimary = isMobile ? 120 : isTablet ? 175 : 220
-  const radiusFloating = isMobile ? 160 : isTablet ? 245 : 315
+  // Three tiers of orbital radii:
+  // 1. Core central spiral helix
+  const radiusPrimary = isMobile ? 115 : isTablet ? 165 : 205
+  // 2. Mid-range companion orbit
+  const radiusMid = isMobile ? 155 : isTablet ? 235 : 305
+  // 3. Wide side-flank floating orbits: reaching all the way to the sides of the screen to fill the space!
+  const radiusSides = isMobile ? 195 : isTablet ? 340 : 470
 
-  const heightSpan = isMobile ? 190 : 260
-  const stageHeight = isMobile ? '430px' : '500px'
+  const heightSpan = isMobile ? 200 : 270
+  const stageHeight = isMobile ? '460px' : '530px'
 
   const totalApps = apps.length
 
-  // ================= 1. PRIMARY SPIRAL ICONS =================
+  // ================= 1. PRIMARY INNER SPIRAL ICONS =================
   const primaryItems = useMemo(() => {
     return apps.map((app, index) => {
       const progress = index / (totalApps - 1)
-      const normalizedY = progress - 0.5 // -0.5 to +0.5
+      const normalizedY = progress - 0.5
 
       const turns = 2.2
       const itemAngle = angle + progress * (Math.PI * 2 * turns)
@@ -93,9 +97,9 @@ export default function SoftwareLogosSpiral3D({
       const y = normalizedY * heightSpan + Math.sin(itemAngle) * (isMobile ? 12 : 20)
 
       const zNorm = (z + radiusPrimary) / (2 * radiusPrimary)
-      const scale = isMobile ? 0.72 + zNorm * 0.44 : 0.75 + zNorm * 0.50
-      const opacity = 0.55 + zNorm * 0.45
-      const zIndex = Math.round(100 + zNorm * 200)
+      const scale = isMobile ? 0.72 + zNorm * 0.44 : 0.76 + zNorm * 0.48
+      const opacity = 0.58 + zNorm * 0.42
+      const zIndex = Math.round(150 + zNorm * 200)
 
       return {
         id: `primary-${app.name}`,
@@ -107,43 +111,36 @@ export default function SoftwareLogosSpiral3D({
         scale,
         opacity,
         zIndex,
-        isDuplicate: false,
+        tier: 'primary',
       }
     })
   }, [apps, angle, radiusPrimary, heightSpan, totalApps, isMobile])
 
-  // ================= 2. DUPLICATED COMPANION FLOATING ICONS =================
-  // Orbiting at expanded outer radius with organic floating wave bobbing
-  const floatingDuplicateItems = useMemo(() => {
+  // ================= 2. MID-RANGE COMPANION FLOATING ICONS =================
+  const midCompanionItems = useMemo(() => {
     return apps.map((app, index) => {
-      // Inverted progress to interlace with the primary helix
       const progress = 1 - index / (totalApps - 1)
       const normalizedY = progress - 0.5
 
-      // 180° phase shifted + staggered turns
       const turns = 2.2
-      const itemAngle = angle + progress * (Math.PI * 2 * turns) + Math.PI
+      const itemAngle = angle + progress * (Math.PI * 2 * turns) + Math.PI // 180° offset
+      const r = radiusMid * (1.04 - progress * 0.08)
 
-      // Wider radius that reaches out toward the borders, decreasing empty space
-      const r = radiusFloating * (1.04 - progress * 0.08)
-
-      // 3D coordinates with organic floating wave motion
-      const floatY = Math.sin(angle * 2.4 + index * 1.4) * (isMobile ? 10 : 16)
-      const floatX = Math.cos(angle * 1.8 + index * 0.9) * (isMobile ? 6 : 10)
-      const floatRot = Math.sin(angle * 1.5 + index * 1.1) * 7
+      const floatY = Math.sin(angle * 2.2 + index * 1.3) * (isMobile ? 10 : 16)
+      const floatX = Math.cos(angle * 1.7 + index * 0.8) * (isMobile ? 6 : 10)
+      const floatRot = Math.sin(angle * 1.4 + index * 1.1) * 7
 
       const x = Math.cos(itemAngle) * r + floatX
       const z = Math.sin(itemAngle) * r
       const y = normalizedY * heightSpan * 0.95 + Math.sin(itemAngle) * (isMobile ? 14 : 22) + floatY
 
-      const zNorm = (z + radiusFloating) / (2 * radiusFloating)
-      // Slightly more compact than primary for layered depth
-      const scale = isMobile ? 0.62 + zNorm * 0.38 : 0.65 + zNorm * 0.44
-      const opacity = 0.46 + zNorm * 0.50
-      const zIndex = Math.round(90 + zNorm * 200)
+      const zNorm = (z + radiusMid) / (2 * radiusMid)
+      const scale = isMobile ? 0.62 + zNorm * 0.38 : 0.68 + zNorm * 0.42
+      const opacity = 0.48 + zNorm * 0.48
+      const zIndex = Math.round(120 + zNorm * 200)
 
       return {
-        id: `dup-${app.name}`,
+        id: `mid-${app.name}`,
         app,
         x,
         y,
@@ -152,16 +149,61 @@ export default function SoftwareLogosSpiral3D({
         scale,
         opacity,
         zIndex,
-        isDuplicate: true,
         floatRot,
+        tier: 'mid',
       }
     })
-  }, [apps, angle, radiusFloating, heightSpan, totalApps, isMobile])
+  }, [apps, angle, radiusMid, heightSpan, totalApps, isMobile])
 
-  // Combine both sets so all 22 icons render together in unified 3D depth space
+  // ================= 3. WIDE SIDE-FLANK FLOATING ICONS (SIDES OF SCREEN) =================
+  // Orbiting wide to populate the left and right sides of the screen so it looks completely filled!
+  const sideFlankFloatingItems = useMemo(() => {
+    return apps.map((app, index) => {
+      // Staggered distribution across the outer sides
+      const progress = (index * 0.61803398875) % 1 // Golden ratio distribution for natural organic spread
+      const normalizedY = (index / (totalApps - 1)) - 0.5
+
+      // Wide orbit with alternating left/right phase
+      const sidePhase = index % 2 === 0 ? 0 : Math.PI
+      const itemAngle = angle * 0.85 + (index / totalApps) * Math.PI * 2 + sidePhase
+
+      // Expanded outer radius spanning to the sides of the screen
+      const r = radiusSides * (0.92 + (index % 3) * 0.08)
+
+      // Floating wave physics
+      const floatY = Math.sin(angle * 2.6 + index * 1.6) * (isMobile ? 12 : 22)
+      const floatX = Math.cos(angle * 1.9 + index * 1.2) * (isMobile ? 8 : 14)
+      const floatRot = Math.sin(angle * 1.2 + index * 0.9) * 10
+
+      const x = Math.cos(itemAngle) * r + floatX
+      const z = Math.sin(itemAngle) * (r * 0.65) // Slightly elliptical in Z to keep focus forward
+      const y = normalizedY * (heightSpan * 1.15) + floatY
+
+      const zNorm = (z + radiusSides) / (2 * radiusSides)
+      const scale = isMobile ? 0.58 + zNorm * 0.34 : 0.64 + zNorm * 0.38
+      const opacity = 0.42 + zNorm * 0.50
+      const zIndex = Math.round(90 + zNorm * 180)
+
+      return {
+        id: `side-${app.name}`,
+        app,
+        x,
+        y,
+        z,
+        zNorm,
+        scale,
+        opacity,
+        zIndex,
+        floatRot,
+        tier: 'side',
+      }
+    })
+  }, [apps, angle, radiusSides, heightSpan, totalApps, isMobile])
+
+  // Combine all three tiers into a unified 3D depth field (33 floating/orbiting icons)
   const all3DItems = useMemo(() => {
-    return [...primaryItems, ...floatingDuplicateItems]
-  }, [primaryItems, floatingDuplicateItems])
+    return [...sideFlankFloatingItems, ...midCompanionItems, ...primaryItems]
+  }, [sideFlankFloatingItems, midCompanionItems, primaryItems])
 
   // Parallax rotation angles
   const pitchDeg = pointer.y * -14
@@ -175,47 +217,50 @@ export default function SoftwareLogosSpiral3D({
       className={`relative w-full select-none overflow-visible flex flex-col items-center justify-center ${className}`}
       style={{
         minHeight: stageHeight,
-        perspective: '1300px',
+        perspective: '1350px',
       }}
       role="region"
-      aria-label="3D revolving spiral of software skill logos with floating companion icons. Click any logo to view standard grid."
+      aria-label="3D revolving spiral of software skill logos with full-screen floating companion icons. Click any logo to view standard grid."
     >
-      {/* 3D Helix Core Decorative Halo Rings in Background */}
+      {/* ================= 3D ROTATING RED HELIX RINGS & LIGHT CORE ================= */}
       <div
         className="absolute pointer-events-none transition-transform duration-500 ease-out"
         style={{
-          width: radiusFloating * 1.8,
-          height: heightSpan * 1.4,
+          width: radiusSides * 1.6,
+          height: heightSpan * 1.5,
           transform: `rotateX(${pitchDeg * 0.6}deg) rotateY(${yawDeg * 0.6}deg)`,
           transformStyle: 'preserve-3d',
         }}
         aria-hidden="true"
       >
-        {/* Subtle holographic spiral orbital rings */}
+        {/* Outer Rotating Red Spiral Orbital Ring */}
         <div
-          className="absolute inset-0 rounded-full border border-neutral-900/10 opacity-30 animate-spin-slow"
+          className="absolute inset-0 rounded-full border border-red-600/35 opacity-45 animate-spin-slow"
           style={{
             transform: 'rotateX(72deg) scale(1.15)',
-            filter: 'blur(0.5px)',
+            filter: 'drop-shadow(0 0 6px rgba(220,38,38,0.35))',
           }}
         />
+        {/* Mid Dashed Red Rotating Orbital Ring */}
         <div
-          className="absolute inset-8 rounded-full border border-dashed border-neutral-900/15 opacity-25"
+          className="absolute inset-10 rounded-full border border-dashed border-red-500/40 opacity-40"
           style={{
-            transform: 'rotateX(72deg) scale(0.9)',
+            transform: 'rotateX(72deg) scale(0.92)',
+            filter: 'drop-shadow(0 0 5px rgba(239,68,68,0.3))',
           }}
         />
+        {/* Inner Red Rotating Orbital Ring */}
         <div
-          className="absolute inset-16 rounded-full border border-neutral-900/10 opacity-20"
+          className="absolute inset-20 rounded-full border border-red-500/30 opacity-35"
           style={{
-            transform: 'rotateX(72deg) scale(0.7)',
+            transform: 'rotateX(72deg) scale(0.72)',
           }}
         />
-        {/* Glowing central axis light beam */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-gradient-to-tr from-rose-500/10 via-amber-500/10 to-cyan-500/10 blur-3xl pointer-events-none" />
+        {/* Core Glowing Red Axis Light Beam */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-gradient-to-tr from-red-600/20 via-rose-500/12 to-transparent blur-3xl pointer-events-none" />
       </div>
 
-      {/* 3D Perspective Orbital Stage */}
+      {/* ================= 3D PERSPECTIVE ORBITAL STAGE ================= */}
       <div
         className="relative w-full flex items-center justify-center pointer-events-auto transition-transform duration-300 ease-out"
         style={{
@@ -225,9 +270,11 @@ export default function SoftwareLogosSpiral3D({
         }}
       >
         {all3DItems.map((item) => {
-          const { id, app, x, y, z, zNorm, scale, opacity, zIndex, isDuplicate, floatRot } = item
+          const { id, app, x, y, z, zNorm, scale, opacity, zIndex, tier, floatRot } = item
           const IconComponent = app.Icon
           const isHovered = hoveredApp === id
+          const isSide = tier === 'side'
+          const isMid = tier === 'mid'
 
           return (
             <div
@@ -244,25 +291,27 @@ export default function SoftwareLogosSpiral3D({
               }}
               tabIndex={0}
               role="button"
-              aria-label={`${app.name}${isDuplicate ? ' (floating companion)' : ''} logo in 3D orbit. Click to return to original grid layout.`}
+              aria-label={`${app.name}${isSide ? ' (floating side)' : isMid ? ' (floating companion)' : ''} logo in 3D orbit. Click to return to original grid layout.`}
             >
               {/* Icon Container with dynamic 3D depth shadow & brand glow */}
               <div
                 className={`relative rounded-2xl transition-all duration-300 ${
-                  isDuplicate
+                  isSide
+                    ? 'p-1.5 sm:p-2 border border-red-500/15 shadow-[0_8px_20px_rgba(0,0,0,0.08)]'
+                    : isMid
                     ? 'p-1.5 sm:p-2 border border-neutral-900/10'
                     : 'p-1.5 sm:p-2'
                 } ${
                   isHovered
-                    ? 'shadow-[0_22px_48px_rgba(0,0,0,0.38)] ring-2 ring-neutral-950/80 -translate-y-1'
+                    ? 'shadow-[0_22px_48px_rgba(220,38,38,0.3)] ring-2 ring-red-600 -translate-y-1'
                     : zNorm > 0.65
-                    ? 'shadow-[0_12px_28px_rgba(0,0,0,0.18)]'
-                    : 'shadow-[0_4px_12px_rgba(0,0,0,0.08)]'
+                    ? 'shadow-[0_12px_28px_rgba(0,0,0,0.14)]'
+                    : 'shadow-[0_4px_12px_rgba(0,0,0,0.06)]'
                 }`}
                 style={{
                   backgroundColor: zNorm > 0.5
-                    ? (isDuplicate ? 'rgba(255, 255, 255, 0.82)' : 'rgba(255, 255, 255, 0.92)')
-                    : (isDuplicate ? 'rgba(255, 255, 255, 0.55)' : 'rgba(255, 255, 255, 0.68)'),
+                    ? (isSide ? 'rgba(255, 255, 255, 0.88)' : isMid ? 'rgba(255, 255, 255, 0.90)' : 'rgba(255, 255, 255, 0.96)')
+                    : (isSide ? 'rgba(255, 255, 255, 0.60)' : isMid ? 'rgba(255, 255, 255, 0.68)' : 'rgba(255, 255, 255, 0.75)'),
                   backdropFilter: 'blur(8px)',
                   boxShadow: isHovered && app.color
                     ? `0 18px 40px ${app.color}77`
@@ -271,7 +320,9 @@ export default function SoftwareLogosSpiral3D({
               >
                 <IconComponent
                   className={`${
-                    isDuplicate
+                    isSide
+                      ? 'w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12'
+                      : isMid
                       ? 'w-10 h-10 sm:w-12 sm:h-12 md:w-13 md:h-13'
                       : 'w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14'
                   } transition-transform duration-300 group-hover/orbit:scale-110`}
@@ -290,7 +341,7 @@ export default function SoftwareLogosSpiral3D({
                 className={`mt-2 flex flex-col items-center pointer-events-none transition-all duration-200 ${
                   isHovered
                     ? 'opacity-100 scale-105 translate-y-0'
-                    : zNorm > 0.75
+                    : zNorm > 0.78
                     ? 'opacity-85 scale-95'
                     : 'opacity-0 scale-90'
                 }`}
@@ -304,7 +355,7 @@ export default function SoftwareLogosSpiral3D({
                 </span>
 
                 {isHovered && (
-                  <span className="mt-1 text-[9px] text-neutral-600 font-normal bg-white/75 px-2 py-0.5 rounded-full border border-black/10 shadow-xs whitespace-nowrap">
+                  <span className="mt-1 text-[9px] text-neutral-600 font-normal bg-white/85 px-2 py-0.5 rounded-full border border-red-500/20 shadow-xs whitespace-nowrap">
                     Click to arrange in grid ⊞
                   </span>
                 )}
@@ -319,11 +370,11 @@ export default function SoftwareLogosSpiral3D({
         <button
           type="button"
           onClick={() => onIconClick(null)}
-          className="group inline-flex items-center gap-2 px-5 py-2 rounded-full border border-neutral-900/80 bg-white/80 backdrop-blur-md text-neutral-950 text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+          className="group inline-flex items-center gap-2 px-5 py-2 rounded-full border border-red-600/40 bg-white/90 backdrop-blur-md text-neutral-950 text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(220,38,38,0.1)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
         >
           <span className="w-2 h-2 rounded-full bg-[#BA1F1F] animate-pulse" />
           <span>Click any icon to restore original grid layout</span>
-          <span className="text-neutral-400 group-hover:text-white/80 transition-colors">⊞</span>
+          <span className="text-red-500 group-hover:text-white/80 transition-colors">⊞</span>
         </button>
       </div>
     </div>
