@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
 import {
   ProcreateIcon,
@@ -15,8 +15,6 @@ import {
 } from './SkillIcons'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
-import { QuantumSwarm } from '@/components/ui/quantum-swarm'
-import { Zap, Play, Pause } from 'lucide-react'
 
 // Floating ambient draggable icons using actual skill set app icons
 // Scaled down, positioned along open perimeter margins with ZERO element overlap
@@ -121,17 +119,7 @@ const otherSkillsCol3 = [
 
 export default function SkillSetSection() {
   const [hoveredApp, setHoveredApp] = useState(null)
-  const [isSwarmRunning, setIsSwarmRunning] = useState(true)
-  const swarmRef = useRef(null)
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
-
-  // Trigger shockwave at exact click point on poster card background
-  const handleCardClick = (e) => {
-    // Only trigger if clicking on the card itself, not on interactive buttons/icons
-    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.cursor-pointer')) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    swarmRef.current?.triggerPulse(e.clientX - rect.left, e.clientY - rect.top)
-  }
 
   return (
     <section
@@ -149,13 +137,12 @@ export default function SkillSetSection() {
         
         {/* ================= POSTER CARD (Seamless flat bottom corners) ================= */}
         <div
-          onClick={handleCardClick}
           className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 bg-[#F2F0EA] text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
         >
           
           {/* Subtle Paper Grain Overlay */}
           <svg
-            className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.24] mix-blend-multiply select-none z-[1]"
+            className="pointer-events-none absolute inset-0 w-full h-full opacity-[0.24] mix-blend-multiply select-none"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
@@ -165,19 +152,6 @@ export default function SkillSetSection() {
             </filter>
             <rect width="100%" height="100%" filter="url(#paperNoise)" />
           </svg>
-
-          {/* ================= UNCODE UI QUANTUM SWARM ANIMATION ================= */}
-          <div className="absolute inset-0 w-full h-full z-0 pointer-events-auto overflow-hidden">
-            <QuantumSwarm
-              ref={swarmRef}
-              transparent={true}
-              showControls={false}
-              showHeadline={false}
-              particleCount={250}
-              accentColor="#BA1F1F"
-              className="h-full w-full opacity-65 hover:opacity-85 transition-opacity"
-            />
-          </div>
 
           {/* NedDev Floating Icons Hero Component - Draggable Ambient App Icons */}
           <FloatingIconsHero
@@ -189,44 +163,8 @@ export default function SkillSetSection() {
             icons={floatingAppIcons}
           />
 
-          {/* ================= TOP ROW: TITLE, SWARM HUD & CORNER MONOGRAM ================= */}
+          {/* ================= TOP ROW: TITLE & CORNER MONOGRAM ================= */}
           <div className="relative z-10 w-full flex items-center justify-center">
-            {/* Top-Left Quantum Swarm Live Beacon & Interactive Controls */}
-            <div className="absolute left-0 sm:left-2 md:left-4 top-1/2 -translate-y-1/2 pointer-events-auto flex items-center gap-1.5 sm:gap-2">
-              <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/70 backdrop-blur-md border border-neutral-900/15 shadow-[0_2px_8px_rgba(0,0,0,0.04)] font-mono text-[11px] text-neutral-800 select-none">
-                <span className="relative flex size-2">
-                  {isSwarmRunning && (
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#BA1F1F] opacity-75" />
-                  )}
-                  <span className="relative inline-flex size-2 rounded-full bg-[#BA1F1F]" />
-                </span>
-                <span className="font-semibold tracking-wider uppercase text-[10px]">Swarm</span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => swarmRef.current?.triggerPulse()}
-                className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-neutral-900/20 bg-white/80 hover:bg-neutral-950 hover:text-white px-2.5 sm:px-3 py-1 text-xs font-mono backdrop-blur-md transition-all hover:scale-105 active:scale-95 shadow-sm text-neutral-900 cursor-pointer"
-                title="Trigger Quantum Shockwave"
-              >
-                <Zap className="size-3 text-[#BA1F1F]" />
-                <span className="font-mono text-[10px] font-semibold tracking-wide">PULSE</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  swarmRef.current?.toggleRunning()
-                  setIsSwarmRunning((prev) => !prev)
-                }}
-                className="flex items-center gap-1 rounded-full border border-neutral-900/20 bg-white/80 hover:bg-neutral-950 hover:text-white px-2 sm:px-2.5 py-1 text-xs font-mono backdrop-blur-md transition-all hover:scale-105 active:scale-95 shadow-sm text-neutral-900 cursor-pointer"
-                title={isSwarmRunning ? "Freeze Swarm Animation" : "Resume Swarm Animation"}
-              >
-                {isSwarmRunning ? <Pause className="size-3" /> : <Play className="size-3" />}
-                <span className="hidden md:inline font-mono text-[10px]">{isSwarmRunning ? "FREEZE" : "RUN"}</span>
-              </button>
-            </div>
-
             <h2 className="font-thunder text-5xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[98px] font-semibold text-center tracking-wide uppercase text-neutral-950 leading-none">
               My Skill Set
             </h2>
