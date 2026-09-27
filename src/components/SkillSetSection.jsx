@@ -15,6 +15,7 @@ import {
 } from './SkillIcons'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
+import HelixChronoMatrix from '@/components/ui/helix-chrono-matrix'
 
 // Floating ambient draggable icons using actual skill set app icons
 // Scaled down, positioned along open perimeter margins with ZERO element overlap
@@ -152,6 +153,17 @@ export default function SkillSetSection() {
             </filter>
             <rect width="100%" height="100%" filter="url(#paperNoise)" />
           </svg>
+
+          {/* ================= NEDDEV HELIX CHRONO MATRIX BACKGROUND ANIMATION ================= */}
+          <div
+            className="absolute inset-0 w-full h-full z-0 pointer-events-auto overflow-hidden mix-blend-multiply opacity-55 hover:opacity-80 transition-opacity duration-500 [filter:invert(1)_sepia(100%)_saturate(650%)_hue-rotate(325deg)_brightness(0.72)]"
+            aria-hidden="true"
+          >
+            <HelixChronoMatrix
+              headline=""
+              className="w-full h-full bg-transparent dark:bg-transparent [&_header]:hidden [&_main]:hidden"
+            />
+          </div>
 
           {/* NedDev Floating Icons Hero Component - Draggable Ambient App Icons */}
           <FloatingIconsHero
