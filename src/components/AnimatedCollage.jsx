@@ -62,13 +62,13 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
       className={`relative w-full aspect-[504/738] select-none touch-pan-y ${className}`}
       style={{ perspective: '1000px' }}
       role="region"
-      aria-label="About Me collage with interactive Polaroid - Om: Age 21 Years, Graphics Designer"
+      aria-label="About Me collage with interactive Polaroid - Om: Age 22 Years, Graphics Designer"
     >
       {/* ================= STANDALONE BACKGROUND (Mobile only, zero black strip) ================= */}
       {standalone && (
         <img
           src={aboutRightCollageClean}
-          alt="About Me - Om, 21 years old Graphics Designer collage"
+          alt="About Me - Om, 22 years old Graphics Designer collage"
           className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-0"
         />
       )}
@@ -165,19 +165,41 @@ export default function AnimatedCollage({ className = '', standalone = false }) 
             : 'transform 0.6s ease-out, filter 0.4s ease',
         }}
         tabIndex={0}
-        aria-label="Om's Polaroid Photo: 21 Years Old, Graphics Designer. Move cursor to tilt in 3D."
+        aria-label="Om's Polaroid Photo: 22 Years Old, Graphics Designer. Move cursor to tilt in 3D."
       >
         <div className="relative w-full h-full">
           <img
             src={collagePolaroid}
-            alt="Om - Polaroid photograph: 21 Years Old"
+            alt="Om - Polaroid photograph: 22 Years Old"
             className="w-full h-full object-contain select-none pointer-events-none"
           />
+
+          {/* Handwritten Age: 22 Years rendered in Brickflare Regular font */}
+          <svg
+            viewBox="0 0 322 422"
+            className="absolute inset-0 w-full h-full pointer-events-none select-none z-[2]"
+            aria-hidden="true"
+          >
+            <text
+              x="192"
+              y="384"
+              textAnchor="middle"
+              className="font-brickflare"
+              fill="#121212"
+              transform="rotate(1.5 192 384)"
+              style={{
+                fontFamily: "'Brickflare', 'Brickflare Regular', cursive, sans-serif",
+                fontSize: '43px',
+              }}
+            >
+              AGE: 22 YEARS
+            </text>
+          </svg>
 
           {/* Dynamic Specular Sheen Light Reflection across the Glossy Photo Surface */}
           {tilt.isHovered && (
             <div
-              className="absolute inset-[8%_3%_3%_3%] rounded-[6px] pointer-events-none mix-blend-overlay transition-opacity duration-300"
+              className="absolute inset-[8%_3%_3%_3%] rounded-[6px] pointer-events-none mix-blend-overlay transition-opacity duration-300 z-[3]"
               style={{
                 background: `radial-gradient(circle at ${(tilt.px || 0.5) * 100}% ${(tilt.py || 0.5) * 100}%, rgba(255,255,255,0.45) 0%, transparent 65%)`,
               }}

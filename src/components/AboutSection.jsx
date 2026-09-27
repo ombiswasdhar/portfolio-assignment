@@ -46,7 +46,7 @@ export default function AboutSection() {
             {/* Pristine Figma Frame Canvas with clean base for animated layers */}
             <img
               src={aboutFullFrameCanvas}
-              alt="About Me - Om, UI/UX Designer, Illustrator, Artist based in Shillong, India. Age 21 Years."
+              alt="About Me - Om, UI/UX Designer, Illustrator, Artist based in Shillong, India. Age 22 Years."
               className="w-full h-full object-cover object-center select-none pointer-events-none"
             />
 
@@ -405,7 +405,7 @@ export default function AboutSection() {
             I'm also really into sports and staying active. It helps me keep my energy up and my
             creativity flowing. I like to think the discipline from sports shows up in my art too.
           </p>
-          <p>Profile: Age 21 Years | Graphics Designer</p>
+          <p>Profile: Age 22 Years | Graphics Designer</p>
         </div>
 
       </div>
