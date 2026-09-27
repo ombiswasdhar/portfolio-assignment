@@ -236,7 +236,7 @@ export default function SkillSetSection() {
 
             {/* Conditional Display: 3D Helical Spiral Orbit OR Original 2D Grid Layout */}
             {isSpiralMode ? (
-              <div className="w-full max-w-[840px] mx-auto animate-fadeIn transition-all duration-500">
+              <div className="w-full max-w-[1020px] mx-auto animate-fadeIn transition-all duration-500">
                 <SoftwareLogosSpiral3D
                   apps={allAppsList}
                   onIconClick={(clickedApp) => {
