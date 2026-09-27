@@ -1,258 +1,206 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import cuttingMatImg from '../assets/skills/cutting_mat.png'
 
-const group1 = {
-  title: 'Ideation & Form',
-  coord: '55 // 40 MM',
-  bgPosition: 'center 12%',
-  skills: [
-    { name: 'Sketching', mark: '55 mm' },
-    { name: 'Animation', mark: '50 mm' },
-    { name: 'Product design', mark: '45 mm' },
-    { name: 'Mood boarding', mark: '40 mm' },
-  ],
-}
-
-const group2 = {
-  title: 'Design & Logic',
-  coord: '35 // 20 MM',
-  bgPosition: 'center 50%',
-  skills: [
-    { name: 'Painting', mark: '35 mm' },
-    { name: 'Ui/Ux design', mark: '30 mm' },
-    { name: '3d design', mark: '25 mm' },
-    { name: 'Mind Mapping', mark: '20 mm' },
-    { name: 'Information Collection', mark: '15 mm' },
-  ],
-}
-
-const group3 = {
-  title: 'Visual & Persona',
-  coord: '30° · 45° · 60°',
-  bgPosition: 'center 88%',
-  skills: [
-    { name: 'Character design', mark: '30°' },
-    { name: 'Graphic design', mark: '45°' },
-    { name: 'Animation', mark: '60°' },
-    { name: 'User Personas', mark: '90°' },
-  ],
-}
+const skillGroups = [
+  {
+    category: 'Ideation & Form',
+    code: '01 // 60° AXIS',
+    align: 'left',
+    skills: [
+      { name: 'Sketching', tag: '21 CM' },
+      { name: 'Animation', tag: '18 CM' },
+      { name: 'Product design', tag: '15 CM' },
+      { name: 'Mood boarding', tag: '12 CM' },
+    ],
+  },
+  {
+    category: 'Design & Logic',
+    code: '02 // 45° GRID',
+    align: 'center',
+    skills: [
+      { name: 'Painting', tag: '45° ANGLE' },
+      { name: 'Ui/Ux design', tag: 'GRID 08' },
+      { name: '3d design', tag: 'CENTER' },
+      { name: 'Mind Mapping', tag: 'GRID 10' },
+      { name: 'Information Collection', tag: '14 CM' },
+    ],
+  },
+  {
+    category: 'Visual & User',
+    code: '03 // A4 MATRIX',
+    align: 'right',
+    skills: [
+      { name: 'Character design', tag: 'A4 // 01' },
+      { name: 'Graphic design', tag: 'A4 // 02' },
+      { name: 'Animation', tag: 'A4 // 03' },
+      { name: 'User Personas', tag: 'A4 // 04' },
+    ],
+  },
+]
 
 export default function FloatingGreenMatSkills({ isVisible = true }) {
+  const containerRef = useRef(null)
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const [hoveredSkill, setHoveredSkill] = useState(null)
+
+  // Interactive 3D mouse tilt for realistic floating physics
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const normX = ((e.clientX - rect.left) / rect.width) * 2 - 1 // -1 to 1
+    const normY = ((e.clientY - rect.top) / rect.height) * 2 - 1 // -1 to 1
+    setTilt({
+      x: normY * -4.5, // subtle pitch
+      y: normX * 5.5,  // subtle yaw
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 })
+    setHoveredSkill(null)
+  }
+
   return (
-    <div className="w-full max-w-[1140px] mx-auto px-2 sm:px-4">
-      {/* 3 Floating Cropped Cutting Mat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch justify-items-center">
-        
-        {/* ================= CARD 1: TOP MAT CROP (Ideation) ================= */}
+    <div className="w-full max-w-[1140px] mx-auto px-2 sm:px-4 md:px-6">
+      {/* 3D Floating Mat Stage */}
+      <div
+        style={{ perspective: '1400px' }}
+        className="w-full flex justify-center py-4"
+      >
         <div
-          className={`group relative w-full max-w-[340px] rounded-2xl overflow-hidden transition-all duration-700 ease-out hover:-translate-y-3 hover:scale-[1.02] cursor-default select-none animate-float-gentle ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          ref={containerRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className={`group relative w-full max-w-[980px] rounded-2xl sm:rounded-3xl overflow-hidden cursor-default select-none transition-all duration-700 ease-out animate-float-gentle ${
+            isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.97]'
           }`}
           style={{
-            transitionDelay: '80ms',
-            boxShadow: '0 24px 60px -12px rgba(0, 0, 0, 0.9), 0 0 35px rgba(14, 56, 43, 0.35)',
-            transform: 'perspective(1000px) rotateY(2deg) rotateZ(-1deg)',
+            transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+            transformStyle: 'preserve-3d',
+            boxShadow: '0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 45px rgba(19, 67, 55, 0.45)',
           }}
+          role="region"
+          aria-label="Floating A4 green cutting mat containing design and digital skills"
         >
-          {/* Authentic Cutting Mat Texture Background (Top Crop) */}
+          {/* Authentic Cutting Mat Texture Background */}
           <div
-            className="absolute inset-0 w-full h-full bg-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-[1.015]"
             style={{
               backgroundImage: `url(${cuttingMatImg})`,
-              backgroundPosition: group1.bgPosition,
-              filter: 'contrast(1.05) brightness(0.95)',
+              filter: 'contrast(1.04) brightness(0.96)',
             }}
           />
 
-          {/* Ambient Lighting Gradient: Directional Studio Top Light */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-black/25 to-white/15 pointer-events-none" />
+          {/* Directional Studio Lighting Overlay (Highlights upper-left, soft falloff) */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-black/55 via-black/15 to-white/12 pointer-events-none" />
 
-          {/* Surface Vinyl Specular Reflection Sheen */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.18)_0%,transparent_60%)] pointer-events-none" />
+          {/* Surface Specular Highlight Sheen */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_35%_25%,rgba(255,255,255,0.16)_0%,transparent_65%)] pointer-events-none" />
 
-          {/* Beveled Cutting-Mat Rim & Inner Shadow */}
-          <div className="absolute inset-0 rounded-2xl border-2 border-[#1c5541]/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),inset_0_-3px_6px_rgba(0,0,0,0.7)] pointer-events-none" />
+          {/* Beveled Cutting-Mat Rim with Dual Edge Highlight & Depth Shadows */}
+          <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-[#1c5541]/90 shadow-[inset_0_1px_2px_rgba(255,255,255,0.35),inset_0_-3px_6px_rgba(0,0,0,0.7)] pointer-events-none" />
 
-          {/* Card Content Inscribed onto Mat */}
-          <div className="relative z-10 p-6 sm:p-7 flex flex-col justify-between h-full min-h-[340px]">
-            {/* Header with ruler coordinates */}
-            <div className="flex items-center justify-between border-b border-[#c2cb74]/35 pb-3">
-              <span className="font-mono text-[11px] sm:text-xs tracking-widest text-[#d6e088] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                {group1.coord}
-              </span>
-              <span className="w-2 h-2 rounded-full bg-[#d6e088] opacity-80 group-hover:animate-ping" />
+          {/* Interior Subtle Grid Frame Accent */}
+          <div className="absolute inset-3 sm:inset-4 rounded-xl sm:rounded-2xl border border-[#7ec4b0]/20 pointer-events-none" />
+
+          {/* ================= CONTENT: SKILLS INSCRIBED ACCORDING TO GRID ================= */}
+          <div className="relative z-10 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-between min-h-[460px] sm:min-h-[500px] md:min-h-[540px]">
+            
+            {/* Top Coordinate Header Bar */}
+            <div className="flex items-center justify-between border-b border-[#7ec4b0]/25 pb-3 sm:pb-4">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#7ec4b0] animate-pulse" />
+                <span className="font-mono text-[10px] sm:text-xs tracking-widest text-[#94d6c4] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+                  PRECISION WORKBENCH // A4 MATRIX
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-[10px] sm:text-[11px] text-[#7ec4b0]/80 tracking-wider">
+                  25 × 17 CM
+                </span>
+                <span className="hidden sm:inline font-mono text-[10px] text-[#7ec4b0]/50">
+                  |
+                </span>
+                <span className="hidden sm:inline font-mono text-[10px] text-[#7ec4b0]/80 tracking-wider">
+                  11 × 8 INCH
+                </span>
+              </div>
             </div>
 
-            {/* List of Skills formatted like authentic cutting-mat typography */}
-            <div className="py-4 space-y-3.5 my-auto">
-              {group1.skills.map((skill) => (
+            {/* 3-Column Skills Grid aligned with cutting mat quadrants */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 my-auto py-6 sm:py-8">
+              {skillGroups.map((group, gIdx) => (
                 <div
-                  key={skill.name}
-                  className="flex items-center justify-between group/item px-2.5 py-1.5 rounded-lg transition-all duration-200 hover:bg-black/30 hover:backdrop-blur-xs"
+                  key={group.category}
+                  className="flex flex-col justify-between rounded-xl p-4 sm:p-5 bg-[#09221b]/45 backdrop-blur-[2px] border border-[#7ec4b0]/15 hover:border-[#7ec4b0]/35 transition-all duration-300"
                 >
-                  <span className="font-serif-display text-base sm:text-lg text-[#f4f1eb] tracking-tight transition-colors duration-200 group-hover/item:text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
-                    {skill.name}
-                  </span>
-                  <span className="font-mono text-[10px] text-[#c2cb74]/75 group-hover/item:text-[#e4ee99] transition-colors">
-                    {skill.mark}
-                  </span>
+                  {/* Category Header */}
+                  <div className="flex items-center justify-between border-b border-[#7ec4b0]/20 pb-2.5 mb-3.5">
+                    <span className="font-mono text-[10px] sm:text-[11px] font-semibold text-[#a5e2d2] tracking-wider uppercase">
+                      {group.category}
+                    </span>
+                    <span className="font-mono text-[9px] text-[#7ec4b0]/70 tracking-widest">
+                      {group.code}
+                    </span>
+                  </div>
+
+                  {/* Skills List */}
+                  <div className="space-y-2.5">
+                    {group.skills.map((skill) => {
+                      const isHovered = hoveredSkill === skill.name
+                      return (
+                        <div
+                          key={skill.name}
+                          onMouseEnter={() => setHoveredSkill(skill.name)}
+                          onMouseLeave={() => setHoveredSkill(null)}
+                          className={`flex items-center justify-between px-3 py-1.5 rounded-lg transition-all duration-200 cursor-default ${
+                            isHovered
+                              ? 'bg-[#103a2f]/80 translate-x-1 shadow-[0_2px_8px_rgba(0,0,0,0.4)]'
+                              : 'hover:bg-[#103a2f]/40'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full transition-all duration-200 ${
+                                isHovered
+                                  ? 'bg-[#7ec4b0] scale-125 shadow-[0_0_6px_#7ec4b0]'
+                                  : 'bg-[#7ec4b0]/50'
+                              }`}
+                            />
+                            <span className="font-serif-display text-sm sm:text-base md:text-lg text-[#edf7f4] tracking-tight transition-colors duration-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
+                              {skill.name}
+                            </span>
+                          </div>
+                          <span className="font-mono text-[9px] sm:text-[10px] text-[#82c9b6]/75 group-hover:text-[#a8ebd9] transition-colors whitespace-nowrap pl-2">
+                            {skill.tag}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {/* Column Bottom Coordinate Mark */}
+                  <div className="mt-4 pt-2.5 border-t border-[#7ec4b0]/15 flex items-center justify-between text-[9px] font-mono text-[#7ec4b0]/60">
+                    <span>SECTOR 0{gIdx + 1}</span>
+                    <span>ACTIVE</span>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {/* Bottom Category Label */}
-            <div className="pt-3 border-t border-[#c2cb74]/25 flex items-center justify-between">
-              <span className="font-sans text-[11px] text-[#d6e088]/85 uppercase tracking-wider font-semibold">
-                {group1.title}
+            {/* Bottom Ruler Footer Bar */}
+            <div className="flex flex-wrap items-center justify-between border-t border-[#7ec4b0]/25 pt-3 sm:pt-4 text-[10px] font-mono text-[#7ec4b0]/70 gap-2">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7ec4b0]/60" />
+                <span>SELF-HEALING SURFACE · MULTI-DISCIPLINARY STACK</span>
               </span>
-              <span className="text-[10px] font-mono text-[#c2cb74]/60">01 / 03</span>
+              <span className="tracking-widest uppercase">
+                SCALE 1:1 // OM BISWAS
+              </span>
             </div>
+
           </div>
         </div>
-
-        {/* ================= CARD 2: CENTER MAT CROP (Design & Logic) ================= */}
-        <div
-          className={`group relative w-full max-w-[340px] rounded-2xl overflow-hidden transition-all duration-700 ease-out hover:-translate-y-3 hover:scale-[1.03] cursor-default select-none animate-float-reverse ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-          style={{
-            transitionDelay: '180ms',
-            boxShadow: '0 30px 70px -15px rgba(0, 0, 0, 0.95), 0 0 45px rgba(14, 56, 43, 0.45)',
-            transform: 'perspective(1000px) rotateY(0deg) translateY(-6px)',
-          }}
-        >
-          {/* Authentic Cutting Mat Texture Background (Center Crop) */}
-          <div
-            className="absolute inset-0 w-full h-full bg-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            style={{
-              backgroundImage: `url(${cuttingMatImg})`,
-              backgroundPosition: group2.bgPosition,
-              filter: 'contrast(1.08) brightness(0.92)',
-            }}
-          />
-
-          {/* Ambient Lighting Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/65 via-black/25 to-white/18 pointer-events-none" />
-
-          {/* Center Subtle Motto Badge matching user's image */}
-          <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[85%] py-1.5 px-3 rounded border border-[#c2cb74]/25 bg-[#08241b]/80 backdrop-blur-xs text-center pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
-            <p className="font-serif-display italic text-[11px] text-[#e8e4d8] tracking-normal drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-              "Don't be busy. Be productive."
-            </p>
-          </div>
-
-          {/* Surface Specular Sheen */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_15%,rgba(255,255,255,0.22)_0%,transparent_65%)] pointer-events-none" />
-
-          {/* Beveled Cutting-Mat Rim */}
-          <div className="absolute inset-0 rounded-2xl border-2 border-[#1c5541]/90 shadow-[inset_0_1px_2px_rgba(255,255,255,0.35),inset_0_-3px_6px_rgba(0,0,0,0.7)] pointer-events-none" />
-
-          {/* Card Content */}
-          <div className="relative z-10 p-6 sm:p-7 flex flex-col justify-between h-full min-h-[340px]">
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#c2cb74]/35 pb-3">
-              <span className="font-mono text-[11px] sm:text-xs tracking-widest text-[#d6e088] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                {group2.coord}
-              </span>
-              <span className="w-2 h-2 rounded-full bg-[#d6e088] opacity-80 group-hover:animate-ping" />
-            </div>
-
-            {/* List of Skills */}
-            <div className="py-4 mt-7 space-y-2.5 my-auto">
-              {group2.skills.map((skill) => (
-                <div
-                  key={skill.name}
-                  className="flex items-center justify-between group/item px-2.5 py-1.5 rounded-lg transition-all duration-200 hover:bg-black/35 hover:backdrop-blur-xs"
-                >
-                  <span className="font-serif-display text-base sm:text-lg text-[#f4f1eb] tracking-tight transition-colors duration-200 group-hover/item:text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
-                    {skill.name}
-                  </span>
-                  <span className="font-mono text-[10px] text-[#c2cb74]/75 group-hover/item:text-[#e4ee99] transition-colors">
-                    {skill.mark}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Bottom Category Label */}
-            <div className="pt-3 border-t border-[#c2cb74]/25 flex items-center justify-between">
-              <span className="font-sans text-[11px] text-[#d6e088]/85 uppercase tracking-wider font-semibold">
-                {group2.title}
-              </span>
-              <span className="text-[10px] font-mono text-[#c2cb74]/60">02 / 03</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ================= CARD 3: BOTTOM MAT CROP (Visual & User) ================= */}
-        <div
-          className={`group relative w-full max-w-[340px] rounded-2xl overflow-hidden transition-all duration-700 ease-out hover:-translate-y-3 hover:scale-[1.02] cursor-default select-none animate-float-gentle ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-          style={{
-            animationDelay: '1.2s',
-            transitionDelay: '260ms',
-            boxShadow: '0 24px 60px -12px rgba(0, 0, 0, 0.9), 0 0 35px rgba(14, 56, 43, 0.35)',
-            transform: 'perspective(1000px) rotateY(-2deg) rotateZ(1deg)',
-          }}
-        >
-          {/* Authentic Cutting Mat Texture Background (Bottom Crop with 30° 45° 60° guide lines) */}
-          <div
-            className="absolute inset-0 w-full h-full bg-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            style={{
-              backgroundImage: `url(${cuttingMatImg})`,
-              backgroundPosition: group3.bgPosition,
-              filter: 'contrast(1.05) brightness(0.95)',
-            }}
-          />
-
-          {/* Ambient Lighting Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-black/25 to-white/15 pointer-events-none" />
-
-          {/* Surface Specular Sheen */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_25%,rgba(255,255,255,0.18)_0%,transparent_60%)] pointer-events-none" />
-
-          {/* Beveled Rim */}
-          <div className="absolute inset-0 rounded-2xl border-2 border-[#1c5541]/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),inset_0_-3px_6px_rgba(0,0,0,0.7)] pointer-events-none" />
-
-          {/* Card Content */}
-          <div className="relative z-10 p-6 sm:p-7 flex flex-col justify-between h-full min-h-[340px]">
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#c2cb74]/35 pb-3">
-              <span className="font-mono text-[11px] sm:text-xs tracking-widest text-[#d6e088] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                {group3.coord}
-              </span>
-              <span className="w-2 h-2 rounded-full bg-[#d6e088] opacity-80 group-hover:animate-ping" />
-            </div>
-
-            {/* List of Skills */}
-            <div className="py-4 space-y-3.5 my-auto">
-              {group3.skills.map((skill) => (
-                <div
-                  key={skill.name}
-                  className="flex items-center justify-between group/item px-2.5 py-1.5 rounded-lg transition-all duration-200 hover:bg-black/30 hover:backdrop-blur-xs"
-                >
-                  <span className="font-serif-display text-base sm:text-lg text-[#f4f1eb] tracking-tight transition-colors duration-200 group-hover/item:text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
-                    {skill.name}
-                  </span>
-                  <span className="font-mono text-[10px] text-[#c2cb74]/75 group-hover/item:text-[#e4ee99] transition-colors">
-                    {skill.mark}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Bottom Category Label */}
-            <div className="pt-3 border-t border-[#c2cb74]/25 flex items-center justify-between">
-              <span className="font-sans text-[11px] text-[#d6e088]/85 uppercase tracking-wider font-semibold">
-                {group3.title}
-              </span>
-              <span className="text-[10px] font-mono text-[#c2cb74]/60">03 / 03</span>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   )
