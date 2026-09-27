@@ -365,16 +365,16 @@ export default function SoftwareLogosSpiral3D({
         })}
       </div>
 
-      {/* Helpful Ambient Call-to-Action Pill at bottom of 3D Orbit */}
-      <div className="relative z-20 mt-4 mb-2 flex items-center justify-center">
+      {/* Helpful Call-to-Action rendered in user's MyFont with surrounding bar removed */}
+      <div className="relative z-20 mt-5 mb-2 flex items-center justify-center">
         <button
           type="button"
           onClick={() => onIconClick(null)}
-          className="group inline-flex items-center gap-2 px-5 py-2 rounded-full border border-red-600/40 bg-white/90 backdrop-blur-md text-neutral-950 text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(220,38,38,0.1)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+          className="font-myfont text-xl sm:text-2xl md:text-3xl text-neutral-300 hover:text-white transition-all duration-300 cursor-pointer tracking-wider text-center flex items-center gap-2.5 bg-transparent border-0 p-0 select-none group/cta hover:scale-105 active:scale-95 drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]"
+          title="Click to restore original 2D grid"
         >
-          <span className="w-2 h-2 rounded-full bg-[#BA1F1F] animate-pulse" />
-          <span>Click any icon to restore original grid layout</span>
-          <span className="text-red-500 group-hover:text-white/80 transition-colors">⊞</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse group-hover/cta:scale-125 transition-transform" />
+          <span>click any icon to restore original grid layout</span>
         </button>
       </div>
     </div>

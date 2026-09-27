@@ -17,6 +17,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal'
 import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
 import HelixChronoMatrix from '@/components/ui/helix-chrono-matrix'
 import SoftwareLogosSpiral3D from './SoftwareLogosSpiral3D'
+import FloatingGreenMatSkills from './FloatingGreenMatSkills'
 
 // Floating ambient draggable icons using actual skill set app icons
 // Scaled down, positioned along open perimeter margins with ZERO element overlap
@@ -111,28 +112,6 @@ const allAppsList = [
   { name: 'Procreate Dreams', Icon: ProcreateDreamsIcon, glow: 'hover:shadow-[0_14px_32px_rgba(0,229,255,0.45)]', color: '#00e5ff' },
 ]
 
-const otherSkillsCol1 = [
-  'Sketching',
-  'Animation',
-  'Product design',
-  'Mood boarding',
-]
-
-const otherSkillsCol2 = [
-  'Painting',
-  'Ui/Ux design',
-  '3d design',
-  'Mind Mapping',
-  'Information Collection',
-]
-
-const otherSkillsCol3 = [
-  'Character design',
-  'Graphic design',
-  'Animation',
-  'User Personas',
-]
-
 export default function SkillSetSection() {
   const [hoveredApp, setHoveredApp] = useState(null)
   const [isSpiralMode, setIsSpiralMode] = useState(true)
@@ -152,10 +131,10 @@ export default function SkillSetSection() {
         }`}
       >
         
-        {/* ================= POSTER CARD (Pure white background) ================= */}
+        {/* ================= POSTER CARD (Pure black background) ================= */}
         <div
-          style={{ backgroundColor: '#ffffff' }}
-          className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 !bg-white text-neutral-900 px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
+          style={{ backgroundColor: '#000000' }}
+          className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 !bg-black text-white px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
         >
           {/* ================= NEDDEV HELIX CHRONO MATRIX BACKGROUND ANIMATION ================= */}
           <div
@@ -184,7 +163,7 @@ export default function SkillSetSection() {
 
           {/* ================= TOP ROW: TITLE & CORNER MONOGRAM ================= */}
           <div className="relative z-10 w-full flex items-center justify-center">
-            <h2 className="font-thunder text-5xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[98px] font-semibold text-center tracking-wide uppercase text-neutral-950 leading-none">
+            <h2 className="font-thunder text-5xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[98px] font-semibold text-center tracking-wide uppercase text-white drop-shadow-[0_4px_30px_rgba(255,255,255,0.15)] leading-none">
               My Skill Set
             </h2>
 
@@ -194,37 +173,13 @@ export default function SkillSetSection() {
                 src={arrowLogo}
                 alt="Monogram"
                 title="Monogram"
-                className="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 object-contain filter invert mix-blend-multiply opacity-85 rotate-180 hover:rotate-[360deg] hover:scale-125 active:scale-95 transition-all duration-700 ease-out cursor-pointer"
+                className="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 object-contain filter brightness-0 invert opacity-85 rotate-180 hover:rotate-[360deg] hover:scale-125 active:scale-95 transition-all duration-700 ease-out cursor-pointer"
               />
             </div>
           </div>
 
-          {/* ================= DIGITAL SECTION ================= */}
-          <div className="relative z-10 w-full mt-8 sm:mt-10 md:mt-12">
-            {/* Section Pill Badge & 3D Spiral Toggle Switch */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-7 sm:mb-9 md:mb-10">
-              <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm font-fredoka font-normal text-sm sm:text-base md:text-lg text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
-                <span className="relative z-10">Digital</span>
-                <span className="pointer-events-none absolute inset-0 -translate-x-full group-hover/pill:animate-[shimmer-sweep_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/35 to-transparent" />
-              </span>
-
-              {/* Mode Toggle Button: [ 🌀 3D Spiral ] or [ ⊞ Grid View ] */}
-              <button
-                type="button"
-                onClick={() => setIsSpiralMode(!isSpiralMode)}
-                className={`relative overflow-hidden inline-flex items-center gap-2 px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-xl border text-xs sm:text-sm font-medium tracking-tight shadow-sm transition-all duration-300 cursor-pointer active:scale-95 ${
-                  isSpiralMode
-                    ? 'border-neutral-900 bg-neutral-950 text-white hover:bg-neutral-800 shadow-[0_4px_16px_rgba(0,0,0,0.25)]'
-                    : 'border-neutral-900/80 bg-white/70 backdrop-blur-sm text-neutral-900 hover:bg-neutral-950 hover:text-white hover:border-neutral-950'
-                }`}
-                title={isSpiralMode ? "Switch to original grid layout" : "Revolve in 3D spiral space"}
-                aria-pressed={isSpiralMode}
-              >
-                <span className={`w-2 h-2 rounded-full ${isSpiralMode ? 'bg-cyan-400 animate-pulse' : 'bg-[#BA1F1F]'}`} />
-                <span>{isSpiralMode ? '⊞ Switch to Grid' : '🌀 3D Spiral Orbit'}</span>
-              </button>
-            </div>
-
+          {/* ================= SOFTWARE SKILLS SECTION ================= */}
+          <div className="relative z-10 w-full mt-6 sm:mt-8 md:mt-10">
             {/* Conditional Display: 3D Helical Spiral Orbit OR Original 2D Grid Layout */}
             {isSpiralMode ? (
               <div className="w-full max-w-[1360px] mx-auto animate-fadeIn transition-all duration-500">
@@ -261,7 +216,7 @@ export default function SkillSetSection() {
                       <div className={`transition-all duration-300 ease-out group-hover:-translate-y-2.5 group-hover:scale-115 active:scale-95 rounded-2xl ${app.glow}`}>
                         <IconComponent className="w-13 h-13 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
                       </div>
-                      <span className="mt-2 text-xs md:text-sm font-normal text-neutral-800 text-center tracking-tight transition-all duration-200 group-hover:text-black group-hover:font-medium group-hover:scale-105">
+                      <span className="mt-2 text-xs md:text-sm font-normal text-neutral-300 text-center tracking-tight transition-all duration-200 group-hover:text-white group-hover:font-medium group-hover:scale-105">
                         {app.name}
                       </span>
                     </div>
@@ -285,7 +240,7 @@ export default function SkillSetSection() {
                       <div className={`transition-all duration-300 ease-out group-hover:-translate-y-2.5 group-hover:scale-115 active:scale-95 rounded-2xl ${app.glow}`}>
                         <IconComponent className="w-13 h-13 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
                       </div>
-                      <span className="mt-2 text-xs md:text-sm font-normal text-neutral-800 text-center tracking-tight transition-all duration-200 group-hover:text-black group-hover:font-medium group-hover:scale-105">
+                      <span className="mt-2 text-xs md:text-sm font-normal text-neutral-300 text-center tracking-tight transition-all duration-200 group-hover:text-white group-hover:font-medium group-hover:scale-105">
                         {app.name}
                       </span>
                     </div>
@@ -308,7 +263,7 @@ export default function SkillSetSection() {
                   <div className="transition-all duration-300 ease-out group-hover:-translate-y-2.5 group-hover:scale-115 active:scale-95 rounded-2xl hover:shadow-[0_14px_32px_rgba(0,229,255,0.45)]">
                     <ProcreateDreamsIcon className="w-13 h-13 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
                   </div>
-                  <span className="mt-2 text-xs md:text-sm font-normal text-neutral-800 text-center tracking-tight transition-all duration-200 group-hover:text-black group-hover:font-medium group-hover:scale-105 whitespace-nowrap">
+                  <span className="mt-2 text-xs md:text-sm font-normal text-neutral-300 text-center tracking-tight transition-all duration-200 group-hover:text-white group-hover:font-medium group-hover:scale-105 whitespace-nowrap">
                     Procreate Dreams
                   </span>
                 </div>
@@ -320,9 +275,9 @@ export default function SkillSetSection() {
                   }`}
                   style={{ transitionDelay: isVisible ? '860ms' : '0ms' }}
                 >
-                  <div className="relative overflow-hidden w-full max-w-[270px] sm:max-w-[290px] md:max-w-[310px] rounded-xl sm:rounded-2xl border border-neutral-900/90 bg-white/50 backdrop-blur-sm px-4 md:px-5 py-2 sm:py-2.5 flex items-center justify-between shadow-[0_4px_14px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.12)] hover:bg-white/80 hover:-translate-y-1 transition-all duration-300 group/big3">
+                  <div className="relative overflow-hidden w-full max-w-[270px] sm:max-w-[290px] md:max-w-[310px] rounded-xl sm:rounded-2xl border border-white/20 bg-neutral-900/80 backdrop-blur-sm px-4 md:px-5 py-2 sm:py-2.5 flex items-center justify-between shadow-[0_4px_14px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_28px_rgba(220,38,38,0.2)] hover:border-white/40 hover:-translate-y-1 transition-all duration-300 group/big3">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-fredoka font-normal text-xl sm:text-2xl tracking-normal text-neutral-950 whitespace-nowrap leading-none">
+                      <span className="font-fredoka font-normal text-xl sm:text-2xl tracking-normal text-white whitespace-nowrap leading-none">
                         Big 3
                       </span>
                       <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" title="Core Stack" />
@@ -339,7 +294,7 @@ export default function SkillSetSection() {
                       </div>
                     </div>
                     {/* Shimmer sweep effect across card */}
-                    <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover/big3:animate-[shimmer-sweep_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                    <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover/big3:animate-[shimmer-sweep_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                   </div>
                 </div>
               </div>
@@ -357,7 +312,7 @@ export default function SkillSetSection() {
                         <div className="transition-transform duration-200 group-hover:scale-110">
                           <IconComponent className="w-12 h-12" />
                         </div>
-                        <span className="mt-1.5 text-xs font-normal text-neutral-800 text-center tracking-tight">
+                        <span className="mt-1.5 text-xs font-normal text-neutral-300 text-center tracking-tight">
                           {app.name}
                         </span>
                       </div>
@@ -367,9 +322,9 @@ export default function SkillSetSection() {
 
                 {/* Mobile Big 3 Card */}
                 <div className="w-full flex justify-center pt-2">
-                  <div className="relative overflow-hidden w-full max-w-[280px] rounded-xl border border-neutral-900 bg-white/50 px-4 py-2.5 flex items-center justify-between shadow-sm hover:bg-white/80 transition-all">
+                  <div className="relative overflow-hidden w-full max-w-[280px] rounded-xl border border-white/20 bg-neutral-900/80 px-4 py-2.5 flex items-center justify-between shadow-sm hover:border-white/40 transition-all">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-fredoka font-normal text-xl tracking-normal text-neutral-950 leading-none">
+                      <span className="font-fredoka font-normal text-xl tracking-normal text-white leading-none">
                         Big 3
                       </span>
                       <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" />
@@ -382,84 +337,33 @@ export default function SkillSetSection() {
                   </div>
                 </div>
               </div>
+
+              {/* Return to 3D Orbit Button rendered in user's MyFont with NO surrounding bar */}
+              <div className="w-full flex justify-center mt-10">
+                <button
+                  type="button"
+                  onClick={() => setIsSpiralMode(true)}
+                  className="font-myfont text-xl sm:text-2xl md:text-3xl text-neutral-300 hover:text-white transition-all duration-300 cursor-pointer tracking-wider flex items-center gap-2.5 bg-transparent border-0 p-0 select-none group/back hover:scale-105 active:scale-95 drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse group-hover/back:scale-125 transition-transform" />
+                  <span>click to return to 3d spiral orbit</span>
+                </button>
+              </div>
             </div>
           )}
         </div>
 
-          {/* ================= OTHER SECTION ================= */}
-          <div className="relative z-10 w-full mt-12 sm:mt-16 md:mt-20">
-            {/* Section Pill Badge with Interactive Hover State & Shimmer */}
+          {/* ================= OTHER SECTION WITH FLOATING GREEN CUTTING MAT ================= */}
+          <div className="relative z-10 w-full mt-14 sm:mt-18 md:mt-24 mb-6">
+            {/* Section Heading written in user's MyFont with NO surrounding pill bar */}
             <div className="flex justify-center mb-8 sm:mb-10 md:mb-12">
-              <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm font-fredoka font-normal text-sm sm:text-base md:text-lg text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
-                <span className="relative z-10">Other</span>
-                <span className="pointer-events-none absolute inset-0 -translate-x-full group-hover/pill:animate-[shimmer-sweep_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/35 to-transparent" />
-              </span>
+              <h3 className="font-myfont text-4xl sm:text-5xl md:text-6xl text-white font-medium tracking-wide text-center drop-shadow-[0_2px_14px_rgba(255,255,255,0.25)] lowercase select-none">
+                other
+              </h3>
             </div>
 
-            {/* 3 Columns Layout exactly matching Figma matrix with interactive tactile chips & scroll cascades */}
-            <div className="max-w-[780px] md:max-w-[840px] mx-auto">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-y-0 gap-x-6 sm:gap-x-10 text-center">
-                {/* Column 1: Sketching, Animation, Product design, Mood boarding */}
-                <div
-                  className={`flex flex-col items-center space-y-2 sm:space-y-3 transition-all duration-700 ease-out ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: isVisible ? '920ms' : '0ms' }}
-                >
-                  {otherSkillsCol1.map((skill) => (
-                    <div
-                      key={skill}
-                      className="group flex items-center justify-center px-3.5 py-1.5 rounded-full transition-all duration-200 hover:bg-black/8 hover:scale-105 cursor-default select-none"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] opacity-0 group-hover:opacity-100 mr-2 -ml-1 transition-all duration-200 scale-0 group-hover:scale-100 shrink-0" />
-                      <span className="font-sans text-sm sm:text-base font-normal text-neutral-900 tracking-normal transition-colors duration-200 group-hover:text-black group-hover:font-medium">
-                        {skill}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Column 2: Painting, Ui/Ux design, 3d design, Mind Mapping, Information Collection */}
-                <div
-                  className={`flex flex-col items-center space-y-2 sm:space-y-3 transition-all duration-700 ease-out ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: isVisible ? '1000ms' : '0ms' }}
-                >
-                  {otherSkillsCol2.map((skill) => (
-                    <div
-                      key={skill}
-                      className="group flex items-center justify-center px-3.5 py-1.5 rounded-full transition-all duration-200 hover:bg-black/8 hover:scale-105 cursor-default select-none"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] opacity-0 group-hover:opacity-100 mr-2 -ml-1 transition-all duration-200 scale-0 group-hover:scale-100 shrink-0" />
-                      <span className="font-sans text-sm sm:text-base font-normal text-neutral-900 tracking-normal transition-colors duration-200 group-hover:text-black group-hover:font-medium">
-                        {skill}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Column 3: Character design, Graphic design, Animation, User Personas */}
-                <div
-                  className={`flex flex-col items-center space-y-2 sm:space-y-3 transition-all duration-700 ease-out ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: isVisible ? '1080ms' : '0ms' }}
-                >
-                  {otherSkillsCol3.map((skill) => (
-                    <div
-                      key={skill}
-                      className="group flex items-center justify-center px-3.5 py-1.5 rounded-full transition-all duration-200 hover:bg-black/8 hover:scale-105 cursor-default select-none"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] opacity-0 group-hover:opacity-100 mr-2 -ml-1 transition-all duration-200 scale-0 group-hover:scale-100 shrink-0" />
-                      <span className="font-sans text-sm sm:text-base font-normal text-neutral-900 tracking-normal transition-colors duration-200 group-hover:text-black group-hover:font-medium">
-                        {skill}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            {/* Floating Green Cutting Mat with the rest of the skills */}
+            <FloatingGreenMatSkills isVisible={isVisible} />
           </div>
 
           {/* ================= BOTTOM-RIGHT CORNER MONOGRAM ================= */}
@@ -469,7 +373,7 @@ export default function SkillSetSection() {
                 src={arrowLogo}
                 alt="Monogram"
                 title="Monogram"
-                className="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 object-contain filter invert mix-blend-multiply opacity-85 hover:rotate-90 hover:scale-125 active:scale-95 transition-all duration-500 ease-out cursor-pointer"
+                className="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 object-contain filter brightness-0 invert opacity-85 hover:rotate-90 hover:scale-125 active:scale-95 transition-all duration-500 ease-out cursor-pointer"
               />
             </div>
           </div>
