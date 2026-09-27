@@ -16,6 +16,7 @@ import {
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
 import HelixChronoMatrix from '@/components/ui/helix-chrono-matrix'
+import SoftwareLogosSpiral3D from './SoftwareLogosSpiral3D'
 
 // Floating ambient draggable icons using actual skill set app icons
 // Scaled down, positioned along open perimeter margins with ZERO element overlap
@@ -96,6 +97,20 @@ const row2Apps = [
   { name: 'Autocad', Icon: AutocadIcon, glow: 'hover:shadow-[0_14px_32px_rgba(216,23,84,0.45)]' },
 ]
 
+const allAppsList = [
+  { name: 'Procreate', Icon: ProcreateIcon, glow: 'hover:shadow-[0_14px_32px_rgba(181,23,158,0.45)]', color: '#b5179e' },
+  { name: 'Sketchbook', Icon: SketchbookIcon, glow: 'hover:shadow-[0_14px_32px_rgba(233,91,61,0.45)]', color: '#e95b3d' },
+  { name: 'Figma', Icon: FigmaIcon, glow: 'hover:shadow-[0_14px_32px_rgba(162,89,255,0.45)]', color: '#a259ff' },
+  { name: 'Premier Pro', Icon: PremierProIcon, glow: 'hover:shadow-[0_14px_32px_rgba(30,58,138,0.45)]', color: '#1e3a8a' },
+  { name: 'Blender', Icon: BlenderIcon, glow: 'hover:shadow-[0_14px_32px_rgba(234,118,0,0.45)]', color: '#ea7600' },
+  { name: 'Photoshop', Icon: PhotoshopIcon, glow: 'hover:shadow-[0_14px_32px_rgba(49,168,255,0.45)]', color: '#31a8ff' },
+  { name: 'Illustrator', Icon: IllustratorIcon, glow: 'hover:shadow-[0_14px_32px_rgba(255,154,0,0.45)]', color: '#ff9a00' },
+  { name: 'InShot', Icon: InShotIcon, glow: 'hover:shadow-[0_14px_32px_rgba(255,42,84,0.45)]', color: '#ff2a54' },
+  { name: 'Canva', Icon: CanvaIcon, glow: 'hover:shadow-[0_14px_32px_rgba(0,196,204,0.45)]', color: '#00c4cc' },
+  { name: 'Autocad', Icon: AutocadIcon, glow: 'hover:shadow-[0_14px_32px_rgba(216,23,84,0.45)]', color: '#d81754' },
+  { name: 'Procreate Dreams', Icon: ProcreateDreamsIcon, glow: 'hover:shadow-[0_14px_32px_rgba(0,229,255,0.45)]', color: '#00e5ff' },
+]
+
 const otherSkillsCol1 = [
   'Sketching',
   'Animation',
@@ -120,6 +135,7 @@ const otherSkillsCol3 = [
 
 export default function SkillSetSection() {
   const [hoveredApp, setHoveredApp] = useState(null)
+  const [isSpiralMode, setIsSpiralMode] = useState(true)
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
 
   return (
@@ -194,18 +210,49 @@ export default function SkillSetSection() {
 
           {/* ================= DIGITAL SECTION ================= */}
           <div className="relative z-10 w-full mt-8 sm:mt-10 md:mt-12">
-            {/* Section Pill Badge with Interactive Hover State & Shimmer */}
-            <div className="flex justify-center mb-7 sm:mb-9 md:mb-10">
+            {/* Section Pill Badge & 3D Spiral Toggle Switch */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-7 sm:mb-9 md:mb-10">
               <span className="relative overflow-hidden inline-flex items-center px-6 sm:px-8 py-1 sm:py-1.5 rounded-xl border border-neutral-900 bg-white/50 backdrop-blur-sm font-fredoka font-normal text-sm sm:text-base md:text-lg text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:bg-neutral-950 hover:text-white hover:border-neutral-950 hover:scale-105 transition-all duration-300 cursor-default select-none group/pill">
                 <span className="relative z-10">Digital</span>
                 <span className="pointer-events-none absolute inset-0 -translate-x-full group-hover/pill:animate-[shimmer-sweep_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/35 to-transparent" />
               </span>
+
+              {/* Mode Toggle Button: [ 🌀 3D Spiral ] or [ ⊞ Grid View ] */}
+              <button
+                type="button"
+                onClick={() => setIsSpiralMode(!isSpiralMode)}
+                className={`relative overflow-hidden inline-flex items-center gap-2 px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-xl border text-xs sm:text-sm font-medium tracking-tight shadow-sm transition-all duration-300 cursor-pointer active:scale-95 ${
+                  isSpiralMode
+                    ? 'border-neutral-900 bg-neutral-950 text-white hover:bg-neutral-800 shadow-[0_4px_16px_rgba(0,0,0,0.25)]'
+                    : 'border-neutral-900/80 bg-white/70 backdrop-blur-sm text-neutral-900 hover:bg-neutral-950 hover:text-white hover:border-neutral-950'
+                }`}
+                title={isSpiralMode ? "Switch to original grid layout" : "Revolve in 3D spiral space"}
+                aria-pressed={isSpiralMode}
+              >
+                <span className={`w-2 h-2 rounded-full ${isSpiralMode ? 'bg-cyan-400 animate-pulse' : 'bg-[#BA1F1F]'}`} />
+                <span>{isSpiralMode ? '⊞ Switch to Grid' : '🌀 3D Spiral Orbit'}</span>
+              </button>
             </div>
 
-            {/* Apps Grid Layout */}
-            <div className="max-w-[760px] md:max-w-[820px] mx-auto">
-              {/* Desktop / Tablet 5-Column Grid */}
-              <div className="hidden sm:grid grid-cols-5 gap-y-8 md:gap-y-10 gap-x-4 sm:gap-x-8 items-start justify-items-center">
+            {/* Conditional Display: 3D Helical Spiral Orbit OR Original 2D Grid Layout */}
+            {isSpiralMode ? (
+              <div className="w-full max-w-[840px] mx-auto animate-fadeIn transition-all duration-500">
+                <SoftwareLogosSpiral3D
+                  apps={allAppsList}
+                  onIconClick={(clickedApp) => {
+                    setIsSpiralMode(false)
+                    if (clickedApp?.name) {
+                      setHoveredApp(clickedApp.name)
+                      setTimeout(() => setHoveredApp(null), 2400)
+                    }
+                  }}
+                />
+              </div>
+            ) : (
+              /* The Exact Original 2D Grid Layout */
+              <div className="max-w-[760px] md:max-w-[820px] mx-auto animate-fadeIn transition-all duration-500">
+                {/* Desktop / Tablet 5-Column Grid */}
+                <div className="hidden sm:grid grid-cols-5 gap-y-8 md:gap-y-10 gap-x-4 sm:gap-x-8 items-start justify-items-center">
                 {/* Row 1: Procreate, Sketchbook, Figma, Premier Pro, Blender with staggered scroll cascade */}
                 {row1Apps.map((app, idx) => {
                   const IconComponent = app.Icon
@@ -345,7 +392,8 @@ export default function SkillSetSection() {
                 </div>
               </div>
             </div>
-          </div>
+          )}
+        </div>
 
           {/* ================= OTHER SECTION ================= */}
           <div className="relative z-10 w-full mt-12 sm:mt-16 md:mt-20">
