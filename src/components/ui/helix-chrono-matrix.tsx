@@ -77,8 +77,9 @@ export function HelixChronoMatrix({
     // Initialize stratified 3D ribbon fibers and traveling particles
     const initTopology = useCallback((width: number, height: number) => {
         const rings: FiberRing[] = [];
-        const ringCount = 28;
-        const pointsPerRing = 120;
+        // Keep the animated background light enough to scroll smoothly on laptops.
+        const ringCount = 18;
+        const pointsPerRing = 80;
 
         for (let r = 0; r < ringCount; r++) {
             const progress = r / ringCount;
@@ -111,7 +112,7 @@ export function HelixChronoMatrix({
 
         // Initialize moving particles along the lines
         const particles: Particle[] = [];
-        const particleCount = 45;
+        const particleCount = 24;
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 ringIndex: Math.floor(Math.random() * ringCount),
@@ -135,7 +136,8 @@ export function HelixChronoMatrix({
         const resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 const rect = entry.contentRect;
-                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                // Large high-DPI canvases are expensive to repaint every frame.
+                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
                 dimensionsRef.current = { width: rect.width, height: rect.height };
                 canvas.width = Math.floor(rect.width * dpr);
@@ -174,12 +176,25 @@ export function HelixChronoMatrix({
 
         let animId = 0;
         let time = 0;
+        let lastFrameTime = 0;
+        let isInView = true;
+        const frameInterval = 1000 / 30;
 
-        const render = () => {
-            if (!isRunning) {
+        const scheduleRender = () => {
+            if (!animId && isRunning && isInView && !document.hidden) {
                 animId = requestAnimationFrame(render);
+            }
+        };
+
+        const render = (now: number) => {
+            animId = 0;
+            if (!isRunning || !isInView || document.hidden) return;
+
+            if (now - lastFrameTime < frameInterval) {
+                scheduleRender();
                 return;
             }
+            lastFrameTime = now;
 
             time += 0.012;
             const { width, height } = dimensionsRef.current;
@@ -377,11 +392,35 @@ export function HelixChronoMatrix({
                 ctx.stroke();
             }
 
-            animId = requestAnimationFrame(render);
+            scheduleRender();
         };
 
-        animId = requestAnimationFrame(render);
-        return () => cancelAnimationFrame(animId);
+        const observer = new IntersectionObserver(([entry]) => {
+            isInView = entry.isIntersecting;
+            if (isInView) {
+                scheduleRender();
+            } else if (animId) {
+                cancelAnimationFrame(animId);
+                animId = 0;
+            }
+        });
+        observer.observe(canvas);
+
+        const handleVisibilityChange = () => {
+            if (!document.hidden) scheduleRender();
+            else if (animId) {
+                cancelAnimationFrame(animId);
+                animId = 0;
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        scheduleRender();
+
+        return () => {
+            if (animId) cancelAnimationFrame(animId);
+            observer.disconnect();
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
     }, [isRunning, topology, isDarkMode, transparentBg, lineColor]);
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
