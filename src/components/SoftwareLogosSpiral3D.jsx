@@ -321,10 +321,10 @@ export default function SoftwareLogosSpiral3D({
                 <IconComponent
                   className={`${
                     isSide
-                      ? 'w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12'
+                      ? 'w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7'
                       : isMid
-                      ? 'w-10 h-10 sm:w-12 sm:h-12 md:w-13 md:h-13'
-                      : 'w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14'
+                      ? 'w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8'
+                      : 'w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9'
                   } transition-transform duration-300 group-hover/orbit:scale-110`}
                 />
 
@@ -336,30 +336,32 @@ export default function SoftwareLogosSpiral3D({
                 )}
               </div>
 
-              {/* Floating Tooltip / App Label */}
-              <div
-                className={`mt-2 flex flex-col items-center pointer-events-none transition-all duration-200 ${
-                  isHovered
-                    ? 'opacity-100 scale-105 translate-y-0'
-                    : zNorm > 0.78
-                    ? 'opacity-85 scale-95'
-                    : 'opacity-0 scale-90'
-                }`}
-              >
-                <span className="px-2.5 py-0.5 rounded-full bg-neutral-950/85 backdrop-blur-md text-white text-[10px] sm:text-xs font-medium tracking-tight shadow-md whitespace-nowrap flex items-center gap-1.5">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: app.color || '#BA1F1F' }}
-                  />
-                  {app.name}
-                </span>
-
-                {isHovered && (
-                  <span className="mt-1 text-[9px] text-neutral-600 font-normal bg-white/85 px-2 py-0.5 rounded-full border border-red-500/20 shadow-xs whitespace-nowrap">
-                    Click to arrange in grid ⊞
+              {/* Floating Tooltip / App Label — only on primary tier (no tags on duplicates) */}
+              {tier === 'primary' && (
+                <div
+                  className={`mt-2 flex flex-col items-center pointer-events-none transition-all duration-200 ${
+                    isHovered
+                      ? 'opacity-100 scale-105 translate-y-0'
+                      : zNorm > 0.78
+                      ? 'opacity-85 scale-95'
+                      : 'opacity-0 scale-90'
+                  }`}
+                >
+                  <span className="px-2.5 py-0.5 rounded-full bg-neutral-950/85 backdrop-blur-md text-white text-[10px] sm:text-xs font-medium tracking-tight shadow-md whitespace-nowrap flex items-center gap-1.5">
+                    <span
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: app.color || '#BA1F1F' }}
+                    />
+                    {app.name}
                   </span>
-                )}
-              </div>
+
+                  {isHovered && (
+                    <span className="mt-1 text-[9px] text-neutral-600 font-normal bg-white/85 px-2 py-0.5 rounded-full border border-red-500/20 shadow-xs whitespace-nowrap">
+                      Click to arrange in grid ⊞
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           )
         })}

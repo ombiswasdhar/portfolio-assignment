@@ -198,7 +198,11 @@ export function HelixChronoMatrix({
 
             const isDark = document.documentElement.classList.contains('dark') || isDarkMode;
             const bgColor = isDark ? '#090a0f' : '#f8fafc';
-            const strokeBase = lineColor === 'red' ? '220, 38, 38' : (isDark ? '255, 255, 255' : '15, 23, 42');
+            const strokeBase = lineColor === 'red'
+                ? '220, 38, 38'
+                : lineColor === 'soft-red'
+                    ? '248, 113, 113'
+                    : (isDark ? '255, 255, 255' : '15, 23, 42');
 
             if (transparentBg) {
                 ctx.save();
@@ -297,15 +301,15 @@ export function HelixChronoMatrix({
                 const isExcited = avgExcitation > 0.05;
 
                 if (isExcited) {
-                    ctx.strokeStyle = lineColor === 'red'
-                        ? `rgba(239, 68, 68, ${Math.min(1, 0.7 + avgExcitation * 0.3)})`
+                    ctx.strokeStyle = lineColor === 'red' || lineColor === 'soft-red'
+                        ? `rgba(${lineColor === 'red' ? '239, 68, 68' : '251, 113, 133'}, ${Math.min(1, 0.7 + avgExcitation * 0.3)})`
                         : (isDark
                             ? `rgba(255, 255, 255, ${Math.min(1, 0.4 + avgExcitation * 0.6)})`
                             : `rgba(0, 0, 0, ${Math.min(1, 0.4 + avgExcitation * 0.6)})`);
                     ctx.lineWidth = 1.4 + avgExcitation * 1.5;
                 } else {
-                    ctx.strokeStyle = `rgba(${strokeBase}, ${depthAlpha * (lineColor === 'red' ? 0.85 : 0.6)})`;
-                    ctx.lineWidth = lineColor === 'red' ? 1.0 : 0.75;
+                    ctx.strokeStyle = `rgba(${strokeBase}, ${depthAlpha * (lineColor === 'red' || lineColor === 'soft-red' ? 0.85 : 0.6)})`;
+                    ctx.lineWidth = lineColor === 'red' || lineColor === 'soft-red' ? 1.0 : 0.75;
                 }
 
                 ctx.stroke();
@@ -356,6 +360,8 @@ export function HelixChronoMatrix({
 
                 if (lineColor === 'red') {
                     ctx.fillStyle = isNearHover ? '#ef4444' : '#ba1f1f';
+                } else if (lineColor === 'soft-red') {
+                    ctx.fillStyle = isNearHover ? '#fca5a5' : '#f87171';
                 } else if (isNearHover) {
                     // Inverted to white (or high contrast) when hovered
                     ctx.fillStyle = isDark ? '#ffffff' : '#000000';
