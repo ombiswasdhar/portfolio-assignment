@@ -208,6 +208,18 @@
   animation: spin-slow 8s linear infinite !important;
 }
 
+/* Keep continuously rotating hero artwork on a cheap compositor layer. */
+.hero-spin-layer {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+@media (max-width: 640px) {
+  .hero-spin-layer {
+    animation-duration: 12s !important;
+  }
+}
+
 @keyframes float-gentle {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);

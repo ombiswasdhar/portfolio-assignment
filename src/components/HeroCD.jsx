@@ -43,7 +43,7 @@ export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
 
       {/* Rotating CD Disc (Memory Lane style) */}
       <div
-        className="w-full h-full rounded-full overflow-hidden relative border border-white/40 dark:border-white/30 ring-1 ring-black/40 shadow-inner select-none will-change-transform"
+        className="hero-spin-layer w-full h-full rounded-full overflow-hidden relative border border-white/40 dark:border-white/30 ring-1 ring-black/40 shadow-inner select-none"
         style={{
           animation: 'spin-slow 8s linear infinite',
           transformOrigin: 'center center',
@@ -56,7 +56,7 @@ export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
             e.currentTarget.src = SUNFLOWER_COVER_URL
           }}
           alt="Sunflower CD Disc"
-          className="w-full h-full object-cover object-center filter contrast-105 saturate-110 select-none pointer-events-none"
+          className="w-full h-full object-cover object-center select-none pointer-events-none"
         />
 
         {/* 2. Editorial Typography Printed Directly on CD Face */}

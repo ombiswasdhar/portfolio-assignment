@@ -244,7 +244,7 @@ export default function Hero() {
             <img
               src={smiley}
               alt="Smiley sticker"
-              className="w-full h-auto object-contain origin-center animate-spin-slow will-change-transform select-none pointer-events-none"
+              className="hero-spin-layer w-full h-auto object-contain origin-center animate-spin-slow select-none pointer-events-none"
               style={{
                 animation: 'spin-slow 8s linear infinite',
                 transformOrigin: 'center center',
