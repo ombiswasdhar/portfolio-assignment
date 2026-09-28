@@ -26,10 +26,31 @@ export default function SoftwareLogosSpiral3D({
     return () => observer.disconnect()
   }, [])
 
-  // Continuous 60/120fps 3D spiral orbit loop
+  // Keep the orbit smooth when idle, but yield to page scrolling.
   useEffect(() => {
     let lastTime = performance.now()
+    let lastFrameTime = 0
+    let isInView = false
+    let isScrolling = false
+    let scrollTimeout = 0
+    const frameInterval = 1000 / 30
+    const container = containerRef.current
+
+    const scheduleLoop = () => {
+      if (!animFrameRef.current && isInView && !isScrolling && !document.hidden) {
+        animFrameRef.current = requestAnimationFrame(loop)
+      }
+    }
+
     const loop = (currentTime) => {
+      animFrameRef.current = null
+      if (!isInView || isScrolling || document.hidden) return
+
+      if (currentTime - lastFrameTime < frameInterval) {
+        scheduleLoop()
+        return
+      }
+      lastFrameTime = currentTime
       const delta = Math.min((currentTime - lastTime) / 1000, 0.1)
       lastTime = currentTime
 
@@ -37,13 +58,55 @@ export default function SoftwareLogosSpiral3D({
       const speed = hoveredApp ? 0.08 : 0.42
       setAngle((prev) => (prev + speed * delta) % (Math.PI * 2))
 
-      animFrameRef.current = requestAnimationFrame(loop)
+      scheduleLoop()
     }
 
-    animFrameRef.current = requestAnimationFrame(loop)
-    return () => {
+    const observer = new IntersectionObserver(([entry]) => {
+      isInView = entry.isIntersecting
+      if (isInView) scheduleLoop()
+      else if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current)
+        animFrameRef.current = null
+      }
+    }, { rootMargin: '80px' })
+    if (container) observer.observe(container)
+
+    const handleScroll = () => {
+      isScrolling = true
       if (animFrameRef.current) {
         cancelAnimationFrame(animFrameRef.current)
+        animFrameRef.current = null
+      }
+      window.clearTimeout(scrollTimeout)
+      scrollTimeout = window.setTimeout(() => {
+        isScrolling = false
+        lastTime = performance.now()
+        scheduleLoop()
+      }, 120)
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
+        animFrameRef.current = null
+      } else {
+        lastTime = performance.now()
+        scheduleLoop()
+      }
+    }
+
+    document.addEventListener('scroll', handleScroll, { passive: true, capture: true })
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    scheduleLoop()
+
+    return () => {
+      observer.disconnect()
+      document.removeEventListener('scroll', handleScroll, true)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.clearTimeout(scrollTimeout)
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current)
+        animFrameRef.current = null
       }
     }
   }, [hoveredApp])
@@ -238,7 +301,6 @@ export default function SoftwareLogosSpiral3D({
           className="absolute inset-0 rounded-full border border-red-600/35 opacity-45 animate-spin-slow"
           style={{
             transform: 'rotateX(72deg) scale(1.15)',
-            filter: 'drop-shadow(0 0 6px rgba(220,38,38,0.35))',
           }}
         />
         {/* Mid Dashed Red Rotating Orbital Ring */}
@@ -246,7 +308,6 @@ export default function SoftwareLogosSpiral3D({
           className="absolute inset-10 rounded-full border border-dashed border-red-500/40 opacity-40"
           style={{
             transform: 'rotateX(72deg) scale(0.92)',
-            filter: 'drop-shadow(0 0 5px rgba(239,68,68,0.3))',
           }}
         />
         {/* Inner Red Rotating Orbital Ring */}
@@ -282,7 +343,7 @@ export default function SoftwareLogosSpiral3D({
               onClick={() => onIconClick(app)}
               onMouseEnter={() => setHoveredApp(id)}
               onMouseLeave={() => setHoveredApp(null)}
-              className="absolute cursor-pointer flex flex-col items-center group/orbit transition-all duration-100 ease-out will-change-transform"
+              className="absolute cursor-pointer flex flex-col items-center group/orbit"
               style={{
                 transform: `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${floatRot || 0}deg) scale(${isHovered ? scale * 1.25 : scale})`,
                 zIndex: isHovered ? 999 : zIndex,
@@ -312,7 +373,6 @@ export default function SoftwareLogosSpiral3D({
                   backgroundColor: zNorm > 0.5
                     ? (isSide ? 'rgba(255, 255, 255, 0.88)' : isMid ? 'rgba(255, 255, 255, 0.90)' : 'rgba(255, 255, 255, 0.96)')
                     : (isSide ? 'rgba(255, 255, 255, 0.60)' : isMid ? 'rgba(255, 255, 255, 0.68)' : 'rgba(255, 255, 255, 0.75)'),
-                  backdropFilter: 'blur(8px)',
                   boxShadow: isHovered && app.color
                     ? `0 18px 40px ${app.color}77`
                     : undefined,

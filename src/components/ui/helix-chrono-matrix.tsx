@@ -178,17 +178,19 @@ export function HelixChronoMatrix({
         let time = 0;
         let lastFrameTime = 0;
         let isInView = true;
+        let isScrolling = false;
+        let scrollTimeout = 0;
         const frameInterval = 1000 / 30;
 
         const scheduleRender = () => {
-            if (!animId && isRunning && isInView && !document.hidden) {
+            if (!animId && isRunning && isInView && !isScrolling && !document.hidden) {
                 animId = requestAnimationFrame(render);
             }
         };
 
         const render = (now: number) => {
             animId = 0;
-            if (!isRunning || !isInView || document.hidden) return;
+            if (!isRunning || !isInView || isScrolling || document.hidden) return;
 
             if (now - lastFrameTime < frameInterval) {
                 scheduleRender();
@@ -406,6 +408,20 @@ export function HelixChronoMatrix({
         });
         observer.observe(canvas);
 
+        const handleScroll = () => {
+            isScrolling = true;
+            if (animId) {
+                cancelAnimationFrame(animId);
+                animId = 0;
+            }
+            window.clearTimeout(scrollTimeout);
+            scrollTimeout = window.setTimeout(() => {
+                isScrolling = false;
+                lastFrameTime = 0;
+                scheduleRender();
+            }, 120);
+        };
+
         const handleVisibilityChange = () => {
             if (!document.hidden) scheduleRender();
             else if (animId) {
@@ -413,12 +429,15 @@ export function HelixChronoMatrix({
                 animId = 0;
             }
         };
+        document.addEventListener('scroll', handleScroll, { passive: true, capture: true });
         document.addEventListener('visibilitychange', handleVisibilityChange);
         scheduleRender();
 
         return () => {
             if (animId) cancelAnimationFrame(animId);
+            window.clearTimeout(scrollTimeout);
             observer.disconnect();
+            document.removeEventListener('scroll', handleScroll, true);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [isRunning, topology, isDarkMode, transparentBg, lineColor]);
