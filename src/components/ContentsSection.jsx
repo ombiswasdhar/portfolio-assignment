@@ -195,7 +195,7 @@ const projectsData = [
 const SWIPE_THRESHOLD = 50
 
 export default function ContentsSection() {
-  const [layoutMode, setLayoutMode] = useState('gallery') // 'gallery' | 'stack' | 'grid' | 'list'
+  const [layoutMode, setLayoutMode] = useState('stack') // 'stack' | 'grid' | 'list'
   const [activeTabIdx, setActiveTabIdx] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [activeProject, setActiveProject] = useState(null)
@@ -589,9 +589,9 @@ export default function ContentsSection() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setLayoutMode('gallery')}
+                  onClick={() => setLayoutMode('grid')}
                   className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-akira tracking-wider transition-all cursor-pointer ${
-                    layoutMode === 'gallery'
+                    layoutMode === 'grid'
                       ? 'bg-black text-white shadow-sm'
                       : 'text-neutral-700 hover:text-black hover:bg-black/5'
                   }`}
@@ -637,8 +637,6 @@ export default function ContentsSection() {
                 className={
                   layoutMode === 'stack'
                     ? 'relative w-full pt-10 sm:pt-14 min-h-[670px] xs:min-h-[650px] sm:min-h-[680px] lg:min-h-[640px]'
-                    : layoutMode === 'gallery'
-                    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-10 sm:gap-x-7 sm:gap-y-12 w-full'
                     : layoutMode === 'grid'
                     ? 'grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full'
                     : 'flex flex-col gap-4 sm:gap-5 w-full'
@@ -648,24 +646,6 @@ export default function ContentsSection() {
                   {displayCards.map((card) => {
                     const posStyle = getPositionStyle(card.stackPosition)
                     const isTop = layoutMode === 'stack' && card.stackPosition === 0
-
-                    // Clean portfolio gallery inspired by the reference site.
-                    if (layoutMode === 'gallery') {
-                      return (
-                        <motion.article key={card.id} layoutId={`project-card-${card.id}`} layout transition={{ type: 'spring', stiffness: 300, damping: 26 }} className="group min-w-0">
-                          <button type="button" onClick={() => setActiveProject(card)} aria-label={`View ${card.title}`} className="relative block aspect-[4/3] w-full overflow-hidden bg-neutral-200 text-left">
-                            <img src={card.thumbnail} alt={card.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
-                            <span className="absolute inset-0 flex items-center justify-center bg-black/45 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 focus-visible:opacity-100">
-                              <span className="font-poppins text-xs uppercase tracking-[0.22em]">View project ↗</span>
-                            </span>
-                          </button>
-                          <div className="pt-3 text-neutral-950">
-                            <h3 className="font-poppins text-sm font-medium uppercase tracking-[0.08em]">{card.title}</h3>
-                            <p className="mt-1 font-poppins-light text-xs text-neutral-600">{card.category}</p>
-                          </div>
-                        </motion.article>
-                      )
-                    }
 
                     // 1. GRID LAYOUT MODE CARD
                     if (layoutMode === 'grid') {
