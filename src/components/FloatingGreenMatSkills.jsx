@@ -68,33 +68,14 @@ const matConfigs = [
 ]
 
 /*
- * "Design Toolbox" sticker text — multi-shadow outline technique.
- * 8-directional text-shadow at 3px creates a thick, smooth dark border.
- * Much better rendering than -webkit-text-stroke.
+ * Skill text styling — bold italic cream text with soft 3D shadow.
+ * Matches the premium editorial "hidden gems" reference aesthetic.
  */
-const outlineThick = [
-  '-3px -3px 0 #000', '3px -3px 0 #000',
-  '-3px  3px 0 #000', '3px  3px 0 #000',
-  ' 0   -3px 0 #000', '0    3px 0 #000',
-  '-3px  0   0 #000', '3px  0   0 #000',
-  '4px 4px 0px rgba(0,0,0,0.35)',
-].join(', ')
+const creamColor = '#f0e6d2'
 
-const outlineMed = [
-  '-2px -2px 0 #000', '2px -2px 0 #000',
-  '-2px  2px 0 #000', '2px  2px 0 #000',
-  ' 0   -2px 0 #000', '0    2px 0 #000',
-  '-2px  0   0 #000', '2px  0   0 #000',
-  '3px 3px 0px rgba(0,0,0,0.3)',
-].join(', ')
-
-const outlineThin = [
-  '-1px -1px 0 #000', '1px -1px 0 #000',
-  '-1px  1px 0 #000', '1px  1px 0 #000',
-  ' 0   -1px 0 #000', '0    1px 0 #000',
-  '-1px  0   0 #000', '1px  0   0 #000',
-  '2px 2px 0px rgba(0,0,0,0.3)',
-].join(', ')
+const shadowHeavy = '2px 3px 0px rgba(0,0,0,0.35), 4px 5px 8px rgba(0,0,0,0.25)'
+const shadowMed   = '1px 2px 0px rgba(0,0,0,0.30), 3px 4px 6px rgba(0,0,0,0.20)'
+const shadowLight = '1px 1px 0px rgba(0,0,0,0.25), 2px 3px 4px rgba(0,0,0,0.15)'
 
 function MatCard({ group, config, isVisible, index }) {
   return (
@@ -153,11 +134,12 @@ function MatCard({ group, config, isVisible, index }) {
           {/* ── Header ── */}
           <div className="flex items-center justify-between mb-4">
             <span
-              className="font-fredoka text-[13px] sm:text-sm uppercase tracking-[0.08em]"
+              className="font-fredoka text-[13px] sm:text-sm uppercase tracking-[0.12em]"
               style={{
-                color: '#fff',
+                color: creamColor,
                 fontWeight: 600,
-                textShadow: outlineMed,
+                fontStyle: 'italic',
+                textShadow: shadowLight,
               }}
             >
               {group.coord}
@@ -165,9 +147,10 @@ function MatCard({ group, config, isVisible, index }) {
             <span
               className="font-fredoka text-[11px] font-semibold px-2 py-0.5 rounded"
               style={{
-                color: '#fff',
+                color: creamColor,
                 fontWeight: 600,
-                textShadow: outlineThin,
+                fontStyle: 'italic',
+                textShadow: shadowLight,
               }}
             >
               {group.badge}
@@ -182,14 +165,15 @@ function MatCard({ group, config, isVisible, index }) {
                 className="group/item transition-transform duration-200 cursor-default hover:translate-x-1"
               >
                 <span
-                  className="font-fredoka uppercase block"
+                  className="font-ca-display uppercase block"
                   style={{
-                    color: '#ffffff',
-                    fontWeight: 700,
-                    fontSize: 'clamp(14px, 2vw, 18px)',
-                    lineHeight: 1.1,
-                    letterSpacing: '-0.01em',
-                    textShadow: outlineThick,
+                    color: creamColor,
+                    fontWeight: 800,
+                    fontStyle: 'italic',
+                    fontSize: 'clamp(22px, 3.5vw, 32px)',
+                    lineHeight: 1.15,
+                    letterSpacing: '-0.02em',
+                    textShadow: shadowHeavy,
                   }}
                 >
                   {skill.name}
@@ -206,9 +190,10 @@ function MatCard({ group, config, isVisible, index }) {
             <span
               className="font-myfont text-lg sm:text-xl md:text-2xl tracking-wide lowercase"
               style={{
-                color: '#ffffff',
+                color: creamColor,
                 fontWeight: 600,
-                textShadow: outlineMed,
+                fontStyle: 'italic',
+                textShadow: shadowMed,
               }}
             >
               {group.title}
@@ -216,9 +201,10 @@ function MatCard({ group, config, isVisible, index }) {
             <span
               className="font-fredoka text-xs sm:text-sm uppercase tracking-[0.15em]"
               style={{
-                color: '#ffffff',
+                color: creamColor,
                 fontWeight: 700,
-                textShadow: outlineThin,
+                fontStyle: 'italic',
+                textShadow: shadowLight,
               }}
             >
               PART {config.num}
