@@ -10,11 +10,8 @@ import oniCardBackImg from '../assets/work/oni-card-back.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 
-// PlayStaples Gallery Images & GIFs
-import psBombayTaxiGif from '../assets/playstaples/gallery/Bombay_taxi_03.gif'
+// PlayStaples Gallery Stills
 import psTaxi03Img from '../assets/playstaples/gallery/Taxi_03.jpg'
-import psTaxi04Gif from '../assets/playstaples/gallery/Taxi_04.gif'
-import psTaxi05Gif from '../assets/playstaples/gallery/Taxi_05.gif'
 import psTaxi06Img from '../assets/playstaples/gallery/Taxi_06.jpg'
 import psTaxi07Img from '../assets/playstaples/gallery/Taxi_07.jpg'
 
@@ -189,10 +186,7 @@ const projectsData = [
     hoverImage: kaaliPeeliHoverImg,
     previewPhotos: [
       projectPlaystaplesImg,
-      psBombayTaxiGif,
       psTaxi03Img,
-      psTaxi04Gif,
-      psTaxi05Gif,
       psTaxi06Img,
       psTaxi07Img,
     ],
@@ -511,8 +505,9 @@ export default function ContentsSection() {
 
                 {/* RED TITLE BAR BELOW THE IMAGE */}
                 <div className="w-full bg-[#E84A4A] border-t-4 border-black px-4 py-3 flex items-center justify-center text-center shrink-0 min-h-[3.25rem]">
-                  <h3 className="font-ca-mono font-bold text-white text-xs sm:text-sm md:text-base tracking-wide uppercase truncate max-w-full">
-                    {card.title} — {card.subtitle}
+                  <h3 className="text-white text-xs sm:text-sm md:text-base tracking-wide uppercase truncate max-w-full flex items-center justify-center gap-1.5 sm:gap-2">
+                    <span className={card.id === 'business-cards' ? 'font-akira font-black' : 'font-ca-mono font-bold'}>{card.title}</span>
+                    <span className={card.id === 'business-cards' ? 'font-fredoka font-normal text-white/95' : 'font-ca-mono font-bold'}>— {card.subtitle}</span>
                   </h3>
                 </div>
               </div>

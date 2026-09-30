@@ -160,37 +160,34 @@ export default function OniCardIsometricAnimation({ className = '' }) {
       {/* CORNER STUDIO TYPOGRAPHY MARKINGS (MATCHING REFERENCE VIDEO) */}
       {/* ============================================================ */}
       {/* Top Left: Vertical Agency Spec Tag */}
-      <div className="absolute top-4 left-4 pointer-events-none opacity-40 hover:opacity-100 transition-opacity">
-        <span className="block font-ca-mono text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-neutral-400 [writing-mode:vertical-lr] rotate-180">
+      <div className="absolute top-4 left-4 pointer-events-none opacity-60 hover:opacity-100 transition-opacity z-10">
+        <span className="block font-fredoka text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-neutral-300 [writing-mode:vertical-lr] rotate-180">
           RAW - IDENTITY // RAW - LOVE, RAW - COLOUR
         </span>
       </div>
 
       {/* Bottom Left: Dimensions & Spec Label */}
-      <div className="absolute bottom-4 left-4 pointer-events-none opacity-40 hover:opacity-100 transition-opacity">
+      <div className="absolute bottom-4 left-4 pointer-events-none opacity-60 hover:opacity-100 transition-opacity z-10">
         <div className="flex flex-col gap-0.5">
-          <span className="font-ca-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-neutral-400">
+          <span className="font-fredoka text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-neutral-300">
             DIMENSIONS: 85 x 55mm
           </span>
-          <span className="font-ca-mono text-[7px] sm:text-[8px] uppercase tracking-[0.18em] text-neutral-500">
+          <span className="font-fredoka text-[8px] sm:text-[9px] uppercase tracking-[0.12em] text-neutral-400 font-normal">
             350GSM MATTE SILK CARDSTOCK
           </span>
         </div>
       </div>
 
-      {/* Top Right: Studio Monogram */}
-      <div className="absolute top-4 right-4 pointer-events-none opacity-50 flex flex-col items-end">
-        <span className="font-akira text-[10px] tracking-widest text-white/70 uppercase">
-          ONI // QI
-        </span>
-        <span className="font-ca-mono text-[7px] tracking-[0.2em] text-amber-400/80 uppercase">
-          DESIGN STUDIOS
+      {/* Top Right: Studio Title in Akira Expanded */}
+      <div className="absolute top-4 right-4 pointer-events-none opacity-85 hover:opacity-100 transition-opacity flex flex-col items-end z-10 text-right">
+        <span className="font-akira text-[9px] sm:text-[11px] tracking-wider text-white uppercase font-black leading-tight">
+          ONI DESIGN STUDIOS
         </span>
       </div>
 
       {/* Bottom Right: Season & Edition Tag */}
-      <div className="absolute bottom-4 right-4 pointer-events-none opacity-40 hover:opacity-100 transition-opacity text-right">
-        <span className="font-ca-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-neutral-400 block">
+      <div className="absolute bottom-4 right-4 pointer-events-none opacity-60 hover:opacity-100 transition-opacity text-right z-10">
+        <span className="font-fredoka text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-neutral-300 block">
           2ND YEAR COURSEWORK // 2026
         </span>
       </div>
