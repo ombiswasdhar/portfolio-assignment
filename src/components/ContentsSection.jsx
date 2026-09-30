@@ -12,19 +12,19 @@ import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 
-// PlayStaples image sequence
-import ps19Img from '../assets/playstaples/gallery/19.jpg'
-import ps20Img from '../assets/playstaples/gallery/20.jpg'
-import ps21Img from '../assets/playstaples/gallery/21.jpg'
-import ps22Img from '../assets/playstaples/gallery/22.jpg'
-import ps23Img from '../assets/playstaples/gallery/23.jpg'
-import ps24Img from '../assets/playstaples/gallery/24.jpg'
-import ps25Img from '../assets/playstaples/gallery/25.jpg'
-import ps26Img from '../assets/playstaples/gallery/26.jpg'
-import ps27Img from '../assets/playstaples/gallery/27.jpg'
-import ps28Img from '../assets/playstaples/gallery/28.jpg'
-import ps29Img from '../assets/playstaples/gallery/29.jpg'
-import ps30Img from '../assets/playstaples/gallery/30.jpg'
+// PlayStaples image sequence supplied for the project gallery
+import ps39Img from '../assets/playstaples/gallery/39.jpg'
+import ps40Img from '../assets/playstaples/gallery/40.jpg'
+import ps41Img from '../assets/playstaples/gallery/41.jpg'
+import ps42Img from '../assets/playstaples/gallery/42.jpg'
+import ps43Img from '../assets/playstaples/gallery/43.jpg'
+import ps44Img from '../assets/playstaples/gallery/44.jpg'
+import ps49Img from '../assets/playstaples/gallery/49.jpg'
+import ps50Img from '../assets/playstaples/gallery/50.jpg'
+import ps51Img from '../assets/playstaples/gallery/51.jpg'
+import ps218Img from '../assets/playstaples/gallery/218.jpg'
+import ps220Img from '../assets/playstaples/gallery/220.jpg'
+import ps221Img from '../assets/playstaples/gallery/221.jpg'
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
@@ -183,18 +183,18 @@ const projectsData = [
     thumbnail: projectPlaystaplesImg,
     hoverImage: kaaliPeeliHoverImg,
     previewPhotos: [
-      ps19Img,
-      ps20Img,
-      ps21Img,
-      ps22Img,
-      ps23Img,
-      ps24Img,
-      ps25Img,
-      ps26Img,
-      ps27Img,
-      ps28Img,
-      ps29Img,
-      ps30Img,
+      ps39Img,
+      ps40Img,
+      ps41Img,
+      ps42Img,
+      ps43Img,
+      ps44Img,
+      ps49Img,
+      ps50Img,
+      ps51Img,
+      ps218Img,
+      ps220Img,
+      ps221Img,
     ],
     tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
     deliverables: [

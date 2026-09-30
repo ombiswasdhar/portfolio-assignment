@@ -269,32 +269,32 @@ export default function OniCardIsometricAnimation({ className = '' }) {
       </div>
 
       {/* ============================================================ */}
-      {/* INTERACTIVE EDITION SELECTOR PILL TABS                       */}
+      {/* INTERACTIVE EDITION TOGGLE BUTTON (TEXT-FREE)                */}
       {/* ============================================================ */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 p-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 shadow-2xl">
-        <button
-          type="button"
-          onClick={() => setActiveEdition(0)}
-          className={`px-3 py-1 rounded-full font-fredoka text-[9px] sm:text-[10px] uppercase tracking-wider transition-all duration-300 ${
-            activeEdition === 0
-              ? 'bg-[#E84A4A] text-white font-semibold shadow-[0_0_12px_rgba(232,74,74,0.6)]'
-              : 'text-neutral-400 hover:text-white'
+      <button
+        type="button"
+        onClick={() => setActiveEdition((prev) => (prev === 0 ? 1 : 0))}
+        aria-label="Switch between cards"
+        title="Switch between cards"
+        className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/65 hover:bg-black/90 active:scale-90 border border-white/20 hover:border-[#E84A4A] backdrop-blur-md shadow-2xl transition-all duration-300 group cursor-pointer hover:shadow-[0_0_16px_rgba(232,74,74,0.5)]"
+      >
+        <svg
+          className={`w-4 h-4 text-white/80 group-hover:text-white transition-transform duration-500 ${
+            activeEdition === 1 ? 'rotate-180 text-[#E84A4A]' : ''
           }`}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          01 • Shuffle
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveEdition(1)}
-          className={`px-3 py-1 rounded-full font-fredoka text-[9px] sm:text-[10px] uppercase tracking-wider transition-all duration-300 ${
-            activeEdition === 1
-              ? 'bg-[#E84A4A] text-white font-semibold shadow-[0_0_12px_rgba(232,74,74,0.6)]'
-              : 'text-neutral-400 hover:text-white'
-          }`}
-        >
-          02 • 3D Flip
-        </button>
-      </div>
+          <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+          <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+          <path d="M16 21h5v-5" />
+        </svg>
+      </button>
 
       {/* ============================================================ */}
       {/* MAIN ANIMATED STAGE RIG (SMOOTH CROSSFADE BETWEEN EDITIONS)  */}
