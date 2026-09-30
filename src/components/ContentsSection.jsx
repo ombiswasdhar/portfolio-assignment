@@ -353,7 +353,7 @@ export default function ContentsSection() {
           </div>
         </section>
 
-        {/* FULL BLEED GRID WITH THEME RED HEADER STRIPS & BLACK BORDERS */}
+        {/* FULL BLEED GRID WITH RED FOOTER TITLE STRIPS & BLACK BORDERS */}
         <div className="relative z-10 w-full border-t-4 border-b-4 border-black bg-black">
           <div className="w-full grid grid-cols-1 md:grid-cols-2">
             {projectsData.map((card, idx) => (
@@ -366,13 +366,6 @@ export default function ContentsSection() {
                 } last:border-b-0`}
                 onClick={() => setActiveProject(card)}
               >
-                {/* RED TITLE BAR MATCHING WEBSITE THEME */}
-                <div className="w-full bg-[#E84A4A] border-b-4 border-black px-4 py-2.5 flex items-center justify-center text-center shrink-0">
-                  <h3 className="font-ca-mono font-bold text-white text-xs sm:text-sm md:text-base tracking-wide uppercase truncate max-w-full">
-                    {card.title} — {card.subtitle}
-                  </h3>
-                </div>
-
                 {/* PROJECT IMAGE CONTAINER */}
                 <div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-900">
                   <img 
@@ -385,6 +378,13 @@ export default function ContentsSection() {
                       View Case Study ↗
                     </span>
                   </div>
+                </div>
+
+                {/* RED TITLE BAR BELOW THE IMAGE */}
+                <div className="w-full bg-[#E84A4A] border-t-4 border-black px-4 py-2.5 flex items-center justify-center text-center shrink-0">
+                  <h3 className="font-ca-mono font-bold text-white text-xs sm:text-sm md:text-base tracking-wide uppercase truncate max-w-full">
+                    {card.title} — {card.subtitle}
+                  </h3>
                 </div>
               </div>
             ))}

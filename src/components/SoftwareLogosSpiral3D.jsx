@@ -7,6 +7,7 @@ export default function SoftwareLogosSpiral3D({
 }) {
   const containerRef = useRef(null)
   const animFrameRef = useRef(null)
+  const hoveredAppRef = useRef(null)
   const [angle, setAngle] = useState(0)
   const [hoveredApp, setHoveredApp] = useState(null)
   const [pointer, setPointer] = useState({ x: 0, y: 0 })
@@ -33,7 +34,7 @@ export default function SoftwareLogosSpiral3D({
     let isInView = false
     let isScrolling = false
     let scrollTimeout = 0
-    const frameInterval = 1000 / 30
+    const frameInterval = 1000 / 60
     const container = containerRef.current
 
     const scheduleLoop = () => {
@@ -55,7 +56,7 @@ export default function SoftwareLogosSpiral3D({
       lastTime = currentTime
 
       // Smooth orbital speed (~14s per revolution), slows down on hover
-      const speed = hoveredApp ? 0.08 : 0.42
+      const speed = hoveredAppRef.current ? 0.08 : 0.34
       setAngle((prev) => (prev + speed * delta) % (Math.PI * 2))
 
       scheduleLoop()
@@ -109,7 +110,7 @@ export default function SoftwareLogosSpiral3D({
         animFrameRef.current = null
       }
     }
-  }, [hoveredApp])
+  }, [])
 
   // Mouse move handler for interactive 3D pitch/yaw parallax
   const handleMouseMove = (e) => {
@@ -125,6 +126,7 @@ export default function SoftwareLogosSpiral3D({
 
   const handleMouseLeave = () => {
     setPointer({ x: 0, y: 0 })
+    hoveredAppRef.current = null
     setHoveredApp(null)
   }
 
@@ -144,6 +146,9 @@ export default function SoftwareLogosSpiral3D({
   const stageHeight = isMobile ? '460px' : '530px'
 
   const totalApps = apps.length
+  // Keep every logo in the main helix, but use half as many repeated companions.
+  // This cuts down DOM updates and layered shadows while preserving the orbit effect.
+  const companionApps = useMemo(() => apps.filter((_, index) => index % 4 === 0), [apps])
 
   // ================= 1. PRIMARY INNER SPIRAL ICONS =================
   const primaryItems = useMemo(() => {
@@ -181,8 +186,8 @@ export default function SoftwareLogosSpiral3D({
 
   // ================= 2. MID-RANGE COMPANION FLOATING ICONS =================
   const midCompanionItems = useMemo(() => {
-    return apps.map((app, index) => {
-      const progress = 1 - index / (totalApps - 1)
+    return companionApps.map((app, index) => {
+      const progress = 1 - index / Math.max(companionApps.length - 1, 1)
       const normalizedY = progress - 0.5
 
       const turns = 2.2
@@ -216,19 +221,19 @@ export default function SoftwareLogosSpiral3D({
         tier: 'mid',
       }
     })
-  }, [apps, angle, radiusMid, heightSpan, totalApps, isMobile])
+  }, [companionApps, angle, radiusMid, heightSpan, isMobile])
 
   // ================= 3. WIDE SIDE-FLANK FLOATING ICONS (SIDES OF SCREEN) =================
   // Orbiting wide to populate the left and right sides of the screen so it looks completely filled!
   const sideFlankFloatingItems = useMemo(() => {
-    return apps.map((app, index) => {
+    return companionApps.map((app, index) => {
       // Staggered distribution across the outer sides
       const progress = (index * 0.61803398875) % 1 // Golden ratio distribution for natural organic spread
-      const normalizedY = (index / (totalApps - 1)) - 0.5
+      const normalizedY = (index / Math.max(companionApps.length - 1, 1)) - 0.5
 
       // Wide orbit with alternating left/right phase
       const sidePhase = index % 2 === 0 ? 0 : Math.PI
-      const itemAngle = angle * 0.85 + (index / totalApps) * Math.PI * 2 + sidePhase
+      const itemAngle = angle * 0.85 + (index / companionApps.length) * Math.PI * 2 + sidePhase
 
       // Expanded outer radius spanning to the sides of the screen
       const r = radiusSides * (0.92 + (index % 3) * 0.08)
@@ -261,9 +266,9 @@ export default function SoftwareLogosSpiral3D({
         tier: 'side',
       }
     })
-  }, [apps, angle, radiusSides, heightSpan, totalApps, isMobile])
+  }, [companionApps, angle, radiusSides, heightSpan, isMobile])
 
-  // Combine all three tiers into a unified 3D depth field (33 floating/orbiting icons)
+  // Combine three tiers into a lighter field (main icons plus fewer repeats).
   const all3DItems = useMemo(() => {
     return [...sideFlankFloatingItems, ...midCompanionItems, ...primaryItems]
   }, [sideFlankFloatingItems, midCompanionItems, primaryItems])
@@ -341,8 +346,14 @@ export default function SoftwareLogosSpiral3D({
             <div
               key={id}
               onClick={() => onIconClick(app)}
-              onMouseEnter={() => setHoveredApp(id)}
-              onMouseLeave={() => setHoveredApp(null)}
+              onMouseEnter={() => {
+                hoveredAppRef.current = id
+                setHoveredApp(id)
+              }}
+              onMouseLeave={() => {
+                hoveredAppRef.current = null
+                setHoveredApp(null)
+              }}
               className="absolute cursor-pointer flex flex-col items-center group/orbit"
               style={{
                 transform: `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${floatRot || 0}deg) scale(${isHovered ? scale * 1.25 : scale})`,
