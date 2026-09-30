@@ -12,10 +12,19 @@ import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 
-// PlayStaples Gallery Stills
-import psTaxi03Img from '../assets/playstaples/gallery/Taxi_03.jpg'
-import psTaxi06Img from '../assets/playstaples/gallery/Taxi_06.jpg'
-import psTaxi07Img from '../assets/playstaples/gallery/Taxi_07.jpg'
+// PlayStaples image sequence
+import ps19Img from '../assets/playstaples/gallery/19.jpg'
+import ps20Img from '../assets/playstaples/gallery/20.jpg'
+import ps21Img from '../assets/playstaples/gallery/21.jpg'
+import ps22Img from '../assets/playstaples/gallery/22.jpg'
+import ps23Img from '../assets/playstaples/gallery/23.jpg'
+import ps24Img from '../assets/playstaples/gallery/24.jpg'
+import ps25Img from '../assets/playstaples/gallery/25.jpg'
+import ps26Img from '../assets/playstaples/gallery/26.jpg'
+import ps27Img from '../assets/playstaples/gallery/27.jpg'
+import ps28Img from '../assets/playstaples/gallery/28.jpg'
+import ps29Img from '../assets/playstaples/gallery/29.jpg'
+import ps30Img from '../assets/playstaples/gallery/30.jpg'
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
@@ -24,8 +33,6 @@ import MarqueeBar from './MarqueeBar'
 
 function CyclingProjectImage({ images, alt, className, onImageClick }) {
   const [imageIndex, setImageIndex] = React.useState(0)
-  const [nextImageIndex, setNextImageIndex] = React.useState(null)
-  const [isFading, setIsFading] = React.useState(false)
   const imageList = images?.length ? images : []
 
   React.useEffect(() => {
@@ -33,7 +40,6 @@ function CyclingProjectImage({ images, alt, className, onImageClick }) {
 
     let currentIndex = 0
     let cycleTimer
-    let fadeTimer
     let isActive = true
 
     const scheduleNext = () => {
@@ -44,16 +50,9 @@ function CyclingProjectImage({ images, alt, className, onImageClick }) {
         const beginFade = () => {
           if (didFinishLoading || !isActive) return
           didFinishLoading = true
-          setNextImageIndex(nextIndex)
-          requestAnimationFrame(() => setIsFading(true))
-          fadeTimer = window.setTimeout(() => {
-            if (!isActive) return
-            currentIndex = nextIndex
-            setImageIndex(nextIndex)
-            setNextImageIndex(null)
-            setIsFading(false)
-            scheduleNext()
-          }, 450)
+          currentIndex = nextIndex
+          setImageIndex(nextIndex)
+          scheduleNext()
         }
         preloadedImage.onload = beginFade
         preloadedImage.onerror = () => {
@@ -63,25 +62,22 @@ function CyclingProjectImage({ images, alt, className, onImageClick }) {
         }
         preloadedImage.src = imageList[nextIndex]
         if (preloadedImage.complete) beginFade()
-      }, 1900)
+      }, 1100)
     }
 
     scheduleNext()
     return () => {
       isActive = false
       window.clearTimeout(cycleTimer)
-      window.clearTimeout(fadeTimer)
     }
   }, [imageList])
 
   const src = imageList[imageIndex] || imageList[0]
-  const nextSrc = nextImageIndex === null ? null : imageList[nextImageIndex]
   const handleClick = (event, imageSrc) => onImageClick?.(event, imageSrc)
 
   return (
     <span className="relative block h-full w-full overflow-hidden">
-      <img src={src} alt={alt} className={`absolute inset-0 transition-opacity duration-500 ${isFading ? 'opacity-0' : 'opacity-100'} ${className}`} onClick={(event) => handleClick(event, src)} />
-      {nextSrc && <img src={nextSrc} alt="" aria-hidden="true" className={`absolute inset-0 transition-opacity duration-500 ${isFading ? 'opacity-100' : 'opacity-0'} ${className}`} onClick={(event) => handleClick(event, nextSrc)} />}
+      <img src={src} alt={alt} className={`absolute inset-0 ${className}`} onClick={(event) => handleClick(event, src)} />
     </span>
   )
 }
@@ -187,10 +183,18 @@ const projectsData = [
     thumbnail: projectPlaystaplesImg,
     hoverImage: kaaliPeeliHoverImg,
     previewPhotos: [
-      projectPlaystaplesImg,
-      psTaxi03Img,
-      psTaxi06Img,
-      psTaxi07Img,
+      ps19Img,
+      ps20Img,
+      ps21Img,
+      ps22Img,
+      ps23Img,
+      ps24Img,
+      ps25Img,
+      ps26Img,
+      ps27Img,
+      ps28Img,
+      ps29Img,
+      ps30Img,
     ],
     tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
     deliverables: [

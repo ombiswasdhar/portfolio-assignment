@@ -21,7 +21,7 @@ import oniCard2Back from '../assets/work/oni-card-2-back.png'
  * 
  * Features:
  * - Smooth cinematic transition between the two editions.
- * - Auto-cycle every 8 seconds, pausing on hover.
+ * - Fast auto-cycle every 3.8 seconds, pausing on hover.
  * - Interactive glassmorphism edition toggle pills.
  * - Typography: Studio branding in Akira Expanded, spec tags in Fredoka.
  */
@@ -30,12 +30,12 @@ export default function OniCardIsometricAnimation({ className = '' }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = useState(false)
 
-  // Auto-switch between Edition 01 and Edition 02 smoothly
+  // Auto-switch between Edition 01 and Edition 02 smoothly & fast
   useEffect(() => {
     if (isHovered) return undefined
     const timer = setInterval(() => {
       setActiveEdition((prev) => (prev === 0 ? 1 : 0))
-    }, 8500)
+    }, 3800)
     return () => clearInterval(timer)
   }, [isHovered])
 
@@ -157,14 +157,14 @@ export default function OniCardIsometricAnimation({ className = '' }) {
         }
 
         .oni-card-1a-anim {
-          animation: oniShuffleCard1Front 4.8s cubic-bezier(0.38, 0, 0.2, 1) infinite;
+          animation: oniShuffleCard1Front 2.8s cubic-bezier(0.38, 0, 0.2, 1) infinite;
           will-change: transform, filter, box-shadow;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
         }
 
         .oni-card-1b-anim {
-          animation: oniShuffleCard1Back 4.8s cubic-bezier(0.38, 0, 0.2, 1) infinite;
+          animation: oniShuffleCard1Back 2.8s cubic-bezier(0.38, 0, 0.2, 1) infinite;
           will-change: transform, filter, box-shadow;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
@@ -197,7 +197,7 @@ export default function OniCardIsometricAnimation({ className = '' }) {
         }
 
         .oni-card-2-flip-anim {
-          animation: oniCardFloatFlip 5.8s cubic-bezier(0.42, 0, 0.2, 1) infinite;
+          animation: oniCardFloatFlip 3.0s cubic-bezier(0.42, 0, 0.2, 1) infinite;
           transform-style: preserve-3d;
           will-change: transform;
         }
@@ -215,7 +215,7 @@ export default function OniCardIsometricAnimation({ className = '' }) {
         }
 
         .oni-floor-shadow {
-          animation: oniFloorShadowAnim 5.8s cubic-bezier(0.42, 0, 0.2, 1) infinite;
+          animation: oniFloorShadowAnim 3.0s cubic-bezier(0.42, 0, 0.2, 1) infinite;
         }
       `}</style>
 
@@ -306,10 +306,10 @@ export default function OniCardIsometricAnimation({ className = '' }) {
           /* ========================================================== */
           <motion.div
             key="edition-01-shuffle"
-            initial={{ opacity: 0, scale: 0.94, filter: 'blur(6px)' }}
+            initial={{ opacity: 0, scale: 0.95, filter: 'blur(4px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, scale: 1.05, filter: 'blur(6px)' }}
-            transition={{ duration: 0.65, ease: [0.38, 0, 0.2, 1] }}
+            exit={{ opacity: 0, scale: 1.04, filter: 'blur(4px)' }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="relative flex items-center justify-center w-[60%] sm:w-[64%] max-w-[285px] aspect-[601/368]"
             style={{
               transform: `rotateX(${55 + (isHovered ? mousePos.y * 14 : 0)}deg) rotateZ(${-36 + (isHovered ? mousePos.x * 14 : 0)}deg) rotateY(${6 + (isHovered ? mousePos.x * 10 : 0)}deg)`,
@@ -361,10 +361,10 @@ export default function OniCardIsometricAnimation({ className = '' }) {
           /* ========================================================== */
           <motion.div
             key="edition-02-flip"
-            initial={{ opacity: 0, scale: 0.92, filter: 'blur(6px)' }}
+            initial={{ opacity: 0, scale: 0.94, filter: 'blur(4px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, scale: 0.94, filter: 'blur(6px)' }}
-            transition={{ duration: 0.65, ease: [0.38, 0, 0.2, 1] }}
+            exit={{ opacity: 0, scale: 1.04, filter: 'blur(4px)' }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="relative flex items-center justify-center w-[72%] sm:w-[75%] max-w-[320px] aspect-[599/366]"
             style={{
               perspective: 1200,
