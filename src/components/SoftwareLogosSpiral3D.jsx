@@ -56,7 +56,7 @@ export default function SoftwareLogosSpiral3D({
       lastTime = currentTime
 
       // Smooth orbital speed (~14s per revolution), slows down on hover
-      const speed = hoveredAppRef.current ? 0.08 : 0.34
+      const speed = hoveredAppRef.current ? 0.1 : 0.42
       setAngle((prev) => (prev + speed * delta) % (Math.PI * 2))
 
       scheduleLoop()
@@ -146,7 +146,7 @@ export default function SoftwareLogosSpiral3D({
   const stageHeight = isMobile ? '460px' : '530px'
 
   const totalApps = apps.length
-  // Keep every logo in the main helix, but use half as many repeated companions.
+  // Keep every logo in the main helix, but use fewer repeated companions.
   // This cuts down DOM updates and layered shadows while preserving the orbit effect.
   const companionApps = useMemo(() => apps.filter((_, index) => index % 4 === 0), [apps])
 

@@ -353,21 +353,23 @@ export default function ContentsSection() {
           </div>
         </section>
 
-        {/* FULL BLEED GRID WITH RED FOOTER TITLE STRIPS & BLACK BORDERS */}
+        {/* FULL BLEED GRID WITH RED FOOTER TITLE STRIPS & PERFECT ALIGNMENT */}
         <div className="relative z-10 w-full border-t-4 border-b-4 border-black bg-black">
-          <div className="w-full grid grid-cols-1 md:grid-cols-2">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 items-stretch">
             {projectsData.map((card, idx) => (
               <div 
                 key={card.id} 
-                className={`group relative cursor-pointer flex flex-col overflow-hidden bg-neutral-950 border-b-4 border-black ${
-                  idx % 2 === 0 ? 'md:border-r-4 md:border-black' : ''
+                className={`group relative cursor-pointer flex flex-col h-full overflow-hidden bg-neutral-950 ${
+                  idx < projectsData.length - 1 ? 'border-b-4 border-black' : ''
                 } ${
                   idx >= projectsData.length - 2 ? 'md:border-b-0' : ''
-                } last:border-b-0`}
+                } ${
+                  idx % 2 === 0 ? 'md:border-r-4 md:border-black' : ''
+                }`}
                 onClick={() => setActiveProject(card)}
               >
                 {/* PROJECT IMAGE CONTAINER */}
-                <div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-900">
+                <div className="relative w-full aspect-[4/3] flex-1 overflow-hidden bg-neutral-900">
                   <img 
                     src={card.thumbnail} 
                     alt={card.title} 
@@ -381,7 +383,7 @@ export default function ContentsSection() {
                 </div>
 
                 {/* RED TITLE BAR BELOW THE IMAGE */}
-                <div className="w-full bg-[#E84A4A] border-t-4 border-black px-4 py-2.5 flex items-center justify-center text-center shrink-0">
+                <div className="w-full bg-[#E84A4A] border-t-4 border-black px-4 py-3 flex items-center justify-center text-center shrink-0 min-h-[3.25rem]">
                   <h3 className="font-ca-mono font-bold text-white text-xs sm:text-sm md:text-base tracking-wide uppercase truncate max-w-full">
                     {card.title} — {card.subtitle}
                   </h3>
