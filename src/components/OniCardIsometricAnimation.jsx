@@ -48,108 +48,125 @@ export default function OniCardIsometricAnimation({ className = '' }) {
     >
       <style>{`
         /* ======================================================== */
-        /* EXACT 3D ISOMETRIC SHUFFLE KEYFRAMES (ZERO PHASING/CLIPPING) */
+        /* EXACT SIDE-BY-SIDE CARD SHUFFLE CHOREOGRAPHY             */
+        /* (Cards glide past each other to a side-by-side position,  */
+        /*  swap depth & position, then glide back into the deck)   */
         /* ======================================================== */
 
-        /* CARD A (FRONT): Starts in FOREGROUND, then lifts up & slides to BACK, rests, then returns */
+        /* CARD A (FRONT): Starts in FOREGROUND, glides out to side-by-side, swaps, glides into BACK */
         @keyframes oniShuffleCardFront {
-          0%, 18% {
-            transform: translate3d(42px, 38px, 0) scale(1);
+          0%, 16% {
+            /* Rest 1: Foreground position */
+            transform: translate3d(20px, 14px, 0) scale(1);
             filter: blur(0px) brightness(1);
             z-index: 25;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 35px 70px -10px rgba(0,0,0,0.9), 0 18px 32px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.15);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 32px 64px -8px rgba(0,0,0,0.85), 0 16px 28px -8px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.15);
           }
-          30% {
-            /* Lifts high in the air at apex while sliding back */
-            transform: translate3d(8px, 6px, 0) scale(1.05);
-            filter: blur(0px) brightness(1.04);
+          32% {
+            /* Glides out past Card B to the right */
+            transform: translate3d(85px, 62px, 0) scale(0.98);
+            filter: blur(0px) brightness(1.02);
             z-index: 25;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 55px 95px -12px rgba(0,0,0,0.95), 0 28px 48px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.2);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 40px 75px -10px rgba(0,0,0,0.9), 0 20px 36px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.18);
           }
-          36% {
-            /* Switches cleanly behind Card B while at apex */
-            transform: translate3d(-15px, -14px, 0) scale(1.02);
-            filter: blur(0.3px) brightness(1.01);
+          36%, 42% {
+            /* Side-by-side display: both cards fully visible side-by-side */
+            transform: translate3d(90px, 65px, 0) scale(0.98);
+            filter: blur(0px) brightness(1.02);
+            /* Switches behind Card B while completely separated side-by-side */
             z-index: 10;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 2px 0 rgba(0,0,0,0.6), 0 30px 60px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.12);
           }
-          48%, 68% {
-            /* Settled smoothly in background position */
-            transform: translate3d(-42px, -38px, 0) scale(0.935);
-            filter: blur(1.2px) brightness(0.9);
+          54%, 68% {
+            /* Rest 2: Settled in background position behind Card B */
+            transform: translate3d(-20px, -14px, 0) scale(0.95);
+            filter: blur(0.8px) brightness(0.92);
             z-index: 10;
             box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
           }
-          80% {
-            /* Glides smoothly forward along tabletop */
-            transform: translate3d(18px, 16px, 0) scale(0.98);
-            filter: blur(0.3px) brightness(0.98);
+          82% {
+            /* Glides out past Card B to the right again */
+            transform: translate3d(85px, 62px, 0) scale(0.98);
+            filter: blur(0px) brightness(1.02);
             z-index: 10;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 2px 0 rgba(0,0,0,0.6), 0 30px 60px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.12);
           }
-          86% {
-            /* Comes in front as Card B lifts into apex */
+          86%, 90% {
+            /* Side-by-side display: switches to foreground layer */
+            transform: translate3d(90px, 65px, 0) scale(0.98);
+            filter: blur(0px) brightness(1.02);
             z-index: 25;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 40px 75px -10px rgba(0,0,0,0.9), 0 20px 36px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.18);
           }
           100% {
-            transform: translate3d(42px, 38px, 0) scale(1);
+            /* Glides back into foreground stack position */
+            transform: translate3d(20px, 14px, 0) scale(1);
             filter: blur(0px) brightness(1);
             z-index: 25;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 35px 70px -10px rgba(0,0,0,0.9), 0 18px 32px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.15);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 32px 64px -8px rgba(0,0,0,0.85), 0 16px 28px -8px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.15);
           }
         }
 
-        /* CARD B (BACK): Starts in BACKGROUND, glides forward into FOREGROUND, rests, then lifts & returns */
+        /* CARD B (BACK): Starts in BACKGROUND, glides out to side-by-side, swaps, glides into FOREGROUND */
         @keyframes oniShuffleCardBack {
-          0%, 18% {
-            transform: translate3d(-42px, -38px, 0) scale(0.935);
-            filter: blur(1.2px) brightness(0.9);
+          0%, 16% {
+            /* Rest 1: Background position */
+            transform: translate3d(-20px, -14px, 0) scale(0.95);
+            filter: blur(0.8px) brightness(0.92);
             z-index: 10;
             box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
           }
-          30% {
-            /* Glides smoothly forward along tabletop while Card A is elevated */
-            transform: translate3d(14px, 12px, 0) scale(0.97);
-            filter: blur(0.4px) brightness(0.97);
+          32% {
+            /* Glides out past Card A to the left */
+            transform: translate3d(-85px, -62px, 0) scale(0.98);
+            filter: blur(0px) brightness(1.02);
             z-index: 10;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 2px 0 rgba(0,0,0,0.6), 0 30px 60px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.12);
           }
-          36% {
-            /* Card A has moved behind, Card B is now foreground */
+          36%, 42% {
+            /* Side-by-side display: switches to foreground layer */
+            transform: translate3d(-90px, -65px, 0) scale(0.98);
+            filter: blur(0px) brightness(1.02);
             z-index: 25;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 40px 75px -10px rgba(0,0,0,0.9), 0 20px 36px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.18);
           }
-          48%, 68% {
-            /* Settled in foreground position */
-            transform: translate3d(42px, 38px, 0) scale(1);
+          54%, 68% {
+            /* Rest 2: Settled in foreground position in front of Card A */
+            transform: translate3d(20px, 14px, 0) scale(1);
             filter: blur(0px) brightness(1);
             z-index: 25;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 35px 70px -10px rgba(0,0,0,0.9), 0 18px 32px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.15);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 32px 64px -8px rgba(0,0,0,0.85), 0 16px 28px -8px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.15);
           }
-          80% {
-            /* Lifts high in the air at apex while sliding back */
-            transform: translate3d(8px, 6px, 0) scale(1.05);
-            filter: blur(0px) brightness(1.04);
+          82% {
+            /* Glides out past Card A to the left again */
+            transform: translate3d(-85px, -62px, 0) scale(0.98);
+            filter: blur(0px) brightness(1.02);
             z-index: 25;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 55px 95px -12px rgba(0,0,0,0.95), 0 28px 48px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.2);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 40px 75px -10px rgba(0,0,0,0.9), 0 20px 36px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.18);
           }
-          86% {
-            /* Switches cleanly behind Card A while at apex */
-            transform: translate3d(-15px, -14px, 0) scale(1.02);
-            filter: blur(0.3px) brightness(1.01);
+          86%, 90% {
+            /* Side-by-side display: switches behind Card A */
+            transform: translate3d(-90px, -65px, 0) scale(0.98);
+            filter: blur(0px) brightness(1.02);
             z-index: 10;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 2px 0 rgba(0,0,0,0.6), 0 30px 60px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.12);
           }
           100% {
-            transform: translate3d(-42px, -38px, 0) scale(0.935);
-            filter: blur(1.2px) brightness(0.9);
+            /* Glides back into background stack position */
+            transform: translate3d(-20px, -14px, 0) scale(0.95);
+            filter: blur(0.8px) brightness(0.92);
             z-index: 10;
             box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
           }
         }
 
         .oni-card-a-anim {
-          animation: oniShuffleCardFront 4.2s cubic-bezier(0.42, 0, 0.18, 1) infinite;
+          animation: oniShuffleCardFront 4.8s cubic-bezier(0.38, 0, 0.2, 1) infinite;
           will-change: transform, filter, box-shadow;
         }
 
         .oni-card-b-anim {
-          animation: oniShuffleCardBack 4.2s cubic-bezier(0.42, 0, 0.18, 1) infinite;
+          animation: oniShuffleCardBack 4.8s cubic-bezier(0.38, 0, 0.2, 1) infinite;
           will-change: transform, filter, box-shadow;
         }
       `}</style>
@@ -200,7 +217,7 @@ export default function OniCardIsometricAnimation({ className = '' }) {
       {/* 3D ISOMETRIC STAGE RIG (EXACT CAMERA OBLIQUE ANGLE)          */}
       {/* ============================================================ */}
       <motion.div
-        className="relative flex items-center justify-center w-[74%] max-w-[370px] aspect-[601/368]"
+        className="relative flex items-center justify-center w-[70%] max-w-[350px] aspect-[601/368]"
         animate={{
           rotateX: 55 + (isHovered ? mousePos.y * 14 : 0),
           rotateZ: -36 + (isHovered ? mousePos.x * 14 : 0),
