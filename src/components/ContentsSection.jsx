@@ -5,20 +5,18 @@ import projectCardsImg from '../assets/work/project_cards.jpg'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
 import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
-import playstaplesShopAll from '../assets/playstaples/shop all.svg'
-import playstaplesShopAllAlt from '../assets/playstaples/shop all-1.svg'
-import playstaplesWebsite from '../assets/playstaples/Redesign PlayStaples Website 2.svg'
-import playstaplesProduct from '../assets/playstaples/product.svg'
+import oniCardFrontImg from '../assets/work/oni-card-front.png'
+import oniCardBackImg from '../assets/work/oni-card-back.png'
+import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
+import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 
 // PlayStaples Gallery Images & GIFs
 import psBombayTaxiGif from '../assets/playstaples/gallery/Bombay_taxi_03.gif'
+import psTaxi03Img from '../assets/playstaples/gallery/Taxi_03.jpg'
 import psTaxi04Gif from '../assets/playstaples/gallery/Taxi_04.gif'
+import psTaxi05Gif from '../assets/playstaples/gallery/Taxi_05.gif'
 import psTaxi06Img from '../assets/playstaples/gallery/Taxi_06.jpg'
 import psTaxi07Img from '../assets/playstaples/gallery/Taxi_07.jpg'
-import psPosterImg from '../assets/playstaples/gallery/Poster_01.jpg'
-import psBannerImg from '../assets/playstaples/gallery/Website_Banner_Image.jpg'
-import psBg26Img from '../assets/playstaples/gallery/26.jpg'
-import psBg19Img from '../assets/playstaples/gallery/19.jpg'
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
@@ -27,25 +25,86 @@ import MarqueeBar from './MarqueeBar'
 
 function CyclingProjectImage({ images, alt, className, onImageClick }) {
   const [imageIndex, setImageIndex] = React.useState(0)
+  const [nextImageIndex, setNextImageIndex] = React.useState(null)
+  const [isFading, setIsFading] = React.useState(false)
   const imageList = images?.length ? images : []
 
   React.useEffect(() => {
-    if (imageList.length < 2) return undefined
-    const timer = window.setInterval(() => {
-      setImageIndex((index) => (index + 1) % imageList.length)
-    }, 2800)
-    return () => window.clearInterval(timer)
+    if (imageList.length < 2 || imageList.every((image) => image === imageList[0])) return undefined
+
+    let currentIndex = 0
+    let cycleTimer
+    let fadeTimer
+    let isActive = true
+
+    const scheduleNext = () => {
+      cycleTimer = window.setTimeout(() => {
+        const nextIndex = (currentIndex + 1) % imageList.length
+        const preloadedImage = new Image()
+        let didFinishLoading = false
+        const beginFade = () => {
+          if (didFinishLoading || !isActive) return
+          didFinishLoading = true
+          setNextImageIndex(nextIndex)
+          requestAnimationFrame(() => setIsFading(true))
+          fadeTimer = window.setTimeout(() => {
+            if (!isActive) return
+            currentIndex = nextIndex
+            setImageIndex(nextIndex)
+            setNextImageIndex(null)
+            setIsFading(false)
+            scheduleNext()
+          }, 450)
+        }
+        preloadedImage.onload = beginFade
+        preloadedImage.onerror = () => {
+          if (!isActive) return
+          currentIndex = nextIndex
+          scheduleNext()
+        }
+        preloadedImage.src = imageList[nextIndex]
+        if (preloadedImage.complete) beginFade()
+      }, 1900)
+    }
+
+    scheduleNext()
+    return () => {
+      isActive = false
+      window.clearTimeout(cycleTimer)
+      window.clearTimeout(fadeTimer)
+    }
   }, [imageList])
 
   const src = imageList[imageIndex] || imageList[0]
+  const nextSrc = nextImageIndex === null ? null : imageList[nextImageIndex]
+  const handleClick = (event, imageSrc) => onImageClick?.(event, imageSrc)
+
   return (
-    <img
-      key={src}
-      src={src}
-      alt={alt}
-      className={className}
-      onClick={onImageClick ? (event) => onImageClick(event, src) : undefined}
-    />
+    <span className="relative block h-full w-full overflow-hidden">
+      <img src={src} alt={alt} className={`absolute inset-0 transition-opacity duration-500 ${isFading ? 'opacity-0' : 'opacity-100'} ${className}`} onClick={(event) => handleClick(event, src)} />
+      {nextSrc && <img src={nextSrc} alt="" aria-hidden="true" className={`absolute inset-0 transition-opacity duration-500 ${isFading ? 'opacity-100' : 'opacity-0'} ${className}`} onClick={(event) => handleClick(event, nextSrc)} />}
+    </span>
+  )
+}
+
+function FlippingBusinessCard({ front, back, alt, className }) {
+  const [showBack, setShowBack] = React.useState(false)
+
+  React.useEffect(() => {
+    const timer = window.setInterval(() => setShowBack((visible) => !visible), 2800)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  return (
+    <div className={`relative h-full w-full overflow-hidden [perspective:1000px] ${className}`}>
+      <div
+        className="relative h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.22,0.75,0.25,1)] [transform-style:preserve-3d]"
+        style={{ transform: showBack ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+      >
+        <img src={front} alt={`${alt}, front`} className="absolute inset-0 h-full w-full object-contain [backface-visibility:hidden]" />
+        <img src={back} alt={`${alt}, back`} className="absolute inset-0 h-full w-full object-contain [backface-visibility:hidden] [transform:rotateY(180deg)]" />
+      </div>
+    </div>
   )
 }
 
@@ -127,20 +186,15 @@ const projectsData = [
     description:
       'PlayStaples celebrates iconic Indian street culture through tactile collectible design. "Kaali Peeli" reimagines the legendary Mumbai Premier Padmini taxi as a handcrafted wooden toy—celebrating nostalgia "for the ones who carved dreams on the trunk." Developed with 3D product visualization, custom taxi livery, physical packaging, and brand storytelling.',
     thumbnail: projectPlaystaplesImg,
+    hoverImage: kaaliPeeliHoverImg,
     previewPhotos: [
       projectPlaystaplesImg,
       psBombayTaxiGif,
-      psTaxi06Img,
-      psBannerImg,
-      psTaxi07Img,
-      psPosterImg,
+      psTaxi03Img,
       psTaxi04Gif,
-      psBg26Img,
-      psBg19Img,
-      playstaplesShopAll,
-      playstaplesShopAllAlt,
-      playstaplesWebsite,
-      playstaplesProduct,
+      psTaxi05Gif,
+      psTaxi06Img,
+      psTaxi07Img,
     ],
     tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
     deliverables: [
@@ -171,8 +225,9 @@ const projectsData = [
     bulletSummary: 'Brand Identity • Mascot Character Design • Print Production',
     description:
       'Students were given the assignment of researching business cards and designing their own card, either as a freelancer or an employee of any brand. Analysis of the card was done after preparing different iterations which include the logo, colours, typefaces, and dimensions.',
-    thumbnail: projectCardsImg,
-    previewPhotos: [projectCardsImg, projectCardsImg],
+    thumbnail: oniCardFrontImg,
+    isIsometricCards: true,
+    previewPhotos: [oniCardFrontImg, oniCardBackImg, projectCardsImg],
     tags: ['Brand Identity', 'Print Design', 'Figma', 'Procreate', 'Typography'],
     deliverables: [
       'Brand analysis & competitive benchmarking',
@@ -422,8 +477,17 @@ export default function ContentsSection() {
                 onClick={() => setActiveProject(card)}
               >
                 {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
-                <div className="relative w-full aspect-[4/3] flex-1 overflow-hidden bg-neutral-900">
-                  {card.previewPhotos && card.previewPhotos.length > 1 ? (
+                <div className={`relative w-full aspect-[4/3] flex-1 overflow-hidden ${card.flipImages ? 'bg-[#c99bd8]' : 'bg-neutral-900'}`}>
+                  {card.isIsometricCards ? (
+                    <OniCardIsometricAnimation />
+                  ) : card.flipImages ? (
+                    <FlippingBusinessCard
+                      front={card.flipImages[0]}
+                      back={card.flipImages[1]}
+                      alt={card.title}
+                      className="transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : card.previewPhotos && card.previewPhotos.length > 1 ? (
                     <CyclingProjectImage 
                       images={card.previewPhotos} 
                       alt={card.title} 
@@ -436,8 +500,10 @@ export default function ContentsSection() {
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                     />
                   )}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 backdrop-blur-[2px]">
-                    <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
+                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
+                    {card.hoverImage && <img src={card.hoverImage} alt="Kaali Peeli project artwork" className="absolute inset-0 h-full w-full object-cover" />}
+                    {card.hoverImage && <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />}
+                    <span className={`${card.hoverImage ? 'hidden' : ''} px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform`}>
                       View Case Study ↗
                     </span>
                   </div>
