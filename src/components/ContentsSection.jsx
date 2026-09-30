@@ -7,6 +7,8 @@ import projectMelodyImg from '../assets/work/project_melody.jpg'
 import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
 import oniCardFrontImg from '../assets/work/oni-card-front.png'
 import oniCardBackImg from '../assets/work/oni-card-back.png'
+import oniCard2FrontImg from '../assets/work/oni-card-2-front.png'
+import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 
@@ -221,7 +223,7 @@ const projectsData = [
       'Students were given the assignment of researching business cards and designing their own card, either as a freelancer or an employee of any brand. Analysis of the card was done after preparing different iterations which include the logo, colours, typefaces, and dimensions.',
     thumbnail: oniCardFrontImg,
     isIsometricCards: true,
-    previewPhotos: [oniCardFrontImg, oniCardBackImg, projectCardsImg],
+    previewPhotos: [oniCardFrontImg, oniCardBackImg, oniCard2FrontImg, oniCard2BackImg, projectCardsImg],
     tags: ['Brand Identity', 'Print Design', 'Figma', 'Procreate', 'Typography'],
     deliverables: [
       'Brand analysis & competitive benchmarking',
