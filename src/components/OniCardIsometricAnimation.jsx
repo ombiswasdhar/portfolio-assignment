@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import oniCardFront from '../assets/work/oni-card-front.png'
 import oniCardBack from '../assets/work/oni-card-back.png'
@@ -6,29 +6,24 @@ import oniCardBack from '../assets/work/oni-card-back.png'
 /**
  * OniCardIsometricAnimation
  * 
- * Recreates the 3D isometric business card shuffle animation matching the Pinterest reference:
+ * Exact 1:1 reproduction of the 3D isometric business card shuffle video:
  * https://pin.it/3YEE0MTFe
  * 
- * Features:
- * - Precise 3D isometric studio angle (rotateX: 54deg, rotateZ: -38deg)
- * - Both Front & Back cards rendered with realistic 350gsm paper thickness & drop shadows
- * - Automatic seamless shuffle / swap cycle every 3.2s
- * - Interactive cursor-reactive 3D tilt tracking
- * - Smooth cubic-bezier spring physics
+ * Choreography:
+ * - 3D Isometric studio tabletop view (rotateX: 55deg, rotateZ: -36deg, rotateY: 6deg)
+ * - Dual card setup: Front (Anime art & Qi Design Studios) and Back (Qi logo & QR code)
+ * - Seamless deck shuffle cycle:
+ *   1. Foreground card arcs UP in 3D space (translateZ: 85px) and slides backward
+ *   2. Background card glides smoothly forward along the tabletop into the foreground
+ *   3. Dynamic Depth-of-Field blur (background card blurs slightly like a cinema camera lens)
+ *   4. Multi-layer realistic diffused drop shadows & 350GSM physical card edge thickness
+ *   5. Studio edge typography markings matching high-end design agency showcases
+ *   6. Reactive 3D cursor tilt on mouse move
  */
 export default function OniCardIsometricAnimation({ className = '' }) {
-  // isFrontInFront: true when Front card is elevated in foreground, false when Back card is in foreground
-  const [isFrontInFront, setIsFrontInFront] = useState(true)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = useState(false)
-
-  // Automatic shuffle cycle
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIsFrontInFront((prev) => !prev)
-    }, 3200)
-    return () => clearInterval(timer)
-  }, [])
+  const [isManualFlipped, setIsManualFlipped] = useState(false)
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -37,85 +32,192 @@ export default function OniCardIsometricAnimation({ className = '' }) {
     setMousePos({ x, y })
   }
 
+  const handleMouseEnter = () => setIsHovered(true)
   const handleMouseLeave = () => {
-    setMousePos({ x: 0, y: 0 })
     setIsHovered(false)
+    setMousePos({ x: 0, y: 0 })
   }
-
-  const handleMouseEnter = () => {
-    setIsHovered(true)
-  }
-
-  // Offset coordinates along the isometric diagonal
-  // Foreground card: shifted forward & down
-  // Background card: shifted backward & up
-  const fgX = 38
-  const fgY = 32
-  const bgX = -38
-  const bgY = -32
 
   return (
     <div
-      className={`relative w-full h-full min-h-[300px] flex items-center justify-center overflow-hidden select-none bg-[#0d0d12] ${className}`}
+      className={`relative w-full h-full min-h-[320px] flex items-center justify-center overflow-hidden select-none bg-[#0e0e12] ${className}`}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{ perspective: 1200 }}
     >
-      {/* Ambient background studio lighting */}
+      <style>{`
+        /* ======================================================== */
+        /* EXACT 3D ISOMETRIC SHUFFLE KEYFRAMES MATCHING REFERENCE */
+        /* ======================================================== */
+
+        /* CARD A (FRONT): Starts in FOREGROUND, then lifts up & slides to BACK, rests, then returns */
+        @keyframes oniShuffleCardFront {
+          0%, 20% {
+            transform: translate3d(42px, 38px, 32px) scale(1);
+            filter: blur(0px) brightness(1);
+            z-index: 25;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 35px 70px -10px rgba(0,0,0,0.9), 0 18px 32px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.15);
+          }
+          32% {
+            /* Lifts high in the air along Z-axis while sliding back */
+            transform: translate3d(10px, 8px, 95px) scale(0.98);
+            filter: blur(0px) brightness(1.03);
+            z-index: 25;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 50px 90px -15px rgba(0,0,0,0.95), 0 25px 45px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.2);
+          }
+          38% {
+            /* Switches behind the other card at apex */
+            z-index: 10;
+          }
+          48%, 70% {
+            /* Settled in background position */
+            transform: translate3d(-42px, -38px, -15px) scale(0.935);
+            filter: blur(1.2px) brightness(0.9);
+            z-index: 10;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+          }
+          82% {
+            /* Glides smoothly forward into foreground along tabletop */
+            transform: translate3d(20px, 18px, 12px) scale(0.98);
+            filter: blur(0.3px) brightness(0.98);
+            z-index: 10;
+          }
+          86% {
+            /* Comes in front */
+            z-index: 25;
+          }
+          100% {
+            transform: translate3d(42px, 38px, 32px) scale(1);
+            filter: blur(0px) brightness(1);
+            z-index: 25;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 35px 70px -10px rgba(0,0,0,0.9), 0 18px 32px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.15);
+          }
+        }
+
+        /* CARD B (BACK): Starts in BACKGROUND, glides forward into FOREGROUND, rests, then lifts & returns */
+        @keyframes oniShuffleCardBack {
+          0%, 20% {
+            transform: translate3d(-42px, -38px, -15px) scale(0.935);
+            filter: blur(1.2px) brightness(0.9);
+            z-index: 10;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+          }
+          32% {
+            /* Glides smoothly forward along tabletop while Card A is elevated in air */
+            transform: translate3d(15px, 14px, 10px) scale(0.97);
+            filter: blur(0.4px) brightness(0.97);
+            z-index: 10;
+          }
+          38% {
+            /* Comes in front */
+            z-index: 25;
+          }
+          48%, 70% {
+            /* Settled in foreground position */
+            transform: translate3d(42px, 38px, 32px) scale(1);
+            filter: blur(0px) brightness(1);
+            z-index: 25;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 35px 70px -10px rgba(0,0,0,0.9), 0 18px 32px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.15);
+          }
+          82% {
+            /* Lifts high in the air along Z-axis while sliding back */
+            transform: translate3d(10px, 8px, 95px) scale(0.98);
+            filter: blur(0px) brightness(1.03);
+            z-index: 25;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 50px 90px -15px rgba(0,0,0,0.95), 0 25px 45px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.2);
+          }
+          86% {
+            /* Drops behind */
+            z-index: 10;
+          }
+          100% {
+            transform: translate3d(-42px, -38px, -15px) scale(0.935);
+            filter: blur(1.2px) brightness(0.9);
+            z-index: 10;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+          }
+        }
+
+        .oni-card-a-anim {
+          animation: oniShuffleCardFront 4.2s cubic-bezier(0.42, 0, 0.18, 1) infinite;
+          will-change: transform, filter, box-shadow;
+        }
+
+        .oni-card-b-anim {
+          animation: oniShuffleCardBack 4.2s cubic-bezier(0.42, 0, 0.18, 1) infinite;
+          will-change: transform, filter, box-shadow;
+        }
+      `}</style>
+
+      {/* Atmospheric dark studio background spotlight */}
       <div 
-        className="absolute inset-0 pointer-events-none opacity-50 bg-[radial-gradient(circle_at_50%_40%,#2a1f3d_0%,#0d0d12_75%)]" 
+        className="absolute inset-0 pointer-events-none opacity-60 bg-[radial-gradient(ellipse_at_50%_45%,#261c36_0%,#0e0e12_72%)]" 
         aria-hidden="true" 
       />
 
-      {/* Subtle corner studio branding labels */}
-      <div className="absolute top-3.5 left-4 text-[9px] font-ca-mono tracking-widest text-white/35 uppercase pointer-events-none flex items-center gap-1.5">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#EAB854]" />
-        <span>ONI STUDIOS • BRAND IDENTITY</span>
-      </div>
-      <div className="absolute top-3.5 right-4 text-[9px] font-ca-mono tracking-widest text-white/35 uppercase pointer-events-none">
-        350GSM MATTE CARDSTOCK
-      </div>
-      <div className="absolute bottom-3.5 left-4 text-[9px] font-ca-mono tracking-widest text-white/40 uppercase pointer-events-none flex items-center gap-2">
-        <span className="text-[10px] text-amber-400 font-bold">3D SHUFFLE</span>
-        <span className="text-white/20">|</span>
-        <span className="text-white/30 text-[8px]">{isFrontInFront ? 'FRONT VIEW' : 'BACK VIEW'}</span>
+      {/* ============================================================ */}
+      {/* CORNER STUDIO TYPOGRAPHY MARKINGS (MATCHING REFERENCE VIDEO) */}
+      {/* ============================================================ */}
+      {/* Top Left: Vertical Agency Spec Tag */}
+      <div className="absolute top-4 left-4 pointer-events-none opacity-40 hover:opacity-100 transition-opacity">
+        <span className="block font-ca-mono text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-neutral-400 [writing-mode:vertical-lr] rotate-180">
+          RAW - IDENTITY // RAW - LOVE, RAW - COLOUR
+        </span>
       </div>
 
-      {/* 3D ISOMETRIC STAGE RIG */}
+      {/* Bottom Left: Dimensions & Spec Label */}
+      <div className="absolute bottom-4 left-4 pointer-events-none opacity-40 hover:opacity-100 transition-opacity">
+        <div className="flex flex-col gap-0.5">
+          <span className="font-ca-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-neutral-400">
+            DIMENSIONS: 85 x 55mm
+          </span>
+          <span className="font-ca-mono text-[7px] sm:text-[8px] uppercase tracking-[0.18em] text-neutral-500">
+            350GSM MATTE SILK CARDSTOCK
+          </span>
+        </div>
+      </div>
+
+      {/* Top Right: Studio Monogram */}
+      <div className="absolute top-4 right-4 pointer-events-none opacity-50 flex flex-col items-end">
+        <span className="font-akira text-[10px] tracking-widest text-white/70 uppercase">
+          ONI // QI
+        </span>
+        <span className="font-ca-mono text-[7px] tracking-[0.2em] text-amber-400/80 uppercase">
+          DESIGN STUDIOS
+        </span>
+      </div>
+
+      {/* Bottom Right: Season & Edition Tag */}
+      <div className="absolute bottom-4 right-4 pointer-events-none opacity-40 hover:opacity-100 transition-opacity text-right">
+        <span className="font-ca-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-neutral-400 block">
+          2ND YEAR COURSEWORK // 2026
+        </span>
+      </div>
+
+      {/* ============================================================ */}
+      {/* 3D ISOMETRIC STAGE RIG (EXACT CAMERA OBLIQUE ANGLE)          */}
+      {/* ============================================================ */}
       <motion.div
-        className="relative flex items-center justify-center w-[74%] max-w-[360px] aspect-[601/368]"
+        className="relative flex items-center justify-center w-[74%] max-w-[370px] aspect-[601/368]"
         animate={{
-          rotateX: 54 + (isHovered ? mousePos.y * 14 : 0),
-          rotateZ: -38 + (isHovered ? mousePos.x * 14 : 0),
-          rotateY: isHovered ? mousePos.x * 10 : 0,
+          rotateX: 55 + (isHovered ? mousePos.y * 14 : 0),
+          rotateZ: -36 + (isHovered ? mousePos.x * 14 : 0),
+          rotateY: 6 + (isHovered ? mousePos.x * 10 : 0),
         }}
-        transition={{ type: 'spring', damping: 24, stiffness: 100 }}
+        transition={{ type: 'spring', damping: 26, stiffness: 110 }}
         style={{
           transformStyle: 'preserve-3d',
         }}
       >
         {/* ============================================================ */}
-        {/* CARD A: FRONT (Anime Character + Qi Design Studios) */}
+        {/* CARD 1: FRONT (Anime Character + Qi Design Studios)           */}
         {/* ============================================================ */}
-        <motion.div
-          className="absolute inset-0 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer"
-          animate={{
-            x: isFrontInFront ? fgX : bgX,
-            y: isFrontInFront ? fgY : bgY,
-            z: isFrontInFront ? 40 : -10,
-            scale: isFrontInFront ? 1 : 0.94,
-          }}
-          transition={{
-            duration: 0.9,
-            ease: [0.4, 0.0, 0.2, 1], // Smooth snappy transition
-          }}
+        <div
+          className="absolute inset-0 rounded-[18px] sm:rounded-[22px] overflow-hidden cursor-pointer select-none oni-card-a-anim"
           style={{
-            zIndex: isFrontInFront ? 20 : 10,
             transformStyle: 'preserve-3d',
-            boxShadow: isFrontInFront
-              ? '0 1px 0 #3b2d4f, 0 2px 0 #281e36, 0 35px 65px -12px rgba(0, 0, 0, 0.9), 0 18px 32px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.15)'
-              : '0 1px 0 #281e36, 0 18px 36px -10px rgba(0, 0, 0, 0.75), 0 8px 16px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08)',
+            backgroundColor: '#c59ad3',
           }}
         >
           <img
@@ -124,31 +226,21 @@ export default function OniCardIsometricAnimation({ className = '' }) {
             className="w-full h-full object-cover pointer-events-none select-none block"
             draggable={false}
           />
-          {/* Subtle paper specular lighting overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/15 pointer-events-none" />
-        </motion.div>
+          {/* Subtle paper specular lighting sheen across surface */}
+          <div 
+            className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-black/20 via-transparent to-white/20" 
+            aria-hidden="true" 
+          />
+        </div>
 
         {/* ============================================================ */}
-        {/* CARD B: BACK (Qi Monogram + QR Code + Color Pillars) */}
+        {/* CARD 2: BACK (Qi Monogram + QR Code + Color Pillars)         */}
         {/* ============================================================ */}
-        <motion.div
-          className="absolute inset-0 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer"
-          animate={{
-            x: !isFrontInFront ? fgX : bgX,
-            y: !isFrontInFront ? fgY : bgY,
-            z: !isFrontInFront ? 40 : -10,
-            scale: !isFrontInFront ? 1 : 0.94,
-          }}
-          transition={{
-            duration: 0.9,
-            ease: [0.4, 0.0, 0.2, 1], // Smooth snappy transition
-          }}
+        <div
+          className="absolute inset-0 rounded-[18px] sm:rounded-[22px] overflow-hidden cursor-pointer select-none oni-card-b-anim"
           style={{
-            zIndex: !isFrontInFront ? 20 : 10,
             transformStyle: 'preserve-3d',
-            boxShadow: !isFrontInFront
-              ? '0 1px 0 #3b2d4f, 0 2px 0 #281e36, 0 35px 65px -12px rgba(0, 0, 0, 0.9), 0 18px 32px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.15)'
-              : '0 1px 0 #281e36, 0 18px 36px -10px rgba(0, 0, 0, 0.75), 0 8px 16px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08)',
+            backgroundColor: '#c59ad3',
           }}
         >
           <img
@@ -157,22 +249,13 @@ export default function OniCardIsometricAnimation({ className = '' }) {
             className="w-full h-full object-cover pointer-events-none select-none block"
             draggable={false}
           />
-          {/* Subtle paper specular lighting overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/15 pointer-events-none" />
-        </motion.div>
+          {/* Subtle paper specular lighting sheen across surface */}
+          <div 
+            className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-black/20 via-transparent to-white/20" 
+            aria-hidden="true" 
+          />
+        </div>
       </motion.div>
-
-      {/* Manual interactive swap button at bottom right */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation()
-          setIsFrontInFront((prev) => !prev)
-        }}
-        className="absolute bottom-3.5 right-4 z-30 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-[10px] font-ca-mono tracking-wider uppercase text-white/80 border border-white/20 backdrop-blur-md transition-all cursor-pointer flex items-center gap-1.5 shadow-lg"
-      >
-        <span>Flip Cards</span>
-        <span className="text-amber-400 font-bold">⇄</span>
-      </button>
     </div>
   )
 }
