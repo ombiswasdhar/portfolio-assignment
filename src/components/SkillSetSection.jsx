@@ -12,6 +12,9 @@ import {
   CanvaIcon,
   AutocadIcon,
   ProcreateDreamsIcon,
+  VSCodeIcon,
+  AntigravityIcon,
+  AfterEffectsIcon,
 } from './SkillIcons'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
@@ -82,22 +85,6 @@ const floatingAppIcons = [
   },
 ]
 
-const row1Apps = [
-  { name: 'Procreate', Icon: ProcreateIcon, glow: 'hover:shadow-[0_14px_32px_rgba(181,23,158,0.45)]' },
-  { name: 'Sketchbook', Icon: SketchbookIcon, glow: 'hover:shadow-[0_14px_32px_rgba(233,91,61,0.45)]' },
-  { name: 'Figma', Icon: FigmaIcon, glow: 'hover:shadow-[0_14px_32px_rgba(162,89,255,0.45)]' },
-  { name: 'Premier Pro', Icon: PremierProIcon, glow: 'hover:shadow-[0_14px_32px_rgba(30,58,138,0.45)]' },
-  { name: 'Blender', Icon: BlenderIcon, glow: 'hover:shadow-[0_14px_32px_rgba(234,118,0,0.45)]' },
-]
-
-const row2Apps = [
-  { name: 'Photoshop', Icon: PhotoshopIcon, glow: 'hover:shadow-[0_14px_32px_rgba(49,168,255,0.45)]' },
-  { name: 'Illustrator', Icon: IllustratorIcon, glow: 'hover:shadow-[0_14px_32px_rgba(255,154,0,0.45)]' },
-  { name: 'InShot', Icon: InShotIcon, glow: 'hover:shadow-[0_14px_32px_rgba(255,42,84,0.45)]' },
-  { name: 'Canva', Icon: CanvaIcon, glow: 'hover:shadow-[0_14px_32px_rgba(0,196,204,0.45)]' },
-  { name: 'Autocad', Icon: AutocadIcon, glow: 'hover:shadow-[0_14px_32px_rgba(216,23,84,0.45)]' },
-]
-
 const allAppsList = [
   { name: 'Procreate', Icon: ProcreateIcon, glow: 'hover:shadow-[0_14px_32px_rgba(181,23,158,0.45)]', color: '#b5179e' },
   { name: 'Sketchbook', Icon: SketchbookIcon, glow: 'hover:shadow-[0_14px_32px_rgba(233,91,61,0.45)]', color: '#e95b3d' },
@@ -110,6 +97,9 @@ const allAppsList = [
   { name: 'Canva', Icon: CanvaIcon, glow: 'hover:shadow-[0_14px_32px_rgba(0,196,204,0.45)]', color: '#00c4cc' },
   { name: 'Autocad', Icon: AutocadIcon, glow: 'hover:shadow-[0_14px_32px_rgba(216,23,84,0.45)]', color: '#d81754' },
   { name: 'Procreate Dreams', Icon: ProcreateDreamsIcon, glow: 'hover:shadow-[0_14px_32px_rgba(0,229,255,0.45)]', color: '#00e5ff' },
+  { name: 'VS Code', Icon: VSCodeIcon, glow: 'hover:shadow-[0_14px_32px_rgba(0,122,204,0.45)]', color: '#007acc' },
+  { name: 'Antigravity', Icon: AntigravityIcon, glow: 'hover:shadow-[0_14px_32px_rgba(233,69,96,0.45)]', color: '#e94560' },
+  { name: 'After Effects', Icon: AfterEffectsIcon, glow: 'hover:shadow-[0_14px_32px_rgba(153,153,204,0.45)]', color: '#9999cc' },
 ]
 
 export default function SkillSetSection() {
@@ -203,111 +193,30 @@ export default function SkillSetSection() {
               /* The Exact Original 2D Grid Layout */
               <div className="max-w-[760px] md:max-w-[820px] mx-auto animate-fadeIn transition-all duration-500">
                 {/* Desktop / Tablet 5-Column Grid */}
-                <div className="hidden sm:grid grid-cols-5 gap-y-8 md:gap-y-10 gap-x-4 sm:gap-x-8 items-start justify-items-center">
-                {/* Row 1: Procreate, Sketchbook, Figma, Premier Pro, Blender with staggered scroll cascade */}
-                {row1Apps.map((app, idx) => {
-                  const IconComponent = app.Icon
-                  const delay = isVisible ? `${80 + idx * 70}ms` : '0ms'
-                  return (
-                    <div
-                      key={app.name}
-                      className={`group flex flex-col items-center cursor-pointer transition-all duration-600 ease-out ${
-                        isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-90'
-                      }`}
-                      style={{ transitionDelay: delay }}
-                      onMouseEnter={() => setHoveredApp(app.name)}
-                      onMouseLeave={() => setHoveredApp(null)}
-                    >
-                      <div className={`transition-all duration-300 ease-out group-hover:-translate-y-2.5 group-hover:scale-115 active:scale-95 rounded-2xl ${app.glow}`}>
-                        <IconComponent className="w-13 h-13 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
+                <div className="hidden sm:grid grid-cols-4 md:grid-cols-5 gap-x-5 sm:gap-x-8 gap-y-9 md:gap-y-10 items-start justify-items-center">
+                  {allAppsList.map((app, idx) => {
+                    const IconComponent = app.Icon
+                    const delay = isVisible ? `${80 + idx * 45}ms` : '0ms'
+                    return (
+                      <div key={app.name} className={`group flex min-w-0 flex-col items-center cursor-pointer transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: delay }} onMouseEnter={() => setHoveredApp(app.name)} onMouseLeave={() => setHoveredApp(null)}>
+                        <div className={`transition-all duration-300 group-hover:-translate-y-2 group-hover:scale-110 active:scale-95 ${app.glow}`}>
+                          <IconComponent className="w-12 h-12 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
+                        </div>
+                        <span className="mt-2 max-w-full text-xs md:text-sm font-normal text-neutral-300 text-center tracking-tight transition-colors group-hover:text-white">{app.name}</span>
                       </div>
-                      <span className="mt-2 text-xs md:text-sm font-normal text-neutral-300 text-center tracking-tight transition-all duration-200 group-hover:text-white group-hover:font-medium group-hover:scale-105">
-                        {app.name}
-                      </span>
-                    </div>
-                  )
-                })}
-
-                {/* Row 2: Photoshop, Illustrator, InShot, Canva, Autocad with staggered scroll cascade */}
-                {row2Apps.map((app, idx) => {
-                  const IconComponent = app.Icon
-                  const delay = isVisible ? `${440 + idx * 70}ms` : '0ms'
-                  return (
-                    <div
-                      key={app.name}
-                      className={`group flex flex-col items-center cursor-pointer transition-all duration-600 ease-out ${
-                        isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-90'
-                      }`}
-                      style={{ transitionDelay: delay }}
-                      onMouseEnter={() => setHoveredApp(app.name)}
-                      onMouseLeave={() => setHoveredApp(null)}
-                    >
-                      <div className={`transition-all duration-300 ease-out group-hover:-translate-y-2.5 group-hover:scale-115 active:scale-95 rounded-2xl ${app.glow}`}>
-                        <IconComponent className="w-13 h-13 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
-                      </div>
-                      <span className="mt-2 text-xs md:text-sm font-normal text-neutral-300 text-center tracking-tight transition-all duration-200 group-hover:text-white group-hover:font-medium group-hover:scale-105">
-                        {app.name}
-                      </span>
-                    </div>
-                  )
-                })}
-
-                {/* Row 3: Spacer, Spacer, Procreate Dreams, Big 3 Box (Spanning 2 Columns) */}
-                <div aria-hidden="true" />
-                <div aria-hidden="true" />
-
-                {/* Procreate Dreams with staggered reveal */}
-                <div
-                  className={`group flex flex-col items-center cursor-pointer transition-all duration-600 ease-out ${
-                    isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-90'
-                  }`}
-                  style={{ transitionDelay: isVisible ? '790ms' : '0ms' }}
-                  onMouseEnter={() => setHoveredApp('Procreate Dreams')}
-                  onMouseLeave={() => setHoveredApp(null)}
-                >
-                  <div className="transition-all duration-300 ease-out group-hover:-translate-y-2.5 group-hover:scale-115 active:scale-95 rounded-2xl hover:shadow-[0_14px_32px_rgba(0,229,255,0.45)]">
-                    <ProcreateDreamsIcon className="w-13 h-13 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
-                  </div>
-                  <span className="mt-2 text-xs md:text-sm font-normal text-neutral-300 text-center tracking-tight transition-all duration-200 group-hover:text-white group-hover:font-medium group-hover:scale-105 whitespace-nowrap">
-                    Procreate Dreams
-                  </span>
+                    )
+                  })}
                 </div>
-
-                {/* Big 3 Box with Interactive Shimmer, Lift, and Staggered Reveal */}
-                <div
-                  className={`col-span-2 w-full flex items-center justify-start pl-3 sm:pl-5 transition-all duration-700 ease-out ${
-                    isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-90'
-                  }`}
-                  style={{ transitionDelay: isVisible ? '860ms' : '0ms' }}
-                >
-                  <div className="relative overflow-hidden w-full max-w-[270px] sm:max-w-[290px] md:max-w-[310px] rounded-xl sm:rounded-2xl border border-white/20 bg-neutral-900/80 backdrop-blur-sm px-4 md:px-5 py-2 sm:py-2.5 flex items-center justify-between shadow-[0_4px_14px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_28px_rgba(220,38,38,0.2)] hover:border-white/40 hover:-translate-y-1 transition-all duration-300 group/big3">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-fredoka font-normal text-xl sm:text-2xl tracking-normal text-white whitespace-nowrap leading-none">
-                        Big 3
-                      </span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" title="Core Stack" />
-                    </div>
-                    <div className="flex items-center gap-2 sm:gap-2.5">
-                      <div className="transition-all duration-200 hover:scale-125 hover:-translate-y-0.5 active:scale-90" title="Procreate">
-                        <ProcreateIcon className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11" />
-                      </div>
-                      <div className="transition-all duration-200 hover:scale-125 hover:-translate-y-0.5 active:scale-90" title="Procreate Dreams">
-                        <ProcreateDreamsIcon className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11" />
-                      </div>
-                      <div className="transition-all duration-200 hover:scale-125 hover:-translate-y-0.5 active:scale-90" title="Figma">
-                        <FigmaIcon className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11" />
-                      </div>
-                    </div>
-                    {/* Shimmer sweep effect across card */}
-                    <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover/big3:animate-[shimmer-sweep_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                <div className="hidden sm:flex justify-center mt-8">
+                  <div className="relative overflow-hidden w-full max-w-[310px] rounded-xl border border-white/20 bg-neutral-900/80 backdrop-blur-sm px-4 py-2.5 flex items-center justify-between shadow-[0_4px_14px_rgba(0,0,0,0.4)] hover:border-white/40 hover:-translate-y-1 transition-all duration-300 group/big3">
+                    <div className="flex items-center gap-1.5"><span className="font-fredoka text-xl sm:text-2xl text-white">Big 3</span><span className="w-1.5 h-1.5 rounded-full bg-[#BA1F1F] animate-pulse" title="Core Stack" /></div>
+                    <div className="flex items-center gap-2"><ProcreateIcon className="w-9 h-9" /><ProcreateDreamsIcon className="w-9 h-9" /><FigmaIcon className="w-9 h-9" /></div>
                   </div>
                 </div>
-              </div>
-
               {/* Mobile View (< sm): Clean 3-Column Flow with Interactive Micro-Animations */}
               <div className="sm:hidden flex flex-col gap-8">
                 <div className="grid grid-cols-3 gap-y-7 gap-x-4 items-start justify-items-center">
-                  {[...row1Apps, ...row2Apps, { name: 'Procreate Dreams', Icon: ProcreateDreamsIcon, glow: '' }].map((app) => {
+                  {allAppsList.map((app) => {
                     const IconComponent = app.Icon
                     return (
                       <div

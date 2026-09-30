@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="none">
+<path d="M14 28C14 21.7 12.5 17.4 9.55 14.45C6.6 11.5 2.3 10 -4.04e-07 10C2.3 10 6.6 8.5 9.55 5.55C12.5 2.6 14 -1.7 14 -8.08e-07C14 -1.7 15.5 2.6 18.45 5.55C21.4 8.5 25.7 10 28 10C25.7 10 21.4 11.5 18.45 14.45C15.5 17.4 14 21.7 14 28Z" fill="url(#agy-gradient)"/>
+<defs>
+<linearGradient id="agy-gradient" x1="2" y1="26" x2="26" y2="2" gradientUnits="userSpaceOnUse">
+<stop stop-color="#1C7CF4"/>
+<stop offset="0.34" stop-color="#1C7CF4"/>
+<stop offset="0.5" stop-color="#E44758"/>
+<stop offset="0.52" stop-color="#E8453A"/>
+<stop offset="0.68" stop-color="#F9AB00"/>
+<stop offset="0.78" stop-color="#74B847"/>
+<stop offset="0.88" stop-color="#1C7CF4"/>
+<stop offset="1" stop-color="#1C7CF4"/>
+</linearGradient>
+</defs>
+</svg>
