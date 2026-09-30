@@ -136,13 +136,13 @@ export default function SoftwareLogosSpiral3D({
 
   // Three tiers of orbital radii:
   // 1. Core central spiral helix
-  const radiusPrimary = isMobile ? 115 : isTablet ? 165 : 205
+  const radiusPrimary = isMobile ? 125 : isTablet ? 178 : 221
   // 2. Mid-range companion orbit
-  const radiusMid = isMobile ? 155 : isTablet ? 235 : 305
+  const radiusMid = isMobile ? 170 : isTablet ? 254 : 330
   // 3. Wide side-flank floating orbits: reaching all the way to the sides of the screen to fill the space!
-  const radiusSides = isMobile ? 195 : isTablet ? 340 : 470
+  const radiusSides = isMobile ? 215 : isTablet ? 370 : 510
 
-  const heightSpan = isMobile ? 200 : 270
+  const heightSpan = isMobile ? 220 : 295
   const stageHeight = isMobile ? '460px' : '530px'
 
   const totalApps = apps.length
@@ -292,7 +292,7 @@ export default function SoftwareLogosSpiral3D({
     >
       {/* ================= 3D ROTATING RED HELIX RINGS & LIGHT CORE ================= */}
       <div
-        className="absolute pointer-events-none transition-transform duration-500 ease-out"
+        className="absolute z-10 pointer-events-none transition-transform duration-500 ease-out"
         style={{
           width: radiusSides * 1.6,
           height: heightSpan * 1.5,
@@ -328,7 +328,7 @@ export default function SoftwareLogosSpiral3D({
 
       {/* ================= 3D PERSPECTIVE ORBITAL STAGE ================= */}
       <div
-        className="relative w-full flex items-center justify-center pointer-events-auto transition-transform duration-300 ease-out"
+        className="relative z-0 w-full flex items-center justify-center pointer-events-auto transition-transform duration-300 ease-out"
         style={{
           height: stageHeight,
           transform: `rotateX(${pitchDeg}deg) rotateY(${yawDeg}deg)`,
@@ -356,7 +356,7 @@ export default function SoftwareLogosSpiral3D({
               }}
               className="absolute cursor-pointer flex flex-col items-center group/orbit"
               style={{
-                transform: `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${floatRot || 0}deg) scale(${isHovered ? scale * 1.25 : scale})`,
+                transform: `translate3d(${x}px, ${y}px, ${z}px) rotateZ(${floatRot || 0}deg) scale(${isHovered ? scale * 1.35 : scale * 1.08})`,
                 zIndex: isHovered ? 999 : zIndex,
                 opacity: isHovered ? 1 : opacity,
                 transformStyle: 'preserve-3d',

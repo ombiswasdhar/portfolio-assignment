@@ -5,10 +5,49 @@ import projectCardsImg from '../assets/work/project_cards.jpg'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
 import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
+import playstaplesShopAll from '../assets/playstaples/shop all.svg'
+import playstaplesShopAllAlt from '../assets/playstaples/shop all-1.svg'
+import playstaplesWebsite from '../assets/playstaples/Redesign PlayStaples Website 2.svg'
+import playstaplesProduct from '../assets/playstaples/product.svg'
+
+// PlayStaples Gallery Images & GIFs
+import psBombayTaxiGif from '../assets/playstaples/gallery/Bombay_taxi_03.gif'
+import psTaxi04Gif from '../assets/playstaples/gallery/Taxi_04.gif'
+import psTaxi06Img from '../assets/playstaples/gallery/Taxi_06.jpg'
+import psTaxi07Img from '../assets/playstaples/gallery/Taxi_07.jpg'
+import psPosterImg from '../assets/playstaples/gallery/Poster_01.jpg'
+import psBannerImg from '../assets/playstaples/gallery/Website_Banner_Image.jpg'
+import psBg26Img from '../assets/playstaples/gallery/26.jpg'
+import psBg19Img from '../assets/playstaples/gallery/19.jpg'
+
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import Auralis from '@/components/ui/auralis'
 import MarqueeBar from './MarqueeBar'
+
+function CyclingProjectImage({ images, alt, className, onImageClick }) {
+  const [imageIndex, setImageIndex] = React.useState(0)
+  const imageList = images?.length ? images : []
+
+  React.useEffect(() => {
+    if (imageList.length < 2) return undefined
+    const timer = window.setInterval(() => {
+      setImageIndex((index) => (index + 1) % imageList.length)
+    }, 2800)
+    return () => window.clearInterval(timer)
+  }, [imageList])
+
+  const src = imageList[imageIndex] || imageList[0]
+  return (
+    <img
+      key={src}
+      src={src}
+      alt={alt}
+      className={className}
+      onClick={onImageClick ? (event) => onImageClick(event, src) : undefined}
+    />
+  )
+}
 
 /* ========================================================================= */
 /* RETRO CARTOON MASCOT CHARACTERS MATCHING REFERENCE IMAGE */
@@ -88,7 +127,21 @@ const projectsData = [
     description:
       'PlayStaples celebrates iconic Indian street culture through tactile collectible design. "Kaali Peeli" reimagines the legendary Mumbai Premier Padmini taxi as a handcrafted wooden toy—celebrating nostalgia "for the ones who carved dreams on the trunk." Developed with 3D product visualization, custom taxi livery, physical packaging, and brand storytelling.',
     thumbnail: projectPlaystaplesImg,
-    previewPhotos: [projectPlaystaplesImg, projectPlaystaplesImg],
+    previewPhotos: [
+      projectPlaystaplesImg,
+      psBombayTaxiGif,
+      psTaxi06Img,
+      psBannerImg,
+      psTaxi07Img,
+      psPosterImg,
+      psTaxi04Gif,
+      psBg26Img,
+      psBg19Img,
+      playstaplesShopAll,
+      playstaplesShopAllAlt,
+      playstaplesWebsite,
+      playstaplesProduct,
+    ],
     tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
     deliverables: [
       'Handcrafted wooden toy conceptualization & 3D CAD modeling',
@@ -368,13 +421,21 @@ export default function ContentsSection() {
                 }`}
                 onClick={() => setActiveProject(card)}
               >
-                {/* PROJECT IMAGE CONTAINER */}
+                {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
                 <div className="relative w-full aspect-[4/3] flex-1 overflow-hidden bg-neutral-900">
-                  <img 
-                    src={card.thumbnail} 
-                    alt={card.title} 
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
-                  />
+                  {card.previewPhotos && card.previewPhotos.length > 1 ? (
+                    <CyclingProjectImage 
+                      images={card.previewPhotos} 
+                      alt={card.title} 
+                      className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105" 
+                    />
+                  ) : (
+                    <img 
+                      src={card.thumbnail} 
+                      alt={card.title} 
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 backdrop-blur-[2px]">
                     <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
                       View Case Study ↗
