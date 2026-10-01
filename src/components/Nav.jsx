@@ -136,7 +136,7 @@ export default function Nav() {
       <div
         className={`w-full flex items-stretch h-12 md:h-13 shadow-[0_2px_15px_rgba(0,0,0,0.12)] transition-colors duration-300 ease-out will-change-[background-color,border-color,color] ${
           isLightBg
-            ? 'bg-[#F4F3EF]/95 border-b border-black text-black backdrop-blur-md'
+            ? 'bg-white/95 border-b border-black text-black backdrop-blur-md'
             : 'bg-[#0A0A0E]/90 border-b border-white/20 text-white backdrop-blur-md'
         }`}
       >
