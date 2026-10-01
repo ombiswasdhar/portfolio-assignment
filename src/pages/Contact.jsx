@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import KineticMatrix from '@/components/ui/kinetic-matrix'
 
 export default function Contact() {
   const [toastMessage, setToastMessage] = useState('')
@@ -80,6 +81,16 @@ export default function Contact() {
     <div className="relative min-h-screen bg-white text-neutral-900 selection:bg-[#DE2020] selection:text-white flex flex-col justify-between overflow-x-hidden">
       {/* Light-theme Header Nav */}
       <Nav />
+
+      {/* Background: Hero Kinetic Matrix interactive animation in light mode */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
+        <KineticMatrix
+          title=""
+          mode="light"
+          bgColor="#ffffff"
+          className="w-full h-full bg-white [&_header]:hidden [&_main]:hidden"
+        />
+      </div>
 
       {/* Floating Copied Toast Alert */}
       <div

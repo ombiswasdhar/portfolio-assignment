@@ -37,11 +37,15 @@ interface GravitationalShockwave {
 export interface KineticMatrixProps {
     title?: string;
     className?: string;
+    mode?: 'dark' | 'light' | 'auto';
+    bgColor?: string;
 }
 
 export function KineticMatrix({
     title = "TOPOLOGY",
     className = "",
+    mode,
+    bgColor: customBgColor,
 }: KineticMatrixProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -270,9 +274,13 @@ export function KineticMatrix({
             pointer.prevY = pointer.y;
             const mouseSpeed = Math.sqrt(pointer.vx * pointer.vx + pointer.vy * pointer.vy);
 
-            const isDark = document.documentElement.classList.contains('dark') || isDarkMode;
-            const bgColor = isDark ? '#06070a' : '#f9fafb';
-            const nodeColor = isDark ? '255, 255, 255' : '17, 24, 39';
+            const isDark = mode === 'light'
+                ? false
+                : mode === 'dark'
+                ? true
+                : (document.documentElement.classList.contains('dark') || isDarkMode);
+            const bgColor = customBgColor || (isDark ? '#06070a' : '#ffffff');
+            const nodeColor = isDark ? '255, 255, 255' : '20, 20, 25';
             const accentGlow = isDark ? '255, 255, 255' : '0, 0, 0';
 
             ctx.fillStyle = bgColor;
@@ -459,7 +467,7 @@ export function KineticMatrix({
 
         animId = requestAnimationFrame(render);
         return () => cancelAnimationFrame(animId);
-    }, [isRunning, isDarkMode, drawLatticeLink]);
+    }, [isRunning, isDarkMode, mode, customBgColor, drawLatticeLink]);
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const container = containerRef.current;
@@ -517,7 +525,8 @@ export function KineticMatrix({
             onMouseUp={handlePointerUp}
             onMouseLeave={handlePointerLeave}
             className={cn(
-                "group relative flex h-full w-full select-none flex-col justify-between overflow-hidden bg-neutral-50 transition-colors duration-700 dark:bg-[#06070a]",
+                "group relative flex h-full w-full select-none flex-col justify-between overflow-hidden transition-colors duration-700",
+                mode === 'light' ? "bg-white" : "bg-neutral-50 dark:bg-[#06070a]",
                 className
             )}
         >
