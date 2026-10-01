@@ -9,22 +9,25 @@ import oniCardFrontImg from '../assets/work/oni-card-front.png'
 import oniCardBackImg from '../assets/work/oni-card-back.png'
 import oniCard2FrontImg from '../assets/work/oni-card-2-front.png'
 import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
+import oniCardsHoverImg from '../assets/work/headphone-mockup.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 
-// PlayStaples image sequence supplied for the project gallery
-import ps39Img from '../assets/playstaples/gallery/39.jpg'
-import ps40Img from '../assets/playstaples/gallery/40.jpg'
-import ps41Img from '../assets/playstaples/gallery/41.jpg'
-import ps42Img from '../assets/playstaples/gallery/42.jpg'
-import ps43Img from '../assets/playstaples/gallery/43.jpg'
-import ps44Img from '../assets/playstaples/gallery/44.jpg'
-import ps49Img from '../assets/playstaples/gallery/49.jpg'
-import ps50Img from '../assets/playstaples/gallery/50.jpg'
-import ps51Img from '../assets/playstaples/gallery/51.jpg'
-import ps218Img from '../assets/playstaples/gallery/218.jpg'
-import ps220Img from '../assets/playstaples/gallery/220.jpg'
-import ps221Img from '../assets/playstaples/gallery/221.jpg'
+// The 14 replacement PlayStaples images from Downloads/playstaples/New folder.
+import psCycle01Img from '../assets/playstaples/user-cycle/01.jpg'
+import psCycle01BombayImg from '../assets/playstaples/user-cycle/01_Bombay.jpg'
+import psCycle03Img from '../assets/playstaples/user-cycle/03.jpg'
+import psCycle129Img from '../assets/playstaples/user-cycle/129.jpg'
+import psCycle131Img from '../assets/playstaples/user-cycle/131.jpg'
+import psCycle132Img from '../assets/playstaples/user-cycle/132.jpg'
+import psCycle19Img from '../assets/playstaples/user-cycle/19.jpg'
+import psCycle22Img from '../assets/playstaples/user-cycle/22.jpg'
+import psCycle23Img from '../assets/playstaples/user-cycle/23.jpg'
+import psCycle35Img from '../assets/playstaples/user-cycle/35.jpg'
+import psCycleBd01Img from '../assets/playstaples/user-cycle/BD_01.jpg'
+import psCycleCorbett04Img from '../assets/playstaples/user-cycle/corbett 04.jpg'
+import psCyclePost1303Img from '../assets/playstaples/user-cycle/Post 13_03.jpg'
+import psCycleRetroRohtakImg from '../assets/playstaples/user-cycle/Retro Rohtak_PS.jpg'
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
@@ -185,18 +188,20 @@ const projectsData = [
     thumbnail: projectPlaystaplesImg,
     hoverImage: kaaliPeeliHoverImg,
     previewPhotos: [
-      ps39Img,
-      ps40Img,
-      ps41Img,
-      ps42Img,
-      ps43Img,
-      ps44Img,
-      ps49Img,
-      ps50Img,
-      ps51Img,
-      ps218Img,
-      ps220Img,
-      ps221Img,
+      psCycle01Img,
+      psCycle01BombayImg,
+      psCycle03Img,
+      psCycle129Img,
+      psCycle131Img,
+      psCycle132Img,
+      psCycle19Img,
+      psCycle22Img,
+      psCycle23Img,
+      psCycle35Img,
+      psCycleBd01Img,
+      psCycleCorbett04Img,
+      psCyclePost1303Img,
+      psCycleRetroRohtakImg,
     ],
     tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
     deliverables: [
@@ -228,6 +233,7 @@ const projectsData = [
     description:
       'Students were given the assignment of researching business cards and designing their own card, either as a freelancer or an employee of any brand. Analysis of the card was done after preparing different iterations which include the logo, colours, typefaces, and dimensions.',
     thumbnail: oniCardFrontImg,
+    hoverImage: oniCardsHoverImg,
     isIsometricCards: true,
     previewPhotos: [oniCardFrontImg, oniCardBackImg, oniCard2FrontImg, oniCard2BackImg, projectCardsImg],
     tags: ['Brand Identity', 'Print Design', 'Figma', 'Procreate', 'Typography'],
@@ -506,7 +512,7 @@ export default function ContentsSection() {
                     />
                   )}
                   <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.id === 'business-cards' || card.id === 'oni-studios' ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
-                    {card.hoverImage && <img src={card.hoverImage} alt="Kaali Peeli project artwork" className="absolute inset-0 h-full w-full object-cover" />}
+                    {card.hoverImage && <img src={card.hoverImage} alt={`${card.title} project artwork`} className="absolute inset-0 h-full w-full object-cover" />}
                     {(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards) && (
                       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />
                     )}
