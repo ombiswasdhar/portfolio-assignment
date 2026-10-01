@@ -37,11 +37,17 @@ interface GravitationalShockwave {
 export interface KineticMatrixProps {
     title?: string;
     className?: string;
+    mode?: 'dark' | 'light' | 'auto';
+    bgColor?: string;
+    gridColor?: string;
 }
 
 export function KineticMatrix({
     title = "TOPOLOGY",
     className = "",
+    mode,
+    bgColor: customBgColor,
+    gridColor: customGridColor,
 }: KineticMatrixProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -224,11 +230,13 @@ export function KineticMatrix({
             const glow = Math.min(1, Math.max(n1.tension, n2.tension, stretch * 1.2));
             ctx.strokeStyle = isDark
                 ? `rgba(255, 255, 255, ${Math.min(0.5, 0.12 + glow * 0.38)})`
-                : `rgba(0, 0, 0, ${Math.min(0.4, 0.1 + glow * 0.3)})`;
-            ctx.lineWidth = 0.6 + glow * 0.6;
+                : `rgba(0, 0, 0, ${Math.min(0.95, 0.5 + glow * 0.45)})`;
+            ctx.lineWidth = isDark ? (0.6 + glow * 0.6) : (0.95 + glow * 0.95);
         } else {
-            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.07 : 0.04})`;
-            ctx.lineWidth = 0.55;
+            ctx.strokeStyle = isDark
+                ? `rgba(${nodeColor}, 0.07)`
+                : `rgba(0, 0, 0, 0.32)`;
+            ctx.lineWidth = isDark ? 0.55 : 0.85;
         }
 
         ctx.beginPath();
@@ -270,9 +278,13 @@ export function KineticMatrix({
             pointer.prevY = pointer.y;
             const mouseSpeed = Math.sqrt(pointer.vx * pointer.vx + pointer.vy * pointer.vy);
 
-            const isDark = document.documentElement.classList.contains('dark') || isDarkMode;
-            const bgColor = isDark ? '#06070a' : '#f9fafb';
-            const nodeColor = isDark ? '255, 255, 255' : '17, 24, 39';
+            const isDark = mode === 'light'
+                ? false
+                : mode === 'dark'
+                ? true
+                : (document.documentElement.classList.contains('dark') || isDarkMode);
+            const bgColor = customBgColor || (isDark ? '#06070a' : '#ffffff');
+            const nodeColor = isDark ? '255, 255, 255' : '0, 0, 0';
             const accentGlow = isDark ? '255, 255, 255' : '0, 0, 0';
 
             ctx.fillStyle = bgColor;
@@ -432,24 +444,24 @@ export function KineticMatrix({
 
                 ctx.fillStyle = isNear || n.tension > 0.12
                     ? (isDark ? '#ffffff' : '#000000')
-                    : `rgba(${nodeColor}, ${isDark ? 0.25 : 0.18})`;
+                    : (isDark ? `rgba(${nodeColor}, 0.25)` : `rgba(0, 0, 0, 0.65)`);
 
                 ctx.beginPath();
-                ctx.arc(n.x, n.y, Math.max(0.7, currentRadius), 0, Math.PI * 2);
+                ctx.arc(n.x, n.y, Math.max(isDark ? 0.7 : 1.25, currentRadius), 0, Math.PI * 2);
                 ctx.fill();
 
                 if (dist < 65) {
                     const radarRing = ((n.pulsePhase * 20) % 28) + 4;
                     const ringAlpha = (1 - radarRing / 32) * 0.22;
 
-                    ctx.strokeStyle = `rgba(${accentGlow}, ${ringAlpha})`;
+                    ctx.strokeStyle = isDark ? `rgba(255, 255, 255, ${ringAlpha})` : `rgba(0, 0, 0, ${ringAlpha * 1.6})`;
                     ctx.lineWidth = 0.75;
                     ctx.beginPath();
                     ctx.arc(n.x, n.y, radarRing, 0, Math.PI * 2);
                     ctx.stroke();
 
                     ctx.font = '7px ui-monospace, SFMono-Regular, Consolas, monospace';
-                    ctx.fillStyle = `rgba(${accentGlow}, 0.55)`;
+                    ctx.fillStyle = isDark ? `rgba(255, 255, 255, 0.55)` : `rgba(0, 0, 0, 0.8)`;
                     ctx.fillText(n.label, n.x + 8, n.y - 8);
                 }
             }
@@ -459,7 +471,7 @@ export function KineticMatrix({
 
         animId = requestAnimationFrame(render);
         return () => cancelAnimationFrame(animId);
-    }, [isRunning, isDarkMode, drawLatticeLink]);
+    }, [isRunning, isDarkMode, mode, customBgColor, customGridColor, drawLatticeLink]);
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const container = containerRef.current;
@@ -517,7 +529,8 @@ export function KineticMatrix({
             onMouseUp={handlePointerUp}
             onMouseLeave={handlePointerLeave}
             className={cn(
-                "group relative flex h-full w-full select-none flex-col justify-between overflow-hidden bg-neutral-50 transition-colors duration-700 dark:bg-[#06070a]",
+                "group relative flex h-full w-full select-none flex-col justify-between overflow-hidden transition-colors duration-700",
+                mode === 'light' ? "bg-white" : "bg-neutral-50 dark:bg-[#06070a]",
                 className
             )}
         >

@@ -230,12 +230,12 @@ export function KineticMatrix({
             const glow = Math.min(1, Math.max(n1.tension, n2.tension, stretch * 1.2));
             ctx.strokeStyle = isDark
                 ? `rgba(255, 255, 255, ${Math.min(0.5, 0.12 + glow * 0.38)})`
-                : `rgba(0, 0, 0, ${Math.min(0.9, 0.45 + glow * 0.45)})`;
-            ctx.lineWidth = isDark ? (0.6 + glow * 0.6) : (0.9 + glow * 0.9);
+                : `rgba(0, 0, 0, ${Math.min(0.95, 0.5 + glow * 0.45)})`;
+            ctx.lineWidth = isDark ? (0.6 + glow * 0.6) : (0.95 + glow * 0.95);
         } else {
             ctx.strokeStyle = isDark
                 ? `rgba(${nodeColor}, 0.07)`
-                : `rgba(0, 0, 0, 0.28)`;
+                : `rgba(0, 0, 0, 0.32)`;
             ctx.lineWidth = isDark ? 0.55 : 0.85;
         }
 
@@ -284,7 +284,7 @@ export function KineticMatrix({
                 ? true
                 : (document.documentElement.classList.contains('dark') || isDarkMode);
             const bgColor = customBgColor || (isDark ? '#06070a' : '#ffffff');
-            const nodeColor = isDark ? '255, 255, 255' : '20, 20, 25';
+            const nodeColor = isDark ? '255, 255, 255' : '0, 0, 0';
             const accentGlow = isDark ? '255, 255, 255' : '0, 0, 0';
 
             ctx.fillStyle = bgColor;
@@ -444,10 +444,10 @@ export function KineticMatrix({
 
                 ctx.fillStyle = isNear || n.tension > 0.12
                     ? (isDark ? '#ffffff' : '#000000')
-                    : (isDark ? `rgba(${nodeColor}, 0.25)` : `rgba(0, 0, 0, 0.55)`);
+                    : (isDark ? `rgba(${nodeColor}, 0.25)` : `rgba(0, 0, 0, 0.65)`);
 
                 ctx.beginPath();
-                ctx.arc(n.x, n.y, Math.max(isDark ? 0.7 : 1.1, currentRadius), 0, Math.PI * 2);
+                ctx.arc(n.x, n.y, Math.max(isDark ? 0.7 : 1.25, currentRadius), 0, Math.PI * 2);
                 ctx.fill();
 
                 if (dist < 65) {
@@ -461,7 +461,7 @@ export function KineticMatrix({
                     ctx.stroke();
 
                     ctx.font = '7px ui-monospace, SFMono-Regular, Consolas, monospace';
-                    ctx.fillStyle = isDark ? `rgba(255, 255, 255, 0.55)` : `rgba(0, 0, 0, 0.75)`;
+                    ctx.fillStyle = isDark ? `rgba(255, 255, 255, 0.55)` : `rgba(0, 0, 0, 0.8)`;
                     ctx.fillText(n.label, n.x + 8, n.y - 8);
                 }
             }
@@ -471,7 +471,7 @@ export function KineticMatrix({
 
         animId = requestAnimationFrame(render);
         return () => cancelAnimationFrame(animId);
-    }, [isRunning, isDarkMode, mode, customBgColor, drawLatticeLink]);
+    }, [isRunning, isDarkMode, mode, customBgColor, customGridColor, drawLatticeLink]);
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const container = containerRef.current;
