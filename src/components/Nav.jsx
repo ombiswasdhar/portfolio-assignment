@@ -43,6 +43,11 @@ export default function Nav() {
   }, [])
 
   useEffect(() => {
+    if (location.pathname === '/contact') {
+      setIsLightBg(true)
+      return
+    }
+
     if (location.pathname !== '/') {
       setIsLightBg(false)
       return
