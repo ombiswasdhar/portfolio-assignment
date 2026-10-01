@@ -34,10 +34,12 @@ import MarqueeBar from './MarqueeBar'
 function CyclingProjectImage({ images, alt, className, onImageClick }) {
   const [imageIndex, setImageIndex] = React.useState(0)
   const imageList = images?.length ? images : []
+  const imageListKey = imageList.join('|')
 
   React.useEffect(() => {
     if (imageList.length < 2 || imageList.every((image) => image === imageList[0])) return undefined
 
+    setImageIndex(0)
     let currentIndex = 0
     let cycleTimer
     let isActive = true
@@ -62,7 +64,7 @@ function CyclingProjectImage({ images, alt, className, onImageClick }) {
         }
         preloadedImage.src = imageList[nextIndex]
         if (preloadedImage.complete) beginFade()
-      }, 1100)
+      }, 500)
     }
 
     scheduleNext()
@@ -70,7 +72,7 @@ function CyclingProjectImage({ images, alt, className, onImageClick }) {
       isActive = false
       window.clearTimeout(cycleTimer)
     }
-  }, [imageList])
+  }, [imageListKey])
 
   const src = imageList[imageIndex] || imageList[0]
   const handleClick = (event, imageSrc) => onImageClick?.(event, imageSrc)
@@ -500,12 +502,16 @@ export default function ContentsSection() {
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                     />
                   )}
-                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
+                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.id === 'business-cards' ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
                     {card.hoverImage && <img src={card.hoverImage} alt="Kaali Peeli project artwork" className="absolute inset-0 h-full w-full object-cover" />}
-                    {card.hoverImage && <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />}
-                    <span className={`${card.hoverImage ? 'hidden' : ''} px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform`}>
-                      View Case Study ↗
-                    </span>
+                    {(card.hoverImage || card.id === 'business-cards' || card.isIsometricCards) && (
+                      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    )}
+                    {!(card.hoverImage || card.id === 'business-cards' || card.isIsometricCards) && (
+                      <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
+                        View Case Study ↗
+                      </span>
+                    )}
                   </div>
                 </div>
 

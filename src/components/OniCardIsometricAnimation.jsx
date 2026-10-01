@@ -273,7 +273,10 @@ export default function OniCardIsometricAnimation({ className = '' }) {
       {/* ============================================================ */}
       <button
         type="button"
-        onClick={() => setActiveEdition((prev) => (prev === 0 ? 1 : 0))}
+        onClick={(e) => {
+          e.stopPropagation()
+          setActiveEdition((prev) => (prev === 0 ? 1 : 0))
+        }}
         aria-label="Switch between cards"
         title="Switch between cards"
         className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/65 hover:bg-black/90 active:scale-90 border border-white/20 hover:border-[#E84A4A] backdrop-blur-md shadow-2xl transition-all duration-300 group cursor-pointer hover:shadow-[0_0_16px_rgba(232,74,74,0.5)]"
