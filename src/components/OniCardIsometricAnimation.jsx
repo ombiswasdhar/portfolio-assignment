@@ -25,19 +25,21 @@ import oniCard2Back from '../assets/work/oni-card-2-back.png'
  * - Interactive glassmorphism edition toggle pills.
  * - Typography: Studio branding in Akira Expanded, spec tags in Fredoka.
  */
-export default function OniCardIsometricAnimation({ className = '' }) {
+export default function OniCardIsometricAnimation({ className = '', isPaused = false }) {
   const [activeEdition, setActiveEdition] = useState(0) // 0: Lilac Shuffle, 1: Cosmic 3D Flip
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = useState(false)
 
+  const isCardPaused = isHovered || isPaused
+
   // Auto-switch between Pink Card (Edition 01) and Black Card (Edition 02)
   useEffect(() => {
-    if (isHovered) return undefined
+    if (isCardPaused) return undefined
     const timer = setInterval(() => {
       setActiveEdition((prev) => (prev === 0 ? 1 : 0))
     }, 3500)
     return () => clearInterval(timer)
-  }, [isHovered])
+  }, [isCardPaused])
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -54,7 +56,7 @@ export default function OniCardIsometricAnimation({ className = '' }) {
 
   return (
     <div
-      className={`relative w-full h-full min-h-[320px] flex items-center justify-center overflow-hidden select-none bg-[#0e0e12] ${className}`}
+      className={`relative w-full h-full min-h-[320px] flex items-center justify-center overflow-hidden select-none bg-[#0e0e12] ${className} ${isCardPaused ? 'oni-paused' : ''}`}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -217,6 +219,22 @@ export default function OniCardIsometricAnimation({ className = '' }) {
         .oni-floor-shadow {
           animation: oniFloorShadowAnim 5.8s cubic-bezier(0.42, 0, 0.2, 1) infinite;
         }
+
+        /* Freeze/pause card video animations on hover on ANY of the 2 types of cards */
+        .group:hover .oni-card-1a-anim,
+        .group:hover .oni-card-1b-anim,
+        .group:hover .oni-card-2-flip-anim,
+        .group:hover .oni-floor-shadow,
+        :hover > * .oni-card-1a-anim,
+        :hover > * .oni-card-1b-anim,
+        :hover > * .oni-card-2-flip-anim,
+        :hover > * .oni-floor-shadow,
+        .oni-paused .oni-card-1a-anim,
+        .oni-paused .oni-card-1b-anim,
+        .oni-paused .oni-card-2-flip-anim,
+        .oni-paused .oni-floor-shadow {
+          animation-play-state: paused !important;
+        }
       `}</style>
 
       {/* Atmospheric dark studio background spotlight */}
@@ -325,6 +343,7 @@ export default function OniCardIsometricAnimation({ className = '' }) {
               className="absolute inset-0 rounded-[16px] sm:rounded-[20px] overflow-hidden cursor-pointer select-none oni-card-1a-anim"
               style={{
                 backgroundColor: '#c59ad3',
+                animationPlayState: isCardPaused ? 'paused' : 'running',
               }}
             >
               <img
@@ -344,6 +363,7 @@ export default function OniCardIsometricAnimation({ className = '' }) {
               className="absolute inset-0 rounded-[16px] sm:rounded-[20px] overflow-hidden cursor-pointer select-none oni-card-1b-anim"
               style={{
                 backgroundColor: '#c59ad3',
+                animationPlayState: isCardPaused ? 'paused' : 'running',
               }}
             >
               <img
@@ -376,6 +396,9 @@ export default function OniCardIsometricAnimation({ className = '' }) {
             {/* Diffused Floor Shadow beneath the floating card */}
             <div
               className="absolute -bottom-10 w-[78%] h-7 rounded-full bg-black/60 blur-xl pointer-events-none oni-floor-shadow"
+              style={{
+                animationPlayState: isCardPaused ? 'paused' : 'running',
+              }}
               aria-hidden="true"
             />
 
@@ -384,6 +407,7 @@ export default function OniCardIsometricAnimation({ className = '' }) {
               className="relative w-full h-full rounded-[16px] sm:rounded-[20px] cursor-pointer select-none oni-card-2-flip-anim"
               style={{
                 transformStyle: 'preserve-3d',
+                animationPlayState: isCardPaused ? 'paused' : 'running',
               }}
             >
               {/* FRONT FACE: Cosmic Oni Mask + Qi Design Studios */}

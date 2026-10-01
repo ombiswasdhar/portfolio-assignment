@@ -306,6 +306,7 @@ const projectsData = [
 export default function ContentsSection() {
   const [activeProject, setActiveProject] = React.useState(null)
   const [activeImageZoom, setActiveImageZoom] = React.useState(null)
+  const [hoveredCardId, setHoveredCardId] = React.useState(null)
 
   const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
   const [headerRef, isHeaderVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
@@ -476,12 +477,14 @@ export default function ContentsSection() {
                 } ${
                   idx % 2 === 0 ? 'md:border-r-4 md:border-black' : ''
                 }`}
+                onMouseEnter={() => setHoveredCardId(card.id)}
+                onMouseLeave={() => setHoveredCardId(null)}
                 onClick={() => setActiveProject(card)}
               >
                 {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
                 <div className={`relative w-full aspect-[4/3] flex-1 overflow-hidden ${card.flipImages ? 'bg-[#c99bd8]' : 'bg-neutral-900'}`}>
                   {card.isIsometricCards ? (
-                    <OniCardIsometricAnimation />
+                    <OniCardIsometricAnimation isPaused={hoveredCardId === card.id} />
                   ) : card.flipImages ? (
                     <FlippingBusinessCard
                       front={card.flipImages[0]}
@@ -502,12 +505,12 @@ export default function ContentsSection() {
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                     />
                   )}
-                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.id === 'business-cards' ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
+                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.id === 'business-cards' || card.id === 'oni-studios' ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
                     {card.hoverImage && <img src={card.hoverImage} alt="Kaali Peeli project artwork" className="absolute inset-0 h-full w-full object-cover" />}
-                    {(card.hoverImage || card.id === 'business-cards' || card.isIsometricCards) && (
-                      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    {(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards) && (
+                      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />
                     )}
-                    {!(card.hoverImage || card.id === 'business-cards' || card.isIsometricCards) && (
+                    {!(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards) && (
                       <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
                         View Case Study ↗
                       </span>
