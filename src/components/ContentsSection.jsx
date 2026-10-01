@@ -391,30 +391,30 @@ export default function ContentsSection() {
             isDisclaimerVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-8'
           }`}
         >
-          <div className="relative w-full max-w-3xl mx-auto py-2 select-none flex flex-col items-center text-center">
-            <h2 className="font-myfont text-4xl sm:text-5xl md:text-6xl text-white font-bold tracking-wide drop-shadow-[0_2px_14px_rgba(255,255,255,0.2)] mb-3 sm:mb-4 lowercase">
+          <div className="relative w-full max-w-4xl lg:max-w-5xl mx-auto py-2 select-none flex flex-col items-center text-center">
+            <h2 className="font-myfont text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white font-bold tracking-wide drop-shadow-[0_2px_20px_rgba(255,255,255,0.25)] mb-4 sm:mb-6 lowercase">
               disclaimer !
             </h2>
-            <p className="font-myfont text-xl sm:text-2xl md:text-[28px] lg:text-[32px] text-neutral-100 font-medium leading-[1.65] max-w-2xl mx-auto lowercase">
+            <p className="font-myfont text-2xl sm:text-3xl md:text-4xl lg:text-[42px] xl:text-[46px] text-neutral-100 font-medium leading-[1.45] sm:leading-[1.4] max-w-3xl lg:max-w-4xl mx-auto lowercase">
               all the projects showcased here are my 2nd year college assignments (4 projects) which i created as part of my coursework.
             </p>
-            <div className="w-full max-w-sm sm:max-w-md mx-auto my-3 sm:my-4 flex justify-center opacity-40">
-              <svg className="w-full h-2.5 text-neutral-400" viewBox="0 0 500 6" fill="none" preserveAspectRatio="none">
-                <path d="M2 3.5 C 90 2, 220 5, 340 3 C 400 2, 460 4.5, 498 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <div className="w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto my-5 sm:my-7 flex justify-center opacity-45">
+              <svg className="w-full h-3 text-neutral-400" viewBox="0 0 500 6" fill="none" preserveAspectRatio="none">
+                <path d="M2 3.5 C 90 2, 220 5, 340 3 C 400 2, 460 4.5, 498 3.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
               </svg>
             </div>
-            <p className="font-myfont text-lg sm:text-xl md:text-2xl lg:text-[26px] text-neutral-200 font-medium lowercase tracking-wide">
+            <p className="font-myfont text-xl sm:text-2xl md:text-3xl lg:text-[34px] text-neutral-200 font-medium lowercase tracking-wide">
               (yes , that's my handwriting , don't judge)
             </p>
           </div>
-          <div className="mt-8 flex flex-col items-center justify-center">
+          <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center">
             <a 
               href="#featured-works" 
               onClick={scrollToWorks} 
               aria-label="Scroll down to explore assignments"
-              className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center hover:border-white/50 hover:bg-white/15 hover:translate-y-1 transition-all shadow-lg cursor-pointer focus:outline-none"
+              className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-white/20 bg-white/5 flex items-center justify-center hover:border-white/50 hover:bg-white/15 hover:translate-y-1 transition-all shadow-lg cursor-pointer focus:outline-none"
             >
-              <svg className="w-4 h-4 text-neutral-300 hover:text-white transition-colors animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-300 hover:text-white transition-colors animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </a>
