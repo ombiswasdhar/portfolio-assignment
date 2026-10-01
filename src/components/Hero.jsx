@@ -11,6 +11,7 @@ import doodle from '../assets/hero/doodle_rendered.png'
 import barcode from '../assets/hero/barcode.png'
 import arrowLogo from '../assets/hero/arrowLogo_rendered.png'
 import HeroCD from './HeroCD'
+import ClickToPlayBadge from './ClickToPlayBadge'
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0)
@@ -254,6 +255,9 @@ export default function Hero() {
 
           {/* 1b. Sunflower Instrumental CD Music Player (top-right, opposite corner of smiley) */}
           <HeroCD mousePos={mousePos} />
+
+          {/* 1c. Click to play in Fredoka dotted Nothing font with twirling arrow pointing to CD */}
+          <ClickToPlayBadge mousePos={mousePos} />
 
           {/* 2. Custom Typography: "PORTFOLIO" Vector Art */}
           <div
