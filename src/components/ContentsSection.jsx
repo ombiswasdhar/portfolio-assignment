@@ -526,9 +526,8 @@ export default function ContentsSection() {
 
                 {/* RED TITLE BAR BELOW THE IMAGE */}
                 <div className="w-full bg-[#E84A4A] border-t-4 border-black px-4 py-3 flex items-center justify-center text-center shrink-0 min-h-[3.25rem]">
-                  <h3 className="text-white text-xs sm:text-sm md:text-base tracking-wide uppercase truncate max-w-full flex items-center justify-center gap-1.5 sm:gap-2">
-                    <span className={card.id === 'business-cards' ? 'font-akira font-black' : 'font-ca-mono font-bold'}>{card.title}</span>
-                    <span className={card.id === 'business-cards' ? 'font-fredoka font-normal text-white/95' : 'font-ca-mono font-bold'}>— {card.subtitle}</span>
+                  <h3 className="font-akira font-black text-white text-xs sm:text-sm md:text-base tracking-wider uppercase truncate max-w-full">
+                    {card.title}
                   </h3>
                 </div>
               </div>
