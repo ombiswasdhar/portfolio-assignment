@@ -403,27 +403,20 @@ export default function ContentsSection() {
                 <path d="M2 3.5 C 90 2, 220 5, 340 3 C 400 2, 460 4.5, 498 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </div>
-            <p className="font-myfont text-sm sm:text-base md:text-lg text-neutral-400 lowercase tracking-wide">
+            <p className="font-myfont text-lg sm:text-xl md:text-2xl lg:text-[26px] text-neutral-200 font-medium lowercase tracking-wide">
               (yes , that's my handwriting , don't judge)
             </p>
           </div>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-ca-mono text-neutral-400 text-center">
-            <span className="text-neutral-300">Handcrafted in Procreate &amp; Figma</span>
-            <span className="text-neutral-600">•</span>
-            <span className="text-neutral-300">Symbiosis Institute of Design</span>
-            <span className="hidden sm:inline text-neutral-600">•</span>
-            <span className="text-neutral-400">2nd Year Coursework</span>
-          </div>
-          <div className="mt-6 sm:mt-7 flex flex-col items-center justify-center">
-            <a href="#featured-works" onClick={scrollToWorks} className="group flex flex-col items-center gap-2 text-neutral-400 hover:text-white transition-all cursor-pointer focus:outline-none">
-              <span className="text-xs font-ca-mono tracking-widest uppercase text-neutral-400 group-hover:text-neutral-200 transition-colors">
-                Scroll down to explore assignments
-              </span>
-              <div className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center group-hover:border-white/50 group-hover:bg-white/15 group-hover:translate-y-1 transition-all shadow-lg">
-                <svg className="w-4 h-4 text-neutral-300 group-hover:text-white transition-colors animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-              </div>
+          <div className="mt-8 flex flex-col items-center justify-center">
+            <a 
+              href="#featured-works" 
+              onClick={scrollToWorks} 
+              aria-label="Scroll down to explore assignments"
+              className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center hover:border-white/50 hover:bg-white/15 hover:translate-y-1 transition-all shadow-lg cursor-pointer focus:outline-none"
+            >
+              <svg className="w-4 h-4 text-neutral-300 hover:text-white transition-colors animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
             </a>
           </div>
         </div>
