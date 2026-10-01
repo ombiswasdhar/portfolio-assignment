@@ -82,12 +82,13 @@ export default function Contact() {
       {/* Light-theme Header Nav */}
       <Nav />
 
-      {/* Background: Hero Kinetic Matrix interactive animation in light mode */}
+      {/* Background: Hero Kinetic Matrix interactive animation in light mode with black grid */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto">
         <KineticMatrix
           title=""
           mode="light"
           bgColor="#ffffff"
+          gridColor="black"
           className="w-full h-full bg-white [&_header]:hidden [&_main]:hidden"
         />
       </div>
@@ -106,19 +107,19 @@ export default function Contact() {
 
       {/* Main Content Container */}
       <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-28 sm:pt-36 pb-20 flex-1 flex flex-col justify-center">
-        {/* Ruled Notebook Paper Canvas */}
+        {/* Ruled Black Paper Canvas */}
         <div className="relative w-full rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 transition-all">
           <div className="relative z-10 w-full flex flex-col">
             {/* Topmost baseline ruled line */}
-            <div className="w-full h-px bg-[#F1A8A8]/65" />
+            <div className="w-full h-px bg-black/15" />
 
             {contactRows.map((row) => (
               <div
                 key={row.id}
                 className="relative group min-h-[80px] sm:min-h-[96px] md:min-h-[114px] lg:min-h-[128px] flex flex-col justify-end pb-3 sm:pb-4.5 transition-colors"
               >
-                {/* Horizontal Ruled Notebook Pink Line */}
-                <div className="absolute bottom-0 left-0 right-0 h-px bg-[#F1A8A8]/65 group-hover:bg-[#DE2020]/45 transition-colors" />
+                {/* Horizontal Ruled Black Line */}
+                <div className="absolute bottom-0 left-0 right-0 h-px bg-black/15 group-hover:bg-[#DE2020]/60 transition-colors" />
 
                 {/* Row Content Flexbox */}
                 <div className="relative flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4 pr-2 sm:pr-8">

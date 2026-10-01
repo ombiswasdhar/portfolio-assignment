@@ -39,6 +39,7 @@ export interface KineticMatrixProps {
     className?: string;
     mode?: 'dark' | 'light' | 'auto';
     bgColor?: string;
+    gridColor?: string;
 }
 
 export function KineticMatrix({
@@ -46,6 +47,7 @@ export function KineticMatrix({
     className = "",
     mode,
     bgColor: customBgColor,
+    gridColor: customGridColor,
 }: KineticMatrixProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -228,11 +230,13 @@ export function KineticMatrix({
             const glow = Math.min(1, Math.max(n1.tension, n2.tension, stretch * 1.2));
             ctx.strokeStyle = isDark
                 ? `rgba(255, 255, 255, ${Math.min(0.5, 0.12 + glow * 0.38)})`
-                : `rgba(0, 0, 0, ${Math.min(0.4, 0.1 + glow * 0.3)})`;
-            ctx.lineWidth = 0.6 + glow * 0.6;
+                : `rgba(0, 0, 0, ${Math.min(0.9, 0.45 + glow * 0.45)})`;
+            ctx.lineWidth = isDark ? (0.6 + glow * 0.6) : (0.9 + glow * 0.9);
         } else {
-            ctx.strokeStyle = `rgba(${nodeColor}, ${isDark ? 0.07 : 0.04})`;
-            ctx.lineWidth = 0.55;
+            ctx.strokeStyle = isDark
+                ? `rgba(${nodeColor}, 0.07)`
+                : `rgba(0, 0, 0, 0.28)`;
+            ctx.lineWidth = isDark ? 0.55 : 0.85;
         }
 
         ctx.beginPath();
@@ -440,24 +444,24 @@ export function KineticMatrix({
 
                 ctx.fillStyle = isNear || n.tension > 0.12
                     ? (isDark ? '#ffffff' : '#000000')
-                    : `rgba(${nodeColor}, ${isDark ? 0.25 : 0.18})`;
+                    : (isDark ? `rgba(${nodeColor}, 0.25)` : `rgba(0, 0, 0, 0.55)`);
 
                 ctx.beginPath();
-                ctx.arc(n.x, n.y, Math.max(0.7, currentRadius), 0, Math.PI * 2);
+                ctx.arc(n.x, n.y, Math.max(isDark ? 0.7 : 1.1, currentRadius), 0, Math.PI * 2);
                 ctx.fill();
 
                 if (dist < 65) {
                     const radarRing = ((n.pulsePhase * 20) % 28) + 4;
                     const ringAlpha = (1 - radarRing / 32) * 0.22;
 
-                    ctx.strokeStyle = `rgba(${accentGlow}, ${ringAlpha})`;
+                    ctx.strokeStyle = isDark ? `rgba(255, 255, 255, ${ringAlpha})` : `rgba(0, 0, 0, ${ringAlpha * 1.6})`;
                     ctx.lineWidth = 0.75;
                     ctx.beginPath();
                     ctx.arc(n.x, n.y, radarRing, 0, Math.PI * 2);
                     ctx.stroke();
 
                     ctx.font = '7px ui-monospace, SFMono-Regular, Consolas, monospace';
-                    ctx.fillStyle = `rgba(${accentGlow}, 0.55)`;
+                    ctx.fillStyle = isDark ? `rgba(255, 255, 255, 0.55)` : `rgba(0, 0, 0, 0.75)`;
                     ctx.fillText(n.label, n.x + 8, n.y - 8);
                 }
             }
