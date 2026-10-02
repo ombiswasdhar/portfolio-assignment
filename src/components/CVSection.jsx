@@ -7,6 +7,9 @@ import {
   SketchbookIcon,
   FigmaIcon,
   PremierProIcon,
+  AntigravityIcon,
+  VSCodeIcon,
+  AfterEffectsIcon,
   PhotoshopIcon,
   IllustratorIcon,
   CanvaIcon,
@@ -63,7 +66,9 @@ export default function CVSection() {
   }
 
   const handlePrint = () => {
-    window.print()
+    if (typeof window !== 'undefined') {
+      window.open('/Om_Biswas_CV.pdf', '_blank')
+    }
   }
 
   return (
@@ -141,7 +146,7 @@ export default function CVSection() {
         >
           {/* 3D Tilting Inner Container */}
           <div
-            className="relative w-full aspect-[684/1024] bg-[#758AE6] transition-transform ease-out will-change-transform"
+            className="relative w-full aspect-[1003/1500] bg-[#8499FF] transition-transform ease-out will-change-transform"
             style={{
               transform: tilt.isHovered
                 ? `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(1.02)`
@@ -152,7 +157,7 @@ export default function CVSection() {
             {/* Pristine Full Figma Frame Graphic */}
             <img
               src={cvFullFrame}
-              alt="Om Biswas - Curriculum Vitae: Designer, 21 y.o, Symbiosis School of Planning Architecture and Design. Experience, Skills, and Interests."
+              alt="Om Biswas - Curriculum Vitae: Designer, 22 y.o, Symbiosis Institute of Design , Nagpur. Experience, Skills, and Interests."
               className="w-full h-full object-contain pointer-events-none select-none"
             />
 
@@ -167,7 +172,7 @@ export default function CVSection() {
               />
             )}
 
-            {/* ================= 1. HOVER ZOOM: MY PHYLOSOPHY ================= */}
+            {/* ================= 1. HOVER ZOOM: MY PHILOSOPHY ================= */}
             <div
               className={`cv-zoom-card cv-zoom-card--philosophy p-0 shadow-2xl overflow-hidden ${
                 pinnedCard === 'philosophy' ? 'is-active' : ''
@@ -189,20 +194,20 @@ export default function CVSection() {
                 className="w-full h-full object-fill pointer-events-none select-none rounded-[8px]"
               />
               <span className="sr-only">
-                MY PHYLOSOPHY: Keep Upgrading. Keep Evolving. ALWAYS at your Own pace.
+                MY PHILOSOPHY: Keep Upgrading. Keep Evolving. ALWAYS at your Own pace.
               </span>
             </div>
 
             {/* ================= 2. HOVER ZOOM: DESIGNER & SOFTWARE ================= */}
             <div
-              className={`cv-zoom-card bg-[#5066db] text-white p-3.5 sm:p-4 flex flex-col justify-between ${
+              className={`cv-zoom-card bg-[#5066db] text-white p-3 sm:p-3.5 md:p-4 flex flex-col justify-between ${
                 pinnedCard === 'designer' ? 'is-active' : ''
               }`}
               style={{
                 left: '41.2%',
                 top: '3.5%',
-                width: '53.5%',
-                height: '19.0%',
+                width: '54.0%',
+                height: '19.8%',
                 transformOrigin: 'top right',
               }}
               onClick={() => setPinnedCard(pinnedCard === 'designer' ? null : 'designer')}
@@ -215,12 +220,12 @@ export default function CVSection() {
                     DESIGNER
                   </h3>
                   <span className="text-[10px] sm:text-xs font-semibold text-neutral-200">
-                    21 y.o
+                    22 y.o
                   </span>
                 </div>
                 <div className="text-right text-[9.5px] sm:text-[11px] leading-tight select-text">
                   <p className="text-neutral-200">
-                    From <strong className="text-white font-bold">Symbiosis School of Planning Architecture and Design</strong>
+                    From <strong className="text-white font-bold">Symbiosis Institute of Design , Nagpur</strong>
                   </p>
                   <p className="text-neutral-300 text-[8.5px] sm:text-[10px] pt-0.5">
                     B.Des in User Interface & User Experience AND Product Design
@@ -228,21 +233,27 @@ export default function CVSection() {
                 </div>
               </div>
 
-              <div className="pt-1">
+              <div className="pt-0.5">
                 <div className="flex items-center justify-between pb-1">
                   <span className="font-display font-bold text-[10px] sm:text-xs uppercase tracking-wider text-white">
                     SOFTWARE
                   </span>
                 </div>
-                <div className="grid grid-cols-4 gap-1.5 sm:gap-2 select-none py-0.5 w-fit">
-                  <ProcreateIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-                  <SketchbookIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-                  <FigmaIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-                  <PremierProIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-                  <PhotoshopIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-                  <IllustratorIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-                  <ProcreateDreamsIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-                  <CanvaIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+                <div className="space-y-1 sm:space-y-1.5 select-none py-0.5 w-full">
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap">
+                    <ProcreateIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                    <SketchbookIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                    <FigmaIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                    <PremierProIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                    <AntigravityIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                    <VSCodeIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                  </div>
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap">
+                    <AfterEffectsIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                    <IllustratorIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                    <ProcreateDreamsIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                    <CanvaIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 shrink-0" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -303,12 +314,12 @@ export default function CVSection() {
                 MY EXPERIENCE
               </h3>
 
-              <div className="space-y-2 pt-1 text-[9.5px] sm:text-[11px] md:text-[12px] font-fredoka leading-tight text-neutral-100 select-text">
+              <div className="space-y-1.5 sm:space-y-2 pt-1 text-[9.5px] sm:text-[11px] md:text-[12px] font-fredoka leading-tight text-neutral-100 select-text">
                 <div>
-                  <h4 className="font-bold text-white text-[11px] sm:text-[12.5px]">
-                    1. Sports Council Head
+                  <h4 className="font-bold text-white text-[10.5px] sm:text-[12px]">
+                    1. Sports Council Head :
                   </h4>
-                  <ul className="list-disc list-inside text-neutral-200 pl-1 space-y-0.5 text-[9px] sm:text-[10.5px]">
+                  <ul className="list-disc list-inside text-neutral-200 pl-1 space-y-0.5 text-[8.5px] sm:text-[10px]">
                     <li>Designed posters and promotional materials for college sports and other events.</li>
                     <li>Helped organize and manage sports tournaments and activities.</li>
                     <li>Collaborated with teams to ensure smooth execution and maximum participation.</li>
@@ -316,23 +327,46 @@ export default function CVSection() {
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-white text-[10.5px] sm:text-[12px]">
-                    2. Conducted a workshop at a government school, sharing skills and guiding students.
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                    2. Member of Placement Cell.
+                  </h4>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                    3. Conducted a workshop at a government school, sharing skills and guiding students.
                   </h4>
                 </div>
 
                 <div className="flex items-center justify-between gap-2 pt-0.5">
-                  <h4 className="font-bold text-white text-[10.5px] sm:text-[12px]">
-                    3. Worked as a Graphics Designer at Mentorsity
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                    4. Worked as a Graphics Designer at Mentorsity
                   </h4>
                   <a
                     href="https://mentorsity.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-amber-400 hover:bg-yellow-300 text-black font-display font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-amber-400 hover:bg-yellow-300 text-black font-display font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
                   >
                     <span>Mentorsity ↗</span>
+                  </a>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 pt-0.5">
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                    5. Re-designed a website from ground up for PLAYSTAPLES
+                  </h4>
+                  <a
+                    href="#work"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      const el = document.getElementById('featured-works') || document.getElementById('work')
+                      if (el) el.scrollIntoView({ behavior: 'smooth' })
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-display font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
+                  >
+                    <span>PlayStaples ↗</span>
                   </a>
                 </div>
               </div>
@@ -468,11 +502,11 @@ export default function CVSection() {
         {/* ================= SCREEN READER & SEO ACCESSIBILITY ================= */}
         <div className="sr-only">
           <h2>Om Biswas — Curriculum Vitae</h2>
-          <p>Age: 21 | Designer | Shillong, India</p>
-          <p>Education: Symbiosis School of Planning Architecture and Design — B.Des in User Interface & User Experience AND Product Design</p>
+          <p>Age: 22 | Designer | Shillong, India</p>
+          <p>Education: Symbiosis Institute of Design , Nagpur — B.Des in User Interface & User Experience AND Product Design</p>
           <p>Philosophy: Keep Upgrading. Keep Evolving. ALWAYS at your Own pace.</p>
-          <p>Software: Procreate, Sketchbook, Figma, Premiere Pro, Photoshop, Illustrator, Procreate Dreams, Canva</p>
-          <p>Experience: Sports Council Head, Workshop at government school, Graphics Designer at Mentorsity</p>
+          <p>Software: Procreate, Sketchbook, Figma, Premiere Pro, Antigravity, VS Code, After Effects, Illustrator, Procreate Dreams, Canva</p>
+          <p>Experience: Sports Council Head, Member of Placement Cell, Conducted workshop at government school, Graphics Designer at Mentorsity, Re-designed website for PLAYSTAPLES</p>
           <p>Interests: Badminton, Table Tennis, Football, Basketball, Sketching, Animation, Gaming, Guitar, Traveling</p>
           <p>Languages: Fluent in English, Hindi, Bengali. Understanding: Assamese, Nepali</p>
           <p>Contact: Phone: 9383049271 | Email: ombiswasdhar@gmail.com | Instagram: @jkitsnoah | Behance: OmBiswasXD</p>

@@ -15,31 +15,38 @@ export default function Home() {
   const location = useLocation()
   const isInitialMount = useRef(true)
 
-  // On opening, loading, or reloading, guarantee the Hero section is the first view
+  // Handle initial page load and hash scrolling
   useEffect(() => {
     // 1. Force manual scroll restoration so browsers do not restore prior scrolled offsets
     if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual'
     }
 
-    // 2. Immediately scroll to top (Hero section)
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    const initialHash = window.location.hash || location.hash
 
-    // 3. Clear any stale URL hash on fresh reload/load
-    if (window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname)
+    // 2. If no hash, immediately scroll to top (Hero section)
+    if (!initialHash) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     }
 
-    // 4. Double-check on tick to counteract any delayed image/font layout shifts
+    // 3. Allow initial mount to settle and scroll to target if hash was provided
     const timer = setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       isInitialMount.current = false
-    }, 80)
+      if (initialHash) {
+        const targetId = initialHash.replace('#', '')
+        const el = document.getElementById(targetId) || (targetId === 'work' ? document.getElementById('featured-works') : null)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      }
+    }, 120)
 
     return () => clearTimeout(timer)
   }, [])
 
-  // Allow smooth hash scrolling ONLY after the page has finished its initial mount
+  // Allow smooth hash scrolling when hash changes after initial mount
   useEffect(() => {
     if (isInitialMount.current) return
 
