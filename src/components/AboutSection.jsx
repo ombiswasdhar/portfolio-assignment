@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import aboutFullFrameCanvas from '../assets/about/about_full_frame_canvas.png'
 import aboutLeftCardCanvas from '../assets/about/about_left_card_canvas.png'
 import AnimatedCollage from './AnimatedCollage'
@@ -9,6 +9,32 @@ import KineticMatrix from '@/components/ui/kinetic-matrix'
 export default function AboutSection() {
   const [activeMobileBubble, setActiveMobileBubble] = useState(null)
   const [cardRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
+
+  // Tap outside any bubble to dismiss the active bubble back to resting state
+  useEffect(() => {
+    if (activeMobileBubble === null) return
+
+    const handleOutsideTap = (e) => {
+      if (!e.target.closest('.comic-overlay-bubble')) {
+        setActiveMobileBubble(null)
+      }
+    }
+
+    document.addEventListener('click', handleOutsideTap)
+    document.addEventListener('touchstart', handleOutsideTap, { passive: true })
+    return () => {
+      document.removeEventListener('click', handleOutsideTap)
+      document.removeEventListener('touchstart', handleOutsideTap)
+    }
+  }, [activeMobileBubble])
+
+  const toggleMobileBubble = (e, index) => {
+    e.stopPropagation()
+    if (e.currentTarget && typeof e.currentTarget.blur === 'function') {
+      e.currentTarget.blur()
+    }
+    setActiveMobileBubble(prev => (prev === index ? null : index))
+  }
 
   return (
     <section
@@ -209,12 +235,12 @@ export default function AboutSection() {
               portfolio
             </span>
             <span className="text-[10px] font-fredoka uppercase tracking-widest text-neutral-400/90">
-              Tap any paragraph to zoom in
+              Tap any paragraph to zoom in &bull; Tap again to close
             </span>
           </div>
 
           {/* Left Card - Clean, authentic Figma art with animated characters & tap-to-zoom bubbles */}
-          <div className="relative w-full rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.8)] border border-white/10">
+          <div onClick={() => setActiveMobileBubble(null)} className="relative w-full rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.8)] border border-white/10">
             <img
               src={aboutLeftCardCanvas}
               alt="Hello, i'm OM. UI/UX designer, illustrator, artist based in Shillong, India."
@@ -226,15 +252,13 @@ export default function AboutSection() {
 
             {/* Mobile Tagline */}
             <div
-              onClick={() => setActiveMobileBubble(activeMobileBubble === 0 ? null : 0)}
+              onClick={(e) => toggleMobileBubble(e, 0)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 0
-                  ? '!opacity-100 !scale-105 !bg-[#1e2024] !border-white shadow-[4px_4px_0px_#ba1f1f,0_16px_36px_rgba(0,0,0,0.9)] !z-50'
-                  : ''
+                activeMobileBubble === 0 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '30.00%', width: '52.08%', minHeight: '8.14%' }}
-              tabIndex={0}
               role="article"
+              aria-expanded={activeMobileBubble === 0}
             >
               <div className="w-full h-full p-2.5 flex items-center gap-1.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka">
                 <span
@@ -257,15 +281,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 1 */}
             <div
-              onClick={() => setActiveMobileBubble(activeMobileBubble === 1 ? null : 1)}
+              onClick={(e) => toggleMobileBubble(e, 1)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 1
-                  ? '!opacity-100 !scale-105 !bg-[#1e2024] !border-white shadow-[4px_4px_0px_#ba1f1f,0_16px_36px_rgba(0,0,0,0.9)] !z-50'
-                  : ''
+                activeMobileBubble === 1 ? 'is-active' : ''
               }`}
               style={{ left: '34.79%', top: '39.83%', width: '58.33%', minHeight: '13.56%' }}
-              tabIndex={0}
               role="article"
+              aria-expanded={activeMobileBubble === 1}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span
@@ -287,15 +309,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 2 */}
             <div
-              onClick={() => setActiveMobileBubble(activeMobileBubble === 2 ? null : 2)}
+              onClick={(e) => toggleMobileBubble(e, 2)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 2
-                  ? '!opacity-100 !scale-105 !bg-[#1e2024] !border-white shadow-[4px_4px_0px_#ba1f1f,0_16px_36px_rgba(0,0,0,0.9)] !z-50'
-                  : ''
+                activeMobileBubble === 2 ? 'is-active' : ''
               }`}
               style={{ left: '34.79%', top: '53.05%', width: '58.33%', minHeight: '17.80%' }}
-              tabIndex={0}
               role="article"
+              aria-expanded={activeMobileBubble === 2}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span>
@@ -310,15 +330,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 3 */}
             <div
-              onClick={() => setActiveMobileBubble(activeMobileBubble === 3 ? null : 3)}
+              onClick={(e) => toggleMobileBubble(e, 3)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 3
-                  ? '!opacity-100 !scale-105 !bg-[#1e2024] !border-white shadow-[4px_4px_0px_#ba1f1f,0_16px_36px_rgba(0,0,0,0.9)] !z-50'
-                  : ''
+                activeMobileBubble === 3 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '71.02%', width: '86.25%', minHeight: '8.47%' }}
-              tabIndex={0}
               role="article"
+              aria-expanded={activeMobileBubble === 3}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span
@@ -338,15 +356,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 4 */}
             <div
-              onClick={() => setActiveMobileBubble(activeMobileBubble === 4 ? null : 4)}
+              onClick={(e) => toggleMobileBubble(e, 4)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 4
-                  ? '!opacity-100 !scale-105 !bg-[#1e2024] !border-white shadow-[4px_4px_0px_#ba1f1f,0_16px_36px_rgba(0,0,0,0.9)] !z-50'
-                  : ''
+                activeMobileBubble === 4 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '79.83%', width: '86.25%', minHeight: '8.47%' }}
-              tabIndex={0}
               role="article"
+              aria-expanded={activeMobileBubble === 4}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span>
@@ -357,15 +373,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 5 */}
             <div
-              onClick={() => setActiveMobileBubble(activeMobileBubble === 5 ? null : 5)}
+              onClick={(e) => toggleMobileBubble(e, 5)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 5
-                  ? '!opacity-100 !scale-105 !bg-[#1e2024] !border-white shadow-[4px_4px_0px_#ba1f1f,0_16px_36px_rgba(0,0,0,0.9)] !z-50'
-                  : ''
+                activeMobileBubble === 5 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '88.64%', width: '86.25%', minHeight: '9.49%' }}
-              tabIndex={0}
               role="article"
+              aria-expanded={activeMobileBubble === 5}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span>

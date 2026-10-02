@@ -311,14 +311,14 @@
   background-color: transparent;
 }
 
-.comic-overlay-bubble:hover,
-.comic-overlay-bubble:focus-visible {
-  opacity: 1;
-  transform: scale(1.08) translateY(-2px);
-  background-color: #1e2024;
-  border-color: #ffffff;
-  box-shadow: 4px 4px 0px #ba1f1f, 0 16px 36px rgba(0, 0, 0, 0.9);
-  z-index: 50;
+/* Active state explicitly toggled via tap or interaction */
+.comic-overlay-bubble.is-active {
+  opacity: 1 !important;
+  transform: scale(1.06) translateY(-2px) !important;
+  background-color: #1e2024 !important;
+  border-color: #ffffff !important;
+  box-shadow: 4px 4px 0px #ba1f1f, 0 16px 36px rgba(0, 0, 0, 0.9) !important;
+  z-index: 50 !important;
 }
 
 /* Comic bubble speech pointer tail (pointing left toward character) */
@@ -337,11 +337,6 @@
   pointer-events: none;
 }
 
-.comic-bubble-tail-left:hover::before,
-.comic-bubble-tail-left:focus-visible::before {
-  transform: translateY(-50%) scale(1);
-}
-
 .comic-bubble-tail-left::after {
   content: '';
   position: absolute;
@@ -357,9 +352,49 @@
   pointer-events: none;
 }
 
-.comic-bubble-tail-left:hover::after,
-.comic-bubble-tail-left:focus-visible::after {
-  transform: translateY(-50%) scale(1);
+.comic-bubble-tail-left.is-active::before,
+.comic-bubble-tail-left.is-active::after {
+  transform: translateY(-50%) scale(1) !important;
+}
+
+/* Desktop hover (strictly for devices with a real pointer and hover support) */
+@media (hover: hover) and (pointer: fine) {
+  .comic-overlay-bubble:hover,
+  .comic-overlay-bubble:focus-visible {
+    opacity: 1;
+    transform: scale(1.08) translateY(-2px);
+    background-color: #1e2024;
+    border-color: #ffffff;
+    box-shadow: 4px 4px 0px #ba1f1f, 0 16px 36px rgba(0, 0, 0, 0.9);
+    z-index: 50;
+  }
+
+  .comic-bubble-tail-left:hover::before,
+  .comic-bubble-tail-left:focus-visible::before {
+    transform: translateY(-50%) scale(1);
+  }
+
+  .comic-bubble-tail-left:hover::after,
+  .comic-bubble-tail-left:focus-visible::after {
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+/* On mobile viewports & touch devices, prevent sticky :hover so non-active bubbles always return to resting state */
+@media (max-width: 767px), (hover: none) {
+  .comic-overlay-bubble:not(.is-active) {
+    opacity: 0 !important;
+    transform: scale(0.97) !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    z-index: 20 !important;
+  }
+
+  .comic-bubble-tail-left:not(.is-active)::before,
+  .comic-bubble-tail-left:not(.is-active)::after {
+    transform: translateY(-50%) scale(0) !important;
+  }
 }
 
 
