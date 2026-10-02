@@ -51,7 +51,7 @@ export function FigmaIcon({ className = 'w-12 h-12' }) {
     <div
       title="Figma"
       aria-label="Figma"
-      className={`relative rounded-[22%] overflow-hidden bg-black shadow-[0_4px_14px_rgba(0,0,0,0.18)] shrink-0 select-none flex items-center justify-center p-[4%] ${className}`}
+      className={`relative rounded-[22%] overflow-hidden bg-black shadow-[0_4px_14px_rgba(0,0,0,0.18)] shrink-0 select-none ${className}`}
     >
       <img
         src={figmaImg}
@@ -172,7 +172,7 @@ export function VSCodeIcon({ className = 'w-12 h-12' }) {
     <div
       title="VS Code"
       aria-label="VS Code"
-      className={`relative rounded-[22%] overflow-hidden bg-white shadow-[0_4px_14px_rgba(0,0,0,0.18)] shrink-0 select-none flex items-center justify-center p-[6%] ${className}`}
+      className={`relative rounded-[22%] overflow-hidden bg-white shadow-[0_4px_14px_rgba(0,0,0,0.18)] shrink-0 select-none ${className}`}
     >
       <img
         src={vscodeImg}
@@ -189,7 +189,7 @@ export function AntigravityIcon({ className = 'w-12 h-12' }) {
     <div
       title="Antigravity"
       aria-label="Antigravity"
-      className={`relative rounded-[22%] overflow-hidden bg-white shadow-[0_4px_14px_rgba(0,0,0,0.18)] shrink-0 select-none flex items-center justify-center p-[4%] ${className}`}
+      className={`relative rounded-[22%] overflow-hidden bg-white shadow-[0_4px_14px_rgba(0,0,0,0.18)] shrink-0 select-none ${className}`}
     >
       <img
         src={antigravityImg}
