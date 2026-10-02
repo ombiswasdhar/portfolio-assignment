@@ -111,7 +111,7 @@ export default function SkillSetSection() {
     <section
       id="skills"
       aria-label="My Skill Set section"
-      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-0"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-0 pb-0 scroll-mt-16 sm:scroll-mt-20"
     >
       {/* Container aligned flush with AboutSection card */}
       <div
@@ -124,7 +124,7 @@ export default function SkillSetSection() {
         {/* ================= POSTER CARD (Pure black background) ================= */}
         <div
           style={{ backgroundColor: '#000000' }}
-          className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 !bg-black text-white px-6 sm:px-12 md:px-16 pt-10 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
+          className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 !bg-black text-white px-4 sm:px-12 md:px-16 pt-14 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
         >
           {/* ================= NEDDEV HELIX CHRONO MATRIX BACKGROUND ANIMATION ================= */}
           {/* Glowing red while spiral is active, normal subtle animation in grid mode */}
@@ -158,7 +158,7 @@ export default function SkillSetSection() {
 
           {/* ================= TOP ROW: TITLE & CORNER MONOGRAM ================= */}
           <div className="relative z-10 w-full flex items-center justify-center">
-            <h2 className="font-thunder text-5xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[98px] font-semibold text-center tracking-wide uppercase text-white drop-shadow-[0_4px_30px_rgba(255,255,255,0.15)] leading-none">
+            <h2 className="font-akira text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center tracking-[0.08em] uppercase text-white drop-shadow-[0_4px_24px_rgba(255,255,255,0.2)] leading-none select-none">
               My Skill Set
             </h2>
 
@@ -168,7 +168,7 @@ export default function SkillSetSection() {
                 src={arrowLogo}
                 alt="Monogram"
                 title="Monogram"
-                className="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 object-contain filter brightness-0 invert opacity-85 rotate-180 hover:rotate-[360deg] hover:scale-125 active:scale-95 transition-all duration-700 ease-out cursor-pointer"
+                className="w-7 h-7 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain filter brightness-0 invert opacity-85 rotate-180 hover:rotate-[360deg] hover:scale-125 active:scale-95 transition-all duration-700 ease-out cursor-pointer"
               />
             </div>
           </div>
@@ -257,7 +257,7 @@ export default function SkillSetSection() {
                 <button
                   type="button"
                   onClick={() => setIsSpiralMode(true)}
-                  className="font-myfont text-xl sm:text-2xl md:text-3xl text-neutral-300 hover:text-white transition-all duration-300 cursor-pointer tracking-wider flex items-center gap-2.5 bg-transparent border-0 p-0 select-none group/back hover:scale-105 active:scale-95 drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]"
+                  className="font-myfont text-base sm:text-xl md:text-2xl text-neutral-300 hover:text-white transition-all duration-300 cursor-pointer tracking-wider flex items-center gap-2.5 bg-transparent border-0 p-0 select-none group/back hover:scale-105 active:scale-95 drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse group-hover/back:scale-125 transition-transform" />
                   <span>click to return to 3d spiral orbit</span>

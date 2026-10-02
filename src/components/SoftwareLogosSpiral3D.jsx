@@ -451,7 +451,7 @@ export default function SoftwareLogosSpiral3D({
         <button
           type="button"
           onClick={() => onIconClick(null)}
-          className="font-myfont text-xl sm:text-2xl md:text-3xl text-neutral-300 hover:text-white transition-all duration-300 cursor-pointer tracking-wider text-center flex items-center gap-2.5 bg-transparent border-0 p-0 select-none group/cta hover:scale-105 active:scale-95 drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]"
+          className="font-myfont text-base sm:text-xl md:text-2xl text-neutral-300 hover:text-white transition-all duration-300 cursor-pointer tracking-wider text-center flex items-center gap-2.5 bg-transparent border-0 p-0 select-none group/cta hover:scale-105 active:scale-95 drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]"
           title="Click to restore original 2D grid"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse group-hover/cta:scale-125 transition-transform" />
