@@ -5,7 +5,6 @@ import {
   Zap,
   Briefcase,
   FileText,
-  Mail,
 } from 'lucide-react'
 import omMonogramImg from '../assets/nav/om_monogram.png'
 import MarqueeBar from './MarqueeBar'
@@ -24,7 +23,6 @@ const mobileNavItems = [
   { id: 'skills', name: 'Skills', path: '/#skills', icon: Zap },
   { id: 'work', name: 'Work', path: '/#work', icon: Briefcase },
   { id: 'cv', name: 'CV', path: '/#cv', icon: FileText },
-  { id: 'contact', name: 'Contact', path: '/contact', icon: Mail },
 ]
 
 export default function Nav() {
