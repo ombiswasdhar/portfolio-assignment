@@ -151,6 +151,14 @@ export function MusicProvider({ children }) {
       .catch(() => {})
   }, [volume])
 
+  const playPrevious = useCallback(() => {
+    restartTrack()
+  }, [restartTrack])
+
+  const playNext = useCallback(() => {
+    restartTrack()
+  }, [restartTrack])
+
   const handleTimeUpdate = () => {
     if (!audioRef.current) return
     setCurrentTime(audioRef.current.currentTime)
@@ -181,6 +189,8 @@ export function MusicProvider({ children }) {
         togglePlay,
         toggleMute,
         restartTrack,
+        playPrevious,
+        playNext,
       }}
     >
       {/* Global Audio Element for Sunflower Official Instrumental */}
