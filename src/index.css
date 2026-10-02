@@ -321,6 +321,22 @@
   z-index: 50 !important;
 }
 
+/* Bottom-aligned bubble adjustment: elevate upwards so bottom edge and shadow never get cut off */
+.comic-bubble-bottom {
+  transform-origin: bottom center !important;
+}
+
+.comic-bubble-bottom.is-active {
+  transform: scale(1.06) translateY(-28px) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .comic-bubble-bottom:hover,
+  .comic-bubble-bottom:focus-visible {
+    transform: scale(1.08) translateY(-28px) !important;
+  }
+}
+
 /* Comic bubble speech pointer tail (pointing left toward character) */
 .comic-bubble-tail-left::before {
   content: '';

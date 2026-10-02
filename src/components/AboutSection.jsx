@@ -374,7 +374,7 @@ export default function AboutSection() {
             {/* Mobile Paragraph 5 */}
             <div
               onClick={(e) => toggleMobileBubble(e, 5)}
-              className={`comic-overlay-bubble comic-bubble-tail-left ${
+              className={`comic-overlay-bubble comic-bubble-tail-left comic-bubble-bottom ${
                 activeMobileBubble === 5 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '88.64%', width: '86.25%', minHeight: '9.49%' }}
