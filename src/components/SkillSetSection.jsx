@@ -158,7 +158,7 @@ export default function SkillSetSection() {
 
           {/* ================= TOP ROW: TITLE & CORNER MONOGRAM ================= */}
           <div className="relative z-10 w-full flex items-center justify-center">
-            <h2 className="font-akira text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center tracking-[0.08em] uppercase text-white drop-shadow-[0_4px_24px_rgba(255,255,255,0.2)] leading-none select-none">
+            <h2 className="font-thunder px-8 sm:px-0 text-[28px] xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-center tracking-[0.04em] sm:tracking-[0.08em] uppercase text-white drop-shadow-[0_4px_24px_rgba(255,255,255,0.2)] leading-none select-none">
               My Skill Set
             </h2>
 
@@ -202,7 +202,7 @@ export default function SkillSetSection() {
                         <div className={`transition-all duration-300 group-hover:-translate-y-2 group-hover:scale-110 active:scale-95 ${app.glow}`}>
                           <IconComponent className="w-12 h-12 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
                         </div>
-                        <span className="font-thunder mt-2 max-w-full text-xs md:text-sm font-semibold text-neutral-300 text-center tracking-tight transition-colors group-hover:text-white">{app.name}</span>
+                        <span className="font-thunder mt-2 max-w-full text-sm md:text-base font-semibold text-neutral-100 text-center tracking-tight transition-colors group-hover:text-white">{app.name}</span>
                       </div>
                     )
                   })}
@@ -226,7 +226,7 @@ export default function SkillSetSection() {
                         <div className="transition-transform duration-200 group-hover:scale-110">
                           <IconComponent className="w-12 h-12" />
                         </div>
-                        <span className="font-thunder mt-1.5 text-[14px] font-semibold leading-4 text-neutral-100 text-center tracking-[0.02em]">
+                        <span className="font-thunder mt-1.5 w-full px-1 text-[15px] font-semibold leading-[1.05] text-white text-center tracking-[0.02em]">
                           {app.name}
                         </span>
                       </div>
