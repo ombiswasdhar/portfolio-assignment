@@ -31,10 +31,10 @@ export default function ClickToPlayBadge({ mousePos = { x: 0, y: 0 } }) {
         transform: `translate3d(${-mousePos.x * 0.75}px, ${-mousePos.y * 0.75}px, 0)`,
         transition: 'transform 0.2s ease-out',
       }}
-      className="absolute -top-[20%] sm:-top-[26%] md:-top-[30%] right-[11%] sm:right-[12.5%] md:right-[14%] z-35 flex items-center gap-1 sm:gap-2 cursor-pointer group select-none pointer-events-auto transition-transform duration-300 hover:scale-105"
+      className="absolute -top-[14%] sm:-top-[18%] md:-top-[22%] right-[5%] sm:right-[6.5%] md:right-[8%] z-35 flex items-center gap-1 sm:gap-2 cursor-pointer group select-none pointer-events-auto transition-transform duration-300 hover:scale-105 scale-85 sm:scale-95 md:scale-100 origin-bottom-right"
     >
-      {/* 1. Dotted Text in Fredoka font (Nothing Phone dot-matrix style) with White Luminous Glow */}
-      <div className="relative flex flex-col items-end">
+      {/* 1. Dotted Text in Fredoka font (Nothing Phone dot-matrix style) with White Luminous Glow - Tilted anti-clockwise 10 degrees */}
+      <div className="relative flex flex-col items-end -rotate-[10deg] origin-bottom-right transition-transform duration-300">
         <svg
           viewBox={`0 0 ${svgWidth} 26`}
           className="h-5 sm:h-6 md:h-7 w-auto overflow-visible filter drop-shadow-[0_0_3px_rgba(255,255,255,1)] drop-shadow-[0_0_8px_rgba(255,255,255,0.85)] drop-shadow-[0_0_16px_rgba(255,255,255,0.45)] group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,1)] transition-all duration-300"
