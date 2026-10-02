@@ -225,7 +225,7 @@ export function MusicProvider({ children }) {
       {isAutoplayBlocked && !isPlaying && (
         <div
           onClick={togglePlay}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/90 text-white backdrop-blur-xl border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:scale-105 active:scale-95 transition-all animate-bounce select-none pointer-events-auto"
+          className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/90 text-white backdrop-blur-xl border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:scale-105 active:scale-95 transition-all animate-bounce select-none pointer-events-auto"
           title="Click to play music"
           role="button"
           tabIndex={0}

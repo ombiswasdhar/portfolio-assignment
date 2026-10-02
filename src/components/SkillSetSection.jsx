@@ -226,7 +226,7 @@ export default function SkillSetSection() {
                         <div className="transition-transform duration-200 group-hover:scale-110">
                           <IconComponent className="w-12 h-12" />
                         </div>
-                        <span className="mt-1.5 text-xs font-normal text-neutral-300 text-center tracking-tight">
+                        <span className="font-thunder mt-1.5 text-[14px] font-semibold leading-4 text-neutral-100 text-center tracking-[0.02em]">
                           {app.name}
                         </span>
                       </div>
