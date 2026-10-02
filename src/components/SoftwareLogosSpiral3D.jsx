@@ -303,27 +303,27 @@ export default function SoftwareLogosSpiral3D({
       >
         {/* Outer Rotating Red Spiral Orbital Ring */}
         <div
-          className="absolute inset-0 rounded-full border border-red-600/35 opacity-45 animate-spin-slow"
+          className="absolute inset-0 rounded-full border border-red-500/50 opacity-60 animate-spin-slow shadow-[0_0_24px_rgba(239,68,68,0.35)]"
           style={{
             transform: 'rotateX(72deg) scale(1.15)',
           }}
         />
         {/* Mid Dashed Red Rotating Orbital Ring */}
         <div
-          className="absolute inset-10 rounded-full border border-dashed border-red-500/40 opacity-40"
+          className="absolute inset-10 rounded-full border border-dashed border-red-500/50 opacity-55 shadow-[0_0_18px_rgba(239,68,68,0.3)]"
           style={{
             transform: 'rotateX(72deg) scale(0.92)',
           }}
         />
         {/* Inner Red Rotating Orbital Ring */}
         <div
-          className="absolute inset-20 rounded-full border border-red-500/30 opacity-35"
+          className="absolute inset-20 rounded-full border border-red-500/45 opacity-50 shadow-[0_0_15px_rgba(239,68,68,0.25)]"
           style={{
             transform: 'rotateX(72deg) scale(0.72)',
           }}
         />
-        {/* Core Glowing Red Axis Light Beam */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-gradient-to-tr from-red-600/20 via-rose-500/12 to-transparent blur-3xl pointer-events-none" />
+        {/* Core Glowing Red Axis Light Beam with smooth breathing pulse */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-gradient-to-tr from-red-600/35 via-rose-500/20 to-transparent blur-3xl pointer-events-none animate-pulse" />
       </div>
 
       {/* ================= 3D PERSPECTIVE ORBITAL STAGE ================= */}
@@ -341,6 +341,14 @@ export default function SoftwareLogosSpiral3D({
           const isHovered = hoveredApp === id
           const isSide = tier === 'side'
           const isMid = tier === 'mid'
+
+          // Automatic brand glow as icons orbit towards the foreground
+          const frontRatio = Math.max(0, (zNorm - 0.45) / 0.55)
+          const autoGlowShadow = app.color && frontRatio > 0.08
+            ? (isHovered
+                ? `0 22px 48px ${app.color}99, 0 0 24px ${app.color}77`
+                : `0 ${Math.round(6 + frontRatio * 14)}px ${Math.round(14 + frontRatio * 24)}px ${app.color}${Math.round(frontRatio * 110).toString(16).padStart(2, '0')}, 0 0 ${Math.round(8 + frontRatio * 14)}px ${app.color}${Math.round(frontRatio * 80).toString(16).padStart(2, '0')}`)
+            : (isHovered && app.color ? `0 18px 40px ${app.color}77` : undefined)
 
           return (
             <div
@@ -365,7 +373,7 @@ export default function SoftwareLogosSpiral3D({
               role="button"
               aria-label={`${app.name}${isSide ? ' (floating side)' : isMid ? ' (floating companion)' : ''} logo in 3D orbit. Click to return to original grid layout.`}
             >
-              {/* Icon Container with dynamic 3D depth shadow & brand glow */}
+              {/* Icon Container with dynamic 3D depth shadow & automatic rotating brand glow */}
               <div
                 className={`relative rounded-2xl transition-all duration-300 ${
                   isSide
@@ -375,7 +383,9 @@ export default function SoftwareLogosSpiral3D({
                     : 'p-1.5 sm:p-2'
                 } ${
                   isHovered
-                    ? 'shadow-[0_22px_48px_rgba(220,38,38,0.3)] ring-2 ring-red-600 -translate-y-1'
+                    ? 'shadow-[0_22px_48px_rgba(220,38,38,0.4)] ring-2 ring-red-500 -translate-y-1'
+                    : frontRatio > 0.45
+                    ? 'border border-red-500/35 ring-1 ring-red-500/25 shadow-[0_12px_28px_rgba(0,0,0,0.18)]'
                     : zNorm > 0.65
                     ? 'shadow-[0_12px_28px_rgba(0,0,0,0.14)]'
                     : 'shadow-[0_4px_12px_rgba(0,0,0,0.06)]'
@@ -384,9 +394,7 @@ export default function SoftwareLogosSpiral3D({
                   backgroundColor: zNorm > 0.5
                     ? (isSide ? 'rgba(255, 255, 255, 0.88)' : isMid ? 'rgba(255, 255, 255, 0.90)' : 'rgba(255, 255, 255, 0.96)')
                     : (isSide ? 'rgba(255, 255, 255, 0.60)' : isMid ? 'rgba(255, 255, 255, 0.68)' : 'rgba(255, 255, 255, 0.75)'),
-                  boxShadow: isHovered && app.color
-                    ? `0 18px 40px ${app.color}77`
-                    : undefined,
+                  boxShadow: autoGlowShadow,
                 }}
               >
                 <IconComponent

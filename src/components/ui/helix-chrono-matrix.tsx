@@ -285,21 +285,18 @@ export function HelixChronoMatrix({
                     const projX = centerX + x3D * scale;
                     const projY = centerY + (y3D + pt.vy) * scale;
 
-                    // Smooth pointer attraction field
-                    const dx = projX - pointer.x;
-                    const dy = projY - pointer.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    // Automatic continuous excitation wave synchronized with rotation
+                    // A traveling harmonic wave moving along the 3D spiral ribbons
+                    const wavePhase = theta * 2.0 - time * 2.4 + ring.harmonicOffset;
+                    const travelingWave = (Math.sin(wavePhase) + 1) * 0.5; // 0 to 1
+                    // Foreground prominence: ribbons closer to the viewer glow more intensely
+                    const zProminence = Math.max(0, (z3D + ring.radius) / (2 * ring.radius)); // 0 (back) to 1 (front)
+                    const autoExcitation = Math.pow(travelingWave, 1.4) * (0.35 + zProminence * 0.65);
 
-                    if (dist < pointer.radius && dist > 0) {
-                        const ratio = 1 - dist / pointer.radius;
-                        const targetVy = Math.sin(theta + time) * ratio * 15;
-                        pt.vy += (targetVy - pt.vy) * 0.1;
-                        pt.excitation = Math.max(pt.excitation, ratio);
-                    } else {
-                        pt.vy *= 0.92;
-                    }
-
-                    pt.excitation *= 0.92;
+                    // Fluid vertical undulating wave
+                    const waveTargetVy = Math.sin(theta * 1.5 + time * 1.8 + ring.harmonicOffset) * 6 * zProminence;
+                    pt.vy += (waveTargetVy - pt.vy) * 0.1;
+                    pt.excitation = autoExcitation;
                     avgExcitation += pt.excitation;
 
                     if (pIdx === 0) {
@@ -314,25 +311,33 @@ export function HelixChronoMatrix({
                 ctx.lineTo(firstProjX, firstProjY);
 
                 avgExcitation /= numPoints;
-                const depthAlpha = 0.15 + (rIdx / rings.length) * 0.45;
-                const isExcited = avgExcitation > 0.05;
+                const depthAlpha = 0.25 + (rIdx / rings.length) * 0.45;
+                // Continuous luminous glow intensity driven automatically by rotation & excitation
+                const ringGlow = Math.min(1, 0.45 + avgExcitation * 0.55);
 
-                if (isExcited) {
-                    ctx.strokeStyle = lineColor === 'red' || lineColor === 'soft-red'
-                        ? `rgba(${lineColor === 'red' ? '239, 68, 68' : '251, 113, 133'}, ${Math.min(1, 0.7 + avgExcitation * 0.3)})`
-                        : (isDark
-                            ? `rgba(255, 255, 255, ${Math.min(1, 0.4 + avgExcitation * 0.6)})`
-                            : `rgba(0, 0, 0, ${Math.min(1, 0.4 + avgExcitation * 0.6)})`);
-                    ctx.lineWidth = 1.4 + avgExcitation * 1.5;
+                if (lineColor === 'red' || lineColor === 'soft-red') {
+                    const r = lineColor === 'red' ? 239 : 251;
+                    const g = lineColor === 'red' ? 68 : 113;
+                    const b = lineColor === 'red' ? 68 : 133;
+
+                    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${Math.min(1, 0.4 + ringGlow * 0.6)})`;
+                    ctx.lineWidth = 1.2 + ringGlow * 1.4;
+                    ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${0.45 + ringGlow * 0.55})`;
+                    ctx.shadowBlur = Math.round(5 + ringGlow * 12);
                 } else {
-                    ctx.strokeStyle = `rgba(${strokeBase}, ${depthAlpha * (lineColor === 'red' || lineColor === 'soft-red' ? 0.85 : 0.6)})`;
-                    ctx.lineWidth = lineColor === 'red' || lineColor === 'soft-red' ? 1.0 : 0.75;
+                    ctx.strokeStyle = isDark
+                        ? `rgba(255, 255, 255, ${Math.min(1, 0.4 + ringGlow * 0.6)})`
+                        : `rgba(0, 0, 0, ${Math.min(1, 0.4 + ringGlow * 0.6)})`;
+                    ctx.lineWidth = 1.0 + ringGlow * 1.2;
+                    ctx.shadowColor = isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.25)';
+                    ctx.shadowBlur = Math.round(4 + ringGlow * 8);
                 }
 
                 ctx.stroke();
+                ctx.shadowBlur = 0;
             }
 
-            // Render Traveling Points along the Lines (Black normally, White when hovered/excited)
+            // Render Traveling Points along the Lines with automatic luminous pulse
             for (let i = 0; i < particles.length; i++) {
                 const p = particles[i];
                 p.progress = (p.progress + p.speed + 1) % 1;
@@ -366,32 +371,32 @@ export function HelixChronoMatrix({
                 const projX = centerX + x3D * scale;
                 const projY = centerY + y3D * scale;
 
-                // Check proximity to pointer for hover color inversion (Black -> White)
-                const dx = projX - pointer.x;
-                const dy = projY - pointer.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                const isNearHover = dist < pointer.radius;
+                // Automatic rhythmic glowing pulse as particles orbit along the ribbons
+                const particlePulse = (Math.sin(p.progress * Math.PI * 4 + time * 3.2 + p.ringIndex * 1.2) + 1) * 0.5;
 
                 ctx.beginPath();
-                ctx.arc(projX, projY, p.size * scale, 0, Math.PI * 2);
+                ctx.arc(projX, projY, (p.size + particlePulse * 0.8) * scale, 0, Math.PI * 2);
 
                 if (lineColor === 'red') {
-                    ctx.fillStyle = isNearHover ? '#ef4444' : '#ba1f1f';
+                    ctx.fillStyle = particlePulse > 0.35 ? '#ff4d4d' : '#ef4444';
+                    ctx.shadowColor = 'rgba(239, 68, 68, 0.85)';
+                    ctx.shadowBlur = Math.round((6 + particlePulse * 10) * scale);
                 } else if (lineColor === 'soft-red') {
-                    ctx.fillStyle = isNearHover ? '#fca5a5' : '#f87171';
-                } else if (isNearHover) {
-                    // Inverted to white (or high contrast) when hovered
-                    ctx.fillStyle = isDark ? '#ffffff' : '#000000';
+                    ctx.fillStyle = particlePulse > 0.35 ? '#fda4af' : '#fb7185';
+                    ctx.shadowColor = 'rgba(251, 113, 133, 0.85)';
+                    ctx.shadowBlur = Math.round((6 + particlePulse * 10) * scale);
                 } else {
-                    // Standard color opposite to lines (Black by default)
-                    ctx.fillStyle = isDark ? '#000000' : '#ffffff';
+                    ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+                    ctx.shadowColor = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.3)';
+                    ctx.shadowBlur = Math.round(5 * scale);
                 }
                 ctx.fill();
 
-                // Optional soft border outline for high definition clarity
+                // Soft luminous border outline
                 ctx.lineWidth = 0.5;
-                ctx.strokeStyle = lineColor === 'red' ? 'rgba(239, 68, 68, 0.6)' : (isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)');
+                ctx.strokeStyle = lineColor === 'red' ? 'rgba(255, 200, 200, 0.7)' : (isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.3)');
                 ctx.stroke();
+                ctx.shadowBlur = 0;
             }
 
             scheduleRender();
