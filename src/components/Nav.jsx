@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
+  Home,
   User,
   Zap,
   Briefcase,
@@ -19,6 +20,7 @@ const primaryNavItems = [
 ]
 
 const mobileNavItems = [
+  { id: 'home', name: 'Home', path: '/#hero', icon: Home },
   { id: 'about', name: 'About', path: '/#about', icon: User },
   { id: 'skills', name: 'Skills', path: '/#skills', icon: Zap },
   { id: 'work', name: 'Work', path: '/#work', icon: Briefcase },
@@ -29,7 +31,7 @@ export default function Nav() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const [scrollSection, setScrollSection] = useState('')
+  const [scrollSection, setScrollSection] = useState('home')
   const [isLightBg, setIsLightBg] = useState(false)
   const [scrollY, setScrollY] = useState(0)
 
@@ -76,7 +78,7 @@ export default function Nav() {
       } else if (aboutEl && aboutEl.getBoundingClientRect().top <= threshold) {
         setScrollSection('about')
       } else {
-        setScrollSection('')
+        setScrollSection('home')
       }
 
       // Check whether top header (top 0 to 88px) is over the light section
@@ -102,6 +104,18 @@ export default function Nav() {
   }, [location.pathname])
 
   const handleClick = (e, item) => {
+    if (item.id === 'home') {
+      e.preventDefault()
+      if (location.pathname === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.history.pushState(null, '', '/')
+        setScrollSection('home')
+      } else {
+        navigate('/')
+      }
+      return
+    }
+
     // Handling dedicated route pages
     if (item.id === 'contact') {
       e.preventDefault()
@@ -157,7 +171,7 @@ export default function Nav() {
                 e.preventDefault()
                 window.scrollTo({ top: 0, behavior: 'smooth' })
                 window.history.pushState(null, '', '/')
-                setScrollSection('')
+                setScrollSection('home')
               }
             }}
             className={`group flex-1 md:flex-none md:flex-[1.3] px-3.5 sm:px-6 flex items-center justify-between sm:justify-start gap-2.5 transition-colors duration-200 cursor-pointer no-underline active:scale-[0.99] ${
@@ -185,24 +199,6 @@ export default function Nav() {
             </div>
             <span className="w-1.5 h-1.5 rounded-full bg-[#DE2020] animate-pulse hidden sm:inline-block ml-auto shadow-[0_0_8px_#DE2020] group-hover:scale-125 group-hover:shadow-[0_0_12px_#DE2020] transition-all duration-300" />
           </Link>
-
-          {/* Mobile Top Header Action (< md): Status Contact Pill */}
-          <div className="md:hidden flex items-center pr-3.5 shrink-0">
-            <Link
-              to="/contact"
-              onClick={(e) => handleClick(e, { id: 'contact' })}
-              className={`px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeSection === 'contact'
-                  ? 'bg-[#DE2020] text-white shadow-[0_0_10px_rgba(222,32,32,0.5)]'
-                  : isLightBg
-                  ? 'bg-black/5 hover:bg-black/10 text-neutral-800 border border-black/10'
-                  : 'bg-white/10 hover:bg-white/15 text-neutral-200 border border-white/10'
-              }`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#DE2020] animate-pulse" />
-              <span>CONTACT</span>
-            </Link>
-          </div>
 
           {/* Desktop Cells 2-5: Middle Navigation Links (About, Work, Skills, CV) */}
           <div className="hidden md:flex flex-1 items-stretch">
@@ -233,20 +229,20 @@ export default function Nav() {
             })}
           </div>
 
-          {/* Desktop Cell 6: Call To Action Get in Touch (Liquid Button + Sparkles Text) */}
-          <div className="hidden md:flex items-stretch shrink-0">
+          {/* Right Action Cell: Liquid Button + Sparkles Text ("Connect" on mobile, "Get in Touch" on desktop) */}
+          <div className="flex items-stretch shrink-0">
             <Link
               to="/contact"
               onClick={(e) => handleClick(e, { id: 'contact' })}
               className="no-underline flex items-stretch h-full"
-              aria-label="Get in Touch"
+              aria-label="Connect with Om Biswas"
             >
               <LiquidButton
                 isActive={activeSection === 'contact'}
                 isLightBg={isLightBg}
                 hoverScale={1}
                 tapScale={0.98}
-                className={`h-full px-5 md:px-6 rounded-none flex items-center justify-center cursor-pointer select-none border-l transition-colors duration-200 group ${
+                className={`h-full px-4 sm:px-5 md:px-6 rounded-none flex items-center justify-center cursor-pointer select-none border-l transition-colors duration-200 group ${
                   isLightBg ? 'border-black' : 'border-white/20'
                 } ${
                   activeSection === 'contact'
@@ -257,14 +253,15 @@ export default function Nav() {
                 }`}
               >
                 <SparklesText
-                  sparklesCount={5}
+                  sparklesCount={4}
                   colors={{
                     first: '#FFFFFF',
                     second: '#FFA8A8',
                   }}
-                  className="font-myfont text-[21px] sm:text-[23px] md:text-[25px] tracking-wide leading-none pt-1 transition-transform duration-200 group-hover:scale-105"
+                  className="font-myfont text-[16px] sm:text-[20px] md:text-[25px] tracking-wide leading-none pt-1 transition-transform duration-200 group-hover:scale-105"
                 >
-                  Get in Touch
+                  <span className="md:hidden">Connect</span>
+                  <span className="hidden md:inline">Get in Touch</span>
                 </SparklesText>
               </LiquidButton>
             </Link>

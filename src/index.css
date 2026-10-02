@@ -780,7 +780,16 @@
 }
 
 .font-thunder {
-  font-family: 'Thunder', 'Akira Expanded', sans-serif;
+  font-family: 'Thunder SemiBold', 'Akira Expanded', sans-serif;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Thunder SemiBold';
+  src: url('/fonts/Thunder-SemiBoldHC.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {

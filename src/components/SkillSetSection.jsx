@@ -202,7 +202,7 @@ export default function SkillSetSection() {
                         <div className={`transition-all duration-300 group-hover:-translate-y-2 group-hover:scale-110 active:scale-95 ${app.glow}`}>
                           <IconComponent className="w-12 h-12 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
                         </div>
-                        <span className="mt-2 max-w-full text-xs md:text-sm font-normal text-neutral-300 text-center tracking-tight transition-colors group-hover:text-white">{app.name}</span>
+                        <span className="font-thunder mt-2 max-w-full text-xs md:text-sm font-semibold text-neutral-300 text-center tracking-tight transition-colors group-hover:text-white">{app.name}</span>
                       </div>
                     )
                   })}

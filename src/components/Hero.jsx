@@ -259,43 +259,47 @@ export default function Hero() {
           {/* 1c. Click to play in Fredoka dotted Nothing font with twirling arrow pointing to CD */}
           <ClickToPlayBadge mousePos={mousePos} />
 
-          {/* 2. Custom Typography: "PORTFOLIO" Vector Art */}
+          {/* 2. Custom Typography: "PORTFOLIO" Vector Art & Center OM Badge */}
           <div
             className="absolute -left-[3.23%] top-[23.72%] w-[106.41%] h-[52.15%] z-20 pointer-events-none flex items-center justify-center"
           >
-            <img
-              src={portfolioText}
-              alt="PORTFOLIO"
-              className="w-full h-full object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.5)]"
-            />
-          </div>
+            {/* Aspect-locked container matching portfolio_text.svg (1262 x 267) */}
+            <div className="relative w-full aspect-[1262/267] max-h-full">
+              {/* PORTFOLIO typography SVG */}
+              <img
+                src={portfolioText}
+                alt="PORTFOLIO"
+                className="w-full h-full object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.5)] select-none pointer-events-none"
+              />
 
-          {/* 3. Center OM Badge (replacing the 'O' in PORTFOLiO) */}
-          <div
-            className="absolute left-[53.49%] top-[32.11%] w-[11%] md:w-[10.54%] z-25 group cursor-pointer pointer-events-auto"
-            title="OM Logo"
-          >
-            <img
-              src={centerLogo}
-              alt="OM Center Badge"
-              className="w-full h-auto object-contain transition-all duration-300 ease-out group-hover:scale-110 group-hover:drop-shadow-[0_0_24px_rgba(186,31,31,0.85)] drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
-            />
-          </div>
+              {/* Center OM Badge (replacing the 'O' in PORTFOLiO, centered between 'F' and 'L') */}
+              <div
+                className="absolute left-[57.73%] top-[48.69%] -translate-x-1/2 -translate-y-1/2 w-[11.25%] z-25 group cursor-pointer pointer-events-auto"
+                title="OM Logo"
+              >
+                <img
+                  src={centerLogo}
+                  alt="OM Center Badge"
+                  className="w-full h-auto object-contain transition-all duration-300 ease-out group-hover:scale-110 group-hover:drop-shadow-[0_0_24px_rgba(186,31,31,0.85)] drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)] select-none"
+                />
+              </div>
 
-          {/* 4. Crown Doodle (perched on top of the center OM badge) */}
-          <div
-            className="absolute left-[59.95%] top-[14.93%] w-[10%] md:w-[9.11%] z-30 group cursor-pointer pointer-events-auto"
-            title="Crown doodle"
-            style={{
-              transform: `translate3d(${-mousePos.x * 0.7}px, ${-mousePos.y * 0.7}px, 0)`,
-              transition: 'transform 0.2s ease-out',
-            }}
-          >
-            <img
-              src={crown}
-              alt="Crown sticker"
-              className="w-full h-auto object-contain animate-float-gentle transition-transform duration-300 ease-out group-hover:scale-125 group-hover:rotate-12 drop-shadow-md"
-            />
+              {/* Crown Doodle (perched on top of the center OM badge) */}
+              <div
+                className="absolute left-[62.5%] -top-[16%] w-[9.2%] z-30 group cursor-pointer pointer-events-auto"
+                title="Crown doodle"
+                style={{
+                  transform: `translate3d(${-mousePos.x * 0.7}px, ${-mousePos.y * 0.7}px, 0)`,
+                  transition: 'transform 0.2s ease-out',
+                }}
+              >
+                <img
+                  src={crown}
+                  alt="Crown sticker"
+                  className="w-full h-auto object-contain animate-float-gentle transition-transform duration-300 ease-out group-hover:scale-125 group-hover:rotate-12 drop-shadow-md select-none pointer-events-none"
+                />
+              </div>
+            </div>
           </div>
 
           {/* 5. Double Exclamation Action Doodle (above the letter 'L' / 'i') */}
