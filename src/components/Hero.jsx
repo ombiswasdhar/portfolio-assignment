@@ -314,14 +314,7 @@ export default function Hero() {
             />
           </div>
 
-          {/* 6. OM BISWAS Text (bottom-right under banner) */}
-          <div
-            className="absolute right-0 top-[102%] z-20 pt-1 sm:pt-2 md:pt-3 text-right"
-          >
-            <span className="font-fredoka font-bold text-base sm:text-xl md:text-[32px] leading-none tracking-normal text-white uppercase whitespace-nowrap">
-              OM BISWAS
-            </span>
-          </div>
+          
 
         </div>
 
@@ -345,8 +338,11 @@ export default function Hero() {
             />
           </div>
 
-          {/* Right: Arrow Monogram Logo Anchor */}
-          <div className="flex items-center justify-end pointer-events-none">
+          {/* Right: OM BISWAS (Opposite Symbiosis Institute of Design) + Arrow Monogram Logo Anchor */}
+          <div className="flex items-center justify-end gap-3 lg:gap-4 pointer-events-auto">
+            <span className="font-fredoka font-bold text-base lg:text-[20px] leading-snug text-white uppercase whitespace-nowrap">
+              OM BISWAS
+            </span>
             <div
               ref={isDesktop ? anchorRef : null}
               className="h-10 lg:h-12 w-10 lg:w-12 pointer-events-none"
@@ -375,8 +371,11 @@ export default function Hero() {
             />
           </div>
 
-          {/* Right: Arrow Monogram Logo Anchor */}
-          <div className="shrink-0 flex items-center justify-end pointer-events-none">
+          {/* Right: OM BISWAS + Arrow Monogram Logo Anchor */}
+          <div className="shrink-0 flex items-center justify-end gap-2 pointer-events-auto">
+            <span className="font-fredoka font-bold text-[10px] sm:text-xs leading-tight text-white uppercase whitespace-nowrap">
+              OM BISWAS
+            </span>
             <div
               ref={!isDesktop ? anchorRef : null}
               className="h-6 sm:h-7 w-6 sm:w-7 pointer-events-none"
