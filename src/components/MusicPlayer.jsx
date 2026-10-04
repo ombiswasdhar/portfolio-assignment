@@ -33,6 +33,11 @@ export default function MusicPlayer() {
   } = useMusic()
 
   const location = useLocation()
+  const isContactPage =
+    location.pathname === '/contact' ||
+    location.pathname === '/get-in-touch' ||
+    location.pathname === '/connect'
+
   const [isLightBackground, setIsLightBackground] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [isPastHero, setIsPastHero] = useState(false)
@@ -166,7 +171,7 @@ export default function MusicPlayer() {
             ? 'translate-y-0 opacity-100'
             : '-translate-y-full opacity-0'
         }`}
-        style={{ top: isLightBackground ? '84px' : '48px', width: '312px', height: '56px' }}
+        style={{ top: isContactPage ? '84px' : '48px', width: '312px', height: '56px' }}
         role="region"
         aria-label="Mobile Music Player Notch"
       >
