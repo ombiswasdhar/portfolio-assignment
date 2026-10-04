@@ -174,12 +174,18 @@ export default function Contact() {
         </div>
 
         {/* Back to Home Link */}
-        <div className="mt-12 flex justify-center">
+        <div className="mt-12 mb-4 flex justify-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-black/15 bg-neutral-50 hover:bg-black hover:text-white text-neutral-700 text-xs sm:text-sm font-mono uppercase tracking-wider transition-all duration-200 shadow-sm hover:shadow"
+            className="group relative z-20 inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-2.5 sm:py-3 rounded-none border border-black bg-white hover:bg-black text-black hover:text-white transition-all duration-200 cursor-pointer select-none no-underline shadow-[3px_3px_0px_#000000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px]"
+            title="Return to Home"
           >
-            <span>← Return to Home</span>
+            <span className="font-sans text-base sm:text-lg font-bold transition-transform duration-200 group-hover:-translate-x-1">
+              ←
+            </span>
+            <span className="font-myfont text-[20px] sm:text-[23px] md:text-[26px] tracking-wide leading-none pt-1">
+              return to home
+            </span>
           </Link>
         </div>
       </main>
