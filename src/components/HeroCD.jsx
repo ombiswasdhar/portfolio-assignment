@@ -16,7 +16,7 @@ export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="absolute -right-[4%] sm:-right-[5.87%] -top-[14%] sm:-top-[16.36%] w-[17%] sm:w-[14.65%] aspect-square z-30 group cursor-pointer transition-transform duration-300 ease-out hover:scale-110 drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)] pointer-events-auto"
-      title={isPlaying ? 'Pause Sunflower (Official Instrumental)' : 'Play Sunflower (Official Instrumental)'}
+      title={isPlaying ? 'Pause Sunflower (Apple Music)' : 'Play Sunflower (Apple Music)'}
       style={{
         transform: `translate3d(${-mousePos.x * 0.9}px, ${-mousePos.y * 0.9}px, 0)`,
         transition: 'transform 0.2s ease-out',
@@ -29,7 +29,7 @@ export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
           togglePlay()
         }
       }}
-      aria-label={isPlaying ? 'Pause Sunflower Instrumental' : 'Play Sunflower Instrumental'}
+      aria-label={isPlaying ? 'Pause Sunflower (Apple Music)' : 'Play Sunflower (Apple Music)'}
     >
       {/* Active Audio Pulse / Soundwave Badge */}
       {isPlaying && (
@@ -74,7 +74,7 @@ export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
             className="text-[6px] sm:text-[7px] md:text-[8px] uppercase tracking-widest text-[#DE2020] font-bold"
             style={{ textShadow: '0 1px 3px rgba(0,0,0,0.95)' }}
           >
-            Spider-Verse • Instrumental
+            Spider-Verse • Apple Music
           </span>
         </div>
 
