@@ -4,9 +4,10 @@ import React, { createContext, useContext, useState, useRef, useEffect, useCallb
 
 const MusicContext = createContext(null)
 
-// Direct official Apple Music stream for Sunflower (Spider-Man: Into the Spider-Verse) by Post Malone & Swae Lee
-export const APPLE_MUSIC_STREAM_URL =
-  'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/98/f0/d6/98f0d67e-f8bf-762d-cac7-1c6b3b6b35dd/mzaf_4543283896248560946.plus.aac.p.m4a'
+// Full-length track for Sunflower (Spider-Man: Into the Spider-Verse) by Post Malone & Swae Lee
+// Plays from the very beginning (0:00) with complete intro, verses, and chorus
+export const AUDIO_TRACK_URL = '/sunflower.m4a'
+export const APPLE_MUSIC_STREAM_URL = AUDIO_TRACK_URL
 
 export function MusicProvider({ children }) {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -197,10 +198,10 @@ export function MusicProvider({ children }) {
         playNext,
       }}
     >
-      {/* Global Audio Element for Sunflower streamed directly from Apple Music */}
+      {/* Global Audio Element for Sunflower starting from the very beginning (0:00) */}
       <audio
         ref={audioRef}
-        src={APPLE_MUSIC_STREAM_URL}
+        src={AUDIO_TRACK_URL}
         preload="auto"
         loop
         playsInline
@@ -221,7 +222,8 @@ export function MusicProvider({ children }) {
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
       >
-        <source src={APPLE_MUSIC_STREAM_URL} type="audio/mp4" />
+        <source src="/sunflower.m4a" type="audio/mp4" />
+        <source src="/sunflower.mp3" type="audio/mpeg" />
       </audio>
 
       {/* Floating Gentle Prompt if Browser Blocks Autoplay on Refresh */}
