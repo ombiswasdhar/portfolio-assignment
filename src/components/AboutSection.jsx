@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import aboutFullFrameCanvas from '../assets/about/about_full_frame_canvas.png'
 import aboutLeftCardCanvas from '../assets/about/about_left_card_canvas.png'
 import pixelHandPointer from '../assets/about/pixel_hand_pointer.png'
+import jojoArrowWhite from '../assets/about/jojo_arrow_white.png'
+import jojoArrowDark from '../assets/about/jojo_arrow_dark.png'
 import AnimatedCollage from './AnimatedCollage'
 import AboutCharacters from './AboutCharacters'
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -235,24 +237,35 @@ export default function AboutSection() {
             <span className="font-script text-3xl sm:text-4xl font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
               portfolio
             </span>
-            <div className="relative inline-flex items-center justify-center gap-2 max-w-full px-2">
+            <div className="relative inline-flex items-center justify-center gap-1.5 max-w-full px-2">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation()
                   setActiveMobileBubble(prev => (prev === null ? 0 : null))
                 }}
-                className="group relative z-10 inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-none border border-black bg-white hover:bg-black text-black hover:text-white transition-all duration-200 cursor-pointer select-none no-underline shadow-[3px_3px_0px_#000000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px]"
+                className="group relative inline-flex items-center justify-center cursor-pointer select-none border-0 bg-transparent p-0 transition-transform duration-200 active:scale-95"
                 title="Tap any paragraph to zoom in"
               >
-                <span className="font-myfont text-[15px] sm:text-[17px] tracking-wide leading-none pt-0.5 text-center">
-                  tap any paragraph to zoom in
-                </span>
+                <div className="relative w-[285px] sm:w-[325px] aspect-[490/112] filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+                  {/* Authentic JoJo Arrow Graphic (White comic fill with black ink outline, transparent background) */}
+                  <img
+                    src={jojoArrowWhite}
+                    alt="Arrow banner"
+                    className="w-full h-full object-contain select-none pointer-events-none transition-transform duration-200 group-hover:scale-[1.02]"
+                  />
+                  {/* Dynamic text inside arrow main bar */}
+                  <div className="absolute inset-y-0 left-[18%] right-[11%] flex items-center justify-center pointer-events-none">
+                    <span className="font-myfont text-[13px] sm:text-[15px] font-bold tracking-wider leading-none text-black select-none uppercase pt-0.5 text-center">
+                      tap any paragraph to zoom in
+                    </span>
+                  </div>
+                </div>
               </button>
               <img
                 src={pixelHandPointer}
                 alt="Pointer hand"
-                className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0 animate-pixel-tap drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] [image-rendering:pixelated] pointer-events-none select-none"
+                className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0 animate-pixel-tap drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] [image-rendering:pixelated] pointer-events-none select-none -ml-1"
               />
             </div>
           </div>
