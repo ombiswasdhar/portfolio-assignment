@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   Home,
@@ -33,10 +33,11 @@ export default function Nav() {
 
   const [scrollSection, setScrollSection] = useState('home')
   const [isLightBg, setIsLightBg] = useState(false)
-  const [scrollY, setScrollY] = useState(0)
+  const [marqueeOffset, setMarqueeOffset] = useState(0)
+  const scrollFrameRef = useRef(0)
+  const navigationScrollRef = useRef(null)
 
   const MARQUEE_HEIGHT = 36 // height in px of the top MarqueeBar
-  const marqueeOffset = Math.min(scrollY, MARQUEE_HEIGHT)
 
   // Derive active section directly based on route or scroll position
   const activeSection =
@@ -56,50 +57,78 @@ export default function Nav() {
     }
 
     // Scroll spy: check current section, background, and scroll position
+    const finishNavigationScroll = () => {
+      if (!navigationScrollRef.current) return
+      window.clearTimeout(navigationScrollRef.current)
+      navigationScrollRef.current = null
+      handleScroll()
+    }
+
     const handleScroll = () => {
-      setScrollY(window.scrollY)
-
-      const cvEl = document.getElementById('cv')
-      const workEl = document.getElementById('work') || document.getElementById('featured-works')
-      const skillsEl = document.getElementById('skills')
-      const aboutEl = document.getElementById('about')
-
-      const threshold = window.innerHeight * 0.45
-      const isAtBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 80
-
-      if (isAtBottom || (cvEl && cvEl.getBoundingClientRect().top <= threshold)) {
-        setScrollSection('cv')
-      } else if (workEl && workEl.getBoundingClientRect().top <= threshold) {
-        setScrollSection('work')
-      } else if (skillsEl && skillsEl.getBoundingClientRect().top <= threshold) {
-        setScrollSection('skills')
-      } else if (aboutEl && aboutEl.getBoundingClientRect().top <= threshold) {
-        setScrollSection('about')
-      } else {
-        setScrollSection('home')
+      if (navigationScrollRef.current) {
+        window.clearTimeout(navigationScrollRef.current)
+        navigationScrollRef.current = window.setTimeout(finishNavigationScroll, 180)
       }
+      if (scrollFrameRef.current) return
 
-      // Check whether top header (top 0 to 88px) is over the light section
-      const lightSection = document.querySelector('[data-theme="light"], .ca-dotted-grid-bg')
-      if (lightSection) {
-        const rect = lightSection.getBoundingClientRect()
-        // When top of light section has reached the top header and its bottom hasn't scrolled off
-        const isOverLight = rect.top <= 88 && rect.bottom >= 0
-        setIsLightBg(isOverLight)
-      } else {
-        setIsLightBg(false)
-      }
+      scrollFrameRef.current = window.requestAnimationFrame(() => {
+        scrollFrameRef.current = 0
+        const nextMarqueeOffset = Math.min(window.scrollY, MARQUEE_HEIGHT)
+        setMarqueeOffset((current) => current === nextMarqueeOffset ? current : nextMarqueeOffset)
+
+        if (!navigationScrollRef.current) {
+          const cvEl = document.getElementById('cv')
+          const workEl = document.getElementById('work') || document.getElementById('featured-works')
+          const skillsEl = document.getElementById('skills')
+          const aboutEl = document.getElementById('about')
+
+          const threshold = window.innerHeight * 0.45
+          const isAtBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 80
+
+          let nextSection = 'home'
+          if (isAtBottom || (cvEl && cvEl.getBoundingClientRect().top <= threshold)) {
+            nextSection = 'cv'
+          } else if (workEl && workEl.getBoundingClientRect().top <= threshold) {
+            nextSection = 'work'
+          } else if (skillsEl && skillsEl.getBoundingClientRect().top <= threshold) {
+            nextSection = 'skills'
+          } else if (aboutEl && aboutEl.getBoundingClientRect().top <= threshold) {
+            nextSection = 'about'
+          }
+          setScrollSection((current) => current === nextSection ? current : nextSection)
+        }
+
+        // Check whether the top header is over the light section.
+        const lightSection = document.querySelector('[data-theme="light"], .ca-dotted-grid-bg')
+        const isOverLight = lightSection
+          ? (() => {
+              const rect = lightSection.getBoundingClientRect()
+              return rect.top <= 88 && rect.bottom >= 0
+            })()
+          : false
+        setIsLightBg((current) => current === isOverLight ? current : isOverLight)
+      })
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleScroll, { passive: true })
+    window.addEventListener('scrollend', finishNavigationScroll)
     handleScroll()
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleScroll)
+      window.removeEventListener('scrollend', finishNavigationScroll)
+      if (navigationScrollRef.current) {
+        window.clearTimeout(navigationScrollRef.current)
+        navigationScrollRef.current = null
+      }
+      if (scrollFrameRef.current) {
+        window.cancelAnimationFrame(scrollFrameRef.current)
+        scrollFrameRef.current = 0
+      }
     }
   }, [location.pathname])
 
@@ -107,6 +136,9 @@ export default function Nav() {
     if (item.id === 'home') {
       e.preventDefault()
       if (location.pathname === '/') {
+        navigationScrollRef.current = window.setTimeout(() => {
+          navigationScrollRef.current = null
+        }, 300)
         window.scrollTo({ top: 0, behavior: 'smooth' })
         window.history.pushState(null, '', '/')
         setScrollSection('home')
@@ -133,6 +165,9 @@ export default function Nav() {
     if (location.pathname === '/') {
       const el = document.getElementById(item.id) || (item.id === 'work' ? document.getElementById('featured-works') : null)
       if (el) {
+        navigationScrollRef.current = window.setTimeout(() => {
+          navigationScrollRef.current = null
+        }, 300)
         el.scrollIntoView({ behavior: 'smooth' })
         window.history.pushState(null, '', `/#${item.id}`)
         setScrollSection(item.id)
@@ -174,7 +209,7 @@ export default function Nav() {
                 setScrollSection('home')
               }
             }}
-            className={`group flex-1 md:flex-none md:flex-[1.3] px-3.5 sm:px-6 flex items-center justify-between sm:justify-start gap-2.5 transition-colors duration-200 cursor-pointer no-underline active:scale-[0.99] ${
+            className={`group flex-1 md:flex-none md:flex-[1.3] px-3.5 sm:px-6 flex items-center justify-between sm:justify-start gap-2.5 transition-colors duration-200 cursor-pointer no-underline ${
               isLightBg
                 ? 'border-r-0 md:border-r border-black bg-transparent hover:bg-[#EAE8E2] text-black'
                 : 'border-r-0 md:border-r border-white/20 bg-transparent hover:bg-white/10 text-white'
@@ -210,7 +245,7 @@ export default function Nav() {
                   key={item.id}
                   to={item.path}
                   onClick={(e) => handleClick(e, item)}
-                  className={`flex-1 px-3 flex items-center justify-center text-center transition-all duration-200 no-underline cursor-pointer group active:scale-[0.98] ${
+                  className={`flex-1 px-3 flex items-center justify-center text-center transition-colors duration-100 no-underline cursor-pointer group ${
                     isLightBg ? 'border-r border-black' : 'border-r border-white/20'
                   } ${
                     isActive
@@ -280,7 +315,7 @@ export default function Nav() {
           bottom: 'max(1.25rem, env(safe-area-inset-bottom, 1.25rem))',
         }}
       >
-        <div className="flex items-center gap-1.5 p-1.5 rounded-[22px] bg-[#0A0A0E]/90 backdrop-blur-2xl border border-white/12 shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_1px_rgba(255,255,255,0.2)]">
+        <div className="flex items-center gap-2 p-2 rounded-full bg-[#0A0A0E]/90 backdrop-blur-2xl border border-white/15 shadow-[0_16px_40px_rgba(0,0,0,0.75),0_0_1px_rgba(255,255,255,0.2)]">
           {mobileNavItems.map((item) => {
             const isActive = activeSection === item.id
             const Icon = item.icon
@@ -290,36 +325,31 @@ export default function Nav() {
                 key={item.id}
                 type="button"
                 onClick={(e) => handleClick(e, item)}
-                className={`relative h-10 min-w-10 rounded-[14px] flex items-center justify-center cursor-pointer select-none transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] active:scale-95 ${
+                className={`relative h-10 w-10 shrink-0 rounded-full flex items-center justify-center cursor-pointer select-none transition-[transform,background-color,color,box-shadow] duration-200 ease-out ${
                   isActive
-                    ? 'max-w-36 px-3.5 bg-[#1B1C24] text-white border border-[#DE2020]/60 shadow-[0_0_16px_rgba(222,32,32,0.3)]'
-                    : 'max-w-10 px-0 bg-white/[0.05] hover:bg-white/[0.1] text-neutral-400 hover:text-white border border-white/[0.07]'
+                    ? '-translate-y-3 bg-[#DE2020] text-white shadow-[0_6px_20px_rgba(222,32,32,0.45)]'
+                    : 'bg-white/[0.05] text-neutral-400 hover:bg-white/[0.1] hover:text-white'
                 }`}
                 aria-label={item.name}
                 aria-current={isActive ? 'page' : undefined}
               >
                 <Icon
-                  className={`w-4 h-4 shrink-0 transition-colors duration-200 ${
-                    isActive ? 'text-[#FF4A4A]' : 'text-neutral-400'
+                  className={`w-[18px] h-[18px] shrink-0 transition-[color,transform] duration-200 ${
+                    isActive ? 'text-white scale-105' : 'text-neutral-400'
                   }`}
                   strokeWidth={isActive ? 2.5 : 2}
                 />
 
-                {/* Animated Expanding Label */}
+                {/* Active label floats above the raised tab, like the reference dock. */}
                 <span
-                  className={`font-fredoka text-[13px] font-semibold tracking-wide whitespace-nowrap overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                  className={`absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-[#0A0A0E] px-2.5 py-1 font-fredoka text-[11px] font-semibold tracking-wide text-white shadow-lg transition-[top,opacity] duration-200 ease-out ${
                     isActive
-                      ? 'max-w-[70px] opacity-100 ml-1.5'
-                      : 'max-w-0 opacity-0 ml-0'
+                      ? '-top-8 opacity-100'
+                      : 'top-0 opacity-0 pointer-events-none'
                   }`}
                 >
                   {item.name}
                 </span>
-
-                {/* Pulsing Crimson Dot on Active */}
-                {isActive && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#DE2020] animate-pulse shrink-0 ml-1 shadow-[0_0_6px_#DE2020]" />
-                )}
               </button>
             )
           })}

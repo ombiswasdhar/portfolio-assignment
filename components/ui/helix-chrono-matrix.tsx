@@ -32,6 +32,7 @@ interface Particle {
 export interface HelixChronoMatrixProps {
     headline?: string;
     className?: string;
+    lowPower?: boolean;
 }
 
 type TopologyMode = 'DOUBLE_HELIX' | 'NEURAL_STRATA' | 'QUANTUM_RIBBONS';
@@ -39,6 +40,7 @@ type TopologyMode = 'DOUBLE_HELIX' | 'NEURAL_STRATA' | 'QUANTUM_RIBBONS';
 export function HelixChronoMatrix({
     headline = "STRATA",
     className = "",
+    lowPower = false,
 }: HelixChronoMatrixProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -73,8 +75,8 @@ export function HelixChronoMatrix({
     // Initialize stratified 3D ribbon fibers and traveling particles
     const initTopology = useCallback((width: number, height: number) => {
         const rings: FiberRing[] = [];
-        const ringCount = 28;
-        const pointsPerRing = 120;
+        const ringCount = lowPower ? 16 : 28;
+        const pointsPerRing = lowPower ? 72 : 120;
 
         for (let r = 0; r < ringCount; r++) {
             const progress = r / ringCount;
@@ -107,7 +109,7 @@ export function HelixChronoMatrix({
 
         // Initialize moving particles along the lines
         const particles: Particle[] = [];
-        const particleCount = 45;
+        const particleCount = lowPower ? 18 : 45;
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 ringIndex: Math.floor(Math.random() * ringCount),
@@ -117,7 +119,7 @@ export function HelixChronoMatrix({
             });
         }
         particlesRef.current = particles;
-    }, []);
+    }, [lowPower]);
 
     // Canvas Resize Observer
     useEffect(() => {
@@ -131,7 +133,7 @@ export function HelixChronoMatrix({
         const resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 const rect = entry.contentRect;
-                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                const dpr = Math.min(window.devicePixelRatio || 1, lowPower ? 1.25 : 2);
 
                 dimensionsRef.current = { width: rect.width, height: rect.height };
                 canvas.width = Math.floor(rect.width * dpr);
@@ -170,27 +172,52 @@ export function HelixChronoMatrix({
 
         let animId = 0;
         let time = 0;
+        let lastFrameTime = 0;
+        let isInView = false;
+        let pageVisible = !document.hidden;
+        const frameInterval = 1000 / (lowPower ? 30 : 60);
+        const container = containerRef.current;
+        let render: FrameRequestCallback;
 
-        const render = () => {
-            if (!isRunning) {
+        const scheduleRender = () => {
+            if (isRunning && isInView && pageVisible && !animId) {
                 animId = requestAnimationFrame(render);
+            }
+        };
+
+        render = (currentTime: number) => {
+            animId = 0;
+            if (!isRunning || !isInView || !pageVisible) return;
+
+            if (currentTime - lastFrameTime < frameInterval) {
+                scheduleRender();
                 return;
             }
 
-            time += 0.012;
+            const frameScale = lastFrameTime === 0
+                ? 1
+                : Math.min((currentTime - lastFrameTime) / (1000 / 60), 2.5);
+            lastFrameTime = currentTime;
+
+            time += 0.012 * frameScale;
             const { width, height } = dimensionsRef.current;
+            if (width <= 0 || height <= 0) {
+                scheduleRender();
+                return;
+            }
             const pointer = pointerRef.current;
             const rings = ringsRef.current;
             const particles = particlesRef.current;
             const trans = topologyTransitionRef.current;
+            const lerpFactor = 1 - Math.pow(0.9, frameScale);
 
             if (trans.progress < 1) {
-                trans.progress = Math.min(1, trans.progress + 0.05);
+                trans.progress = Math.min(1, trans.progress + 0.05 * frameScale);
             }
 
             // Silky smooth mouse interpolation (Lerp)
-            pointer.x += (pointer.targetX - pointer.x) * 0.1;
-            pointer.y += (pointer.targetY - pointer.y) * 0.1;
+            pointer.x += (pointer.targetX - pointer.x) * lerpFactor;
+            pointer.y += (pointer.targetY - pointer.y) * lerpFactor;
 
             const isDark = document.documentElement.classList.contains('dark') || isDarkMode;
             const bgColor = isDark ? '#090a0f' : '#f8fafc';
@@ -205,7 +232,7 @@ export function HelixChronoMatrix({
             // Render fibers
             for (let rIdx = 0; rIdx < rings.length; rIdx++) {
                 const ring = rings[rIdx];
-                ring.angle += ring.rotationSpeed;
+                ring.angle += ring.rotationSpeed * frameScale;
 
                 const points = ring.points;
                 const numPoints = points.length;
@@ -261,13 +288,13 @@ export function HelixChronoMatrix({
                     if (dist < pointer.radius && dist > 0) {
                         const ratio = 1 - dist / pointer.radius;
                         const targetVy = Math.sin(theta + time) * ratio * 15;
-                        pt.vy += (targetVy - pt.vy) * 0.1;
+                        pt.vy += (targetVy - pt.vy) * lerpFactor;
                         pt.excitation = Math.max(pt.excitation, ratio);
                     } else {
-                        pt.vy *= 0.92;
+                        pt.vy *= Math.pow(0.92, frameScale);
                     }
 
-                    pt.excitation *= 0.92;
+                    pt.excitation *= Math.pow(0.92, frameScale);
                     avgExcitation += pt.excitation;
 
                     if (pIdx === 0) {
@@ -301,7 +328,7 @@ export function HelixChronoMatrix({
             // Render Traveling Points along the Lines (Black normally, White when hovered/excited)
             for (let i = 0; i < particles.length; i++) {
                 const p = particles[i];
-                p.progress = (p.progress + p.speed + 1) % 1;
+                p.progress = (p.progress + p.speed * frameScale + 1) % 1;
 
                 const ring = rings[p.ringIndex];
                 if (!ring) continue;
@@ -356,12 +383,36 @@ export function HelixChronoMatrix({
                 ctx.stroke();
             }
 
-            animId = requestAnimationFrame(render);
+            scheduleRender();
         };
 
-        animId = requestAnimationFrame(render);
-        return () => cancelAnimationFrame(animId);
-    }, [isRunning, topology, isDarkMode]);
+        const observer = new IntersectionObserver(([entry]) => {
+            isInView = entry.isIntersecting;
+            if (isInView) scheduleRender();
+            else if (animId) {
+                cancelAnimationFrame(animId);
+                animId = 0;
+            }
+        }, { rootMargin: '120px' });
+        if (container) observer.observe(container);
+
+        const handleVisibilityChange = () => {
+            pageVisible = !document.hidden;
+            if (pageVisible) {
+                lastFrameTime = 0;
+                scheduleRender();
+            } else if (animId) {
+                cancelAnimationFrame(animId);
+                animId = 0;
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => {
+            observer.disconnect();
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            if (animId) cancelAnimationFrame(animId);
+        };
+    }, [isRunning, topology, isDarkMode, lowPower]);
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const container = containerRef.current;

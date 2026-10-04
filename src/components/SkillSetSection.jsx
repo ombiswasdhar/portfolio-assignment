@@ -17,6 +17,7 @@ import {
   AfterEffectsIcon,
 } from './SkillIcons'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import usePowerSaveMode from '../hooks/usePowerSaveMode'
 import { FloatingIconsHero } from '@/components/ui/floating-icons-hero-section'
 import HelixChronoMatrix from '@/components/ui/helix-chrono-matrix'
 import SoftwareLogosSpiral3D from './SoftwareLogosSpiral3D'
@@ -106,6 +107,7 @@ export default function SkillSetSection() {
   const [hoveredApp, setHoveredApp] = useState(null)
   const [isSpiralMode, setIsSpiralMode] = useState(true)
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
+  const isPowerSaveMode = usePowerSaveMode()
 
   return (
     <section
@@ -140,21 +142,23 @@ export default function SkillSetSection() {
               headline=""
               lineColor={isSpiralMode ? 'red' : 'soft-red'}
               transparentBg={true}
+              lowPower={isPowerSaveMode}
               className="w-full h-full !bg-transparent [&_header]:hidden [&_main]:hidden"
             />
           </div>
 
           {/* NedDev Floating Icons Hero Component - Visible in grid mode, seamlessly part of 3D spiral animation in spiral mode */}
-          <FloatingIconsHero
-            className={`absolute inset-0 w-full h-full min-h-0 !h-full !bg-transparent overflow-hidden z-20 pointer-events-none select-none [&>div.relative.z-10]:hidden transition-opacity duration-500 ${
-              isSpiralMode ? 'opacity-0 pointer-events-none' : 'opacity-100'
-            }`}
-            title=""
-            subtitle=""
-            ctaText=""
-            ctaHref="#"
-            icons={floatingAppIcons}
-          />
+          {!isSpiralMode && (
+            <FloatingIconsHero
+              lowPower={isPowerSaveMode}
+              className="absolute inset-0 w-full h-full min-h-0 !h-full !bg-transparent overflow-hidden z-20 pointer-events-none select-none [&>div.relative.z-10]:hidden"
+              title=""
+              subtitle=""
+              ctaText=""
+              ctaHref="#"
+              icons={floatingAppIcons}
+            />
+          )}
 
           {/* ================= TOP ROW: TITLE & CORNER MONOGRAM ================= */}
           <div className="relative z-10 w-full flex items-center justify-center">
@@ -180,6 +184,7 @@ export default function SkillSetSection() {
               <div className="w-full max-w-[1360px] mx-auto animate-fadeIn transition-all duration-500">
                 <SoftwareLogosSpiral3D
                   apps={allAppsList}
+                  isPowerSaveMode={isPowerSaveMode}
                   onIconClick={(clickedApp) => {
                     setIsSpiralMode(false)
                     if (clickedApp?.name) {
@@ -202,7 +207,7 @@ export default function SkillSetSection() {
                         <div className={`transition-all duration-300 group-hover:-translate-y-2 group-hover:scale-110 active:scale-95 ${app.glow}`}>
                           <IconComponent className="w-12 h-12 sm:w-14 sm:h-14 md:w-[58px] md:h-[58px]" />
                         </div>
-                        <span className="font-thunder mt-2 max-w-full text-sm md:text-base font-semibold text-neutral-100 text-center tracking-tight transition-colors group-hover:text-white">{app.name}</span>
+                        <span className="font-fredoka-tag mt-2 max-w-full text-sm md:text-base text-neutral-100 text-center tracking-tight transition-colors group-hover:text-white">{app.name}</span>
                       </div>
                     )
                   })}
@@ -226,7 +231,7 @@ export default function SkillSetSection() {
                         <div className="transition-transform duration-200 group-hover:scale-110">
                           <IconComponent className="w-12 h-12" />
                         </div>
-                        <span className="font-thunder mt-1.5 w-full px-1 text-[15px] font-semibold leading-[1.05] text-white text-center tracking-[0.02em]">
+                        <span className="font-fredoka-tag mt-1.5 w-full px-1 text-[15px] leading-[1.05] text-white text-center tracking-[0.02em]">
                           {app.name}
                         </span>
                       </div>

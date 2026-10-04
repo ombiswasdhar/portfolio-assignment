@@ -87,6 +87,8 @@ function MatCard({ group, config, isVisible, index }) {
       {/* Inner: 3D perspective */}
       <div
         className={`group relative w-full max-w-[370px] rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-700 ease-out hover:-translate-y-3 hover:scale-[1.025] cursor-default select-none ${
+          index % 2 === 0 ? '-rotate-[1.5deg] sm:rotate-0' : 'rotate-[1.5deg] sm:rotate-0'
+        } ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
         style={{

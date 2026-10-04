@@ -179,6 +179,19 @@
   font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+@font-face {
+  font-family: 'Fredoka Skill Tags';
+  src: url('/fonts/Fredoka-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-fredoka-tag {
+  font-family: 'Fredoka Skill Tags', 'Fredoka', sans-serif;
+  font-weight: 600;
+}
+
 .font-script {
   font-family: 'Caveat', cursive;
 }

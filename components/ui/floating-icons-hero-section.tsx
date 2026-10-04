@@ -17,15 +17,17 @@ export interface FloatingIconsHeroProps {
   ctaText: string;
   ctaHref: string;
   icons: IconProps[];
+  lowPower?: boolean;
 }
 
 const Icon = ({
-  mouseX, mouseY, iconData, index,
+  mouseX, mouseY, iconData, index, lowPower,
 }: {
   mouseX: React.MutableRefObject<number>;
   mouseY: React.MutableRefObject<number>;
   iconData: IconProps;
   index: number;
+  lowPower: boolean;
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -34,6 +36,8 @@ const Icon = ({
   const springY = useSpring(y, { stiffness: 300, damping: 20 });
 
   React.useEffect(() => {
+    if (lowPower) return undefined;
+
     const handleMouseMove = () => {
       if (ref.current) {
         const rect = ref.current.getBoundingClientRect();
@@ -54,7 +58,7 @@ const Icon = ({
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [x, y, mouseX, mouseY]);
+  }, [x, y, mouseX, mouseY, lowPower]);
 
   return (
     <motion.div ref={ref} key={iconData.id} style={{ x: springX, y: springY }}
@@ -62,8 +66,8 @@ const Icon = ({
       transition={{ delay: index * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={cn('absolute', iconData.className)}>
       <motion.div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 p-3 rounded-3xl shadow-xl bg-card/80 backdrop-blur-md border border-border/10"
-        animate={{ y: [0, -8, 0, 8, 0], x: [0, 6, 0, -6, 0], rotate: [0, 5, 0, -5, 0] }}
-        transition={{ duration: 5 + Math.random() * 5, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}>
+        animate={lowPower ? { y: 0, x: 0, rotate: 0 } : { y: [0, -8, 0, 8, 0], x: [0, 6, 0, -6, 0], rotate: [0, 5, 0, -5, 0] }}
+        transition={lowPower ? { duration: 0.4, delay: index * 0.04 } : { duration: 5 + Math.random() * 5, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}>
         <iconData.icon className="w-8 h-8 md:w-10 md:h-10 text-foreground" />
       </motion.div>
     </motion.div>
@@ -73,7 +77,7 @@ const Icon = ({
 const FloatingIconsHero = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & FloatingIconsHeroProps
->(({ className, title, subtitle, ctaText, ctaHref, icons, ...props }, ref) => {
+>(({ className, title, subtitle, ctaText, ctaHref, icons, lowPower = false, ...props }, ref) => {
   const mouseX = React.useRef(0);
   const mouseY = React.useRef(0);
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -85,7 +89,7 @@ const FloatingIconsHero = React.forwardRef<
       className={cn('relative w-full h-screen min-h-[700px] flex items-center justify-center overflow-hidden bg-background', className)} {...props}>
       <div className="absolute inset-0 w-full h-full">
         {icons.map((iconData, index) => (
-          <Icon key={iconData.id} mouseX={mouseX} mouseY={mouseY} iconData={iconData} index={index} />
+          <Icon key={iconData.id} mouseX={mouseX} mouseY={mouseY} iconData={iconData} index={index} lowPower={lowPower} />
         ))}
       </div>
       <div className="relative z-10 text-center px-4">

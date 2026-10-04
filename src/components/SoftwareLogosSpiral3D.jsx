@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react'
 export default function SoftwareLogosSpiral3D({
   apps,
   onIconClick,
+  isPowerSaveMode = false,
   className = '',
 }) {
   const containerRef = useRef(null)
@@ -34,7 +35,7 @@ export default function SoftwareLogosSpiral3D({
     let isInView = false
     let isScrolling = false
     let scrollTimeout = 0
-    const frameInterval = 1000 / 60
+    const frameInterval = 1000 / (isPowerSaveMode ? 30 : 60)
     const container = containerRef.current
 
     const scheduleLoop = () => {
@@ -110,7 +111,7 @@ export default function SoftwareLogosSpiral3D({
         animFrameRef.current = null
       }
     }
-  }, [])
+  }, [isPowerSaveMode])
 
   // Mouse move handler for interactive 3D pitch/yaw parallax
   const handleMouseMove = (e) => {
@@ -148,7 +149,10 @@ export default function SoftwareLogosSpiral3D({
   const totalApps = apps.length
   // Keep every logo in the main helix, but use fewer repeated companions.
   // This cuts down DOM updates and layered shadows while preserving the orbit effect.
-  const companionApps = useMemo(() => apps.filter((_, index) => index % 4 === 0), [apps])
+  const companionApps = useMemo(
+    () => apps.filter((_, index) => index % (isPowerSaveMode ? 6 : 4) === 0),
+    [apps, isPowerSaveMode],
+  )
 
   // ================= 1. PRIMARY INNER SPIRAL ICONS =================
   const primaryItems = useMemo(() => {
@@ -226,6 +230,8 @@ export default function SoftwareLogosSpiral3D({
   // ================= 3. WIDE SIDE-FLANK FLOATING ICONS (SIDES OF SCREEN) =================
   // Orbiting wide to populate the left and right sides of the screen so it looks completely filled!
   const sideFlankFloatingItems = useMemo(() => {
+    if (isPowerSaveMode) return []
+
     return companionApps.map((app, index) => {
       // Staggered distribution across the outer sides
       const progress = (index * 0.61803398875) % 1 // Golden ratio distribution for natural organic spread
@@ -266,7 +272,7 @@ export default function SoftwareLogosSpiral3D({
         tier: 'side',
       }
     })
-  }, [companionApps, angle, radiusSides, heightSpan, isMobile])
+  }, [companionApps, angle, radiusSides, heightSpan, isMobile, isPowerSaveMode])
 
   // Combine three tiers into a lighter field (main icons plus fewer repeats).
   const all3DItems = useMemo(() => {
@@ -303,7 +309,7 @@ export default function SoftwareLogosSpiral3D({
       >
         {/* Outer Rotating Red Spiral Orbital Ring */}
         <div
-          className="absolute inset-0 rounded-full border border-red-500/50 opacity-60 animate-spin-slow shadow-[0_0_24px_rgba(239,68,68,0.35)]"
+          className={`absolute inset-0 rounded-full border border-red-500/50 opacity-60 ${isPowerSaveMode ? '' : 'animate-spin-slow'} shadow-[0_0_24px_rgba(239,68,68,0.35)]`}
           style={{
             transform: 'rotateX(72deg) scale(1.15)',
           }}
@@ -323,7 +329,7 @@ export default function SoftwareLogosSpiral3D({
           }}
         />
         {/* Core Glowing Red Axis Light Beam with smooth breathing pulse */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-gradient-to-tr from-red-600/35 via-rose-500/20 to-transparent blur-3xl pointer-events-none animate-pulse" />
+        <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${isPowerSaveMode ? 'w-56 h-56 blur-2xl' : 'w-80 h-80 blur-3xl animate-pulse'} rounded-full bg-gradient-to-tr from-red-600/35 via-rose-500/20 to-transparent pointer-events-none`} />
       </div>
 
       {/* ================= 3D PERSPECTIVE ORBITAL STAGE ================= */}
@@ -344,11 +350,13 @@ export default function SoftwareLogosSpiral3D({
 
           // Automatic brand glow as icons orbit towards the foreground
           const frontRatio = Math.max(0, (zNorm - 0.45) / 0.55)
-          const autoGlowShadow = app.color && frontRatio > 0.08
-            ? (isHovered
-                ? `0 22px 48px ${app.color}99, 0 0 24px ${app.color}77`
-                : `0 ${Math.round(6 + frontRatio * 14)}px ${Math.round(14 + frontRatio * 24)}px ${app.color}${Math.round(frontRatio * 110).toString(16).padStart(2, '0')}, 0 0 ${Math.round(8 + frontRatio * 14)}px ${app.color}${Math.round(frontRatio * 80).toString(16).padStart(2, '0')}`)
-            : (isHovered && app.color ? `0 18px 40px ${app.color}77` : undefined)
+          const autoGlowShadow = isPowerSaveMode
+            ? (isHovered && app.color ? `0 8px 18px ${app.color}66` : undefined)
+            : app.color && frontRatio > 0.08
+              ? (isHovered
+                  ? `0 22px 48px ${app.color}99, 0 0 24px ${app.color}77`
+                  : `0 ${Math.round(6 + frontRatio * 14)}px ${Math.round(14 + frontRatio * 24)}px ${app.color}${Math.round(frontRatio * 110).toString(16).padStart(2, '0')}, 0 0 ${Math.round(8 + frontRatio * 14)}px ${app.color}${Math.round(frontRatio * 80).toString(16).padStart(2, '0')}`)
+              : (isHovered && app.color ? `0 18px 40px ${app.color}77` : undefined)
 
           return (
             <div
@@ -375,20 +383,22 @@ export default function SoftwareLogosSpiral3D({
             >
               {/* Icon Container with dynamic 3D depth shadow & automatic rotating brand glow */}
               <div
-                className={`relative rounded-2xl transition-all duration-300 ${
+                className={`relative rounded-2xl ${isPowerSaveMode ? 'transition-none' : 'transition-all duration-300'} ${
                   isSide
                     ? 'p-1.5 sm:p-2 border border-red-500/15 shadow-[0_8px_20px_rgba(0,0,0,0.08)]'
                     : isMid
                     ? 'p-1.5 sm:p-2 border border-neutral-900/10'
                     : 'p-1.5 sm:p-2'
                 } ${
-                  isHovered
-                    ? 'shadow-[0_22px_48px_rgba(220,38,38,0.4)] ring-2 ring-red-500 -translate-y-1'
-                    : frontRatio > 0.45
-                    ? 'border border-red-500/35 ring-1 ring-red-500/25 shadow-[0_12px_28px_rgba(0,0,0,0.18)]'
-                    : zNorm > 0.65
-                    ? 'shadow-[0_12px_28px_rgba(0,0,0,0.14)]'
-                    : 'shadow-[0_4px_12px_rgba(0,0,0,0.06)]'
+                  isPowerSaveMode
+                    ? (isHovered ? 'shadow-sm ring-1 ring-red-500/70 -translate-y-1' : 'border border-neutral-900/10 shadow-sm')
+                    : isHovered
+                      ? 'shadow-[0_22px_48px_rgba(220,38,38,0.4)] ring-2 ring-red-500 -translate-y-1'
+                      : frontRatio > 0.45
+                        ? 'border border-red-500/35 ring-1 ring-red-500/25 shadow-[0_12px_28px_rgba(0,0,0,0.18)]'
+                        : zNorm > 0.65
+                          ? 'shadow-[0_12px_28px_rgba(0,0,0,0.14)]'
+                          : 'shadow-[0_4px_12px_rgba(0,0,0,0.06)]'
                 }`}
                 style={{
                   backgroundColor: zNorm > 0.5
@@ -426,11 +436,7 @@ export default function SoftwareLogosSpiral3D({
                       : 'opacity-0 scale-90'
                   }`}
                 >
-                  <span className="px-2.5 py-0.5 rounded-full bg-neutral-950/85 backdrop-blur-md text-white text-[10px] sm:text-xs font-medium tracking-tight shadow-md whitespace-nowrap flex items-center gap-1.5">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: app.color || '#BA1F1F' }}
-                    />
+                  <span className="font-fredoka-tag px-2.5 py-0.5 rounded-full bg-neutral-950/85 backdrop-blur-md text-white text-[10px] sm:text-xs tracking-tight shadow-md whitespace-nowrap flex items-center">
                     {app.name}
                   </span>
 
