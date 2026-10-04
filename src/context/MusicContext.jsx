@@ -4,22 +4,50 @@ import React, { createContext, useContext, useState, useRef, useEffect, useCallb
 
 const MusicContext = createContext(null)
 
-// Official Studio Instrumental for Sunflower (Spider-Man: Into the Spider-Verse)
-// Plays right from the beginning (0:00) with complete iconic intro beat and melody
-export const AUDIO_TRACK_URL = '/sunflower.m4a'
+// Multi-track playlist: Sunflower (Spider-Verse) & NOBLE (F3miii)
+export const TRACKS = [
+  {
+    id: 'sunflower',
+    title: 'Sunflower',
+    subtitle: 'Spider-Verse • Instrumental',
+    artist: 'Post Malone & Swae Lee',
+    src: '/sunflower.m4a',
+    cover: '/sunflower_cover.jpg',
+    appleMusicEmbedUrl: 'https://embed.music.apple.com/us/album/sunflower-spider-man-into-the-spider-verse/1438399551?i=1438399556',
+    appleMusicUrl: 'https://music.apple.com/us/album/sunflower-spider-man-into-the-spider-verse/1438399551?i=1438399556',
+    duration: 158,
+  },
+  {
+    id: 'noble',
+    title: 'NOBLE',
+    subtitle: 'F3miii • Instrumental (prod. sparse)',
+    artist: 'F3miii',
+    src: '/noble.m4a',
+    cover: '/noble_cover.jpg',
+    appleMusicEmbedUrl: 'https://embed.music.apple.com/us/album/noble/1878172174?i=1878172181',
+    appleMusicUrl: 'https://music.apple.com/us/album/noble/1878172174?i=1878172181',
+    duration: 186,
+  },
+]
+
+export const AUDIO_TRACK_URL = TRACKS[0].src
 export const APPLE_MUSIC_STREAM_URL = AUDIO_TRACK_URL
 
 export function MusicProvider({ children }) {
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
+  const currentTrack = TRACKS[currentTrackIndex]
+
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(158)
+  const [duration, setDuration] = useState(TRACKS[0].duration)
   const [volume, setVolume] = useState(0.85)
   const [isAutoplayBlocked, setIsAutoplayBlocked] = useState(false)
 
   const audioRef = useRef(null)
   const userPausedRef = useRef(false)
   const isPlayingRef = useRef(false)
+  const isFirstRenderRef = useRef(true)
 
   // Keep isPlayingRef in sync with state
   useEffect(() => {
@@ -32,6 +60,34 @@ export function MusicProvider({ children }) {
       audioRef.current.volume = volume
     }
   }, [volume])
+
+  // Track switching effect (seamless transition to new track)
+  useEffect(() => {
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false
+      return
+    }
+
+    if (!audioRef.current) return
+    const track = TRACKS[currentTrackIndex]
+    userPausedRef.current = false
+    audioRef.current.src = track.src
+    audioRef.current.currentTime = 0
+    setCurrentTime(0)
+    audioRef.current.volume = volume
+    audioRef.current.muted = false
+
+    audioRef.current
+      .play()
+      .then(() => {
+        setIsPlaying(true)
+        setIsAutoplayBlocked(false)
+      })
+      .catch((err) => {
+        console.warn('Playback error on track change:', err)
+        setIsPlaying(false)
+      })
+  }, [currentTrackIndex, volume])
 
   // Robust AutoPlay on Launch & Refresh
   useEffect(() => {
@@ -156,13 +212,24 @@ export function MusicProvider({ children }) {
       .catch(() => {})
   }, [volume])
 
-  const playPrevious = useCallback(() => {
-    restartTrack()
-  }, [restartTrack])
-
   const playNext = useCallback(() => {
-    restartTrack()
-  }, [restartTrack])
+    setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length)
+  }, [])
+
+  const playPrevious = useCallback(() => {
+    if (audioRef.current && audioRef.current.currentTime > 3) {
+      audioRef.current.currentTime = 0
+      setCurrentTime(0)
+      return
+    }
+    setCurrentTrackIndex((prev) => (prev - 1 + TRACKS.length) % TRACKS.length)
+  }, [])
+
+  const selectTrack = useCallback((index) => {
+    if (index >= 0 && index < TRACKS.length) {
+      setCurrentTrackIndex(index)
+    }
+  }, [])
 
   const handleTimeUpdate = () => {
     if (!audioRef.current) return
@@ -171,14 +238,12 @@ export function MusicProvider({ children }) {
 
   const handleLoadedMetadata = () => {
     if (!audioRef.current) return
-    setDuration(audioRef.current.duration || 158)
+    setDuration(audioRef.current.duration || currentTrack.duration)
   }
 
   const handleEnded = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0
-      audioRef.current.play().catch(() => setIsPlaying(false))
-    }
+    // Auto advance to next song in playlist
+    playNext()
   }
 
   return (
@@ -190,20 +255,23 @@ export function MusicProvider({ children }) {
         duration,
         volume,
         isAutoplayBlocked,
+        tracks: TRACKS,
+        currentTrackIndex,
+        currentTrack,
         setVolume,
         togglePlay,
         toggleMute,
         restartTrack,
         playPrevious,
         playNext,
+        selectTrack,
       }}
     >
-      {/* Global Audio Element for Sunflower Instrumental starting from the very beginning (0:00) */}
+      {/* Global Audio Element */}
       <audio
         ref={audioRef}
-        src={AUDIO_TRACK_URL}
+        src={currentTrack.src}
         preload="auto"
-        loop
         playsInline
         onPlay={() => {
           setIsPlaying(true)
@@ -221,10 +289,7 @@ export function MusicProvider({ children }) {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
-      >
-        <source src="/sunflower.m4a" type="audio/mp4" />
-        <source src="/sunflower_lofi.mp3" type="audio/mpeg" />
-      </audio>
+      />
 
       {/* Floating Gentle Prompt if Browser Blocks Autoplay on Refresh */}
       {isAutoplayBlocked && !isPlaying && (
@@ -240,7 +305,7 @@ export function MusicProvider({ children }) {
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#DE2020]" />
           </span>
           <span className="text-xs font-semibold tracking-wide">
-            Click anywhere to play Sunflower ♫
+            Click anywhere to play {currentTrack.title} ♫
           </span>
         </div>
       )}

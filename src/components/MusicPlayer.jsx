@@ -24,13 +24,26 @@ export default function MusicPlayer() {
     currentTime,
     duration,
     volume,
+    currentTrack,
+    currentTrackIndex,
+    tracks,
     setVolume,
     togglePlay,
     toggleMute,
     restartTrack,
     playPrevious,
     playNext,
+    selectTrack,
   } = useMusic()
+
+  const track = currentTrack || (tracks && tracks[0]) || {
+    title: 'Sunflower',
+    subtitle: 'Spider-Verse • Instrumental',
+    artist: 'Post Malone & Swae Lee',
+    cover: sunflowerCover,
+    appleMusicEmbedUrl: 'https://embed.music.apple.com/us/album/sunflower-spider-man-into-the-spider-verse/1438399551?i=1438399556',
+    appleMusicUrl: 'https://music.apple.com/us/album/sunflower-spider-man-into-the-spider-verse/1438399551?i=1438399556',
+  }
 
   const location = useLocation()
   const isContactPage =
@@ -205,10 +218,10 @@ export default function MusicPlayer() {
           <div
             onClick={togglePlay}
             className="relative w-9 h-9 shrink-0 cursor-pointer group active:scale-90 transition-transform"
-            title={isPlaying ? 'Pause Sunflower' : 'Play Sunflower'}
+            title={isPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
             role="button"
             tabIndex={0}
-            aria-label={isPlaying ? 'Pause Sunflower' : 'Play Sunflower'}
+            aria-label={isPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
           >
             {/* Spinning CD Disc */}
             <div
@@ -220,11 +233,11 @@ export default function MusicPlayer() {
             >
               {/* Cover Art Surface */}
               <img
-                src={sunflowerCover}
+                src={track.cover}
                 onError={(e) => {
                   e.currentTarget.src = SUNFLOWER_COVER_URL
                 }}
-                alt="Sunflower CD Disc"
+                alt={`${track.title} CD Disc`}
                 className="w-full h-full object-cover select-none pointer-events-none"
               />
 
@@ -262,7 +275,7 @@ export default function MusicPlayer() {
           <div className="flex flex-col justify-center min-w-0 flex-1 px-3 font-fredoka">
             <div className="flex items-center gap-1.5">
               <span className={`text-[12.5px] font-bold tracking-tight leading-none truncate ${isLightBackground ? 'text-neutral-900' : 'text-white'}`}>
-                Sunflower
+                {track.title}
               </span>
               {/* Mini Audio Equalizer Animation */}
               <div className="flex items-end gap-0.5 h-2.5 w-3 shrink-0 opacity-80" aria-hidden="true">
@@ -280,8 +293,8 @@ export default function MusicPlayer() {
                 />
               </div>
             </div>
-              <span className={`text-[9.5px] font-fredoka tracking-tight leading-none truncate mt-0.5 tabular-nums ${isLightBackground ? 'text-neutral-600' : 'text-neutral-400'}`}>
-              Spider-Verse • Instrumental • {formatTime(currentTime)}
+            <span className={`text-[9.5px] font-fredoka tracking-tight leading-none truncate mt-0.5 tabular-nums ${isLightBackground ? 'text-neutral-600' : 'text-neutral-400'}`}>
+              {track.subtitle} • {formatTime(currentTime)}
             </span>
           </div>
 
@@ -398,14 +411,14 @@ export default function MusicPlayer() {
               />
             </div>
 
-            {/* (1) Spinning Sunflower CD Disc */}
+            {/* (1) Spinning CD Disc */}
             <div
               onClick={togglePlay}
               className="relative w-10 h-10 shrink-0 cursor-pointer group active:scale-90 transition-transform mt-0.5"
-              title={isPlaying ? 'Pause Sunflower' : 'Play Sunflower'}
+              title={isPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
               role="button"
               tabIndex={0}
-              aria-label={isPlaying ? 'Pause Sunflower' : 'Play Sunflower'}
+              aria-label={isPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
             >
               <div
                 className={`w-full h-full rounded-full overflow-hidden relative border ${
@@ -419,11 +432,11 @@ export default function MusicPlayer() {
                 }}
               >
                 <img
-                  src={sunflowerCover}
+                  src={track.cover}
                   onError={(e) => {
                     e.currentTarget.src = SUNFLOWER_COVER_URL
                   }}
-                  alt="Sunflower CD Disc"
+                  alt={`${track.title} CD Disc`}
                   className="w-full h-full object-cover select-none pointer-events-none"
                 />
                 {/* Holographic Iridescent Sheen */}
@@ -479,14 +492,14 @@ export default function MusicPlayer() {
                   isLightBackground ? 'text-neutral-900' : 'text-white'
                 }`}
               >
-                Sunflower
+                {track.title}
               </span>
               <span
                 className={`text-[8px] font-fredoka tracking-tight leading-none truncate mt-0.5 tabular-nums ${
                   isLightBackground ? 'text-neutral-500' : 'text-neutral-400'
                 }`}
               >
-                Instrumental • {formatTime(currentTime)}
+                {track.title === 'Sunflower' ? 'Instrumental' : 'F3miii'} • {formatTime(currentTime)}
               </span>
             </div>
 
@@ -633,11 +646,11 @@ export default function MusicPlayer() {
               </div>
               <div className="flex items-center gap-1">
                 <a
-                  href="https://music.apple.com/us/album/sunflower-spider-man-into-the-spider-verse/1438399551?i=1438399556"
+                  href={track.appleMusicUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[9.5px] text-[#FA243C] hover:underline font-semibold flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#FA243C]/10 transition-colors"
-                  title="Open in Apple Music App"
+                  title={`Open ${track.title} in Apple Music App`}
                 >
                   Open App ↗
                 </a>
@@ -668,8 +681,8 @@ export default function MusicPlayer() {
                   display: 'block',
                 }}
                 sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
-                src="https://embed.music.apple.com/us/album/sunflower-spider-man-into-the-spider-verse/1438399551?i=1438399556"
-                title="Sunflower by Post Malone & Swae Lee on Apple Music"
+                src={track.appleMusicEmbedUrl}
+                title={`${track.title} on Apple Music`}
               />
             </div>
           </div>
