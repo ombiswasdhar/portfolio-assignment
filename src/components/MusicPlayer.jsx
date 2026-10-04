@@ -171,7 +171,7 @@ export default function MusicPlayer() {
           </div>
 
           {/* 2. Track Info & Dynamic Equalizer */}
-          <div className="flex flex-col justify-center min-w-0 flex-1 px-3">
+          <div className="flex flex-col justify-center min-w-0 flex-1 px-3 font-fredoka">
             <div className="flex items-center gap-1.5">
               <span className="text-[12.5px] font-bold text-white tracking-tight leading-none truncate">
                 Sunflower
@@ -192,7 +192,7 @@ export default function MusicPlayer() {
                 />
               </div>
             </div>
-            <span className="text-[9.5px] text-neutral-400 font-mono tracking-tight leading-none truncate mt-0.5">
+              <span className="text-[9.5px] text-neutral-400 font-fredoka tracking-tight leading-none truncate mt-0.5 tabular-nums">
               Spider-Verse • {formatTime(currentTime)}
             </span>
           </div>
@@ -252,7 +252,7 @@ export default function MusicPlayer() {
       {/* ========================================================================= */}
       {isPlaying && isPastHero && (
         <div
-          className="hidden md:flex fixed bottom-6 left-6 z-50 select-none font-sans items-center gap-3 px-4 py-2.5 rounded-full bg-white/95 dark:bg-[#111116]/95 backdrop-blur-xl border border-black/10 dark:border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.22)] animate-fadeIn transition-all duration-300"
+          className="hidden md:flex fixed bottom-6 left-6 z-50 select-none font-fredoka items-center gap-3 px-4 py-2.5 rounded-full bg-white/95 dark:bg-[#111116]/95 backdrop-blur-xl border border-black/10 dark:border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.22)] animate-fadeIn transition-all duration-300"
           onMouseLeave={() => setShowVolumeSlider(false)}
           role="region"
           aria-label="Sunflower Instrumental Player Controls"
