@@ -96,9 +96,9 @@ export default function Contact() {
       </div>
 
       {/* Main Content Container */}
-      <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-28 sm:pt-36 pb-20 flex-1 flex flex-col justify-center">
+      <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-48 sm:pt-52 md:pt-40 lg:pt-36 pb-20 flex-1 flex flex-col justify-start md:justify-center">
         {/* Ruled Black Paper Canvas */}
-        <div className="relative w-full rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 transition-all">
+        <div className="relative w-full rounded-2xl sm:rounded-3xl p-4 sm:p-8 lg:p-12 transition-all mt-2 sm:mt-0">
           <div className="relative z-10 w-full flex flex-col">
             {/* Topmost baseline ruled line */}
             <div className="w-full h-px bg-black/15" />

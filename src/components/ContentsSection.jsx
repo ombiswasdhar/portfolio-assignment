@@ -33,6 +33,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import Auralis from '@/components/ui/auralis'
 import MarqueeBar from './MarqueeBar'
+import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
 
 function CyclingProjectImage({ images, alt, className, onImageClick }) {
   const [imageIndex, setImageIndex] = React.useState(0)
@@ -428,8 +429,10 @@ export default function ContentsSection() {
       <div id="work" data-theme="light" className="relative w-full ca-dotted-grid-bg text-neutral-900 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] scroll-mt-14 pb-0">
         <div className="ca-dotted-grid-pattern" aria-hidden="true" />
 
-        <section id="featured-works" className="relative z-10 w-full pt-12 sm:pt-16 pb-8 sm:pb-12 px-4 sm:px-8 scroll-mt-16">
-          <div ref={headerRef} className={`mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-1000 ${isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section id="featured-works" className="relative z-10 w-full pt-16 sm:pt-24 md:pt-28 pb-12 sm:pb-20 md:pb-24 px-4 sm:px-8 scroll-mt-16 overflow-hidden min-h-[440px] sm:min-h-[500px] flex items-center justify-center">
+          {/* Dynamic Floating Background Elements */}
+          <FeaturedWorksFloatingElements />
+          <div ref={headerRef} className={`relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-1000 ${isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div ref={handwritingTriggerRef} className="flex flex-col items-center">
               <div className="font-myfont text-3xl sm:text-4xl text-neutral-800 font-medium tracking-wide flex items-center justify-center min-h-[2.5rem] sm:min-h-[3rem]">
                 {isHandwritingInView ? (
