@@ -221,6 +221,12 @@
   animation: spin-slow 8s linear infinite !important;
 }
 
+@keyframes music-disc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Keep continuously rotating hero artwork on a cheap compositor layer. */
 .hero-spin-layer {
   backface-visibility: hidden;

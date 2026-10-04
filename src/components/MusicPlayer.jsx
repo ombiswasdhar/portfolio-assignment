@@ -126,7 +126,7 @@ export default function MusicPlayer() {
             <div
               className="w-full h-full rounded-full overflow-hidden relative border border-white/30 shadow-[0_2px_8px_rgba(0,0,0,0.8)] will-change-transform"
               style={{
-                animation: 'spin 6s linear infinite',
+                animation: 'music-disc-spin 6s linear infinite',
                 animationPlayState: isPlaying ? 'running' : 'paused',
               }}
             >
