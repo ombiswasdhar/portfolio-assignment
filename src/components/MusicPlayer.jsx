@@ -81,12 +81,12 @@ export default function MusicPlayer() {
       {/* Inspired by Apple Dynamic Island & user reference pin: https://pin.it/2rGTJh73E */}
       {/* ========================================================================= */}
       <div
-        className={`fixed top-12 left-1/2 -translate-x-1/2 z-50 md:hidden select-none transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
+        className={`fixed left-1/2 -translate-x-1/2 z-50 md:hidden select-none transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
           isPastHero
             ? 'translate-y-0 opacity-100 pointer-events-auto'
             : '-translate-y-full opacity-0 pointer-events-none'
         }`}
-        style={{ width: '312px', height: '56px' }}
+        style={{ top: isLightBackground ? '84px' : '48px', width: '312px', height: '56px' }}
         role="region"
         aria-label="Mobile Music Player Notch"
       >
