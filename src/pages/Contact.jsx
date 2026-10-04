@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import ContactFloatingElements from '../components/ContactFloatingElements'
 
 export default function Contact() {
   const [toastMessage, setToastMessage] = useState('')
@@ -80,6 +81,9 @@ export default function Contact() {
     <div className="relative min-h-screen bg-white text-neutral-900 selection:bg-[#DE2020] selection:text-white flex flex-col justify-between overflow-x-hidden">
       {/* Light-theme Header Nav */}
       <Nav />
+
+      {/* Floating Background Stickers & Doodles */}
+      <ContactFloatingElements />
 
 
 
