@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import aboutFullFrameCanvas from '../assets/about/about_full_frame_canvas.png'
 import aboutLeftCardCanvas from '../assets/about/about_left_card_canvas.png'
+import pixelHandPointer from '../assets/about/pixel_hand_pointer.png'
 import AnimatedCollage from './AnimatedCollage'
 import AboutCharacters from './AboutCharacters'
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -229,14 +230,31 @@ export default function AboutSection() {
 
         {/* ================= MOBILE VIEW (Stacked column in original form) ================= */}
         <div className="md:hidden flex flex-col items-center gap-6 sm:gap-8 w-full max-w-[580px] mx-auto">
-          {/* Top 'portfolio' cursive text with mobile tap hint */}
-          <div className="flex flex-col items-center gap-1">
+          {/* Top 'portfolio' cursive text with brutalist tap hint button and pixel pointer hand */}
+          <div className="flex flex-col items-center gap-3 pt-6">
             <span className="font-script text-3xl sm:text-4xl font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
               portfolio
             </span>
-            <span className="text-[10px] font-fredoka uppercase tracking-widest text-neutral-400/90">
-              Tap any paragraph to zoom in &bull; Tap again to close
-            </span>
+            <div className="relative inline-flex items-center justify-center gap-2 max-w-full px-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setActiveMobileBubble(prev => (prev === null ? 0 : null))
+                }}
+                className="group relative z-10 inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-none border border-black bg-white hover:bg-black text-black hover:text-white transition-all duration-200 cursor-pointer select-none no-underline shadow-[3px_3px_0px_#000000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px]"
+                title="Tap any paragraph to zoom in"
+              >
+                <span className="font-myfont text-[15px] sm:text-[17px] tracking-wide leading-none pt-0.5 text-center">
+                  tap any paragraph to zoom in
+                </span>
+              </button>
+              <img
+                src={pixelHandPointer}
+                alt="Pointer hand"
+                className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0 animate-pixel-tap drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] [image-rendering:pixelated] pointer-events-none select-none"
+              />
+            </div>
           </div>
 
           {/* Left Card - Clean, authentic Figma art with animated characters & tap-to-zoom bubbles */}
