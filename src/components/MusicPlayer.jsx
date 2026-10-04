@@ -33,6 +33,7 @@ export default function MusicPlayer() {
   } = useMusic()
 
   const location = useLocation()
+  const isLightBackground = location.pathname === '/contact'
   const [scrollY, setScrollY] = useState(0)
   const [isPastHero, setIsPastHero] = useState(false)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
@@ -91,7 +92,7 @@ export default function MusicPlayer() {
       >
         {/* Notch Physical Silhouette SVG with Inverted Fillet Wings & OLED Black Fill */}
         <svg
-          className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-[0_12px_28px_rgba(0,0,0,0.85)]"
+          className={`absolute inset-0 w-full h-full pointer-events-none ${isLightBackground ? 'drop-shadow-[0_8px_20px_rgba(0,0,0,0.16)]' : 'drop-shadow-[0_12px_28px_rgba(0,0,0,0.85)]'}`}
           viewBox="0 0 312 56"
           fill="none"
           preserveAspectRatio="none"
@@ -99,12 +100,12 @@ export default function MusicPlayer() {
           {/* Deep OLED Black Fill (Closed Path) */}
           <path
             d="M 0 0 C 8 0 14 6 14 14 L 14 38 C 14 48 22 56 32 56 L 280 56 C 290 56 298 48 298 38 L 298 14 C 298 6 304 0 312 0 Z"
-            fill="#000000"
+            fill={isLightBackground ? '#FFFFFF' : '#000000'}
           />
           {/* Perimeter Glass Rim Stroke (Open across top so it connects seamlessly to the nav bar) */}
           <path
             d="M 0 0 C 8 0 14 6 14 14 L 14 38 C 14 48 22 56 32 56 L 280 56 C 290 56 298 48 298 38 L 298 14 C 298 6 304 0 312 0"
-            stroke="rgba(255, 255, 255, 0.18)"
+            stroke={isLightBackground ? 'rgba(0, 0, 0, 0.16)' : 'rgba(255, 255, 255, 0.18)'}
             strokeWidth="1"
             fill="none"
           />
@@ -124,7 +125,7 @@ export default function MusicPlayer() {
           >
             {/* Spinning CD Disc */}
             <div
-              className="w-full h-full rounded-full overflow-hidden relative border border-white/30 shadow-[0_2px_8px_rgba(0,0,0,0.8)] will-change-transform"
+              className={`w-full h-full rounded-full overflow-hidden relative border ${isLightBackground ? 'border-black/20 shadow-[0_2px_8px_rgba(0,0,0,0.2)]' : 'border-white/30 shadow-[0_2px_8px_rgba(0,0,0,0.8)]'} will-change-transform`}
               style={{
                 animation: 'music-disc-spin 6s linear infinite',
                 animationPlayState: isPlaying ? 'running' : 'paused',
@@ -173,7 +174,7 @@ export default function MusicPlayer() {
           {/* 2. Track Info & Dynamic Equalizer */}
           <div className="flex flex-col justify-center min-w-0 flex-1 px-3 font-fredoka">
             <div className="flex items-center gap-1.5">
-              <span className="text-[12.5px] font-bold text-white tracking-tight leading-none truncate">
+              <span className={`text-[12.5px] font-bold tracking-tight leading-none truncate ${isLightBackground ? 'text-neutral-900' : 'text-white'}`}>
                 Sunflower
               </span>
               {/* Mini Audio Equalizer Animation */}
@@ -192,7 +193,7 @@ export default function MusicPlayer() {
                 />
               </div>
             </div>
-              <span className="text-[9.5px] text-neutral-400 font-fredoka tracking-tight leading-none truncate mt-0.5 tabular-nums">
+              <span className={`text-[9.5px] font-fredoka tracking-tight leading-none truncate mt-0.5 tabular-nums ${isLightBackground ? 'text-neutral-600' : 'text-neutral-400'}`}>
               Spider-Verse • {formatTime(currentTime)}
             </span>
           </div>
@@ -203,7 +204,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={playPrevious}
-              className="w-7 h-7 rounded-full flex items-center justify-center text-neutral-400 hover:text-white active:scale-85 transition-all cursor-pointer hover:bg-white/10"
+              className={`w-7 h-7 rounded-full flex items-center justify-center active:scale-85 transition-all cursor-pointer ${isLightBackground ? 'text-neutral-500 hover:text-black hover:bg-black/5' : 'text-neutral-400 hover:text-white hover:bg-white/10'}`}
               title="Previous track / Restart"
               aria-label="Previous track"
             >
@@ -214,7 +215,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={togglePlay}
-              className="w-8 h-8 rounded-full bg-white/12 hover:bg-white/22 active:scale-90 border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+              className={`w-8 h-8 rounded-full active:scale-90 flex items-center justify-center transition-all cursor-pointer ${isLightBackground ? 'bg-black/[0.06] hover:bg-black/[0.12] border border-black/15 text-neutral-900 shadow-[0_2px_8px_rgba(0,0,0,0.12)]' : 'bg-white/12 hover:bg-white/22 border border-white/20 text-white shadow-[0_2px_8px_rgba(0,0,0,0.5)]'}`}
               title={isPlaying ? 'Pause' : 'Play'}
               aria-label={isPlaying ? 'Pause' : 'Play'}
             >
@@ -229,7 +230,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={playNext}
-              className="w-7 h-7 rounded-full flex items-center justify-center text-neutral-400 hover:text-white active:scale-85 transition-all cursor-pointer hover:bg-white/10"
+              className={`w-7 h-7 rounded-full flex items-center justify-center active:scale-85 transition-all cursor-pointer ${isLightBackground ? 'text-neutral-500 hover:text-black hover:bg-black/5' : 'text-neutral-400 hover:text-white hover:bg-white/10'}`}
               title="Next track"
               aria-label="Next track"
             >
@@ -239,7 +240,7 @@ export default function MusicPlayer() {
         </div>
 
         {/* 4. Slim Glowing Audio Progress Bar along the bottom of the Notch */}
-        <div className="absolute bottom-[2px] left-[32px] right-[32px] h-[1.5px] bg-white/15 rounded-full overflow-hidden pointer-events-none">
+        <div className={`absolute bottom-[2px] left-[32px] right-[32px] h-[1.5px] rounded-full overflow-hidden pointer-events-none ${isLightBackground ? 'bg-black/15' : 'bg-white/15'}`}>
           <div
             className="h-full bg-[#DE2020] transition-all duration-200"
             style={{ width: `${progressPercent}%` }}
