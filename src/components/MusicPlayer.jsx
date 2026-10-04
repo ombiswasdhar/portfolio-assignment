@@ -276,7 +276,7 @@ export default function MusicPlayer() {
               </div>
             </div>
               <span className={`text-[9.5px] font-fredoka tracking-tight leading-none truncate mt-0.5 tabular-nums ${isLightBackground ? 'text-neutral-600' : 'text-neutral-400'}`}>
-              Spider-Verse • {formatTime(currentTime)}
+              Lofi Instrumental • {formatTime(currentTime)}
             </span>
           </div>
 
@@ -481,7 +481,7 @@ export default function MusicPlayer() {
                   isLightBackground ? 'text-neutral-500' : 'text-neutral-400'
                 }`}
               >
-                {formatTime(currentTime)}
+                Lofi • {formatTime(currentTime)}
               </span>
             </div>
 
