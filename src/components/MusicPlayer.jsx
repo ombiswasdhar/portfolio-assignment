@@ -33,7 +33,10 @@ export default function MusicPlayer() {
   } = useMusic()
 
   const location = useLocation()
-  const isLightBackground = location.pathname === '/contact'
+  const isLightBackground =
+    location.pathname === '/contact' ||
+    location.pathname === '/get-in-touch' ||
+    location.pathname === '/connect'
   const [scrollY, setScrollY] = useState(0)
   const [isPastHero, setIsPastHero] = useState(false)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)

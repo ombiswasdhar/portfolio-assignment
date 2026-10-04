@@ -78,7 +78,10 @@ export default function Contact() {
   ]
 
   return (
-    <div className="relative min-h-screen bg-white text-neutral-900 selection:bg-[#DE2020] selection:text-white flex flex-col justify-between overflow-x-hidden">
+    <div className="relative min-h-screen ca-dotted-grid-bg bg-white text-neutral-900 selection:bg-[#DE2020] selection:text-white flex flex-col justify-between overflow-x-hidden">
+      {/* Dotted Grid Paper Pattern */}
+      <div className="ca-dotted-grid-pattern" aria-hidden="true" />
+
       {/* Light-theme Header Nav */}
       <Nav />
 
@@ -182,7 +185,7 @@ export default function Contact() {
       </main>
 
       {/* Clean Paper-style Footer */}
-      <footer className="relative z-10 border-t border-black/10 py-6 text-center text-xs text-neutral-500 font-mono tracking-wider bg-white">
+      <footer className="relative z-10 border-t border-black/10 py-6 text-center text-xs text-neutral-500 font-mono tracking-wider bg-white/70 backdrop-blur-sm">
         OM BISWAS • SHILLONG, INDIA • DESIGN PORTFOLIO
       </footer>
     </div>

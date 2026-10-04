@@ -39,14 +39,16 @@ export default function Nav() {
 
   const MARQUEE_HEIGHT = 36 // height in px of the top MarqueeBar
 
+  const isContactRoute =
+    location.pathname === '/contact' ||
+    location.pathname === '/get-in-touch' ||
+    location.pathname === '/connect'
+
   // Derive active section directly based on route or scroll position
-  const activeSection =
-    location.pathname === '/contact'
-      ? 'contact'
-      : scrollSection
+  const activeSection = isContactRoute ? 'contact' : scrollSection
 
   useEffect(() => {
-    if (location.pathname === '/contact') {
+    if (isContactRoute) {
       setIsLightBg(true)
       return
     }
@@ -151,7 +153,7 @@ export default function Nav() {
     // Handling dedicated route pages
     if (item.id === 'contact') {
       e.preventDefault()
-      if (location.pathname === '/contact') {
+      if (isContactRoute) {
         window.scrollTo({ top: 0, behavior: 'smooth' })
       } else {
         navigate('/contact')

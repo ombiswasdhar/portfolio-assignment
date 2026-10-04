@@ -45,6 +45,8 @@ function App() {
           <Route path="/cv" element={<CV />} />
           <Route path="/resume" element={<CV />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/get-in-touch" element={<Contact />} />
+          <Route path="/connect" element={<Contact />} />
           <Route path="/demo" element={<ConstellationGrid />} />
           <Route path="/constellation" element={<ConstellationGrid />} />
           <Route path="/quantum-swarm" element={<QuantumSwarmDemo />} />
