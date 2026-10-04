@@ -935,16 +935,3 @@ a, button, [role="button"], input, textarea, select, label, summary, .cursor-poi
 .animate-wavy-stroke {
   animation: wavyStrokeMotion 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-
-@keyframes pixelCursorTap {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(-4px, -4px) scale(0.95);
-  }
-}
-
-.animate-pixel-tap {
-  animation: pixelCursorTap 1.2s ease-in-out infinite;
-}
