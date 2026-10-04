@@ -4,16 +4,16 @@ import React, { createContext, useContext, useState, useRef, useEffect, useCallb
 
 const MusicContext = createContext(null)
 
-// 100% Royalty-Free Lofi Instrumental (Mixkit Free License, Safe for Web & Personal/Commercial Use)
-// Plays right from the beginning (0:00) with relaxed chill beats and warm chords
-export const AUDIO_TRACK_URL = '/sunflower_lofi.mp3'
+// Official Studio Instrumental for Sunflower (Spider-Man: Into the Spider-Verse)
+// Plays right from the beginning (0:00) with complete iconic intro beat and melody
+export const AUDIO_TRACK_URL = '/sunflower.m4a'
 export const APPLE_MUSIC_STREAM_URL = AUDIO_TRACK_URL
 
 export function MusicProvider({ children }) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(99)
+  const [duration, setDuration] = useState(158)
   const [volume, setVolume] = useState(0.85)
   const [isAutoplayBlocked, setIsAutoplayBlocked] = useState(false)
 
@@ -198,7 +198,7 @@ export function MusicProvider({ children }) {
         playNext,
       }}
     >
-      {/* Global Audio Element for Royalty-Free Lofi starting from the very beginning (0:00) */}
+      {/* Global Audio Element for Sunflower Instrumental starting from the very beginning (0:00) */}
       <audio
         ref={audioRef}
         src={AUDIO_TRACK_URL}
@@ -222,8 +222,8 @@ export function MusicProvider({ children }) {
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
       >
-        <source src="/sunflower_lofi.mp3" type="audio/mpeg" />
         <source src="/sunflower.m4a" type="audio/mp4" />
+        <source src="/sunflower_lofi.mp3" type="audio/mpeg" />
       </audio>
 
       {/* Floating Gentle Prompt if Browser Blocks Autoplay on Refresh */}
