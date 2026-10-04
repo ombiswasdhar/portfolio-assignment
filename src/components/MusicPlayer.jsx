@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
   Play,
@@ -33,39 +33,115 @@ export default function MusicPlayer() {
   } = useMusic()
 
   const location = useLocation()
-  const isLightBackground =
-    location.pathname === '/contact' ||
-    location.pathname === '/get-in-touch' ||
-    location.pathname === '/connect'
+  const [isLightBackground, setIsLightBackground] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [isPastHero, setIsPastHero] = useState(false)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
-  const [showAppleMusic, setShowAppleMusic] = useState(true)
+  const [showAppleMusic, setShowAppleMusic] = useState(false)
 
-  // Track scroll position and detect when user has scrolled past the hero section
+  const notchRef = useRef(null)
+  const appleMusicRef = useRef(null)
+
+  // Close Apple Music popup when clicking outside on the background or pressing Escape
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-      if (location.pathname !== '/') {
-        setIsPastHero(true)
-        return
-      }
-      const heroEl = document.getElementById('hero') || document.querySelector('section')
-      if (heroEl) {
-        const rect = heroEl.getBoundingClientRect()
-        // Notch activates as soon as the hero card scrolls off-screen
-        setIsPastHero(rect.bottom < 140 || window.scrollY > 380)
-      } else {
-        setIsPastHero(window.scrollY > 380)
+    if (!showAppleMusic) return
+
+    const handlePointerDown = (e) => {
+      if (
+        appleMusicRef.current &&
+        !appleMusicRef.current.contains(e.target) &&
+        notchRef.current &&
+        !notchRef.current.contains(e.target)
+      ) {
+        setShowAppleMusic(false)
       }
     }
 
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll, { passive: true })
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setShowAppleMusic(false)
+      }
+    }
+
+    const timer = setTimeout(() => {
+      document.addEventListener('pointerdown', handlePointerDown)
+      document.addEventListener('keydown', handleKeyDown)
+    }, 50)
+
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
+      clearTimeout(timer)
+      document.removeEventListener('pointerdown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [showAppleMusic])
+
+  // Track scroll position, detect when user has scrolled past the hero section,
+  // and dynamically adapt theme to the background (e.g. Featured Works dotted canvas vs dark sections)
+  useEffect(() => {
+    const isContactPage =
+      location.pathname === '/contact' ||
+      location.pathname === '/get-in-touch' ||
+      location.pathname === '/connect'
+
+    if (isContactPage) {
+      setIsPastHero(true)
+      setIsLightBackground(true)
+      return
+    }
+
+    let animationFrameId = null
+
+    const checkScrollAndBackground = () => {
+      const scroll = window.scrollY
+      setScrollY(scroll)
+
+      if (location.pathname !== '/') {
+        setIsPastHero(true)
+      } else {
+        const heroEl = document.getElementById('hero') || document.querySelector('section')
+        if (heroEl) {
+          const rect = heroEl.getBoundingClientRect()
+          setIsPastHero(rect.bottom < 140 || scroll > 380)
+        } else {
+          setIsPastHero(scroll > 380)
+        }
+      }
+
+      // Dynamic Background Detection: probe whether notch is over a light background
+      const lightElements = document.querySelectorAll('[data-theme="light"], .ca-dotted-grid-bg')
+      const isDesktop = window.innerWidth >= 768
+      // Desktop notch is vertically centered: probe at window.innerHeight * 0.5
+      // Mobile notch is at top of screen: probe at 70px
+      const probeY = isDesktop ? window.innerHeight * 0.5 : 70
+
+      let isOverLight = false
+      for (let i = 0; i < lightElements.length; i++) {
+        const rect = lightElements[i].getBoundingClientRect()
+        if (rect.top <= probeY && rect.bottom >= probeY) {
+          isOverLight = true
+          break
+        }
+      }
+
+      setIsLightBackground((curr) => (curr === isOverLight ? curr : isOverLight))
+    }
+
+    const onScrollOrResize = () => {
+      if (animationFrameId) return
+      animationFrameId = window.requestAnimationFrame(() => {
+        animationFrameId = null
+        checkScrollAndBackground()
+      })
+    }
+
+    checkScrollAndBackground()
+    window.addEventListener('scroll', onScrollOrResize, { passive: true })
+    window.addEventListener('resize', onScrollOrResize, { passive: true })
+
+    return () => {
+      if (animationFrameId) window.cancelAnimationFrame(animationFrameId)
+      window.removeEventListener('scroll', onScrollOrResize)
+      window.removeEventListener('resize', onScrollOrResize)
     }
   }, [location.pathname])
 
@@ -85,10 +161,10 @@ export default function MusicPlayer() {
       {/* Inspired by Apple Dynamic Island & user reference pin: https://pin.it/2rGTJh73E */}
       {/* ========================================================================= */}
       <div
-        className={`fixed left-1/2 -translate-x-1/2 z-50 md:hidden select-none transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
+        className={`fixed left-1/2 -translate-x-1/2 z-50 md:hidden select-none pointer-events-none transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
           isPastHero
-            ? 'translate-y-0 opacity-100 pointer-events-auto'
-            : '-translate-y-full opacity-0 pointer-events-none'
+            ? 'translate-y-0 opacity-100'
+            : '-translate-y-full opacity-0'
         }`}
         style={{ top: isLightBackground ? '84px' : '48px', width: '312px', height: '56px' }}
         role="region"
@@ -96,7 +172,7 @@ export default function MusicPlayer() {
       >
         {/* Notch Physical Silhouette SVG with Inverted Fillet Wings & OLED Black Fill */}
         <svg
-          className={`absolute inset-0 w-full h-full pointer-events-none ${isLightBackground ? 'drop-shadow-[0_8px_20px_rgba(0,0,0,0.16)]' : 'drop-shadow-[0_12px_28px_rgba(0,0,0,0.85)]'}`}
+          className={`absolute inset-0 w-full h-full pointer-events-none transition-all duration-300 ${isLightBackground ? 'drop-shadow-[0_8px_20px_rgba(0,0,0,0.16)]' : 'drop-shadow-[0_12px_28px_rgba(0,0,0,0.85)]'}`}
           viewBox="0 0 312 56"
           fill="none"
           preserveAspectRatio="none"
@@ -105,6 +181,7 @@ export default function MusicPlayer() {
           <path
             d="M 0 0 C 8 0 14 6 14 14 L 14 38 C 14 48 22 56 32 56 L 280 56 C 290 56 298 48 298 38 L 298 14 C 298 6 304 0 312 0 Z"
             fill={isLightBackground ? '#FFFFFF' : '#000000'}
+            className="transition-colors duration-300 ease-out"
           />
           {/* Perimeter Glass Rim Stroke (Open across top so it connects seamlessly to the nav bar) */}
           <path
@@ -112,11 +189,12 @@ export default function MusicPlayer() {
             stroke={isLightBackground ? 'rgba(0, 0, 0, 0.16)' : 'rgba(255, 255, 255, 0.18)'}
             strokeWidth="1"
             fill="none"
+            className="transition-colors duration-300 ease-out"
           />
         </svg>
 
         {/* Notch Inner Content Bar */}
-        <div className="relative z-10 w-full h-full pl-[22px] pr-[18px] flex items-center justify-between">
+        <div className="relative z-10 w-full h-full pl-[22px] pr-[18px] flex items-center justify-between pointer-events-auto">
           
           {/* 1. Small Rotating CD Disc */}
           <div
@@ -261,22 +339,23 @@ export default function MusicPlayer() {
       {/* Physical silhouette with inverted fillet wings connecting to screen edge  */}
       {/* ========================================================================= */}
       <div
-        className={`hidden md:flex fixed left-0 top-1/2 -translate-y-1/2 z-50 select-none items-center transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
+        className={`hidden md:flex fixed left-0 top-1/2 -translate-y-1/2 z-50 select-none items-center pointer-events-none transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
           isPastHero
-            ? 'translate-x-0 opacity-100 pointer-events-auto'
-            : '-translate-x-full opacity-0 pointer-events-none'
+            ? 'translate-x-0 opacity-100'
+            : '-translate-x-full opacity-0'
         }`}
         role="region"
         aria-label="Desktop Vertical Music Player Notch"
       >
         {/* 1. Left Edge Physical Notch Silhouette & Content */}
         <div
-          className="relative select-none"
+          ref={notchRef}
+          className="relative select-none pointer-events-auto transition-transform duration-300 ease-out"
           style={{ width: '64px', height: '380px' }}
         >
           {/* Notch Physical Silhouette SVG with Inverted Fillet Wings connecting seamlessly to left screen edge */}
           <svg
-            className={`absolute inset-0 w-full h-full pointer-events-none ${
+            className={`absolute inset-0 w-full h-full pointer-events-none transition-all duration-300 ${
               isLightBackground
                 ? 'drop-shadow-[0_8px_24px_rgba(0,0,0,0.16)]'
                 : 'drop-shadow-[0_16px_36px_rgba(0,0,0,0.85)]'
@@ -288,6 +367,7 @@ export default function MusicPlayer() {
             <path
               d="M 0 0 C 0 8, 6 14, 14 14 L 46 14 C 56 14, 64 22, 64 32 L 64 348 C 64 358, 56 366, 46 366 L 14 366 C 6 366, 0 372, 0 380 Z"
               fill={isLightBackground ? '#FFFFFF' : '#000000'}
+              className="transition-colors duration-300 ease-out"
             />
             {/* Perimeter Glass Rim Stroke (Open across left side so it connects seamlessly to the viewport edge) */}
             <path
@@ -295,6 +375,7 @@ export default function MusicPlayer() {
               stroke={isLightBackground ? 'rgba(0, 0, 0, 0.16)' : 'rgba(255, 255, 255, 0.18)'}
               strokeWidth="1.2"
               fill="none"
+              className="transition-colors duration-300 ease-out"
             />
           </svg>
 
@@ -528,7 +609,8 @@ export default function MusicPlayer() {
         {/* 2. Apple Music Embedded Card (Expands to the right of the notch) */}
         {showAppleMusic && (
           <div
-            className={`ml-2 w-[295px] rounded-2xl p-2.5 border transition-all duration-300 ease-out origin-left animate-fadeIn ${
+            ref={appleMusicRef}
+            className={`pointer-events-auto ml-2 w-[295px] rounded-2xl p-2.5 border transition-all duration-300 ease-out origin-left animate-fadeIn ${
               isLightBackground
                 ? 'bg-white/95 border-black/15 shadow-[0_20px_50px_rgba(0,0,0,0.18)] backdrop-blur-2xl text-neutral-900'
                 : 'bg-[#0E0E14]/95 border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-2xl text-white'
