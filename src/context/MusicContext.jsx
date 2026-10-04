@@ -231,6 +231,82 @@ export function MusicProvider({ children }) {
     }
   }, [])
 
+  // Auto-switch track between Sunflower and NOBLE based on active section:
+  // "play noble the moment the screen comes to about me page then when goes to the next page go back to sunflower"
+  const activeSectionRef = useRef('home')
+
+  useEffect(() => {
+    let scrollRaf = 0
+
+    const updateSectionMusic = () => {
+      if (typeof window === 'undefined') return
+
+      const aboutEl = document.getElementById('about')
+      const skillsEl = document.getElementById('skills')
+      const workEl = document.getElementById('work') || document.getElementById('featured-works')
+      const cvEl = document.getElementById('cv')
+
+      // If About section doesn't exist (e.g. on /contact page), default to Sunflower
+      if (!aboutEl) {
+        if (activeSectionRef.current === 'about') {
+          activeSectionRef.current = 'other'
+          selectTrack(0) // Back to Sunflower
+        }
+        return
+      }
+
+      const threshold = window.innerHeight * 0.45
+      const isAtBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 80
+
+      let currentSection = 'home'
+      if (isAtBottom || (cvEl && cvEl.getBoundingClientRect().top <= threshold)) {
+        currentSection = 'cv'
+      } else if (workEl && workEl.getBoundingClientRect().top <= threshold) {
+        currentSection = 'work'
+      } else if (skillsEl && skillsEl.getBoundingClientRect().top <= threshold) {
+        currentSection = 'skills'
+      } else if (aboutEl && aboutEl.getBoundingClientRect().top <= threshold) {
+        currentSection = 'about'
+      }
+
+      // Check transition into or out of 'about' section
+      if (currentSection === 'about' && activeSectionRef.current !== 'about') {
+        activeSectionRef.current = 'about'
+        selectTrack(1) // Play NOBLE!
+      } else if (currentSection !== 'about' && activeSectionRef.current === 'about') {
+        activeSectionRef.current = currentSection
+        selectTrack(0) // Go back to Sunflower!
+      } else if (currentSection !== 'about') {
+        activeSectionRef.current = currentSection
+      }
+    }
+
+    const onScroll = () => {
+      if (scrollRaf) return
+      scrollRaf = window.requestAnimationFrame(() => {
+        scrollRaf = 0
+        updateSectionMusic()
+      })
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    window.addEventListener('hashchange', onScroll, { passive: true })
+
+    // Check after initial mount / navigation settle
+    const initialTimer = setTimeout(updateSectionMusic, 350)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      window.removeEventListener('hashchange', onScroll)
+      if (scrollRaf) window.cancelAnimationFrame(scrollRaf)
+      clearTimeout(initialTimer)
+    }
+  }, [selectTrack])
+
   const handleTimeUpdate = () => {
     if (!audioRef.current) return
     setCurrentTime(audioRef.current.currentTime)

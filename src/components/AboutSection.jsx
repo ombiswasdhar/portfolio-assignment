@@ -5,6 +5,7 @@ import AnimatedCollage from './AnimatedCollage'
 import AboutCharacters from './AboutCharacters'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import KineticMatrix from '@/components/ui/kinetic-matrix'
+import ComicTapHintBubble from './ComicTapHintBubble'
 
 export default function AboutSection() {
   const [activeMobileBubble, setActiveMobileBubble] = useState(null)
@@ -229,14 +230,18 @@ export default function AboutSection() {
 
         {/* ================= MOBILE VIEW (Stacked column in original form) ================= */}
         <div className="md:hidden flex flex-col items-center gap-6 sm:gap-8 w-full max-w-[580px] mx-auto">
-          {/* Top 'portfolio' cursive text with mobile tap hint */}
-          <div className="flex flex-col items-center gap-1">
+          {/* Top 'portfolio' cursive text with comic speech bubble tap hint */}
+          <div className="flex flex-col items-center gap-3 pt-8 pb-3">
             <span className="font-script text-3xl sm:text-4xl font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
               portfolio
             </span>
-            <span className="text-[10px] font-fredoka uppercase tracking-widest text-neutral-400/90">
-              Tap any paragraph to zoom in &bull; Tap again to close
-            </span>
+            <ComicTapHintBubble
+              active={activeMobileBubble !== null}
+              onClick={(e) => {
+                e.stopPropagation()
+                setActiveMobileBubble((prev) => (prev === null ? 0 : null))
+              }}
+            />
           </div>
 
           {/* Left Card - Clean, authentic Figma art with animated characters & tap-to-zoom bubbles */}
