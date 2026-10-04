@@ -60,7 +60,7 @@ export default function CVSection() {
   const handleCopyEmail = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    navigator.clipboard.writeText('ombiswasdhar@gmail.com')
+    navigator.clipboard.writeText('ombiswasatwork@gmail.com')
     setCopiedEmail(true)
     setTimeout(() => setCopiedEmail(false), 2500)
   }
@@ -441,10 +441,10 @@ export default function CVSection() {
                   type="button"
                   onClick={handleCopyEmail}
                   className="w-full flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors text-left cursor-pointer"
-                  title="Copy ombiswasdhar@gmail.com"
+                  title="Copy ombiswasatwork@gmail.com"
                 >
                   <MailIcon className="w-4 h-4 shrink-0 shadow-sm" />
-                  <span className="truncate">: {copiedEmail ? '✓ Copied!' : 'ombiswasdhar@gmail.com'}</span>
+                  <span className="truncate">: {copiedEmail ? '✓ Copied!' : 'ombiswasatwork@gmail.com'}</span>
                 </button>
                 <a
                   href="https://instagram.com/jkitsnoah"
@@ -509,7 +509,7 @@ export default function CVSection() {
           <p>Experience: Sports Council Head, Member of Placement Cell, Conducted workshop at government school, Graphics Designer at Mentorsity, Re-designed website for PLAYSTAPLES</p>
           <p>Interests: Badminton, Table Tennis, Football, Basketball, Sketching, Animation, Gaming, Guitar, Traveling</p>
           <p>Languages: Fluent in English, Hindi, Bengali. Understanding: Assamese, Nepali</p>
-          <p>Contact: Phone: 9383049271 | Email: ombiswasdhar@gmail.com | Instagram: @jkitsnoah | Behance: OmBiswasXD</p>
+          <p>Contact: Phone: 9383049271 | Email: ombiswasatwork@gmail.com | Instagram: @jkitsnoah | Behance: OmBiswasXD</p>
         </div>
       </div>
     </section>
