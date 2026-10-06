@@ -34,6 +34,7 @@ export interface HelixChronoMatrixProps {
     className?: string;
     lineColor?: string;
     transparentBg?: boolean;
+    lowPower?: boolean;
 }
 
 type TopologyMode = 'DOUBLE_HELIX' | 'NEURAL_STRATA' | 'QUANTUM_RIBBONS';
@@ -43,6 +44,7 @@ export function HelixChronoMatrix({
     className = "",
     lineColor = "red",
     transparentBg = true,
+    lowPower = false,
 }: HelixChronoMatrixProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -77,9 +79,10 @@ export function HelixChronoMatrix({
     // Initialize stratified 3D ribbon fibers and traveling particles
     const initTopology = useCallback((width: number, height: number) => {
         const rings: FiberRing[] = [];
-        // Keep the animated background light enough to scroll smoothly on laptops.
-        const ringCount = 18;
-        const pointsPerRing = 80;
+        const isMobileCanvas = width < 768;
+        // Reduce rendering load significantly on lowPower mode to fix mobile lag
+        const ringCount = (lowPower || isMobileCanvas) ? 5 : 18;
+        const pointsPerRing = (lowPower || isMobileCanvas) ? 25 : 80;
 
         for (let r = 0; r < ringCount; r++) {
             const progress = r / ringCount;
@@ -112,7 +115,8 @@ export function HelixChronoMatrix({
 
         // Initialize moving particles along the lines
         const particles: Particle[] = [];
-        const particleCount = 24;
+        const isMobileCanvas = width < 768;
+        const particleCount = (lowPower || isMobileCanvas) ? 6 : 24;
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 ringIndex: Math.floor(Math.random() * ringCount),
@@ -122,7 +126,7 @@ export function HelixChronoMatrix({
             });
         }
         particlesRef.current = particles;
-    }, []);
+    }, [lowPower]);
 
     // Canvas Resize Observer
     useEffect(() => {
@@ -180,7 +184,8 @@ export function HelixChronoMatrix({
         let isInView = true;
         let isScrolling = false;
         let scrollTimeout = 0;
-        const frameInterval = 1000 / 30;
+        const isMobileCanvas = canvas.width / (window.devicePixelRatio || 1) < 768;
+        const frameInterval = 1000 / ((lowPower || isMobileCanvas) ? 20 : 30);
 
         const scheduleRender = () => {
             if (!animId && isRunning && isInView && !isScrolling && !document.hidden) {
