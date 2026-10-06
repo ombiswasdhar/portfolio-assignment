@@ -276,8 +276,9 @@ export default function SoftwareLogosSpiral3D({
 
   // Combine three tiers into a lighter field (main icons plus fewer repeats).
   const all3DItems = useMemo(() => {
+    if (isMobile) return primaryItems;
     return [...sideFlankFloatingItems, ...midCompanionItems, ...primaryItems]
-  }, [sideFlankFloatingItems, midCompanionItems, primaryItems])
+  }, [sideFlankFloatingItems, midCompanionItems, primaryItems, isMobile])
 
   // Parallax rotation angles
   const pitchDeg = pointer.y * -14
@@ -350,7 +351,7 @@ export default function SoftwareLogosSpiral3D({
 
           // Automatic brand glow as icons orbit towards the foreground
           const frontRatio = Math.max(0, (zNorm - 0.45) / 0.55)
-          const autoGlowShadow = isPowerSaveMode
+          const autoGlowShadow = (isPowerSaveMode || isMobile)
             ? (isHovered && app.color ? `0 8px 18px ${app.color}66` : undefined)
             : app.color && frontRatio > 0.08
               ? (isHovered
@@ -383,14 +384,14 @@ export default function SoftwareLogosSpiral3D({
             >
               {/* Icon Container with dynamic 3D depth shadow & automatic rotating brand glow */}
               <div
-                className={`relative rounded-2xl ${isPowerSaveMode ? 'transition-none' : 'transition-all duration-300'} ${
+                className={`relative rounded-2xl ${(isPowerSaveMode || isMobile) ? 'transition-none' : 'transition-all duration-300'} ${
                   isSide
                     ? 'p-1.5 sm:p-2 border border-red-500/15 shadow-[0_8px_20px_rgba(0,0,0,0.08)]'
                     : isMid
                     ? 'p-1.5 sm:p-2 border border-neutral-900/10'
                     : 'p-1.5 sm:p-2'
                 } ${
-                  isPowerSaveMode
+                  (isPowerSaveMode || isMobile)
                     ? (isHovered ? 'shadow-sm ring-1 ring-red-500/70 -translate-y-1' : 'border border-neutral-900/10 shadow-sm')
                     : isHovered
                       ? 'shadow-[0_22px_48px_rgba(220,38,38,0.4)] ring-2 ring-red-500 -translate-y-1'
