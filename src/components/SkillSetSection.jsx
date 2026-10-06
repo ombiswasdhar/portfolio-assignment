@@ -129,18 +129,14 @@ export default function SkillSetSection() {
           className="relative w-full max-w-[1440px] mx-auto rounded-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-b border-x border-white/10 !bg-black text-white px-4 sm:px-12 md:px-16 pt-14 sm:pt-14 md:pt-16 pb-6 sm:pb-8 md:pb-10 transition-all duration-500 hover:border-white/20"
         >
           {/* ================= NEDDEV HELIX CHRONO MATRIX BACKGROUND ANIMATION ================= */}
-          {/* Glowing red while spiral is active, normal subtle animation in grid mode */}
+          {/* Glowing red animation persistently applied in both spiral and grid modes */}
           <div
-            className={`absolute inset-0 w-full h-full z-0 overflow-hidden transition-all duration-700 ${
-              isSpiralMode
-                ? 'opacity-90 pointer-events-auto shadow-[inset_0_0_28px_rgba(239,68,68,0.22)] bg-[radial-gradient(circle_at_center,_rgba(239,68,68,0.18),_transparent_55%)]'
-                : 'opacity-40 pointer-events-auto hover:opacity-60 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.05),_transparent_60%)]'
-            }`}
+            className="absolute inset-0 w-full h-full z-0 overflow-hidden transition-all duration-700 opacity-90 pointer-events-auto shadow-[inset_0_0_28px_rgba(239,68,68,0.22)] bg-[radial-gradient(circle_at_center,_rgba(239,68,68,0.18),_transparent_55%)]"
             aria-hidden="true"
           >
             <HelixChronoMatrix
               headline=""
-              lineColor={isSpiralMode ? 'red' : 'soft-red'}
+              lineColor="red"
               transparentBg={true}
               lowPower={isPowerSaveMode}
               className="w-full h-full !bg-transparent [&_header]:hidden [&_main]:hidden"
