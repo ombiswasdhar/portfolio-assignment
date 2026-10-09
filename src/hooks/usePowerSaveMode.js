@@ -1,36 +1,40 @@
 import { useEffect, useState } from 'react'
+import { getDeviceTier, subscribeDeviceTier } from '../utils/deviceTier'
 
-function getDevicePowerHint() {
+function checkIsPowerSave() {
   if (typeof window === 'undefined') return false
-
-  return (
-    window.matchMedia('(pointer: coarse)').matches ||
-    window.matchMedia('(max-width: 640px)').matches ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-    (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4)
-  )
+  const tier = getDeviceTier()
+  if (tier === 'low') return true
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true
+  return false
 }
 
 export default function usePowerSaveMode() {
-  const [isPowerSaveMode, setIsPowerSaveMode] = useState(getDevicePowerHint)
+  const [isPowerSaveMode, setIsPowerSaveMode] = useState(checkIsPowerSave)
 
   useEffect(() => {
-    const mediaQueries = [
-      window.matchMedia('(pointer: coarse)'),
-      window.matchMedia('(max-width: 640px)'),
-      window.matchMedia('(prefers-reduced-motion: reduce)'),
-    ]
     let battery = null
     let disposed = false
 
     const updateMode = () => {
-      const hasLowDeviceCapacity = navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4
-      const isOnBattery = battery ? !battery.charging : false
-      setIsPowerSaveMode(hasLowDeviceCapacity || isOnBattery || mediaQueries.some((query) => query.matches))
+      const tier = getDeviceTier()
+      if (tier === 'low') {
+        setIsPowerSaveMode(true)
+        return
+      }
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        setIsPowerSaveMode(true)
+        return
+      }
+      // If mid or high tier, only enter power-save if battery is critically low (<15%) and discharging
+      if (battery && !battery.charging && battery.level <= 0.15) {
+        setIsPowerSaveMode(true)
+        return
+      }
+      setIsPowerSaveMode(false)
     }
 
-    mediaQueries.forEach((query) => query.addEventListener('change', updateMode))
-    window.addEventListener('resize', updateMode, { passive: true })
+    const unsubTier = subscribeDeviceTier(() => updateMode())
 
     const getBattery = navigator.getBattery
     if (typeof getBattery === 'function') {
@@ -38,6 +42,7 @@ export default function usePowerSaveMode() {
         if (disposed) return
         battery = nextBattery
         battery.addEventListener('chargingchange', updateMode)
+        battery.addEventListener('levelchange', updateMode)
         updateMode()
       }).catch(() => {})
     }
@@ -46,9 +51,11 @@ export default function usePowerSaveMode() {
 
     return () => {
       disposed = true
-      mediaQueries.forEach((query) => query.removeEventListener('change', updateMode))
-      window.removeEventListener('resize', updateMode)
-      if (battery) battery.removeEventListener('chargingchange', updateMode)
+      unsubTier()
+      if (battery) {
+        battery.removeEventListener('chargingchange', updateMode)
+        battery.removeEventListener('levelchange', updateMode)
+      }
     }
   }, [])
 

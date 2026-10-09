@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import cvFullFrame from '../assets/cv/cv_full_frame.png'
 import philosophyCardImg from '../assets/cv/philosophy_card_2x.png'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import ComicTapHintBubble from './ComicTapHintBubble'
 import {
   ProcreateIcon,
   SketchbookIcon,
@@ -26,11 +27,11 @@ import {
  * Curriculum Vitae / Resume presented as an interactive bulletin poster
  * matching the Figma frame (node 373-908) with:
  * - 3D responsive mouse tilt & specular sheen reflection
- * - Authentic Section Zoom: Hovering/tapping any section (Philosophy, Designer/Software,
- *   About Me, Experience, Interests, Languages/Contact) magnifies that exact portion of
- *   the original poster artwork with 100% fidelity without altering fonts, colors, or layouts.
+ * - Comic Tap-To-Zoom: Hovering/tapping any section (Philosophy, Designer/Software,
+ *   About Me, Experience, Interests, Languages/Contact) magnifies that section
+ *   with comic outline & 3D shadow aesthetic, identical to About Me paragraph zoom.
+ * - Fredoka typography throughout all zoomed cards and action buttons.
  * - Interactive contact hotspots (Phone, Email, Instagram, Behance) & Mentorsity link
- * - Animated crown & comic doodles
  * - Download & Print action bar
  */
 export default function CVSection() {
@@ -39,6 +40,24 @@ export default function CVSection() {
   const [tilt, setTilt] = useState({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
   const [copiedEmail, setCopiedEmail] = useState(false)
   const [pinnedCard, setPinnedCard] = useState(null)
+
+  // Tap outside any zoom card to dismiss back to resting poster state (identical to About Me)
+  useEffect(() => {
+    if (pinnedCard === null) return
+
+    const handleOutsideTap = (e) => {
+      if (!e.target.closest('.cv-zoom-card') && !e.target.closest('.comic-tap-hint')) {
+        setPinnedCard(null)
+      }
+    }
+
+    document.addEventListener('click', handleOutsideTap)
+    document.addEventListener('touchstart', handleOutsideTap, { passive: true })
+    return () => {
+      document.removeEventListener('click', handleOutsideTap)
+      document.removeEventListener('touchstart', handleOutsideTap)
+    }
+  }, [pinnedCard])
 
   // 3D Tilt calculation on mouse move
   const handleMouseMove = (e) => {
@@ -71,11 +90,16 @@ export default function CVSection() {
     }
   }
 
+  const toggleCard = (cardKey, e) => {
+    if (e) e.stopPropagation()
+    setPinnedCard(prev => (prev === cardKey ? null : cardKey))
+  }
+
   return (
     <section
       id="cv"
       aria-label="Curriculum Vitae / Resume section"
-      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-12 sm:pt-16 pb-20 sm:pb-24 md:pb-28 scroll-mt-14 sm:scroll-mt-16"
+      className="relative w-full bg-black/75 text-white select-none overflow-hidden pt-12 sm:pt-16 pb-20 sm:pb-24 md:pb-28 scroll-mt-14 sm:scroll-mt-16 font-fredoka"
     >
       {/* Decorative ambient background glow */}
       <div
@@ -91,24 +115,28 @@ export default function CVSection() {
       >
         {/* ================= SECTION HEADER & ACTION BUTTONS ================= */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-[880px] mx-auto mb-6 sm:mb-8">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest bg-white/5 border border-white/10 text-neutral-300 font-semibold">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-fredoka font-semibold uppercase tracking-widest bg-white/5 border border-white/10 text-neutral-300">
               Curriculum Vitae
             </span>
             <span className="w-2 h-2 rounded-full bg-[#BA1F1F] animate-pulse" />
-            <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-neutral-400 pl-1 sm:pl-2">
-              <span>🔍</span>
-              <span><span className="md:hidden">Tap</span><span className="hidden md:inline">Hover</span> any section to zoom</span>
-            </span>
+            <ComicTapHintBubble
+              text="tap any section to zoom in"
+              active={pinnedCard !== null}
+              onClick={(e) => {
+                e.stopPropagation()
+                setPinnedCard(prev => (prev === null ? 'philosophy' : null))
+              }}
+            />
           </div>
 
           {/* Action Bar: Download CV, Print, Copy Email */}
-          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center font-fredoka">
 
             <button
               type="button"
               onClick={handleCopyEmail}
-              className="group inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-mono text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
+              className="group inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-fredoka font-medium text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
               title="Copy Email Address"
             >
               <span>{copiedEmail ? '✓ Copied!' : 'Copy Email'}</span>
@@ -117,7 +145,7 @@ export default function CVSection() {
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-mono text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-fredoka font-medium text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
               title="Print CV or Save as PDF"
             >
               <span>Print / PDF</span>
@@ -126,7 +154,7 @@ export default function CVSection() {
             <a
               href={cvFullFrame}
               download="Om_Biswas_CV.png"
-              className="inline-flex items-center gap-1.5 px-4 sm:px-4.5 py-2 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-bold font-mono tracking-wide shadow-[0_4px_16px_rgba(186,31,31,0.45)] hover:shadow-[0_6px_22px_rgba(186,31,31,0.65)] hover:scale-105 active:scale-95 transition-all min-h-[38px]"
+              className="inline-flex items-center gap-1.5 px-4 sm:px-4.5 py-2 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-fredoka font-bold tracking-wide shadow-[0_4px_16px_rgba(186,31,31,0.45)] hover:shadow-[0_6px_22px_rgba(186,31,31,0.65)] hover:scale-105 active:scale-95 transition-all min-h-[38px]"
             >
               <span>Download CV</span>
               <span>↓</span>
@@ -148,10 +176,10 @@ export default function CVSection() {
           <div
             className="relative w-full aspect-[1003/1500] bg-[#8499FF] transition-transform ease-out will-change-transform"
             style={{
-              transform: tilt.isHovered
+              transform: tilt.isHovered && !pinnedCard
                 ? `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(1.02)`
                 : 'rotateX(0deg) rotateY(0deg) scale(1)',
-              transition: tilt.isHovered ? 'transform 0.08s ease-out' : 'transform 0.5s ease-out',
+              transition: tilt.isHovered && !pinnedCard ? 'transform 0.08s ease-out' : 'transform 0.5s ease-out',
             }}
           >
             {/* Pristine Full Figma Frame Graphic */}
@@ -162,7 +190,7 @@ export default function CVSection() {
             />
 
             {/* Dynamic Specular Sheen Light Reflection across the glossy poster on tilt */}
-            {tilt.isHovered && (
+            {tilt.isHovered && !pinnedCard && (
               <div
                 className="absolute inset-0 pointer-events-none mix-blend-overlay transition-opacity duration-200 z-10"
                 style={{
@@ -174,7 +202,7 @@ export default function CVSection() {
 
             {/* ================= 1. HOVER ZOOM: MY PHILOSOPHY ================= */}
             <div
-              className={`cv-zoom-card cv-zoom-card--philosophy p-0 shadow-2xl overflow-hidden ${
+              className={`cv-zoom-card cv-zoom-card--philosophy p-0 shadow-2xl overflow-hidden font-fredoka ${
                 pinnedCard === 'philosophy' ? 'is-active' : ''
               }`}
               style={{
@@ -184,14 +212,14 @@ export default function CVSection() {
                 height: '21.00%',
                 transformOrigin: 'top left',
               }}
-              onClick={() => setPinnedCard(pinnedCard === 'philosophy' ? null : 'philosophy')}
+              onClick={(e) => toggleCard('philosophy', e)}
               role="region"
               aria-label="Zoomed view: Philosophy - Keep Upgrading. Keep Evolving. ALWAYS at your Own pace."
             >
               <img
                 src={philosophyCardImg}
                 alt="My Philosophy: Keep Upgrading. Keep Evolving. ALWAYS at your Own pace."
-                className="w-full h-full object-fill pointer-events-none select-none rounded-[8px]"
+                className="w-full h-full object-fill pointer-events-none select-none rounded-[16px]"
               />
               <span className="sr-only">
                 MY PHILOSOPHY: Keep Upgrading. Keep Evolving. ALWAYS at your Own pace.
@@ -200,7 +228,7 @@ export default function CVSection() {
 
             {/* ================= 2. HOVER ZOOM: DESIGNER & SOFTWARE ================= */}
             <div
-              className={`cv-zoom-card bg-[#5066db] text-white p-3 sm:p-3.5 md:p-4 flex flex-col justify-between ${
+              className={`cv-zoom-card bg-[#1e2024] text-white p-3 sm:p-3.5 md:p-4 flex flex-col justify-between font-fredoka ${
                 pinnedCard === 'designer' ? 'is-active' : ''
               }`}
               style={{
@@ -210,20 +238,20 @@ export default function CVSection() {
                 height: '19.8%',
                 transformOrigin: 'top right',
               }}
-              onClick={() => setPinnedCard(pinnedCard === 'designer' ? null : 'designer')}
+              onClick={(e) => toggleCard('designer', e)}
               role="region"
               aria-label="Zoomed view: Designer, Education and Software"
             >
               <div className="flex items-start justify-between gap-2 border-b border-white/20 pb-1">
                 <div>
-                  <h3 className="font-display font-black text-xs sm:text-sm md:text-base uppercase text-white leading-none">
+                  <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base uppercase text-white leading-none tracking-wide">
                     DESIGNER
                   </h3>
                   <span className="text-[10px] sm:text-xs font-semibold text-neutral-200">
                     22 y.o
                   </span>
                 </div>
-                <div className="text-right text-[9.5px] sm:text-[11px] leading-tight select-text">
+                <div className="text-right text-[9.5px] sm:text-[11px] leading-tight select-text font-fredoka">
                   <p className="text-neutral-200">
                     From <strong className="text-white font-bold">Symbiosis Institute of Design , Nagpur</strong>
                   </p>
@@ -235,7 +263,7 @@ export default function CVSection() {
 
               <div className="pt-0.5">
                 <div className="flex items-center justify-between pb-1">
-                  <span className="font-display font-bold text-[10px] sm:text-xs uppercase tracking-wider text-white">
+                  <span className="font-fredoka font-bold text-[10px] sm:text-xs uppercase tracking-wider text-white">
                     SOFTWARE
                   </span>
                 </div>
@@ -260,7 +288,7 @@ export default function CVSection() {
 
             {/* ================= 3. HOVER ZOOM: ABOUT ME (OM BISWAS) ================= */}
             <div
-              className={`cv-zoom-card bg-[#5066db] text-white p-3.5 sm:p-5 flex flex-col justify-between ${
+              className={`cv-zoom-card bg-[#1e2024] text-white p-3.5 sm:p-5 flex flex-col justify-between font-fredoka ${
                 pinnedCard === 'about' ? 'is-active' : ''
               }`}
               style={{
@@ -270,20 +298,20 @@ export default function CVSection() {
                 height: '29.8%',
                 transformOrigin: 'left center',
               }}
-              onClick={() => setPinnedCard(pinnedCard === 'about' ? null : 'about')}
+              onClick={(e) => toggleCard('about', e)}
               role="region"
               aria-label="Zoomed view: About Om Biswas"
             >
-              <h2 className="font-serif-display text-xl sm:text-2xl md:text-3xl font-black text-white italic tracking-wide pb-1 border-b border-white/20">
+              <h2 className="font-fredoka text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-wide pb-1 border-b border-white/20">
                 Om Biswas
               </h2>
 
               <div className="space-y-1.5 sm:space-y-2 text-[9.5px] sm:text-[11.5px] md:text-[12.5px] font-fredoka font-normal leading-snug text-neutral-100 select-text">
                 <p>
-                  <span className="font-serif-display font-bold text-xs sm:text-sm text-white uppercase">HELLO</span> , my name is Om , a designer / illustrator / artist based in <strong className="text-white font-bold">SHILLONG , INDIA</strong>.
+                  <span className="font-fredoka font-bold text-xs sm:text-sm text-white uppercase">HELLO</span> , my name is Om , a designer / illustrator / artist based in <strong className="text-white font-bold">SHILLONG , INDIA</strong>.
                 </p>
                 <p>
-                  <span className="font-serif-display font-bold text-xs sm:text-sm">Since</span> 8th grade, my passion for illustration, character design, and visual storytelling has continued to grow. Over the years, this creative interest has expanded into UI/UX design, graphic design, 3D, and product design.
+                  <span className="font-fredoka font-bold text-xs sm:text-sm">Since</span> 8th grade, my passion for illustration, character design, and visual storytelling has continued to grow. Over the years, this creative interest has expanded into UI/UX design, graphic design, 3D, and product design.
                 </p>
                 <p>
                   Always eager to explore new directions, I enjoy experimenting with different styles and mediums to express ideas in fresh, meaningful ways.
@@ -296,7 +324,7 @@ export default function CVSection() {
 
             {/* ================= 4. HOVER ZOOM: MY EXPERIENCE ================= */}
             <div
-              className={`cv-zoom-card bg-[#5066db] text-white p-3.5 sm:p-4 md:p-5 flex flex-col justify-between ${
+              className={`cv-zoom-card bg-[#1e2024] text-white p-3.5 sm:p-4 md:p-5 flex flex-col justify-between font-fredoka ${
                 pinnedCard === 'experience' ? 'is-active' : ''
               }`}
               style={{
@@ -306,20 +334,20 @@ export default function CVSection() {
                 height: '23.8%',
                 transformOrigin: 'left center',
               }}
-              onClick={() => setPinnedCard(pinnedCard === 'experience' ? null : 'experience')}
+              onClick={(e) => toggleCard('experience', e)}
               role="region"
               aria-label="Zoomed view: Experience"
             >
-              <h3 className="font-display font-black text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-1 border-b border-white/20">
+              <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-1 border-b border-white/20">
                 MY EXPERIENCE
               </h3>
 
               <div className="space-y-1.5 sm:space-y-2 pt-1 text-[9.5px] sm:text-[11px] md:text-[12px] font-fredoka leading-tight text-neutral-100 select-text">
                 <div>
-                  <h4 className="font-bold text-white text-[10.5px] sm:text-[12px]">
+                  <h4 className="font-bold text-white text-[10.5px] sm:text-[12px] font-fredoka">
                     1. Sports Council Head :
                   </h4>
-                  <ul className="list-disc list-inside text-neutral-200 pl-1 space-y-0.5 text-[8.5px] sm:text-[10px]">
+                  <ul className="list-disc list-inside text-neutral-200 pl-1 space-y-0.5 text-[8.5px] sm:text-[10px] font-fredoka">
                     <li>Designed posters and promotional materials for college sports and other events.</li>
                     <li>Helped organize and manage sports tournaments and activities.</li>
                     <li>Collaborated with teams to ensure smooth execution and maximum participation.</li>
@@ -327,18 +355,18 @@ export default function CVSection() {
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
                     2. Member of Placement Cell.
                   </h4>
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
                     3. Conducted a workshop at a government school, sharing skills and guiding students.
                   </h4>
                 </div>
 
-                <div className="flex items-center justify-between gap-2 pt-0.5">
+                <div className="flex items-center justify-between gap-2 pt-0.5 font-fredoka">
                   <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
                     4. Worked as a Graphics Designer at Mentorsity
                   </h4>
@@ -347,13 +375,13 @@ export default function CVSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-amber-400 hover:bg-yellow-300 text-black font-display font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-amber-400 hover:bg-yellow-300 text-black font-fredoka font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
                   >
                     <span>Mentorsity ↗</span>
                   </a>
                 </div>
 
-                <div className="flex items-center justify-between gap-2 pt-0.5">
+                <div className="flex items-center justify-between gap-2 pt-0.5 font-fredoka">
                   <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
                     5. Re-designed a website from ground up for PLAYSTAPLES
                   </h4>
@@ -364,7 +392,7 @@ export default function CVSection() {
                       const el = document.getElementById('featured-works') || document.getElementById('work')
                       if (el) el.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-display font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-fredoka font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
                   >
                     <span>PlayStaples ↗</span>
                   </a>
@@ -374,7 +402,7 @@ export default function CVSection() {
 
             {/* ================= 5. HOVER ZOOM: INTERESTS ================= */}
             <div
-              className={`cv-zoom-card bg-[#5066db] text-white p-3.5 sm:p-4 flex flex-col justify-between ${
+              className={`cv-zoom-card bg-[#1e2024] text-white p-3.5 sm:p-4 flex flex-col justify-between font-fredoka ${
                 pinnedCard === 'interests' ? 'is-active' : ''
               }`}
               style={{
@@ -384,11 +412,11 @@ export default function CVSection() {
                 height: '20.4%',
                 transformOrigin: 'bottom left',
               }}
-              onClick={() => setPinnedCard(pinnedCard === 'interests' ? null : 'interests')}
+              onClick={(e) => toggleCard('interests', e)}
               role="region"
               aria-label="Zoomed view: Interests"
             >
-              <h3 className="font-display font-black text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-1 border-b border-white/20">
+              <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-1 border-b border-white/20">
                 INTERESTS
               </h3>
 
@@ -404,7 +432,7 @@ export default function CVSection() {
 
             {/* ================= 6. HOVER ZOOM: LANGUAGES & CONTACT ================= */}
             <div
-              className={`cv-zoom-card bg-[#5066db] text-white p-3 sm:p-3.5 flex flex-col justify-between ${
+              className={`cv-zoom-card bg-[#1e2024] text-white p-3 sm:p-3.5 flex flex-col justify-between font-fredoka ${
                 pinnedCard === 'languages' ? 'is-active' : ''
               }`}
               style={{
@@ -414,11 +442,11 @@ export default function CVSection() {
                 height: '20.4%',
                 transformOrigin: 'bottom right',
               }}
-              onClick={() => setPinnedCard(pinnedCard === 'languages' ? null : 'languages')}
+              onClick={(e) => toggleCard('languages', e)}
               role="region"
               aria-label="Zoomed view: Languages and Contact"
             >
-              <h3 className="font-display font-black text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-0.5 border-b border-white/20">
+              <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-0.5 border-b border-white/20">
                 LANGUAGES
               </h3>
 
@@ -427,11 +455,11 @@ export default function CVSection() {
                 <p><strong className="text-white font-bold">Understanding :</strong> Assamese , Nepali</p>
               </div>
 
-              <div className="pt-1 space-y-1 text-[9px] sm:text-[10px] font-mono">
+              <div className="pt-1 space-y-1 text-[9px] sm:text-[10px] font-fredoka">
                 <a
                   href="tel:9383049271"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors"
+                  className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/40 hover:bg-black/60 border border-white/20 text-neutral-100 hover:text-white transition-colors"
                   title="Call 9383049271"
                 >
                   <PhoneIcon className="w-4 h-4 shrink-0 shadow-sm" />
@@ -440,7 +468,7 @@ export default function CVSection() {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="w-full flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors text-left cursor-pointer"
+                  className="w-full flex items-center gap-2 px-2 py-0.5 rounded bg-black/40 hover:bg-black/60 border border-white/20 text-neutral-100 hover:text-white transition-colors text-left cursor-pointer"
                   title="Copy ombiswasatwork@gmail.com"
                 >
                   <MailIcon className="w-4 h-4 shrink-0 shadow-sm" />
@@ -451,7 +479,7 @@ export default function CVSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors"
+                  className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/40 hover:bg-black/60 border border-white/20 text-neutral-100 hover:text-white transition-colors"
                   title="Instagram: @jkitsnoah"
                 >
                   <InstagramIcon className="w-4 h-4 shrink-0 shadow-sm" />
@@ -462,7 +490,7 @@ export default function CVSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/30 hover:bg-black/50 border border-white/20 text-neutral-100 hover:text-white transition-colors"
+                  className="flex items-center gap-2 px-2 py-0.5 rounded bg-black/40 hover:bg-black/60 border border-white/20 text-neutral-100 hover:text-white transition-colors"
                   title="Behance: OmBiswasXD"
                 >
                   <BehanceIcon className="w-4 h-4 shrink-0 shadow-sm" />

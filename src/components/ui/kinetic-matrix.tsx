@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Sparkles, Play, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useDeviceTier } from '@/utils/deviceTier';
 
 interface MatrixNode {
     x: number;
@@ -54,6 +55,25 @@ export function KineticMatrix({
 
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [isRunning, setIsRunning] = useState(true);
+    const [isInView, setIsInView] = useState(false);
+    const { tier, isHigh, isMedium, isLow, isMobile, dprCap } = useDeviceTier();
+
+    // IntersectionObserver so off-screen instances (e.g. Hero when scrolled down, or About when scrolled away)
+    // consume exactly 0% CPU and GPU.
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsInView(entry.isIntersecting);
+            },
+            { rootMargin: '120px' }
+        );
+
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, []);
 
     // Sync color scheme preference
     useEffect(() => {
@@ -64,7 +84,7 @@ export function KineticMatrix({
         return () => mediaQuery.removeEventListener('change', handler);
     }, []);
 
-    // Pointer state with smooth inertia - refined radius for subtle interaction
+    // Pointer state with smooth inertia
     const pointerRef = useRef({
         x: -2000,
         y: -2000,
@@ -72,7 +92,7 @@ export function KineticMatrix({
         prevY: -2000,
         vx: 0,
         vy: 0,
-        radius: 140,
+        radius: isMobile ? 120 : 140,
         isDown: false,
     });
 
@@ -81,9 +101,11 @@ export function KineticMatrix({
     const shockwavesRef = useRef<GravitationalShockwave[]>([]);
     const dimensionsRef = useRef({ width: 0, height: 0, cols: 0, rows: 0, spacing: 52 });
 
-    // Grid lattice initializer
+    // Grid lattice initializer tailored dynamically by tier across mobile and laptops/desktops
     const buildLattice = useCallback((width: number, height: number) => {
-        const spacing = 52;
+        const spacing = isLow ? (isMobile ? 78 : 72) :
+                        isMedium ? (isMobile ? 65 : 60) : 52;
+
         const cols = Math.ceil(width / spacing) + 1;
         const rows = Math.ceil(height / spacing) + 1;
         const nodes: MatrixNode[] = [];
@@ -112,7 +134,7 @@ export function KineticMatrix({
         dimensionsRef.current = { width, height, cols, rows, spacing };
         nodesRef.current = nodes;
         pulsesRef.current = [];
-    }, []);
+    }, [isLow, isMedium, isMobile]);
 
     // Canvas Resize Observer with immediate initial mount sizing
     useEffect(() => {
@@ -125,7 +147,7 @@ export function KineticMatrix({
 
         const updateSize = (w: number, h: number) => {
             if (w <= 0 || h <= 0) return;
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const dpr = dprCap || (isHigh ? Math.min(window.devicePixelRatio || 1, 2) : (isMobile ? 1.2 : 1.25));
 
             canvas.width = Math.floor(w * dpr);
             canvas.height = Math.floor(h * dpr);
@@ -151,9 +173,9 @@ export function KineticMatrix({
 
         resizeObserver.observe(container);
         return () => resizeObserver.disconnect();
-    }, [buildLattice]);
+    }, [buildLattice, dprCap, isHigh, isMobile]);
 
-    // Unified pointer tracking so animation works 100% of the time across overlays
+    // Unified pointer tracking so animation works across overlays
     useEffect(() => {
         const onPointerMove = (e: PointerEvent) => {
             const container = containerRef.current;
@@ -220,13 +242,12 @@ export function KineticMatrix({
         isDark: boolean,
         nodeColor: string
     ) => {
-        const dx = n1.x - n2.x;
-        const dy = n1.y - n2.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const stretch = Math.abs(dist - restLen) / restLen;
-        const isTensioned = n1.tension > 0.05 || n2.tension > 0.05 || stretch > 0.1;
+        const dx = n2.x - n1.x;
+        const dy = n2.y - n1.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        const stretch = Math.abs(len - restLen) / restLen;
 
-        if (isTensioned) {
+        if (stretch > 0.04 || n1.tension > 0.1 || n2.tension > 0.1) {
             const glow = Math.min(1, Math.max(n1.tension, n2.tension, stretch * 1.2));
             ctx.strokeStyle = isDark
                 ? `rgba(255, 255, 255, ${Math.min(0.5, 0.12 + glow * 0.38)})`
@@ -255,15 +276,36 @@ export function KineticMatrix({
 
         let animId = 0;
         let lastTime = performance.now();
+        let lastRenderTime = 0;
+        let isScrolling = false;
+        let scrollTimeout: any = null;
+
+        const handleScroll = () => {
+            isScrolling = true;
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+            }, 100);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
 
         const render = (now: number) => {
-            const dt = Math.min((now - lastTime) / 1000, 0.033);
-            lastTime = now;
-
-            if (!isRunning) {
-                animId = requestAnimationFrame(render);
+            if (!isRunning || !isInView || document.hidden) {
+                animId = 0;
                 return;
             }
+
+            // Yield frame rate during scroll on mid/low-tier laptops, desktops, and mobile
+            if ((isMedium || isLow) && isScrolling) {
+                if (now - lastRenderTime < 34) {
+                    animId = requestAnimationFrame(render);
+                    return;
+                }
+            }
+
+            lastRenderTime = now;
+            const dt = Math.min((now - lastTime) / 1000, 0.033);
+            lastTime = now;
 
             const { width, height, cols, rows, spacing } = dimensionsRef.current;
             const nodes = nodesRef.current;
@@ -290,7 +332,7 @@ export function KineticMatrix({
             ctx.fillStyle = bgColor;
             ctx.fillRect(0, 0, width, height);
 
-            // 1. Propagate Shockwaves (Smooth, controlled impulse)
+            // 1. Propagate Shockwaves
             for (let s = shockwaves.length - 1; s >= 0; s--) {
                 const sw = shockwaves[s];
                 sw.radius += 360 * dt;
@@ -300,143 +342,134 @@ export function KineticMatrix({
                 }
             }
 
-            // 2. Physics Step (Hooke's Spring-Mass Lattice - Calibrated smooth, low-jiggle response)
-            const SPRING_K = 20;
-            const DAMPING = 0.80;
+            // 2. Physics & Node Displacement
+            const SPRING = 18;
+            const DAMPING = 0.82;
+            const hasPointer = pointer.x > -1000;
 
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
-                n.pulsePhase += dt * 3.2;
+                n.pulsePhase += dt * 2.5;
 
-                const dx = pointer.x - n.x;
-                const dy = pointer.y - n.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
+                let fx = (n.baseX - n.x) * SPRING;
+                let fy = (n.baseY - n.y) * SPRING;
 
-                if (dist < pointer.radius && dist > 0) {
-                    const ratio = 1 - dist / pointer.radius;
-                    // Calibrated silky glide with reduced wobble/jiggle
-                    const force = ratio * (360 + mouseSpeed * 32 + (pointer.isDown ? 600 : 0));
-                    const angle = Math.atan2(dy, dx);
+                if (hasPointer) {
+                    const dx = pointer.x - n.x;
+                    const dy = pointer.y - n.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    n.vx -= Math.cos(angle) * force * dt;
-                    n.vy -= Math.sin(angle) * force * dt;
-                    n.tension = Math.min(0.55, n.tension + ratio * 0.18);
+                    if (dist < pointer.radius && dist > 0) {
+                        const falloff = 1 - dist / pointer.radius;
+                        const force = falloff * (pointer.isDown ? 1800 : 750 + mouseSpeed * 120);
+                        const angle = Math.atan2(dy, dx);
+                        fx -= Math.cos(angle) * force;
+                        fy -= Math.sin(angle) * force;
+                        n.tension = Math.min(1, n.tension + falloff * 0.45);
+                    }
                 }
 
                 for (let s = 0; s < shockwaves.length; s++) {
                     const sw = shockwaves[s];
-                    const swDx = n.x - sw.x;
-                    const swDy = n.y - sw.y;
-                    const swDist = Math.sqrt(swDx * swDx + swDy * swDy);
-                    const delta = Math.abs(swDist - sw.radius);
+                    const dx = n.x - sw.x;
+                    const dy = n.y - sw.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const ringDist = Math.abs(dist - sw.radius);
 
-                    if (delta < 55) {
-                        const force = (1 - delta / 55) * sw.power * 900;
-                        const angle = Math.atan2(swDy, swDx);
-                        n.vx += Math.cos(angle) * force * dt;
-                        n.vy += Math.sin(angle) * force * dt;
-                        n.tension = 0.55;
+                    if (ringDist < 60) {
+                        const waveFactor = (1 - ringDist / 60) * sw.power * 2200;
+                        const angle = Math.atan2(dy, dx);
+                        fx += Math.cos(angle) * waveFactor;
+                        fy += Math.sin(angle) * waveFactor;
+                        n.tension = Math.min(1, n.tension + (1 - ringDist / 60) * sw.power);
                     }
                 }
 
-                const hx = n.baseX - n.x;
-                const hy = n.baseY - n.y;
-                n.vx += hx * SPRING_K * dt;
-                n.vy += hy * SPRING_K * dt;
-
-                n.vx *= DAMPING;
-                n.vy *= DAMPING;
+                n.vx = (n.vx + fx * dt) * DAMPING;
+                n.vy = (n.vy + fy * dt) * DAMPING;
                 n.x += n.vx * dt * 60;
                 n.y += n.vy * dt * 60;
-
-                n.tension = Math.max(0, n.tension - dt * 0.9);
+                n.tension *= Math.pow(0.2, dt);
             }
 
-            // 3. Spawn Random Synaptic Traveling Pulses
-            if (Math.random() < 0.3 && nodes.length > 0 && pulses.length < 40) {
-                const fromIdx = Math.floor(Math.random() * nodes.length);
-                const fromNode = nodes[fromIdx];
-                const possibleDirections = [
-                    { dc: 1, dr: 0 },
-                    { dc: -1, dr: 0 },
-                    { dc: 0, dr: 1 },
-                    { dc: 0, dr: -1 },
-                ];
-                const dir = possibleDirections[Math.floor(Math.random() * possibleDirections.length)];
-                const targetCol = fromNode.col + dir.dc;
-                const targetRow = fromNode.row + dir.dr;
-
-                if (targetCol >= 0 && targetCol < cols && targetRow >= 0 && targetRow < rows) {
-                    const toIdx = targetCol * rows + targetRow;
-                    if (toIdx >= 0 && toIdx < nodes.length) {
-                        pulses.push({
-                            fromNode: fromIdx,
-                            toNode: toIdx,
-                            progress: 0,
-                            speed: 1.6 + Math.random() * 2.2,
-                        });
-                    }
-                }
-            }
-
-            // 4. Render Grid Tension Strands
+            // 3. Draw Grid Lattice Connections
             for (let c = 0; c < cols; c++) {
                 for (let r = 0; r < rows; r++) {
                     const idx = c * rows + r;
                     const n = nodes[idx];
                     if (!n) continue;
 
-                    if (c < cols - 1) {
-                        const rightIdx = (c + 1) * rows + r;
-                        const nr = nodes[rightIdx];
-                        if (nr) drawLatticeLink(ctx, n, nr, spacing, isDark, nodeColor);
+                    if (c + 1 < cols) {
+                        const rightNode = nodes[(c + 1) * rows + r];
+                        if (rightNode) drawLatticeLink(ctx, n, rightNode, spacing, isDark, nodeColor);
                     }
-
-                    if (r < rows - 1) {
-                        const downIdx = c * rows + (r + 1);
-                        const nd = nodes[downIdx];
-                        if (nd) drawLatticeLink(ctx, n, nd, spacing, isDark, nodeColor);
+                    if (r + 1 < rows) {
+                        const bottomNode = nodes[c * rows + (r + 1)];
+                        if (bottomNode) drawLatticeLink(ctx, n, bottomNode, spacing, isDark, nodeColor);
                     }
                 }
             }
 
-            // 5. Render Synaptic Data Pulses
+            // 4. Propagate & Render Synaptic Pulses
+            if (pulses.length < (isLow ? 4 : (isMedium ? 7 : 12)) && Math.random() < (isLow ? 0.03 : 0.07)) {
+                const randomNodeIdx = Math.floor(Math.random() * nodes.length);
+                const n = nodes[randomNodeIdx];
+                if (n) {
+                    const neighbors: number[] = [];
+                    if (n.col + 1 < cols) neighbors.push((n.col + 1) * rows + n.row);
+                    if (n.row + 1 < rows) neighbors.push(n.col * rows + (n.row + 1));
+                    if (n.col - 1 >= 0) neighbors.push((n.col - 1) * rows + n.row);
+                    if (n.row - 1 >= 0) neighbors.push(n.col * rows + (n.row - 1));
+
+                    if (neighbors.length > 0) {
+                        const target = neighbors[Math.floor(Math.random() * neighbors.length)];
+                        pulses.push({
+                            fromNode: randomNodeIdx,
+                            toNode: target,
+                            progress: 0,
+                            speed: 1.4 + Math.random() * 1.8,
+                        });
+                    }
+                }
+            }
+
             for (let p = pulses.length - 1; p >= 0; p--) {
                 const pulse = pulses[p];
-                pulse.progress += dt * pulse.speed;
+                pulse.progress += pulse.speed * dt;
 
                 const n1 = nodes[pulse.fromNode];
                 const n2 = nodes[pulse.toNode];
 
-                if (!n1 || !n2 || pulse.progress >= 1) {
-                    if (n2) n2.tension = Math.min(0.6, n2.tension + 0.3);
+                if (n1 && n2 && pulse.progress <= 1) {
+                    const px = n1.x + (n2.x - n1.x) * pulse.progress;
+                    const py = n1.y + (n2.y - n1.y) * pulse.progress;
+
+                    ctx.fillStyle = isDark ? '#ffffff' : '#000000';
+                    ctx.beginPath();
+                    ctx.arc(px, py, isDark ? 1.6 : 2.2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
                     pulses.splice(p, 1);
-                    continue;
                 }
-
-                const px = n1.x + (n2.x - n1.x) * pulse.progress;
-                const py = n1.y + (n2.y - n1.y) * pulse.progress;
-
-                ctx.fillStyle = isDark ? '#ffffff' : '#000000';
-                ctx.beginPath();
-                ctx.arc(px, py, 2.0, 0, Math.PI * 2);
-                ctx.fill();
             }
 
-            // 6. Render Nodes & HUD Elements (Refined subtle radius & glow)
+            // 5. Render Nodes and Hover Overlays
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
                 const dx = pointer.x - n.x;
                 const dy = pointer.y - n.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                const isNear = dist < pointer.radius;
+                const isNear = hasPointer && dist < pointer.radius;
 
                 const currentRadius = isNear
-                    ? n.radius * 1.5 + n.tension * 0.8
-                    : n.radius + Math.sin(n.pulsePhase) * 0.18;
+                    ? n.radius * 2.1
+                    : n.radius + Math.sin(n.pulsePhase) * 0.25;
 
-                if (isNear || n.tension > 0.12) {
-                    ctx.fillStyle = `rgba(${accentGlow}, ${Math.min(0.4, 0.12 + n.tension * 0.3)})`;
+                if (n.tension > 0.08 || isNear) {
+                    const glowAlpha = Math.min(0.7, (n.tension + (isNear ? 0.4 : 0)) * 0.6);
+                    ctx.fillStyle = isDark
+                        ? `rgba(${accentGlow}, ${glowAlpha})`
+                        : `rgba(0, 0, 0, ${glowAlpha * 0.7})`;
                     ctx.beginPath();
                     ctx.arc(n.x, n.y, currentRadius * 1.8, 0, Math.PI * 2);
                     ctx.fill();
@@ -450,7 +483,7 @@ export function KineticMatrix({
                 ctx.arc(n.x, n.y, Math.max(isDark ? 0.7 : 1.25, currentRadius), 0, Math.PI * 2);
                 ctx.fill();
 
-                if (dist < 65) {
+                if (hasPointer && dist < 65) {
                     const radarRing = ((n.pulsePhase * 20) % 28) + 4;
                     const ringAlpha = (1 - radarRing / 32) * 0.22;
 
@@ -469,9 +502,27 @@ export function KineticMatrix({
             animId = requestAnimationFrame(render);
         };
 
-        animId = requestAnimationFrame(render);
-        return () => cancelAnimationFrame(animId);
-    }, [isRunning, isDarkMode, mode, customBgColor, customGridColor, drawLatticeLink]);
+        const handleVisibilityChange = () => {
+            if (!document.hidden && isInView && isRunning && !animId) {
+                lastTime = performance.now();
+                animId = requestAnimationFrame(render);
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        if (isInView && isRunning && !document.hidden) {
+            lastTime = performance.now();
+            animId = requestAnimationFrame(render);
+        }
+
+        return () => {
+            if (animId) cancelAnimationFrame(animId);
+            clearTimeout(scrollTimeout);
+            window.removeEventListener('scroll', handleScroll);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [isRunning, isInView, isDarkMode, mode, customBgColor, customGridColor, drawLatticeLink, isMedium, isLow, isMobile]);
 
     const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const container = containerRef.current;

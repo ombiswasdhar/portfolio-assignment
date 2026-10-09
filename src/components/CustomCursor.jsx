@@ -39,7 +39,10 @@ const WAVY_PATHS = WAVY_ANGLES.map((deg) => {
   return `M ${u.toFixed(1)} ${d.toFixed(1)} Q ${qx.toFixed(1)} ${qy.toFixed(1)} ${m.toFixed(1)} ${h.toFixed(1)} T ${f.toFixed(1)} ${p.toFixed(1)}`
 })
 
+import { useDeviceTier } from '../utils/deviceTier'
+
 export default function CustomCursor() {
+  const { isTouch } = useDeviceTier()
   const [bursts, setBursts] = useState([])
 
   const removeBurst = useCallback((id) => {
@@ -47,7 +50,7 @@ export default function CustomCursor() {
   }, [])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || isTouch) return
 
     // Spawn Jackie Zhang wavy click burst at exact click position
     const handlePointerDown = (e) => {
@@ -65,7 +68,9 @@ export default function CustomCursor() {
     return () => {
       window.removeEventListener('pointerdown', handlePointerDown)
     }
-  }, [])
+  }, [isTouch])
+
+  if (isTouch) return null
 
   return (
     <div

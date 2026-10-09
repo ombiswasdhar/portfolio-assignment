@@ -8,16 +8,16 @@ import KineticMatrix from '@/components/ui/kinetic-matrix'
 import ComicTapHintBubble from './ComicTapHintBubble'
 
 export default function AboutSection() {
-  const [activeMobileBubble, setActiveMobileBubble] = useState(null)
+  const [activeBubble, setActiveBubble] = useState(null)
   const [cardRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
 
   // Tap outside any bubble to dismiss the active bubble back to resting state
   useEffect(() => {
-    if (activeMobileBubble === null) return
+    if (activeBubble === null) return
 
     const handleOutsideTap = (e) => {
-      if (!e.target.closest('.comic-overlay-bubble')) {
-        setActiveMobileBubble(null)
+      if (!e.target.closest('.comic-overlay-bubble') && !e.target.closest('.comic-tap-hint')) {
+        setActiveBubble(null)
       }
     }
 
@@ -27,14 +27,14 @@ export default function AboutSection() {
       document.removeEventListener('click', handleOutsideTap)
       document.removeEventListener('touchstart', handleOutsideTap)
     }
-  }, [activeMobileBubble])
+  }, [activeBubble])
 
-  const toggleMobileBubble = (e, index) => {
+  const toggleBubble = (e, index) => {
     e.stopPropagation()
     if (e.currentTarget && typeof e.currentTarget.blur === 'function') {
       e.currentTarget.blur()
     }
-    setActiveMobileBubble(prev => (prev === index ? null : index))
+    setActiveBubble(prev => (prev === index ? null : index))
   }
 
   return (
@@ -69,6 +69,21 @@ export default function AboutSection() {
         
         {/* ================= DESKTOP / TABLET VIEW (md and up) ================= */}
         <div className="hidden md:block w-full">
+          {/* Top 'portfolio' cursive text with comic speech bubble tap hint (Desktop) */}
+          <div className="flex items-center justify-between pb-3.5 max-w-[1440px] mx-auto px-3">
+            <span className="font-script text-3xl lg:text-4xl font-normal leading-none tracking-wide text-white lowercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+              portfolio
+            </span>
+            <ComicTapHintBubble
+              active={activeBubble !== null}
+              text="tap any paragraph to zoom in"
+              onClick={(e) => {
+                e.stopPropagation()
+                setActiveBubble((prev) => (prev === null ? 0 : null))
+              }}
+            />
+          </div>
+
           <div className="relative w-full max-w-[1440px] mx-auto aspect-[1024/768] rounded-t-[28px] lg:rounded-t-[36px] rounded-b-none overflow-hidden shadow-[0_24px_70px_rgba(0,0,0,0.9)] border-t border-x border-white/10 group transition-all duration-500 hover:border-white/20">
             {/* Pristine Figma Frame Canvas with clean base for animated layers */}
             <img
@@ -93,14 +108,18 @@ export default function AboutSection() {
               <AnimatedCollage className="w-full h-full" standalone={false} />
             </div>
 
-            {/* Interactive Comic Text Bubbles Overlay for each Paragraph */}
+            {/* Interactive Comic Text Bubbles Overlay for each Paragraph (Desktop) */}
             {/* Tagline */}
             <div
-              className="comic-overlay-bubble comic-bubble-tail-left"
+              onClick={(e) => toggleBubble(e, 0)}
+              className={`comic-overlay-bubble comic-bubble-tail-left ${
+                activeBubble === 0 ? 'is-active' : ''
+              }`}
               style={{ left: '10.16%', top: '39.32%', width: '24.41%', minHeight: '6.25%' }}
               tabIndex={0}
               role="article"
               aria-label="Tagline: ui-ux designer / illustrator / artist based in SHILLONG , INDIA."
+              aria-expanded={activeBubble === 0}
             >
               <div className="w-full h-full p-2.5 flex items-center gap-2 text-[10px] lg:text-xs text-neutral-200 font-fredoka font-normal">
                 <span
@@ -123,11 +142,15 @@ export default function AboutSection() {
 
             {/* Paragraph 1: SINCE 8th grade... */}
             <div
-              className="comic-overlay-bubble comic-bubble-tail-left"
+              onClick={(e) => toggleBubble(e, 1)}
+              className={`comic-overlay-bubble comic-bubble-tail-left ${
+                activeBubble === 1 ? 'is-active' : ''
+              }`}
               style={{ left: '23.24%', top: '43.23%', width: '27.34%', minHeight: '10.42%' }}
               tabIndex={0}
               role="article"
               aria-label="Description paragraph 1"
+              aria-expanded={activeBubble === 1}
             >
               <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
                 <span
@@ -150,11 +173,15 @@ export default function AboutSection() {
 
             {/* Paragraph 2: For a long time I was into character designing... */}
             <div
-              className="comic-overlay-bubble comic-bubble-tail-left"
+              onClick={(e) => toggleBubble(e, 2)}
+              className={`comic-overlay-bubble comic-bubble-tail-left ${
+                activeBubble === 2 ? 'is-active' : ''
+              }`}
               style={{ left: '23.24%', top: '57.03%', width: '27.34%', minHeight: '13.67%' }}
               tabIndex={0}
               role="article"
               aria-label="Description paragraph 2"
+              aria-expanded={activeBubble === 2}
             >
               <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
                 <span>
@@ -170,11 +197,15 @@ export default function AboutSection() {
 
             {/* Paragraph 3: as a new and curious artist... */}
             <div
-              className="comic-overlay-bubble comic-bubble-tail-left"
+              onClick={(e) => toggleBubble(e, 3)}
+              className={`comic-overlay-bubble comic-bubble-tail-left ${
+                activeBubble === 3 ? 'is-active' : ''
+              }`}
               style={{ left: '10.16%', top: '70.83%', width: '40.43%', minHeight: '6.51%' }}
               tabIndex={0}
               role="article"
               aria-label="Description paragraph 3"
+              aria-expanded={activeBubble === 3}
             >
               <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
                 <span
@@ -195,11 +226,15 @@ export default function AboutSection() {
 
             {/* Paragraph 4: I love experimenting... */}
             <div
-              className="comic-overlay-bubble comic-bubble-tail-left"
+              onClick={(e) => toggleBubble(e, 4)}
+              className={`comic-overlay-bubble comic-bubble-tail-left ${
+                activeBubble === 4 ? 'is-active' : ''
+              }`}
               style={{ left: '10.16%', top: '77.60%', width: '40.43%', minHeight: '6.51%' }}
               tabIndex={0}
               role="article"
               aria-label="Description paragraph 4"
+              aria-expanded={activeBubble === 4}
             >
               <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
                 <span>
@@ -211,11 +246,15 @@ export default function AboutSection() {
 
             {/* Paragraph 5: I'm also really into sports... */}
             <div
-              className="comic-overlay-bubble comic-bubble-tail-left"
+              onClick={(e) => toggleBubble(e, 5)}
+              className={`comic-overlay-bubble comic-bubble-tail-left comic-bubble-bottom ${
+                activeBubble === 5 ? 'is-active' : ''
+              }`}
               style={{ left: '10.16%', top: '84.38%', width: '40.43%', minHeight: '7.29%' }}
               tabIndex={0}
               role="article"
               aria-label="Description paragraph 5"
+              aria-expanded={activeBubble === 5}
             >
               <div className="w-full h-full p-2.5 lg:p-3 text-[10px] sm:text-[11px] lg:text-[13px] text-neutral-200 font-fredoka font-light leading-snug">
                 <span>
@@ -236,16 +275,17 @@ export default function AboutSection() {
               portfolio
             </span>
             <ComicTapHintBubble
-              active={activeMobileBubble !== null}
+              active={activeBubble !== null}
+              text="tap any paragraph to zoom in"
               onClick={(e) => {
                 e.stopPropagation()
-                setActiveMobileBubble((prev) => (prev === null ? 0 : null))
+                setActiveBubble((prev) => (prev === null ? 0 : null))
               }}
             />
           </div>
 
           {/* Left Card - Clean, authentic Figma art with animated characters & tap-to-zoom bubbles */}
-          <div onClick={() => setActiveMobileBubble(null)} className="relative w-full rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.8)] border border-white/10">
+          <div onClick={() => setActiveBubble(null)} className="relative w-full rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.8)] border border-white/10">
             <img
               src={aboutLeftCardCanvas}
               alt="Hello, i'm OM. UI/UX designer, illustrator, artist based in Shillong, India."
@@ -257,13 +297,13 @@ export default function AboutSection() {
 
             {/* Mobile Tagline */}
             <div
-              onClick={(e) => toggleMobileBubble(e, 0)}
+              onClick={(e) => toggleBubble(e, 0)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 0 ? 'is-active' : ''
+                activeBubble === 0 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '30.00%', width: '52.08%', minHeight: '8.14%' }}
               role="article"
-              aria-expanded={activeMobileBubble === 0}
+              aria-expanded={activeBubble === 0}
             >
               <div className="w-full h-full p-2.5 flex items-center gap-1.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka">
                 <span
@@ -286,13 +326,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 1 */}
             <div
-              onClick={(e) => toggleMobileBubble(e, 1)}
+              onClick={(e) => toggleBubble(e, 1)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 1 ? 'is-active' : ''
+                activeBubble === 1 ? 'is-active' : ''
               }`}
               style={{ left: '34.79%', top: '39.83%', width: '58.33%', minHeight: '13.56%' }}
               role="article"
-              aria-expanded={activeMobileBubble === 1}
+              aria-expanded={activeBubble === 1}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span
@@ -314,13 +354,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 2 */}
             <div
-              onClick={(e) => toggleMobileBubble(e, 2)}
+              onClick={(e) => toggleBubble(e, 2)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 2 ? 'is-active' : ''
+                activeBubble === 2 ? 'is-active' : ''
               }`}
               style={{ left: '34.79%', top: '53.05%', width: '58.33%', minHeight: '17.80%' }}
               role="article"
-              aria-expanded={activeMobileBubble === 2}
+              aria-expanded={activeBubble === 2}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span>
@@ -335,13 +375,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 3 */}
             <div
-              onClick={(e) => toggleMobileBubble(e, 3)}
+              onClick={(e) => toggleBubble(e, 3)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 3 ? 'is-active' : ''
+                activeBubble === 3 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '71.02%', width: '86.25%', minHeight: '8.47%' }}
               role="article"
-              aria-expanded={activeMobileBubble === 3}
+              aria-expanded={activeBubble === 3}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span
@@ -361,13 +401,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 4 */}
             <div
-              onClick={(e) => toggleMobileBubble(e, 4)}
+              onClick={(e) => toggleBubble(e, 4)}
               className={`comic-overlay-bubble comic-bubble-tail-left ${
-                activeMobileBubble === 4 ? 'is-active' : ''
+                activeBubble === 4 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '79.83%', width: '86.25%', minHeight: '8.47%' }}
               role="article"
-              aria-expanded={activeMobileBubble === 4}
+              aria-expanded={activeBubble === 4}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span>
@@ -378,13 +418,13 @@ export default function AboutSection() {
 
             {/* Mobile Paragraph 5 */}
             <div
-              onClick={(e) => toggleMobileBubble(e, 5)}
+              onClick={(e) => toggleBubble(e, 5)}
               className={`comic-overlay-bubble comic-bubble-tail-left comic-bubble-bottom ${
-                activeMobileBubble === 5 ? 'is-active' : ''
+                activeBubble === 5 ? 'is-active' : ''
               }`}
               style={{ left: '6.88%', top: '88.64%', width: '86.25%', minHeight: '9.49%' }}
               role="article"
-              aria-expanded={activeMobileBubble === 5}
+              aria-expanded={activeBubble === 5}
             >
               <div className="w-full h-full p-2.5 text-[11px] sm:text-xs text-neutral-100 font-fredoka font-light leading-snug">
                 <span>

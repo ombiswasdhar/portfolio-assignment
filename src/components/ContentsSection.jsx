@@ -12,6 +12,13 @@ import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
 import oniCardsHoverImg from '../assets/work/headphone-mockup.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
+import AureusShowcase from './AureusShowcase'
+import AureusCaseStudyModal from './AureusCaseStudyModal'
+import aureusIdeationImg from '../assets/work/aureus/aureus-01-ideation.png'
+import aureusUserStudyImg from '../assets/work/aureus/aureus-02-user-study.png'
+import aureusPainPointsImg from '../assets/work/aureus/aureus-03-pain-points.png'
+import aureusPersonaImg from '../assets/work/aureus/aureus-04-persona.png'
+import aureusAdvantagesImg from '../assets/work/aureus/aureus-05-advantages.png'
 
 // The 14 replacement PlayStaples images from Downloads/playstaples/New folder.
 import psCycle01Img from '../assets/playstaples/user-cycle/01.jpg'
@@ -259,13 +266,20 @@ const projectsData = [
     accentColor: '#EAB854',
     date: 'MAR 2, 2026',
     title: 'Aureaus Audio',
-    subtitle: '3D Hardware & Editorial UI',
-    category: '3D Product Design',
-    bulletSummary: '3D Product Design • Telemetry Dashboard • Hardware Lookbook',
+    subtitle: '3D Hardware & UX Case Study Deck',
+    category: 'UX Case Study & 3D Design',
+    bulletSummary: 'UX Case Study • User Persona • Market Landscape • 3D Hardware',
     description:
       'Aureus is your go-to site for discovering top quality headphones made by the best brands for audio in the market. We focus on bringing you a carefully chosen range of luxurious, high performance headphones that combine superior sound with sleek design.',
     thumbnail: projectAureausImg,
-    previewPhotos: [projectAureausImg, projectAureausImg],
+    previewPhotos: [
+      projectAureausImg,
+      aureusIdeationImg,
+      aureusUserStudyImg,
+      aureusPersonaImg,
+      aureusPainPointsImg,
+      aureusAdvantagesImg,
+    ],
     tags: ['3D Modeling', 'Blender', 'Editorial UI', 'Telemetry', 'Hardware Lookbook'],
     deliverables: [
       '3D headphone model rendering & lighting setups in Blender',
@@ -534,13 +548,16 @@ export default function ContentsSection() {
 
       {/* CASE STUDY DETAIL MODAL */}
       {activeProject && (
+        activeProject.id === 'aureaus' ? (
+          <AureusCaseStudyModal onClose={() => setActiveProject(null)} />
+        ) : (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/90 backdrop-blur-md overflow-y-auto animate-fadeIn"
           onClick={() => setActiveProject(null)}
           role="dialog"
         >
           <div
-            className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-[#101015] border border-white/20 rounded-2xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] p-5 sm:p-8 lg:p-10 my-auto text-white"
+            className="relative w-full max-w-6xl max-h-[92vh] overflow-y-auto bg-[#101015] border border-white/20 rounded-2xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] p-5 sm:p-8 lg:p-10 my-auto text-white"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4 pb-6 border-b border-white/10">
@@ -608,6 +625,11 @@ export default function ContentsSection() {
               </div>
 
               <div className="flex flex-col gap-4">
+                {activeProject.id === 'aureaus' ? (
+                  <div className="w-full">
+                    <AureusShowcase onZoomImage={setActiveImageZoom} />
+                  </div>
+                ) : (
                 <div
                   className="relative group/modalImg overflow-hidden rounded-xl border border-white/20 bg-black cursor-zoom-in shadow-2xl"
                   onClick={() => setActiveImageZoom(activeProject.thumbnail)}
@@ -617,6 +639,7 @@ export default function ContentsSection() {
                     <span className="font-poppins-light font-light text-xs px-4 py-2 rounded-full bg-black/80 text-white border border-white/30 tracking-wider uppercase">Click to Expand 🔍</span>
                   </div>
                 </div>
+                )}
                 <div className="flex flex-wrap gap-2 pt-2">
                   {activeProject.tags.map((tag, tIdx) => (
                     <span key={tIdx} className="font-poppins-light font-light text-xs px-3 py-1 rounded bg-white/5 border border-white/10 text-neutral-300 uppercase tracking-wide">
@@ -628,6 +651,7 @@ export default function ContentsSection() {
             </div>
           </div>
         </div>
+        )
       )}
 
       {/* FULL RESOLUTION IMAGE ZOOM LIGHTBOX */}

@@ -115,7 +115,6 @@ export function HelixChronoMatrix({
 
         // Initialize moving particles along the lines
         const particles: Particle[] = [];
-        const isMobileCanvas = width < 768;
         const particleCount = (lowPower || isMobileCanvas) ? 6 : 24;
         for (let i = 0; i < particleCount; i++) {
             particles.push({

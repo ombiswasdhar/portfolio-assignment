@@ -12,6 +12,12 @@ import QuantumSwarmDemo from './components/examples/quantum-swarm-demo'
 import HelixChronoMatrixDemo from './components/examples/helix-chrono-matrix-demo'
 import MusicPlayer from './components/MusicPlayer'
 import { MusicProvider } from './context/MusicContext'
+import { getDeviceTier } from './utils/deviceTier'
+
+// Initialize device performance tier & attributes immediately
+if (typeof window !== 'undefined') {
+  getDeviceTier()
+}
 
 // Ensure browser does not auto-restore scrolled positions on reload
 if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {

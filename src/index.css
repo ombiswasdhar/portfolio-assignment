@@ -333,11 +333,11 @@
 /* Active state explicitly toggled via tap or interaction */
 .comic-overlay-bubble.is-active {
   opacity: 1 !important;
-  transform: scale(1.06) translateY(-2px) !important;
+  transform: scale(1.15) translateY(-4px) !important;
   background-color: #1e2024 !important;
   border-color: #ffffff !important;
-  box-shadow: 4px 4px 0px #ba1f1f, 0 16px 36px rgba(0, 0, 0, 0.9) !important;
-  z-index: 50 !important;
+  box-shadow: 5px 5px 0px #ba1f1f, 0 20px 48px rgba(0, 0, 0, 0.95) !important;
+  z-index: 60 !important;
 }
 
 /* Bottom-aligned bubble adjustment: elevate upwards so bottom edge and shadow never get cut off */
@@ -346,13 +346,14 @@
 }
 
 .comic-bubble-bottom.is-active {
-  transform: scale(1.06) translateY(-28px) !important;
+  transform: scale(1.15) translateY(-32px) !important;
+  z-index: 60 !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .comic-bubble-bottom:hover,
   .comic-bubble-bottom:focus-visible {
-    transform: scale(1.08) translateY(-28px) !important;
+    transform: scale(1.08) translateY(-28px);
   }
 }
 
@@ -564,52 +565,83 @@
 /* ================= CV Section Zoom Overlay Styles ================= */
 .cv-zoom-card {
   position: absolute;
-  border-radius: 0.875rem;
+  border-radius: 1.25rem;
   cursor: pointer;
   opacity: 0;
   overflow-y: auto;
   transform: scale(0.98);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
               opacity 0.22s ease,
-              box-shadow 0.28s ease;
+              box-shadow 0.28s ease,
+              border-color 0.2s ease,
+              background-color 0.2s ease;
   will-change: transform, opacity;
   z-index: 25;
   pointer-events: auto;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border: 2.5px solid transparent;
+  background-color: #1e2024;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+  font-family: 'Fredoka', sans-serif !important;
 }
 
 .cv-zoom-card:hover,
-.cv-zoom-card:focus-visible,
-.cv-zoom-card.is-active {
+.cv-zoom-card:focus-visible {
   opacity: 1;
-  transform: scale(1.15) translateY(-3px);
-  z-index: 45;
-  border-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(255, 255, 255, 0.35);
+  transform: scale(1.06) translateY(-2px);
+  z-index: 40;
+  border-color: #ffffff;
+  background-color: #1e2024;
+  box-shadow: 4px 4px 0px #ba1f1f, 0 16px 36px rgba(0, 0, 0, 0.9);
 }
 
+.cv-zoom-card.is-active {
+  opacity: 1 !important;
+  transform: scale(1.22) translateY(-6px) !important;
+  z-index: 60 !important;
+  border-color: #ffffff !important;
+  background-color: #1e2024 !important;
+  box-shadow: 6px 6px 0px #ba1f1f, 0 32px 85px rgba(0, 0, 0, 0.98) !important;
+}
 
-/* Philosophy zoom card: retains the authentic poster artwork identically without synthetic borders */
+/* Philosophy zoom card: retains the authentic poster artwork with matching comic border and shadow on zoom */
 .cv-zoom-card--philosophy {
-  border: none !important;
-  border-radius: 8px !important;
+  border-radius: 1.25rem !important;
   background: transparent !important;
+  border: 2.5px solid transparent !important;
 }
 
 .cv-zoom-card--philosophy:hover,
-.cv-zoom-card--philosophy:focus-visible,
+.cv-zoom-card--philosophy:focus-visible {
+  border-color: #ffffff !important;
+  box-shadow: 4px 4px 0px #ba1f1f, 0 16px 36px rgba(0, 0, 0, 0.9) !important;
+  transform: scale(1.06) translateY(-2px) !important;
+  z-index: 40 !important;
+}
+
 .cv-zoom-card--philosophy.is-active {
-  border: none !important;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95) !important;
+  border-color: #ffffff !important;
+  box-shadow: 6px 6px 0px #ba1f1f, 0 32px 85px rgba(0, 0, 0, 0.98) !important;
+  transform: scale(1.22) translateY(-6px) !important;
+  z-index: 60 !important;
 }
 
 @media (max-width: 640px) {
-  .cv-zoom-card:hover,
-  .cv-zoom-card:focus-visible,
-  .cv-zoom-card.is-active {
-    transform: scale(1.22);
+  .cv-zoom-card.is-active,
+  .cv-zoom-card--philosophy.is-active {
+    transform: scale(1.25) translateY(-6px) !important;
+  }
+}
+
+/* On mobile viewports & touch devices, prevent sticky hover so non-active cards return to resting state */
+@media (max-width: 767px), (hover: none) {
+  .cv-zoom-card:not(.is-active) {
+    opacity: 0 !important;
+    transform: scale(0.98) !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    z-index: 25 !important;
   }
 }
 
@@ -888,14 +920,16 @@
   --cursor-pointer: url("data:image/png;base64,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") 12 1, url("/assets/cursor/pointer_32.png") 12 1, pointer;
 }
 
-/* Universal application - custom cursor is guaranteed active and visible everywhere */
-*, *::before, *::after {
-  cursor: var(--cursor-arrow);
-}
+/* Universal application - custom cursor is guaranteed active and visible for fine pointers (desktop) */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: var(--cursor-arrow);
+  }
 
-/* Interactive elements get the Pointer Hand Cursor */
-a, button, [role="button"], input, textarea, select, label, summary, .cursor-pointer, [data-clickable], .rcard, .rcard *, [tabindex]:not([tabindex="-1"]) {
-  cursor: var(--cursor-pointer) !important;
+  /* Interactive elements get the Pointer Hand Cursor */
+  a, button, [role="button"], input, textarea, select, label, summary, .cursor-pointer, [data-clickable], .rcard, .rcard *, [tabindex]:not([tabindex="-1"]) {
+    cursor: var(--cursor-pointer) !important;
+  }
 }
 
 @keyframes wavyBurstScale {
@@ -934,4 +968,31 @@ a, button, [role="button"], input, textarea, select, label, summary, .cursor-poi
 
 .animate-wavy-stroke {
   animation: wavyStrokeMotion 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* =========================================================================
+   ADAPTIVE HARDWARE TIER OPTIMIZATIONS
+   High-end devices retain 100% full blur passes and shaders.
+   Mid-end and low-end devices reduce heavy filter blurs to save mobile GPU composite fillrate.
+   ========================================================================= */
+
+/* Mid-tier optimization: softens heavy 140px-180px Gaussian blurs to 40px */
+html[data-perf-tier="medium"] .blur-\[140px\],
+html[data-perf-tier="medium"] .blur-\[150px\],
+html[data-perf-tier="medium"] .blur-\[160px\],
+html[data-perf-tier="medium"] .blur-\[180px\] {
+  filter: blur(40px) !important;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+/* Low-tier optimization: eliminates expensive multi-pass Gaussian blur filters completely */
+html[data-perf-tier="low"] .blur-\[140px\],
+html[data-perf-tier="low"] .blur-\[150px\],
+html[data-perf-tier="low"] .blur-\[160px\],
+html[data-perf-tier="low"] .blur-\[180px\] {
+  filter: none !important;
+  background: radial-gradient(circle at center, rgba(185, 28, 28, 0.15) 0%, transparent 70%) !important;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
 }
