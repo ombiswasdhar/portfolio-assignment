@@ -40,7 +40,6 @@ import psCycleRetroRohtakImg from '../assets/playstaples/user-cycle/Retro Rohtak
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { HandwritingText } from '@/components/ui/handwriting-text'
-import Auralis from '@/components/ui/auralis'
 import MarqueeBar from './MarqueeBar'
 import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
 
@@ -398,9 +397,18 @@ export default function ContentsSection() {
 
   return (
     <div className="relative w-full bg-black text-white selection:bg-black selection:text-white">
+      {/* Background ambient radial glow */}
+      <div
+        className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-purple-900/10 blur-[150px] rounded-full pointer-events-none"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-1/4 right-10 w-[600px] h-[600px] bg-blue-900/10 blur-[180px] rounded-full pointer-events-none"
+        aria-hidden="true"
+      />
+
       {/* DISCLAIMER HERO BLOCK */}
-      <section className="relative w-full min-h-[70vh] flex flex-col items-center justify-center overflow-hidden py-16 px-4 sm:px-6 md:px-8 border-b border-white/10">
-        <Auralis height="100%" className="absolute inset-0 w-full h-full pointer-events-none z-0" />
+      <section className="relative w-full min-h-[70vh] flex flex-col items-center justify-center py-16 px-4 sm:px-6 md:px-8">
 
         <div
           ref={disclaimerRef}
