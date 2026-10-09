@@ -9,17 +9,33 @@ import oniCardBackImg from '../assets/work/oni-card-back.png'
 import oniCard2FrontImg from '../assets/work/oni-card-2-front.png'
 import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
 import oniCardsHoverImg from '../assets/work/headphone-mockup.png'
+import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
+import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 import AureusShowcase from './AureusShowcase'
 import AureusCaseStudyModal from './AureusCaseStudyModal'
-import PlayStaplesCardAnimation from './PlayStaplesCardAnimation'
 import PlayStaplesCaseStudyModal from './PlayStaplesCaseStudyModal'
-import playStaplesHeroImg from '../assets/work/playstaples/playstaples-hero.png'
 import aureusIdeationImg from '../assets/work/aureus/aureus-01-ideation.png'
 import aureusUserStudyImg from '../assets/work/aureus/aureus-02-user-study.png'
 import aureusPainPointsImg from '../assets/work/aureus/aureus-03-pain-points.png'
 import aureusPersonaImg from '../assets/work/aureus/aureus-04-persona.png'
 import aureusAdvantagesImg from '../assets/work/aureus/aureus-05-advantages.png'
+
+// The 14 replacement PlayStaples images from Downloads/playstaples/New folder.
+import psCycle01Img from '../assets/playstaples/user-cycle/01.jpg'
+import psCycle01BombayImg from '../assets/playstaples/user-cycle/01_Bombay.jpg'
+import psCycle03Img from '../assets/playstaples/user-cycle/03.jpg'
+import psCycle129Img from '../assets/playstaples/user-cycle/129.jpg'
+import psCycle131Img from '../assets/playstaples/user-cycle/131.jpg'
+import psCycle132Img from '../assets/playstaples/user-cycle/132.jpg'
+import psCycle19Img from '../assets/playstaples/user-cycle/19.jpg'
+import psCycle22Img from '../assets/playstaples/user-cycle/22.jpg'
+import psCycle23Img from '../assets/playstaples/user-cycle/23.jpg'
+import psCycle35Img from '../assets/playstaples/user-cycle/35.jpg'
+import psCycleBd01Img from '../assets/playstaples/user-cycle/BD_01.jpg'
+import psCycleCorbett04Img from '../assets/playstaples/user-cycle/corbett 04.jpg'
+import psCyclePost1303Img from '../assets/playstaples/user-cycle/Post 13_03.jpg'
+import psCycleRetroRohtakImg from '../assets/playstaples/user-cycle/Retro Rohtak_PS.jpg'
 
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -169,29 +185,45 @@ const projectsData = [
     num: '01',
     tabTitle: 'PlayStaples',
     displayTitle: 'PLAYSTAPLES ©',
-    folderColor: '#FFE500', // PlayStaples Brand Yellow
-    tabColor: '#FFE500',
-    accentColor: '#E84A4A',
-    date: 'MAR 2026',
+    folderColor: '#48C9A8', // Fresh Mint Green
+    tabColor: '#48C9A8',
+    accentColor: '#FF6584',
+    date: 'FEB 20, 2026',
     title: 'PlayStaples',
-    subtitle: 'Usability Testing & E-Commerce UX Redesign',
-    category: 'Usability Testing & UX Redesign',
-    bulletSummary: "Nielsen's 10 Heuristics • 5-User A/B Testing • Checkout Redesign",
+    subtitle: 'Kaali Peeli Toy Design & Brand Experience',
+    category: 'Toy Design & Branding',
+    bulletSummary: 'Kaali Peeli Toy Design • 3D CAD Modeling • Retail Packaging',
     description:
-      "A comprehensive usability evaluation and UX redesign for the PlayStaples e-commerce platform. Evaluated navigation against Nielsen's 10 Heuristics, conducted unmoderated testing with 5 participants, and resolved critical e-commerce drop-offs in product discovery, catalog browsing, and checkout quantity controls—cutting average purchase duration in half.",
-    thumbnail: playStaplesHeroImg,
-    isPlayStaplesAnimation: true,
-    tags: ['Usability Testing', 'UX Research', 'A/B Testing', 'E-Commerce', 'Heuristics', 'Figma'],
+      'PlayStaples celebrates iconic Indian street culture through tactile collectible design. "Kaali Peeli" reimagines the legendary Mumbai Premier Padmini taxi as a handcrafted wooden toy—celebrating nostalgia "for the ones who carved dreams on the trunk." Developed with 3D product visualization, custom taxi livery, physical packaging, and brand storytelling.',
+    thumbnail: projectPlaystaplesImg,
+    hoverImage: kaaliPeeliHoverImg,
+    previewPhotos: [
+      psCycle01Img,
+      psCycle01BombayImg,
+      psCycle03Img,
+      psCycle129Img,
+      psCycle131Img,
+      psCycle132Img,
+      psCycle19Img,
+      psCycle22Img,
+      psCycle23Img,
+      psCycle35Img,
+      psCycleBd01Img,
+      psCycleCorbett04Img,
+      psCyclePost1303Img,
+      psCycleRetroRohtakImg,
+    ],
+    tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
     deliverables: [
-      "Comprehensive 10 Heuristics usability audit & severity matrix",
-      "5-user moderated & unmoderated task testing sessions",
-      "Homepage product discovery & clickable imagery redesign",
-      "Personalized checkout funnel with in-cart quantity controls",
-      "Quantitative metrics proving a 50%+ reduction in task duration",
+      'Handcrafted wooden toy conceptualization & 3D CAD modeling',
+      'Authentic "Kaali Peeli" Mumbai taxi colorway & livery details',
+      'Custom rooftop luggage rack & tactile wooden wheel proportions',
+      'Complete retail packaging design, hangtags & typography',
+      'Interactive 3D renders & lifestyle product scene staging',
     ],
     highlights:
-      "Transformed baseline navigation confusion into a streamlined, high-trust buying journey. Reduced average checkout time from 2m 45s down to 1m 20s with 3 seamless clicks.",
-    tools: ['Figma', 'Google Meet', 'Google Forms', 'Heuristic Evaluation'],
+      'Transformed an ubiquitous Mumbai cultural emblem into a sleek, nostalgic collectible wooden toy—blending warm organic wood grain with pop-art industrial styling and playful brand identity.',
+    tools: ['Figma', '3D Modeling', 'Photoshop', 'Packaging Design'],
     figmaUrl:
       'https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0',
   },
@@ -471,9 +503,7 @@ export default function ContentsSection() {
               >
                 {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
                 <div className={`relative w-full aspect-[4/3] flex-1 overflow-hidden ${card.flipImages ? 'bg-[#c99bd8]' : 'bg-neutral-900'}`}>
-                  {card.id === 'playstaples' || card.isPlayStaplesAnimation ? (
-                    <PlayStaplesCardAnimation isPaused={hoveredCardId === card.id} />
-                  ) : card.isIsometricCards ? (
+                  {card.isIsometricCards ? (
                     <OniCardIsometricAnimation isPaused={hoveredCardId === card.id} />
                   ) : card.flipImages ? (
                     <FlippingBusinessCard
@@ -495,9 +525,10 @@ export default function ContentsSection() {
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                     />
                   )}
-                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.id === 'business-cards' || card.id === 'oni-studios' ? 'pointer-events-none' : 'bg-black/50 backdrop-blur-[2px]'}`}>
-                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/25" />
-                    {!(card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards) && (
+                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.id === 'business-cards' || card.id === 'oni-studios' ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
+                    {card.hoverImage && <img src={card.hoverImage} alt={`${card.title} project artwork`} className="absolute inset-0 h-full w-full object-cover" />}
+                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />
+                    {!(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards) && (
                       <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
                         View Case Study ↗
                       </span>
