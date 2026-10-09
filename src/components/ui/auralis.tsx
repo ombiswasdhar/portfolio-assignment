@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { useDeviceTier } from "@/utils/deviceTier";
 
 const vertexShaderGLSL = `
 attribute vec2 position;
@@ -29,7 +28,7 @@ vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
 float snoise(vec2 v) {
   const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
   vec2 i  = floor(v + dot(v, C.yy));
-  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 x0 = v - i + dot(i, C.xx);
   vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
   vec4 x12 = x0.xyxy + C.xxzz;
   x12.xy -= i1;
@@ -37,7 +36,7 @@ float snoise(vec2 v) {
   vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
   vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
   m = m*m; m = m*m;
-  vec3 x = 2.0 * fract(p * 0.0243902439) - 1.0;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
   vec3 h = abs(x) - 0.5;
   vec3 ox = floor(x + 0.5);
   vec3 a0 = x - ox;
@@ -49,19 +48,23 @@ float snoise(vec2 v) {
 }
 
 void main() {
-  vec2 uv = gl_FragCoord.xy / u_resolution;
-  vec2 p = uv * 2.0 - 1.0;
-  p.x *= u_resolution.x / u_resolution.y;
+  vec2 uv = vUv;
+  float ratio = u_resolution.x / u_resolution.y;
+  vec2 p = uv * vec2(ratio, 1.0);
+  float t = u_time * 0.2;
 
-  float noiseVal = 0.0;
-  noiseVal += 0.50 * snoise(p * 1.5 + vec2(u_time * 0.2, -u_time * 0.15));
-  noiseVal += 0.25 * snoise(p * 3.0 - vec2(-u_time * 0.1, u_time * 0.25));
+  float n1 = snoise(p * 0.5 + t);
+  float n2 = snoise(p * 0.9 - t * 0.5 + n1);
+  
+  float light = pow(abs(n2), 2.5) * 0.5; 
 
-  vec3 col = mix(u_colors[0], u_colors[1], smoothstep(-0.6, 0.6, noiseVal));
-  col = mix(col, u_colors[2], smoothstep(0.1, 0.8, noiseVal));
+  vec3 col = vec3(0.02, 0.01, 0.01); 
 
-  float g = fract(sin(dot(uv + fract(u_time), vec2(12.9898, 78.233))) * 43758.5453);
-  col += (g - 0.5) * u_grain * 0.15;
+  col += u_colors[0] * smoothstep(0.1, 1.0, n1) * 0.5;
+  col += u_colors[1] * light;
+
+  float grain = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453 + u_time);
+  col += (grain - 0.5) * u_grain * 0.5;
 
   float dist = length(uv - 0.5);
   col *= smoothstep(1.2, 0.2, dist);
@@ -89,24 +92,6 @@ const Auralis = ({
 }: AuralisProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isInView, setIsInView] = useState(false);
-  const { tier, isHigh, isMedium, isLow, isMobile, dprCap } = useDeviceTier();
-
-  // IntersectionObserver so WebGL shader halts completely when off-screen
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
-      },
-      { rootMargin: "100px" }
-    );
-
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, []);
 
   const hexToRgb = (hex: string): [number, number, number] => {
     const h = hex.replace("#", "");
@@ -118,13 +103,11 @@ const Auralis = ({
   };
 
   useEffect(() => {
-    if (isLow) return; // Low tier uses CSS gradient fallback
-
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const gl = canvas.getContext("webgl", { antialias: isHigh, powerPreference: "low-power" });
+    const gl = canvas.getContext("webgl", { antialias: true });
     if (!gl) return;
 
     const createShader = (type: number, src: string) => {
@@ -163,7 +146,7 @@ const Auralis = ({
     };
 
     const resize = () => {
-      const dpr = dprCap || (isHigh ? Math.min(window.devicePixelRatio || 1, 1.5) : 1.0);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.floor(container.clientWidth * dpr);
       canvas.height = Math.floor(container.clientHeight * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -172,36 +155,8 @@ const Auralis = ({
     const ro = new ResizeObserver(resize);
     ro.observe(container);
 
-    let raf: number = 0;
-    let lastRenderTime = 0;
-    let isScrolling = false;
-    let scrollTimeout: any = null;
-
-    const handleScroll = () => {
-      isScrolling = true;
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        isScrolling = false;
-      }, 100);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
+    let raf: number;
     const render = (t: number) => {
-      if (!isInView || document.hidden) {
-        raf = 0;
-        return;
-      }
-
-      // On mid/low-tier laptops, desktops, and mobile during aggressive scrolling, skip alternate frames to guarantee 60fps scroll
-      if ((isMedium || isLow) && isScrolling) {
-        if (t - lastRenderTime < 34) {
-          raf = requestAnimationFrame(render);
-          return;
-        }
-      }
-
-      lastRenderTime = t;
-
       gl.uniform2f(locs.res, canvas.width, canvas.height);
       gl.uniform1f(locs.time, t * 0.001 * speed);
       gl.uniform1f(locs.grain, grain);
@@ -213,26 +168,13 @@ const Auralis = ({
       raf = requestAnimationFrame(render);
     };
 
-    const handleVisibility = () => {
-      if (!document.hidden && isInView && !raf) {
-        raf = requestAnimationFrame(render);
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-
-    if (isInView && !document.hidden) {
-      raf = requestAnimationFrame(render);
-    }
-
+    raf = requestAnimationFrame(render);
     return () => {
       ro.disconnect();
-      if (raf) cancelAnimationFrame(raf);
-      clearTimeout(scrollTimeout);
-      window.removeEventListener("scroll", handleScroll);
-      document.removeEventListener("visibilitychange", handleVisibility);
+      cancelAnimationFrame(raf);
       gl.deleteProgram(program);
     };
-  }, [colors, speed, grain, isInView, isHigh, isMedium, isLow, isMobile, dprCap]);
+  }, [colors, speed, grain]);
 
   return (
     <div
@@ -240,16 +182,10 @@ const Auralis = ({
       style={{ height }}
       className={cn("relative w-full overflow-hidden bg-[#010103]", className)}
     >
-      {isLow ? (
-        <div 
-          className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_rgba(185,28,28,0.25)_0%,_rgba(1,1,3,1)_70%)] pointer-events-none"
-        />
-      ) : (
-        <canvas
-          ref={canvasRef}
-          className="pointer-events-none absolute inset-0 h-full w-full"
-        />
-      )}
+      <canvas
+        ref={canvasRef}
+        className="pointer-events-none absolute inset-0 h-full w-full"
+      />
       <div className="relative z-10 flex h-full w-full flex-col items-center justify-center" />
     </div>
   );
