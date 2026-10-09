@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ArrowUp, ExternalLink, ZoomIn } from 'lucide-react'
+import { X, ArrowUp, ExternalLink, ZoomIn, Maximize2, Minimize2 } from 'lucide-react'
 
 import heroPosterImg from '../assets/work/playstaples/playstaples-hero.png'
 import cs01Img from '../assets/work/playstaples/playstaples-case-study-01.jpg'
@@ -24,6 +24,33 @@ const FRAME_490_SLICES = [
 export default function PlayStaplesCaseStudyModal({ onClose }) {
   const scrollContainerRef = useRef(null)
   const [activeZoomImage, setActiveZoomImage] = useState(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  // Track browser native fullscreen state
+  useEffect(() => {
+    const handleFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', handleFsChange)
+    return () => document.removeEventListener('fullscreenchange', handleFsChange)
+  }, [])
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {})
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {})
+      }
+    }
+  }
+
+  const handleClose = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {})
+    }
+    onClose()
+  }
 
   // Close on Escape key
   useEffect(() => {
@@ -32,13 +59,13 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
         if (activeZoomImage) {
           setActiveZoomImage(null)
         } else {
-          onClose()
+          handleClose()
         }
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onClose, activeZoomImage])
+  }, [activeZoomImage])
 
   // Prevent background scrolling while modal is open
   useEffect(() => {
@@ -57,47 +84,69 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/95 backdrop-blur-xl overflow-hidden animate-fadeIn"
+      className="fixed inset-0 z-50 w-screen h-screen bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
       role="dialog"
       aria-modal="true"
     >
-      <div
-        ref={scrollContainerRef}
-        className="relative w-full max-w-7xl h-[94vh] overflow-y-auto bg-[#0A0A0D] border border-white/15 rounded-2xl sm:rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.98)] text-white flex flex-col"
-      >
-        {/* ================= TOP APP BAR ================= */}
-        <header className="sticky top-0 z-40 bg-[#0A0A0D]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#FFE500] shadow-[0_0_10px_#FFE500]" />
+      {/* ================= TOP FULLSCREEN APP BAR ================= */}
+      <header className="sticky top-0 z-40 bg-[#0A0A0D]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between shrink-0 shadow-lg">
+        <div className="flex items-center gap-3">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#FFE500] shadow-[0_0_10px_#FFE500]" />
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
             <span className="font-akira text-sm sm:text-base font-black tracking-wider text-white">
               PLAYSTAPLES
             </span>
+            <span className="text-[10px] sm:text-xs font-ca-mono text-white/50 tracking-wider">
+              Coursework Assignment • Usability Testing &amp; Research Artboards
+            </span>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <a
-              href="https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono transition-colors"
-            >
-              <ExternalLink className="w-3.5 h-3.5 text-[#FFE500]" />
-              <span>Figma Design ↗</span>
-            </a>
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono text-white transition-colors cursor-pointer"
+            title={isFullscreen ? 'Exit Full Screen' : 'Toggle Full Screen'}
+          >
+            {isFullscreen ? (
+              <Minimize2 className="w-3.5 h-3.5 text-[#FFE500]" />
+            ) : (
+              <Maximize2 className="w-3.5 h-3.5 text-[#FFE500]" />
+            )}
+            <span className="hidden sm:inline">
+              {isFullscreen ? 'Exit Fullscreen' : 'Full Screen'}
+            </span>
+          </button>
 
-            <button
-              onClick={onClose}
-              type="button"
-              className="p-2 sm:p-2.5 rounded-full bg-white/10 hover:bg-red-600/80 hover:text-white text-white/70 border border-white/15 transition-all active:scale-95 cursor-pointer"
-              title="Close (Esc)"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </header>
+          <a
+            href="https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5 text-[#FFE500]" />
+            <span className="hidden sm:inline">Figma Design ↗</span>
+          </a>
 
-        {/* ================= MODAL BODY: PURE ARTBOARD SHOWCASE ================= */}
-        <div className="p-3 sm:p-6 lg:p-8 space-y-6 flex-1">
+          <button
+            onClick={handleClose}
+            type="button"
+            className="p-2 sm:px-3.5 sm:py-1.5 rounded-full bg-white/10 hover:bg-red-600/80 hover:text-white text-white/80 border border-white/15 transition-all active:scale-95 cursor-pointer text-xs font-ca-mono flex items-center gap-1.5"
+            title="Close (Esc)"
+          >
+            <X className="w-4 h-4" />
+            <span className="hidden sm:inline">Close</span>
+          </button>
+        </div>
+      </header>
+
+      {/* ================= SCROLLABLE ASSIGNMENT ARTBOARD FEED ================= */}
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 w-full overflow-y-auto px-2 sm:px-6 md:px-10 py-6 sm:py-8 space-y-6"
+      >
+        <div className="w-full max-w-[1500px] mx-auto space-y-6">
           {/* HERO PAGE: UT A1 2.PDF */}
           <div
             className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-white/15 bg-black cursor-zoom-in shadow-2xl transition-all duration-300 hover:border-white/30"
@@ -139,7 +188,7 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
           </div>
 
           {/* ================= FOOTER ================= */}
-          <footer className="border-t border-white/15 pt-6 pb-2 flex items-center justify-between gap-4">
+          <footer className="border-t border-white/15 pt-8 pb-4 flex items-center justify-between gap-4">
             <button
               type="button"
               onClick={scrollToTop}
@@ -160,7 +209,7 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
 
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 className="px-5 py-2 rounded-full bg-[#FFE500] hover:bg-[#ffe833] text-black font-ca-mono text-xs font-bold transition-transform active:scale-95 cursor-pointer shadow-lg shadow-[#FFE500]/20"
               >
                 Close

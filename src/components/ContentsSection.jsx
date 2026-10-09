@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
-import { Layers, Grid3X3, LayoutList } from 'lucide-react'
+import { Layers, Grid3X3, LayoutList, Maximize2, Minimize2, ExternalLink, ZoomIn, ArrowUp, X } from 'lucide-react'
 import projectCardsImg from '../assets/work/project_cards.jpg'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
@@ -330,6 +330,40 @@ export default function ContentsSection() {
   const [activeProject, setActiveProject] = React.useState(null)
   const [activeImageZoom, setActiveImageZoom] = React.useState(null)
   const [hoveredCardId, setHoveredCardId] = React.useState(null)
+  const [isFullscreen, setIsFullscreen] = React.useState(false)
+
+  // Track browser native fullscreen state
+  React.useEffect(() => {
+    const handleFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', handleFsChange)
+    return () => document.removeEventListener('fullscreenchange', handleFsChange)
+  }, [])
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {})
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {})
+      }
+    }
+  }
+
+  const handleOpenProject = (project) => {
+    setActiveProject(project)
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(() => {})
+    }
+  }
+
+  const handleCloseProject = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {})
+    }
+    setActiveProject(null)
+  }
 
   const [disclaimerRef, isDisclaimerVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
   const [headerRef, isHeaderVisible] = useScrollReveal({ threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
@@ -341,13 +375,16 @@ export default function ContentsSection() {
   React.useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
-        setActiveProject(null)
-        setActiveImageZoom(null)
+        if (activeImageZoom) {
+          setActiveImageZoom(null)
+        } else if (activeProject) {
+          handleCloseProject()
+        }
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [activeProject, activeImageZoom])
 
   React.useEffect(() => {
     if (activeProject || activeImageZoom) {
@@ -509,7 +546,7 @@ export default function ContentsSection() {
                 }`}
                 onMouseEnter={() => setHoveredCardId(card.id)}
                 onMouseLeave={() => setHoveredCardId(null)}
-                onClick={() => setActiveProject(card)}
+                onClick={() => handleOpenProject(card)}
               >
                 {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
                 <div className={`relative w-full aspect-[4/3] flex-1 overflow-hidden ${card.flipImages ? 'bg-[#c99bd8]' : 'bg-neutral-900'}`}>
@@ -561,107 +598,228 @@ export default function ContentsSection() {
       {/* CASE STUDY DETAIL MODAL */}
       {activeProject && (
         activeProject.id === 'aureaus' ? (
-          <AureusCaseStudyModal onClose={() => setActiveProject(null)} />
+          <AureusCaseStudyModal onClose={handleCloseProject} />
         ) : activeProject.id === 'playstaples' ? (
-          <PlayStaplesCaseStudyModal onClose={() => setActiveProject(null)} />
+          <PlayStaplesCaseStudyModal onClose={handleCloseProject} />
         ) : (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/90 backdrop-blur-md overflow-y-auto animate-fadeIn"
-          onClick={() => setActiveProject(null)}
+          className="fixed inset-0 z-50 w-screen h-screen bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
           role="dialog"
+          aria-modal="true"
         >
-          <div
-            className="relative w-full max-w-6xl max-h-[92vh] overflow-y-auto bg-[#101015] border border-white/20 rounded-2xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] p-5 sm:p-8 lg:p-10 my-auto text-white"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4 pb-6 border-b border-white/10">
-              <div className="flex flex-col gap-1">
-                <div className="font-poppins-light font-light inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400">
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeProject.accentColor }} />
-                  <span>{activeProject.num} / 0{projectsData.length} • {activeProject.category}</span>
-                </div>
-                <h3 className="font-akira font-black uppercase text-xl sm:text-3xl tracking-tight text-white">
-                  {activeProject.title}
-                </h3>
-                <p className="font-poppins-light font-light text-neutral-300 text-xs sm:text-sm">
-                  {activeProject.subtitle}
-                </p>
+          {/* STICKY TOP FULLSCREEN HEADER */}
+          <header className="sticky top-0 z-40 bg-[#0A0A0D]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between shrink-0 shadow-lg">
+            <div className="flex items-center gap-3">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: activeProject.folderColor || '#FFE500' }} />
+              <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
+                <span className="font-akira text-sm sm:text-base font-black tracking-wider text-white uppercase">
+                  {activeProject.displayTitle || activeProject.title}
+                </span>
+                <span className="text-[10px] sm:text-xs font-ca-mono text-white/50 tracking-wider">
+                  Coursework Assignment • {activeProject.category}
+                </span>
               </div>
-              <button
-                onClick={() => setActiveProject(null)}
-                className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-neutral-300 hover:text-white transition-all cursor-pointer focus:outline-none shrink-0"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 pt-6">
-              <div className="flex flex-col gap-6">
-                <div>
-                  <h4 className="font-poppins-light font-light text-xs uppercase tracking-widest text-neutral-400 mb-2">Project Overview</h4>
-                  <p className="font-poppins font-normal text-sm sm:text-base text-neutral-200 leading-relaxed">{activeProject.description}</p>
-                </div>
-                <div>
-                  <h4 className="font-poppins-light font-light text-xs uppercase tracking-widest text-neutral-400 mb-2">Key Highlights &amp; Insights</h4>
-                  <p className="font-poppins font-normal text-sm sm:text-base text-neutral-300 leading-relaxed bg-white/5 p-4 rounded-xl border border-white/10">{activeProject.highlights}</p>
-                </div>
-                <div>
-                  <h4 className="font-poppins-light font-light text-xs uppercase tracking-widest text-neutral-400 mb-3">Core Deliverables</h4>
-                  <ul className="flex flex-col gap-2.5">
-                    {activeProject.deliverables.map((item, dIdx) => (
-                      <li key={dIdx} className="font-poppins font-normal text-xs sm:text-sm text-neutral-300 flex items-start gap-3">
-                        <span className="text-white mt-1 shrink-0">✦</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-poppins-light font-light text-xs uppercase tracking-widest text-neutral-400 mb-2.5">Tools &amp; Tech Stack</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {activeProject.tools.map((tool, toolIdx) => (
-                      <span key={toolIdx} className="font-poppins-light font-light text-xs px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-white uppercase tracking-wider">
-                        {tool}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                {activeProject.figmaUrl && (
-                  <div className="pt-2">
-                    <a href={activeProject.figmaUrl} target="_blank" rel="noopener noreferrer" className="font-poppins-light font-light inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-yellow-400 text-black hover:bg-yellow-300 transition-all font-semibold text-xs uppercase tracking-wider shadow-lg">
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/></svg>
-                      <span>Open Live Figma Design File</span>
-                    </a>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-4">
-                {activeProject.id === 'aureaus' ? (
-                  <div className="w-full">
-                    <AureusShowcase onZoomImage={setActiveImageZoom} />
-                  </div>
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={toggleFullscreen}
+                className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono text-white transition-colors cursor-pointer"
+                title={isFullscreen ? 'Exit Full Screen' : 'Toggle Full Screen'}
+              >
+                {isFullscreen ? (
+                  <Minimize2 className="w-3.5 h-3.5 text-[#FFE500]" />
                 ) : (
+                  <Maximize2 className="w-3.5 h-3.5 text-[#FFE500]" />
+                )}
+                <span className="hidden sm:inline">
+                  {isFullscreen ? 'Exit Fullscreen' : 'Full Screen'}
+                </span>
+              </button>
+
+              {activeProject.figmaUrl && (
+                <a
+                  href={activeProject.figmaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5 text-[#FFE500]" />
+                  <span className="hidden sm:inline">Figma Design ↗</span>
+                </a>
+              )}
+
+              <button
+                onClick={handleCloseProject}
+                type="button"
+                className="p-2 sm:px-3.5 sm:py-1.5 rounded-full bg-white/10 hover:bg-red-600/80 hover:text-white text-white/80 border border-white/15 transition-all active:scale-95 cursor-pointer text-xs font-ca-mono flex items-center gap-1.5"
+                title="Close (Esc)"
+              >
+                <X className="w-4 h-4" />
+                <span className="hidden sm:inline">Close</span>
+              </button>
+            </div>
+          </header>
+
+          {/* SCROLLABLE FULLSCREEN ASSIGNMENT FEED */}
+          <div
+            id="project-fullscreen-container"
+            className="flex-1 w-full overflow-y-auto px-3 sm:px-6 md:px-10 py-6 sm:py-10 space-y-8"
+          >
+            <div className="w-full max-w-[1500px] mx-auto space-y-10">
+              {/* PRIMARY ASSIGNMENT ARTWORK PRESENTATION */}
+              {activeProject.id === 'business-cards' ? (
+                <div className="space-y-6">
+                  {/* Main Full Assignment Board */}
+                  <div
+                    className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-white/15 bg-black cursor-zoom-in shadow-2xl transition-all duration-300 hover:border-white/30"
+                    onClick={() => setActiveImageZoom(projectCardsImg)}
+                  >
+                    <img
+                      src={projectCardsImg}
+                      alt="Business Card Research & Analysis Assignment Board"
+                      className="w-full h-auto object-contain block mx-auto transition-transform duration-500 group-hover:scale-[1.008]"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                      <span className="px-4 py-2 rounded-full bg-black/80 text-white font-ca-mono text-xs font-bold border border-white/30 flex items-center gap-2 shadow-2xl">
+                        <ZoomIn className="w-4 h-4 text-[#FFE500]" /> Click to Zoom Assignment Board
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* High-Res Individual Card Designs Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                      { img: oniCardFrontImg, label: 'Iteration 1 • Front View' },
+                      { img: oniCardBackImg, label: 'Iteration 1 • Back View' },
+                      { img: oniCard2FrontImg, label: 'Iteration 2 • Front View' },
+                      { img: oniCard2BackImg, label: 'Iteration 2 • Back View' },
+                    ].map((cardItem, cIdx) => (
+                      <div
+                        key={`card-artwork-${cIdx}`}
+                        className="group relative rounded-xl overflow-hidden border border-white/15 bg-black cursor-zoom-in shadow-xl hover:border-[#FFE500]/50 transition-colors"
+                        onClick={() => setActiveImageZoom(cardItem.img)}
+                      >
+                        <div className="p-2 border-b border-white/10 bg-white/5 text-[11px] font-ca-mono text-neutral-300 flex items-center justify-between">
+                          <span>{cardItem.label}</span>
+                          <ZoomIn className="w-3.5 h-3.5 text-[#FFE500]" />
+                        </div>
+                        <img
+                          src={cardItem.img}
+                          alt={cardItem.label}
+                          className="w-full h-auto object-contain block p-3 transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : activeProject.id === 'melody' ? (
+                <div className="space-y-6">
+                  {/* Main Melody User Flow & Ticket Booking Assignment Board */}
+                  <div
+                    className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-white/15 bg-black cursor-zoom-in shadow-2xl transition-all duration-300 hover:border-white/30"
+                    onClick={() => setActiveImageZoom(projectMelodyImg)}
+                  >
+                    <img
+                      src={projectMelodyImg}
+                      alt="Melody Tickets UI/UX User Flow Assignment Board"
+                      className="w-full h-auto object-contain block mx-auto transition-transform duration-500 group-hover:scale-[1.008]"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                      <span className="px-4 py-2 rounded-full bg-black/80 text-white font-ca-mono text-xs font-bold border border-white/30 flex items-center gap-2 shadow-2xl">
+                        <ZoomIn className="w-4 h-4 text-[#FFE500]" /> Click to Zoom Assignment Board
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <div
-                  className="relative group/modalImg overflow-hidden rounded-xl border border-white/20 bg-black cursor-zoom-in shadow-2xl"
+                  className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-white/15 bg-black cursor-zoom-in shadow-2xl"
                   onClick={() => setActiveImageZoom(activeProject.thumbnail)}
                 >
-                  <img src={activeProject.thumbnail} alt={`${activeProject.title} Full Artwork`} className="w-full h-auto max-h-[500px] object-contain group-hover/modalImg:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/modalImg:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="font-poppins-light font-light text-xs px-4 py-2 rounded-full bg-black/80 text-white border border-white/30 tracking-wider uppercase">Click to Expand 🔍</span>
+                  <img
+                    src={activeProject.thumbnail}
+                    alt={activeProject.title}
+                    className="w-full h-auto object-contain block mx-auto"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                    <span className="px-4 py-2 rounded-full bg-black/80 text-white font-ca-mono text-xs font-bold border border-white/30 flex items-center gap-2 shadow-2xl">
+                      <ZoomIn className="w-4 h-4 text-[#FFE500]" /> Click to Zoom
+                    </span>
                   </div>
                 </div>
-                )}
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {activeProject.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="font-poppins-light font-light text-xs px-3 py-1 rounded bg-white/5 border border-white/10 text-neutral-300 uppercase tracking-wide">
-                      {tag}
-                    </span>
-                  ))}
+              )}
+
+              {/* ASSIGNMENT SPECIFICATIONS & BRIEF */}
+              <div className="border border-white/10 rounded-2xl bg-[#0F0F14] p-6 sm:p-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <h4 className="font-ca-mono text-xs uppercase tracking-wider text-neutral-400 mb-2">Assignment Brief</h4>
+                    <p className="font-poppins text-sm sm:text-base text-neutral-200 leading-relaxed">{activeProject.description}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-ca-mono text-xs uppercase tracking-wider text-neutral-400 mb-2">Key Highlights &amp; Insights</h4>
+                    <p className="font-poppins text-sm sm:text-base text-neutral-300 leading-relaxed bg-white/5 p-4 rounded-xl border border-white/10">{activeProject.highlights}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-white/10">
+                  <div>
+                    <h4 className="font-ca-mono text-xs uppercase tracking-wider text-neutral-400 mb-3">Core Deliverables</h4>
+                    <ul className="flex flex-col gap-2">
+                      {activeProject.deliverables?.map((item, dIdx) => (
+                        <li key={dIdx} className="font-poppins text-xs sm:text-sm text-neutral-300 flex items-start gap-2.5">
+                          <span className="text-[#FFE500] mt-0.5 shrink-0">✦</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-ca-mono text-xs uppercase tracking-wider text-neutral-400 mb-2.5">Tools &amp; Techniques</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {activeProject.tools?.map((tool, toolIdx) => (
+                        <span key={toolIdx} className="font-ca-mono text-xs px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-white">
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+                    {activeProject.tags && (
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {activeProject.tags.map((tag, tIdx) => (
+                          <span key={tIdx} className="text-[11px] font-ca-mono text-white/50 bg-white/5 px-2.5 py-1 rounded border border-white/10">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
+
+              {/* FOOTER */}
+              <footer className="border-t border-white/15 pt-6 pb-2 flex items-center justify-between gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const container = document.getElementById('project-fullscreen-container')
+                    if (container) container.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <ArrowUp className="w-3.5 h-3.5" /> Back to Top
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCloseProject}
+                  className="px-5 py-2 rounded-full bg-[#FFE500] hover:bg-[#ffe833] text-black font-ca-mono text-xs font-bold transition-transform active:scale-95 cursor-pointer shadow-lg shadow-[#FFE500]/20"
+                >
+                  Close
+                </button>
+              </footer>
             </div>
           </div>
         </div>
