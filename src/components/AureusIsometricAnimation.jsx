@@ -159,30 +159,30 @@ export default function AureusIsometricAnimation({
         <div 
           className={`font-akira font-black uppercase text-center tracking-tighter transition-colors duration-500 ${
             themeMode === 'ivory' ? 'text-[#050505] opacity-95' : 'text-white/10'
-          } ${isCompact ? 'text-[15vw]' : 'text-[13.5vw] md:text-[14vw] lg:text-[14.5vw]'}`}
+          } ${isCompact ? 'text-[16vw]' : 'text-[14vw] md:text-[14.5vw] lg:text-[15vw]'}`}
         >
-          TEMPLATE
+          AUREAUS
         </div>
         <div 
           className={`font-akira font-black uppercase text-center tracking-tighter transition-colors duration-500 ${
             themeMode === 'ivory' ? 'text-[#050505] opacity-95' : 'text-white/10'
-          } ${isCompact ? 'text-[15vw]' : 'text-[13.5vw] md:text-[14vw] lg:text-[14.5vw]'}`}
+          } ${isCompact ? 'text-[16vw]' : 'text-[14vw] md:text-[14.5vw] lg:text-[15vw]'}`}
         >
-          FEATURED
+          AUREAUS
         </div>
         <div 
           className={`font-akira font-black uppercase text-center tracking-tighter transition-colors duration-500 ${
             themeMode === 'ivory' ? 'text-[#050505] opacity-95' : 'text-white/10'
-          } ${isCompact ? 'text-[15vw]' : 'text-[13.5vw] md:text-[14vw] lg:text-[14.5vw]'}`}
+          } ${isCompact ? 'text-[16vw]' : 'text-[14vw] md:text-[14.5vw] lg:text-[15vw]'}`}
         >
-          TEMPLATE
+          AUREAUS
         </div>
         <div 
           className={`font-akira font-black uppercase text-center tracking-tighter transition-colors duration-500 ${
             themeMode === 'ivory' ? 'text-[#050505] opacity-95' : 'text-white/10'
-          } ${isCompact ? 'text-[15vw]' : 'text-[13.5vw] md:text-[14vw] lg:text-[14.5vw]'}`}
+          } ${isCompact ? 'text-[16vw]' : 'text-[14vw] md:text-[14.5vw] lg:text-[15vw]'}`}
         >
-          FEATURED
+          AUREAUS
         </div>
       </div>
 
