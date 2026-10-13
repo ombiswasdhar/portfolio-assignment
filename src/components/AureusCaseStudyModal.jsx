@@ -7,6 +7,7 @@ import aureusUserStudyImg from '../assets/work/aureus/aureus-02-user-study.png'
 import aureusPainPointsImg from '../assets/work/aureus/aureus-03-pain-points.png'
 import aureusPersonaImg from '../assets/work/aureus/aureus-04-persona.png'
 import aureusAdvantagesImg from '../assets/work/aureus/aureus-05-advantages.png'
+import AureusIsometricAnimation from './AureusIsometricAnimation'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 
 export const AUREUS_FRAMES = [
@@ -150,6 +151,14 @@ export default function AureusCaseStudyModal({ onClose }) {
           <span className="text-[10px] font-mono uppercase text-neutral-400 font-semibold px-2">
             Jump to:
           </span>
+          <button
+            type="button"
+            onClick={() => scrollToFrame('aureus-3d-showcase')}
+            className="px-2.5 py-1 rounded-full text-xs font-mono text-[#F08264] hover:text-black hover:bg-[#F08264] transition-all cursor-pointer whitespace-nowrap active:scale-95 font-bold flex items-center gap-1.5"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E84A4A] animate-pulse" />
+            ✦ 3D UI Showcase
+          </button>
           {AUREUS_FRAMES.map((frame) => (
             <button
               key={frame.id}
@@ -198,6 +207,33 @@ export default function AureusCaseStudyModal({ onClose }) {
         className="flex-1 w-full overflow-y-auto px-3 sm:px-6 md:px-10 py-6 sm:py-10"
       >
         <main className="w-full max-w-[1500px] mx-auto flex flex-col gap-8 sm:gap-12">
+          {/* ======================================================== */}
+          {/* HERO: 3D ISOMETRIC UI SHOWCASE (PIN.IT/7HBZLQRAW)        */}
+          {/* ======================================================== */}
+          <section
+            id="aureus-3d-showcase"
+            className="flex flex-col gap-3 group scroll-mt-24"
+          >
+            {/* Minimal Section Header Tag */}
+            <div className="flex items-center justify-between px-2 text-xs font-mono">
+              <div className="flex items-center gap-2 text-neutral-400">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#E84A4A] animate-pulse" />
+                <span className="font-bold text-white uppercase tracking-wider">
+                  Featured 3D Webflow UI Showcase • Aureus Audio
+                </span>
+              </div>
+              <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[#F08264] text-[10px] uppercase tracking-wider font-bold">
+                Continuous Motion • Hover to Pause
+              </span>
+            </div>
+
+            {/* Interactive 3D Stage Container */}
+            <div className="relative w-full h-[520px] sm:h-[620px] md:h-[700px] lg:h-[760px] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden border border-white/15 shadow-[0_30px_90px_rgba(0,0,0,0.9)] bg-[#ECE8E1]">
+              <AureusIsometricAnimation
+                onOpenZoom={(img) => setActiveZoomImage(img)}
+              />
+            </div>
+          </section>
           {AUREUS_FRAMES.map((frame, idx) => (
             <article
               id={frame.id}
