@@ -154,10 +154,10 @@ export default function AureusIsometricAnimation({
         }
 
         /* ======================================================== */
-        /* BACKGROUND TRACK: TOP-LEFT TO BOTTOM-RIGHT (REVERSE)     */
+        /* BACKGROUND TRACK: TOP-RIGHT TO BOTTOM-LEFT               */
         /* (Slightly smaller, layered behind with parallax depth)   */
         /* ======================================================== */
-        @keyframes aureusIsometricConveyorReverse {
+        @keyframes aureusIsometricConveyorTRtoBL {
           0% {
             transform: translate3d(0, -50%, 0);
           }
@@ -167,7 +167,7 @@ export default function AureusIsometricAnimation({
         }
 
         .aureus-conveyor-track-reverse {
-          animation: aureusIsometricConveyorReverse ${isCompact ? '22s' : '32s'} linear infinite;
+          animation: aureusIsometricConveyorTRtoBL ${isCompact ? '22s' : '32s'} linear infinite;
           will-change: transform;
         }
 
@@ -296,15 +296,15 @@ export default function AureusIsometricAnimation({
         }}
       >
         {/* ========================================================== */}
-        {/* BACKGROUND STREAM: SMALLER, TOP-LEFT TO BOTTOM-RIGHT       */}
-        {/* Offset left and positioned deeper in Z-space               */}
+        {/* BACKGROUND STREAM: SMALLER, TOP-RIGHT TO BOTTOM-LEFT      */}
+        {/* Positioned upper-right, oriented to flow down-left         */}
         {/* ========================================================== */}
         <div
           className="absolute flex items-center justify-center pointer-events-auto"
           style={{
             transform: isCompact
-              ? 'translate3d(-34%, 0, -45px)'
-              : 'translate3d(-42%, 0, -75px)',
+              ? 'translate3d(18%, -12%, -45px) rotateZ(65deg)'
+              : 'translate3d(18%, -15%, -75px) rotateZ(65deg)',
             transformStyle: 'preserve-3d',
             zIndex: 5,
           }}
@@ -334,7 +334,7 @@ export default function AureusIsometricAnimation({
                       : 'opacity-85 hover:opacity-100 shadow-[0_16px_40px_-10px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.08)]'
                   }`}
                   style={{
-                    transform: isThisCardHovered ? 'translateZ(25px)' : 'translateZ(0px)',
+                    transform: isThisCardHovered ? 'rotateZ(-65deg) translateZ(25px)' : 'rotateZ(-65deg) translateZ(0px)',
                     transformStyle: 'preserve-3d',
                   }}
                 >
