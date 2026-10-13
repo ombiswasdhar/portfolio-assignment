@@ -77,15 +77,8 @@ export default function AureusIsometricAnimation({
 
   const isActuallyPaused = externalPaused || isHovered
 
-  // Duplicate cards for seamless infinite loops
-  const foregroundCards = [...AUREUS_UI_PAGES, ...AUREUS_UI_PAGES]
-  const backgroundCardsList = [
-    AUREUS_UI_PAGES[2],
-    AUREUS_UI_PAGES[3],
-    AUREUS_UI_PAGES[0],
-    AUREUS_UI_PAGES[1],
-  ]
-  const backgroundCards = [...backgroundCardsList, ...backgroundCardsList]
+  // Duplicate cards for a seamless infinite loop
+  const duplicatedCards = [...AUREUS_UI_PAGES, ...AUREUS_UI_PAGES]
 
   const handleMouseMove = (e) => {
     if (isCompact) return
@@ -133,7 +126,8 @@ export default function AureusIsometricAnimation({
     >
       <style>{`
         /* ======================================================== */
-        /* FOREGROUND TRACK: BOTTOM-RIGHT TO TOP-LEFT               */
+        /* AUREUS CONTINUOUS 3D ISOMETRIC CONVEYOR GLIDE            */
+        /* (Continuous linear motion until hovered)                 */
         /* ======================================================== */
         @keyframes aureusIsometricConveyor {
           0% {
@@ -150,28 +144,6 @@ export default function AureusIsometricAnimation({
         }
 
         .aureus-conveyor-track.is-paused {
-          animation-play-state: paused !important;
-        }
-
-        /* ======================================================== */
-        /* BACKGROUND TRACK: TOP-RIGHT TO BOTTOM-LEFT               */
-        /* (Slightly smaller, layered behind with parallax depth)   */
-        /* ======================================================== */
-        @keyframes aureusIsometricConveyorTRtoBL {
-          0% {
-            transform: translate3d(0, -50%, 0);
-          }
-          100% {
-            transform: translate3d(0, 0%, 0);
-          }
-        }
-
-        .aureus-conveyor-track-reverse {
-          animation: aureusIsometricConveyorTRtoBL ${isCompact ? '22s' : '32s'} linear infinite;
-          will-change: transform;
-        }
-
-        .aureus-conveyor-track-reverse.is-paused {
           animation-play-state: paused !important;
         }
       `}</style>
@@ -282,8 +254,8 @@ export default function AureusIsometricAnimation({
       )}
 
       {/* ============================================================ */}
-      {/* 3D ISOMETRIC STAGE RIG (DUAL-STREAM PARALLAX CONVEYOR)       */}
-      {/* Tilted along diagonal plane with counter-scrolling streams   */}
+      {/* 3D ISOMETRIC STAGE RIG                                       */}
+      {/* Tilted along diagonal plane with seamless flowing conveyor   */}
       {/* ============================================================ */}
       <div
         className="relative w-full h-full flex items-center justify-center z-10 pointer-events-auto"
@@ -295,195 +267,91 @@ export default function AureusIsometricAnimation({
           transition: isHovered ? 'transform 0.12s ease-out' : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        {/* ========================================================== */}
-        {/* BACKGROUND STREAM: SMALLER, TOP-RIGHT TO BOTTOM-LEFT      */}
-        {/* Positioned upper-right, oriented to flow down-left         */}
-        {/* ========================================================== */}
+        {/* CONVEYOR COLUMN TRACK */}
         <div
-          className="absolute flex items-center justify-center pointer-events-auto"
-          style={{
-            transform: isCompact
-              ? 'translate3d(18%, -12%, -45px) rotateZ(65deg)'
-              : 'translate3d(18%, -15%, -75px) rotateZ(65deg)',
-            transformStyle: 'preserve-3d',
-            zIndex: 5,
-          }}
+          className={`aureus-conveyor-track flex flex-col items-center ${
+            isActuallyPaused ? 'is-paused' : ''
+          } ${isCompact ? 'gap-6 w-[85%] max-w-[380px]' : 'gap-10 sm:gap-14 w-[84%] max-w-[560px] md:max-w-[620px] lg:max-w-[680px]'}`}
         >
-          <div
-            className={`aureus-conveyor-track-reverse flex flex-col items-center ${
-              isActuallyPaused ? 'is-paused' : ''
-            } ${
-              isCompact
-                ? 'gap-5 w-[65%] max-w-[245px]'
-                : 'gap-7 sm:gap-9 w-[60%] max-w-[340px] md:max-w-[400px] lg:max-w-[450px]'
-            }`}
-          >
-            {backgroundCards.map((card, index) => {
-              const cardKey = `bg-${card.id}-${index}`
-              const isThisCardHovered = hoveredCardId === cardKey
+          {duplicatedCards.map((card, index) => {
+            const isThisCardHovered = hoveredCardId === `${card.id}-${index}`
 
-              return (
-                <div
-                  key={cardKey}
-                  onMouseEnter={() => setHoveredCardId(cardKey)}
-                  onMouseLeave={() => setHoveredCardId(null)}
-                  onClick={(e) => handleCardClick(card, e)}
-                  className={`group/bgcard relative w-full aspect-[1024/697] rounded-[14px] sm:rounded-[20px] overflow-hidden cursor-pointer transition-all duration-300 ${
-                    isThisCardHovered
-                      ? 'scale-[1.03] z-30 opacity-100 shadow-[0_35px_70px_-10px_rgba(0,0,0,0.5),0_0_0_2px_#E84A4A]'
-                      : 'opacity-85 hover:opacity-100 shadow-[0_16px_40px_-10px_rgba(0,0,0,0.35),0_0_0_1px_rgba(0,0,0,0.08)]'
+            return (
+              <div
+                key={`${card.id}-${index}`}
+                onMouseEnter={() => setHoveredCardId(`${card.id}-${index}`)}
+                onMouseLeave={() => setHoveredCardId(null)}
+                onClick={(e) => handleCardClick(card, e)}
+                className={`group/card relative w-full aspect-[1024/697] rounded-[18px] sm:rounded-[24px] overflow-hidden cursor-pointer transition-all duration-300 ${
+                  isThisCardHovered
+                    ? 'scale-[1.03] z-40 shadow-[0_45px_90px_-15px_rgba(0,0,0,0.5),0_0_0_2px_#E84A4A]'
+                    : 'shadow-[0_22px_55px_-12px_rgba(0,0,0,0.38),0_2px_6px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.1)]'
+                }`}
+                style={{
+                  transform: isThisCardHovered ? 'translateZ(35px)' : 'translateZ(0px)',
+                  transformStyle: 'preserve-3d',
+                }}
+              >
+                {/* Browser Pill Header (Minimalist Mockup Bar) */}
+                <div 
+                  className={`w-full px-3.5 py-2 sm:py-2.5 flex items-center justify-between border-b backdrop-blur-md transition-colors ${
+                    card.theme === 'crimson'
+                      ? 'bg-[#8F2B2B] border-white/15 text-white'
+                      : 'bg-[#F2EFEB]/90 border-black/10 text-neutral-800'
                   }`}
-                  style={{
-                    transform: isThisCardHovered ? 'rotateZ(-65deg) translateZ(25px)' : 'rotateZ(-65deg) translateZ(0px)',
-                    transformStyle: 'preserve-3d',
-                  }}
                 >
-                  {/* Browser Pill Header */}
+                  {/* Traffic Light Dots */}
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] border border-black/20" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] border border-black/20" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] border border-black/20" />
+                  </div>
+
+                  {/* Browser URL Pill */}
+                  <div className={`px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-ca-mono tracking-wider truncate max-w-[200px] border ${
+                    card.theme === 'crimson'
+                      ? 'bg-black/20 border-white/10 text-white/90'
+                      : 'bg-white/80 border-black/10 text-neutral-700'
+                  }`}>
+                    {card.route}
+                  </div>
+
+                  {/* Screen Number Badge */}
+                  <span className={`text-[9px] sm:text-[10px] font-ca-mono font-bold tracking-widest uppercase ${
+                    card.theme === 'crimson' ? 'text-white/80' : 'text-neutral-500'
+                  }`}>
+                    {card.num}
+                  </span>
+                </div>
+
+                {/* Screenshot Image Container */}
+                <div className="relative w-full aspect-[1024/697] bg-white overflow-hidden">
+                  <img
+                    src={card.image}
+                    alt={card.alt}
+                    draggable={false}
+                    className="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/card:scale-[1.01]"
+                  />
+
+                  {/* Specular Sheen Gradient */}
                   <div 
-                    className={`w-full px-3 py-1.5 sm:py-2 flex items-center justify-between border-b backdrop-blur-md transition-colors ${
-                      card.theme === 'crimson'
-                        ? 'bg-[#8F2B2B] border-white/15 text-white'
-                        : 'bg-[#F2EFEB]/90 border-black/10 text-neutral-800'
-                    }`}
-                  >
-                    <div className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-[#FF5F56] border border-black/20" />
-                      <span className="w-2 h-2 rounded-full bg-[#FFBD2E] border border-black/20" />
-                      <span className="w-2 h-2 rounded-full bg-[#27C93F] border border-black/20" />
-                    </div>
-                    <div className="px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-ca-mono tracking-wider truncate max-w-[150px] border bg-black/10 border-black/10 text-neutral-700">
-                      {card.route}
-                    </div>
-                    <span className="text-[8px] sm:text-[9px] font-ca-mono font-bold tracking-widest text-neutral-500 uppercase">
-                      {card.num}
+                    className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-black/10 via-transparent to-white/15" 
+                    aria-hidden="true" 
+                  />
+
+                  {/* Hover Inspection Overlay */}
+                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center p-4 text-center">
+                    <span className="px-4 py-2 rounded-full bg-white text-black font-ca-mono text-xs font-bold uppercase tracking-wider shadow-2xl flex items-center gap-2 transform translate-y-2 group-hover/card:translate-y-0 transition-transform duration-200">
+                      <ZoomIn className="w-3.5 h-3.5 text-[#E84A4A]" /> Click to Inspect Screen
+                    </span>
+                    <span className="mt-2 text-white/90 text-xs font-medium font-ca-mono max-w-[320px] drop-shadow-md hidden sm:block">
+                      {card.title}
                     </span>
                   </div>
-
-                  {/* Screenshot Image Container */}
-                  <div className="relative w-full aspect-[1024/697] bg-white overflow-hidden">
-                    <img
-                      src={card.image}
-                      alt={card.alt}
-                      draggable={false}
-                      className="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/bgcard:scale-[1.01]"
-                    />
-                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-black/10 via-transparent to-white/15" aria-hidden="true" />
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] opacity-0 group-hover/bgcard:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center p-2 text-center">
-                      <span className="px-3 py-1.5 rounded-full bg-white text-black font-ca-mono text-[10px] font-bold uppercase tracking-wider shadow-xl flex items-center gap-1.5">
-                        <ZoomIn className="w-3 h-3 text-[#E84A4A]" /> Inspect
-                      </span>
-                    </div>
-                  </div>
                 </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* ========================================================== */}
-        {/* FOREGROUND STREAM: LARGER, BOTTOM-RIGHT TO TOP-LEFT        */}
-        {/* Positioned in front with high fidelity and elevated Z      */}
-        {/* ========================================================== */}
-        <div
-          className="relative flex items-center justify-center pointer-events-auto"
-          style={{
-            transform: isCompact
-              ? 'translate3d(14%, 0, 15px)'
-              : 'translate3d(18%, 0, 25px)',
-            transformStyle: 'preserve-3d',
-            zIndex: 20,
-          }}
-        >
-          <div
-            className={`aureus-conveyor-track flex flex-col items-center ${
-              isActuallyPaused ? 'is-paused' : ''
-            } ${
-              isCompact
-                ? 'gap-6 w-[82%] max-w-[330px]'
-                : 'gap-10 sm:gap-14 w-[82%] max-w-[500px] md:max-w-[560px] lg:max-w-[620px]'
-            }`}
-          >
-            {foregroundCards.map((card, index) => {
-              const cardKey = `fg-${card.id}-${index}`
-              const isThisCardHovered = hoveredCardId === cardKey
-
-              return (
-                <div
-                  key={cardKey}
-                  onMouseEnter={() => setHoveredCardId(cardKey)}
-                  onMouseLeave={() => setHoveredCardId(null)}
-                  onClick={(e) => handleCardClick(card, e)}
-                  className={`group/card relative w-full aspect-[1024/697] rounded-[18px] sm:rounded-[24px] overflow-hidden cursor-pointer transition-all duration-300 ${
-                    isThisCardHovered
-                      ? 'scale-[1.03] z-40 shadow-[0_45px_90px_-15px_rgba(0,0,0,0.5),0_0_0_2px_#E84A4A]'
-                      : 'shadow-[0_22px_55px_-12px_rgba(0,0,0,0.38),0_2px_6px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.1)]'
-                  }`}
-                  style={{
-                    transform: isThisCardHovered ? 'translateZ(35px)' : 'translateZ(0px)',
-                    transformStyle: 'preserve-3d',
-                  }}
-                >
-                  {/* Browser Pill Header (Minimalist Mockup Bar) */}
-                  <div 
-                    className={`w-full px-3.5 py-2 sm:py-2.5 flex items-center justify-between border-b backdrop-blur-md transition-colors ${
-                      card.theme === 'crimson'
-                        ? 'bg-[#8F2B2B] border-white/15 text-white'
-                        : 'bg-[#F2EFEB]/90 border-black/10 text-neutral-800'
-                    }`}
-                  >
-                    {/* Traffic Light Dots */}
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] border border-black/20" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] border border-black/20" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] border border-black/20" />
-                    </div>
-
-                    {/* Browser URL Pill */}
-                    <div className={`px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-ca-mono tracking-wider truncate max-w-[200px] border ${
-                      card.theme === 'crimson'
-                        ? 'bg-black/20 border-white/10 text-white/90'
-                        : 'bg-white/80 border-black/10 text-neutral-700'
-                    }`}>
-                      {card.route}
-                    </div>
-
-                    {/* Screen Number Badge */}
-                    <span className={`text-[9px] sm:text-[10px] font-ca-mono font-bold tracking-widest uppercase ${
-                      card.theme === 'crimson' ? 'text-white/80' : 'text-neutral-500'
-                    }`}>
-                      {card.num}
-                    </span>
-                  </div>
-
-                  {/* Screenshot Image Container */}
-                  <div className="relative w-full aspect-[1024/697] bg-white overflow-hidden">
-                    <img
-                      src={card.image}
-                      alt={card.alt}
-                      draggable={false}
-                      className="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/card:scale-[1.01]"
-                    />
-
-                    {/* Specular Sheen Gradient */}
-                    <div 
-                      className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-black/10 via-transparent to-white/15" 
-                      aria-hidden="true" 
-                    />
-
-                    {/* Hover Inspection Overlay */}
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center p-4 text-center">
-                      <span className="px-4 py-2 rounded-full bg-white text-black font-ca-mono text-xs font-bold uppercase tracking-wider shadow-2xl flex items-center gap-2 transform translate-y-2 group-hover/card:translate-y-0 transition-transform duration-200">
-                        <ZoomIn className="w-3.5 h-3.5 text-[#E84A4A]" /> Click to Inspect Screen
-                      </span>
-                      <span className="mt-2 text-white/90 text-xs font-medium font-ca-mono max-w-[320px] drop-shadow-md hidden sm:block">
-                        {card.title}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+              </div>
+            )
+          })}
         </div>
       </div>
 
