@@ -14,6 +14,7 @@ import HelixChronoMatrixDemo from './components/examples/helix-chrono-matrix-dem
 import MusicPlayer from './components/MusicPlayer'
 import { MusicProvider } from './context/MusicContext'
 import { getDeviceTier } from './utils/deviceTier'
+import AugePreloader from './components/AugePreloader'
 
 // Initialize device performance tier & attributes immediately
 if (typeof window !== 'undefined') {
@@ -39,28 +40,31 @@ function App() {
   return (
     <BrowserRouter>
       <MusicProvider>
+        <AugePreloader topText="om biswas" portfolioText="portfolio" bottomText="Omi's brain" />
         <ScrollToTop />
         <CustomCursor />
         <MusicPlayer />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/featured-works" element={<Work />} />
-          <Route path="/featured-work" element={<Work />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/cv" element={<CV />} />
-          <Route path="/resume" element={<CV />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/get-in-touch" element={<Contact />} />
-          <Route path="/connect" element={<Contact />} />
-          <Route path="/aureus" element={<AureusPage />} />
-          <Route path="/aureaus" element={<AureusPage />} />
-          <Route path="/demo" element={<ConstellationGrid />} />
-          <Route path="/constellation" element={<ConstellationGrid />} />
-          <Route path="/quantum-swarm" element={<QuantumSwarmDemo />} />
-          <Route path="/helix-chrono-matrix" element={<HelixChronoMatrixDemo />} />
-        </Routes>
+        <div className="relative min-h-screen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/work" element={<Work />} />
+            <Route path="/featured-works" element={<Work />} />
+            <Route path="/featured-work" element={<Work />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/skills" element={<Skills />} />
+            <Route path="/cv" element={<CV />} />
+            <Route path="/resume" element={<CV />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/get-in-touch" element={<Contact />} />
+            <Route path="/connect" element={<Contact />} />
+            <Route path="/aureus" element={<AureusPage />} />
+            <Route path="/aureaus" element={<AureusPage />} />
+            <Route path="/demo" element={<ConstellationGrid />} />
+            <Route path="/constellation" element={<ConstellationGrid />} />
+            <Route path="/quantum-swarm" element={<QuantumSwarmDemo />} />
+            <Route path="/helix-chrono-matrix" element={<HelixChronoMatrixDemo />} />
+          </Routes>
+        </div>
       </MusicProvider>
     </BrowserRouter>
   )

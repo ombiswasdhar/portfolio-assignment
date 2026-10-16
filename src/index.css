@@ -831,8 +831,8 @@
 }
 
 .font-thunder {
-  font-family: 'Thunder SemiBold', 'Akira Expanded', sans-serif;
-  font-weight: 600;
+  font-family: 'Thunder', 'Thunder SemiBold', sans-serif;
+  font-weight: 700;
 }
 
 @font-face {
@@ -996,3 +996,16 @@ html[data-perf-tier="low"] .blur-\[180px\] {
   transform: translate3d(0, 0, 0);
   will-change: auto;
 }
+
+/* =========================================================================
+   AUGE XP PRELOADER STYLES & CURTAIN ARC
+   ========================================================================= */
+:root {
+  --mask-arc: 1;
+}
+
+[data-loader-mask] {
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
