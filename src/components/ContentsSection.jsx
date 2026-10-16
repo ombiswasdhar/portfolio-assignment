@@ -473,10 +473,10 @@ export default function ContentsSection() {
         >
           <div className="relative w-full max-w-4xl lg:max-w-5xl mx-auto py-2 select-none flex flex-col items-center text-center">
             <h2 className="font-myfont text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white font-bold tracking-wide drop-shadow-[0_2px_20px_rgba(255,255,255,0.25)] mb-4 sm:mb-6 lowercase">
-              disclaimer !
+              disclaimer!
             </h2>
             <p className="font-myfont text-2xl sm:text-3xl md:text-4xl lg:text-[42px] xl:text-[46px] text-neutral-100 font-medium leading-[1.45] sm:leading-[1.4] max-w-3xl lg:max-w-4xl mx-auto lowercase">
-              all the projects showcased here are my 2nd & 3rd year plus my internship projects.
+              all the projects showcased here are from my 2nd & 3rd year, along with my internship projects.
             </p>
             <div className="w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto my-5 sm:my-7 flex justify-center opacity-45">
               <svg className="w-full h-3 text-neutral-400" viewBox="0 0 500 6" fill="none" preserveAspectRatio="none">
@@ -484,7 +484,7 @@ export default function ContentsSection() {
               </svg>
             </div>
             <p className="font-myfont text-xl sm:text-2xl md:text-3xl lg:text-[34px] text-neutral-200 font-medium lowercase tracking-wide">
-              (yes , that's my handwriting , don't judge)
+              (yes, that's my handwriting, don't judge)
             </p>
           </div>
           <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center">

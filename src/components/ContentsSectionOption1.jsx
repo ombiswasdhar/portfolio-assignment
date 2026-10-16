@@ -258,12 +258,12 @@ export default function ContentsSection() {
           <div className="relative w-full max-w-3xl mx-auto py-2 select-none flex flex-col items-center text-center">
             {/* Title */}
             <h2 className="font-myfont text-4xl sm:text-5xl md:text-6xl text-white font-bold tracking-wide drop-shadow-[0_2px_14px_rgba(255,255,255,0.2)] mb-3 sm:mb-4 lowercase">
-              disclaimer !
+              disclaimer!
             </h2>
 
             {/* Main Statement */}
             <p className="font-myfont text-xl sm:text-2xl md:text-[28px] lg:text-[32px] text-neutral-100 font-medium leading-[1.65] max-w-2xl mx-auto lowercase">
-              all the projects showcased here are my 2nd & 3rd year plus my internship projects.
+              all the projects showcased here are from my 2nd & 3rd year, along with my internship projects.
             </p>
 
             {/* Hand-drawn Organic Divider Line */}
@@ -280,7 +280,7 @@ export default function ContentsSection() {
 
             {/* Handwriting Note */}
             <p className="font-myfont text-sm sm:text-base md:text-lg text-neutral-400 lowercase tracking-wide">
-              (yes , that's my handwriting , don't judge)
+              (yes, that's my handwriting, don't judge)
             </p>
           </div>
 
