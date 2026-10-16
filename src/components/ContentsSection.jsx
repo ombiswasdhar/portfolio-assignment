@@ -17,6 +17,7 @@ import AureusShowcase from './AureusShowcase'
 import AureusCaseStudyModal from './AureusCaseStudyModal'
 import PlayStaplesCaseStudyModal from './PlayStaplesCaseStudyModal'
 import DiagonalMarqueeCarousel from '@/components/ui/diagonal-marquee-carousel'
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
 import uiDiscover from '../assets/work/aureus/aureus-ui-discover.png'
 import uiProducts from '../assets/work/aureus/aureus-ui-products.png'
 import uiDetail from '../assets/work/aureus/aureus-ui-product-detail.png'
@@ -401,16 +402,7 @@ export default function ContentsSection() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [activeProject, activeImageZoom])
 
-  React.useEffect(() => {
-    if (activeProject || activeImageZoom) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [activeProject, activeImageZoom])
+  useBodyScrollLock(!!(activeProject || activeImageZoom))
 
   const scrollToWorks = (e) => {
     e.preventDefault()
@@ -632,19 +624,22 @@ export default function ContentsSection() {
           <PlayStaplesCaseStudyModal onClose={handleCloseProject} />
         ) : (
         <div
-          className="fixed inset-0 z-50 w-screen h-screen bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
+          className="fixed inset-0 z-[100] w-screen h-screen bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
           role="dialog"
           aria-modal="true"
         >
           {/* STICKY TOP FULLSCREEN HEADER */}
-          <header className="sticky top-0 z-40 bg-[#0A0A0D]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between shrink-0 shadow-lg">
-            <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: activeProject.folderColor || '#FFE500' }} />
-              <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
-                <span className="font-akira text-sm sm:text-base font-black tracking-wider text-white uppercase">
+          <header
+            style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top, 0.75rem))' }}
+            className="sticky top-0 z-40 bg-[#0A0A0D] border-b border-white/10 px-3 sm:px-8 py-3 flex items-center justify-between gap-3 shrink-0 shadow-lg"
+          >
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 pr-2">
+              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: activeProject.folderColor || '#FFE500' }} />
+              <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3 min-w-0">
+                <span className="font-akira text-xs sm:text-base font-black tracking-wider text-white uppercase truncate">
                   {activeProject.displayTitle || activeProject.title}
                 </span>
-                <span className="text-[10px] sm:text-xs font-ca-mono text-white/50 tracking-wider">
+                <span className="text-[9px] sm:text-xs font-ca-mono text-white/50 tracking-wider truncate hidden xs:inline sm:inline">
                   Coursework Assignment • {activeProject.category}
                 </span>
               </div>
@@ -654,7 +649,7 @@ export default function ContentsSection() {
               <button
                 type="button"
                 onClick={toggleFullscreen}
-                className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono text-white transition-colors cursor-pointer"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono text-white transition-colors cursor-pointer"
                 title={isFullscreen ? 'Exit Full Screen' : 'Toggle Full Screen'}
               >
                 {isFullscreen ? (
@@ -662,7 +657,7 @@ export default function ContentsSection() {
                 ) : (
                   <Maximize2 className="w-3.5 h-3.5 text-[#FFE500]" />
                 )}
-                <span className="hidden sm:inline">
+                <span className="hidden md:inline">
                   {isFullscreen ? 'Exit Fullscreen' : 'Full Screen'}
                 </span>
               </button>
@@ -672,7 +667,7 @@ export default function ContentsSection() {
                   href={activeProject.figmaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono transition-colors"
                 >
                   <ExternalLink className="w-3.5 h-3.5 text-[#FFE500]" />
                   <span className="hidden sm:inline">Figma Design ↗</span>
@@ -682,8 +677,9 @@ export default function ContentsSection() {
               <button
                 onClick={handleCloseProject}
                 type="button"
-                className="p-2 sm:px-3.5 sm:py-1.5 rounded-full bg-white/10 hover:bg-red-600/80 hover:text-white text-white/80 border border-white/15 transition-all active:scale-95 cursor-pointer text-xs font-ca-mono flex items-center gap-1.5"
+                className="min-w-[38px] min-h-[38px] p-2 sm:px-3.5 sm:py-1.5 rounded-full bg-white/15 hover:bg-red-600 active:bg-red-700 text-white border border-white/20 transition-all active:scale-95 cursor-pointer text-xs font-ca-mono flex items-center justify-center gap-1.5 shadow-md"
                 title="Close (Esc)"
+                aria-label="Close project"
               >
                 <X className="w-4 h-4" />
                 <span className="hidden sm:inline">Close</span>
@@ -694,7 +690,8 @@ export default function ContentsSection() {
           {/* SCROLLABLE FULLSCREEN ASSIGNMENT FEED */}
           <div
             id="project-fullscreen-container"
-            className="flex-1 w-full overflow-y-auto px-3 sm:px-6 md:px-10 py-6 sm:py-10 space-y-8"
+            className="flex-1 w-full overflow-y-auto px-3 sm:px-6 md:px-10 py-6 sm:py-10 space-y-8 overscroll-contain"
+            style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
           >
             <div className="w-full max-w-[1500px] mx-auto space-y-10">
               {/* PRIMARY ASSIGNMENT ARTWORK PRESENTATION */}
@@ -858,7 +855,7 @@ export default function ContentsSection() {
       {/* FULL RESOLUTION IMAGE ZOOM LIGHTBOX */}
       {activeImageZoom && (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fadeIn cursor-zoom-out"
+          className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fadeIn cursor-zoom-out"
           onClick={() => setActiveImageZoom(null)}
           role="dialog"
         >

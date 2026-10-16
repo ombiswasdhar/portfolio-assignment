@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ArrowUp, ExternalLink, ZoomIn, Maximize2, Minimize2 } from 'lucide-react'
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
 
 import heroPosterImg from '../assets/work/playstaples/playstaples-hero.png'
 import cs01Img from '../assets/work/playstaples/playstaples-case-study-01.jpg'
@@ -68,13 +69,7 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
   }, [activeZoomImage])
 
   // Prevent background scrolling while modal is open
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = originalOverflow
-    }
-  }, [])
+  useBodyScrollLock(true)
 
   const scrollToTop = () => {
     if (scrollContainerRef.current) {
@@ -84,19 +79,22 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 w-screen h-screen bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
+      className="fixed inset-0 z-[100] w-screen h-screen bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
       role="dialog"
       aria-modal="true"
     >
       {/* ================= TOP FULLSCREEN APP BAR ================= */}
-      <header className="sticky top-0 z-40 bg-[#0A0A0D]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between shrink-0 shadow-lg">
-        <div className="flex items-center gap-3">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#FFE500] shadow-[0_0_10px_#FFE500]" />
-          <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
-            <span className="font-akira text-sm sm:text-base font-black tracking-wider text-white">
+      <header
+        style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top, 0.75rem))' }}
+        className="sticky top-0 z-40 bg-[#0A0A0D] border-b border-white/10 px-3 sm:px-8 py-3 flex items-center justify-between gap-3 shrink-0 shadow-lg"
+      >
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 pr-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#FFE500] shadow-[0_0_10px_#FFE500] shrink-0" />
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3 min-w-0">
+            <span className="font-akira text-xs sm:text-base font-black tracking-wider text-white truncate">
               PLAYSTAPLES
             </span>
-            <span className="text-[10px] sm:text-xs font-ca-mono text-white/50 tracking-wider">
+            <span className="text-[9px] sm:text-xs font-ca-mono text-white/50 tracking-wider truncate hidden xs:inline sm:inline">
               Coursework Assignment • Usability Testing &amp; Research Artboards
             </span>
           </div>
@@ -106,7 +104,7 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
           <button
             type="button"
             onClick={toggleFullscreen}
-            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono text-white transition-colors cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono text-white transition-colors cursor-pointer"
             title={isFullscreen ? 'Exit Full Screen' : 'Toggle Full Screen'}
           >
             {isFullscreen ? (
@@ -114,7 +112,7 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
             ) : (
               <Maximize2 className="w-3.5 h-3.5 text-[#FFE500]" />
             )}
-            <span className="hidden sm:inline">
+            <span className="hidden md:inline">
               {isFullscreen ? 'Exit Fullscreen' : 'Full Screen'}
             </span>
           </button>
@@ -123,7 +121,7 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
             href="https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5 text-[#FFE500]" />
             <span className="hidden sm:inline">Figma Design ↗</span>
@@ -132,8 +130,9 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
           <button
             onClick={handleClose}
             type="button"
-            className="p-2 sm:px-3.5 sm:py-1.5 rounded-full bg-white/10 hover:bg-red-600/80 hover:text-white text-white/80 border border-white/15 transition-all active:scale-95 cursor-pointer text-xs font-ca-mono flex items-center gap-1.5"
+            className="min-w-[38px] min-h-[38px] inline-flex items-center justify-center gap-1.5 p-2 sm:px-3.5 sm:py-1.5 rounded-full bg-white/15 hover:bg-red-600 active:bg-red-700 text-white border border-white/20 transition-all active:scale-95 cursor-pointer text-xs font-ca-mono shrink-0 shadow-md"
             title="Close (Esc)"
+            aria-label="Close PlayStaples case study"
           >
             <X className="w-4 h-4" />
             <span className="hidden sm:inline">Close</span>
@@ -144,7 +143,8 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
       {/* ================= SCROLLABLE ASSIGNMENT ARTBOARD FEED ================= */}
       <div
         ref={scrollContainerRef}
-        className="flex-1 w-full overflow-y-auto px-2 sm:px-6 md:px-10 py-6 sm:py-8 space-y-6"
+        className="flex-1 w-full overflow-y-auto px-2 sm:px-6 md:px-10 py-6 sm:py-8 space-y-6 overscroll-contain"
+        style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
       >
         <div className="w-full max-w-[1500px] mx-auto space-y-6">
           {/* HERO PAGE: UT A1 2.PDF */}
@@ -226,7 +226,7 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl p-2 sm:p-6 flex flex-col items-center justify-center cursor-zoom-out"
+            className="fixed inset-0 z-[110] bg-black/95 backdrop-blur-2xl p-2 sm:p-6 flex flex-col items-center justify-center cursor-zoom-out"
             onClick={() => setActiveZoomImage(null)}
           >
             <div className="absolute top-4 right-4 flex items-center gap-2 z-50">

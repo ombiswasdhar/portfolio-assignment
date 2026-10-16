@@ -1009,3 +1009,15 @@ html[data-perf-tier="low"] .blur-\[180px\] {
   will-change: transform;
 }
 
+/* =========================================================================
+   PROJECT MODAL OPEN STATE: DEFENSIVELY HIDE FIXED NAV & MUSIC NOTCH
+   ========================================================================= */
+body[data-modal-open="true"] header[aria-label="Editorial Top Navigation Bar"],
+body[data-modal-open="true"] nav[aria-label="Mobile Navigation Dock"],
+body[data-modal-open="true"] div[aria-label="Mobile Music Player Notch"],
+body[data-modal-open="true"] div[aria-label="Desktop Vertical Music Player Notch"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
