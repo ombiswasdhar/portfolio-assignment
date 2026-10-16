@@ -632,9 +632,11 @@ export default function ContentsSection() {
                       </div>
 
                       <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                        <span className="px-5 py-2.5 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-widest uppercase shadow-2xl">
-                          Inspect Case Study 🔍
-                        </span>
+                        {proj.id !== 'melody' && (
+                          <span className="px-5 py-2.5 rounded-full bg-black/90 text-white border border-white/30 text-xs font-poppins-light tracking-widest uppercase shadow-2xl">
+                            Inspect Case Study 🔍
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
