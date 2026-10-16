@@ -604,7 +604,7 @@ export default function ContentsSection() {
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                       />
                     )}
-                    {!card.hoverImage && <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />}
+                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />
                     {!(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards || card.isAureusIsometric || card.id === 'aureaus') && (
                       <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
                         View Case Study ↗
