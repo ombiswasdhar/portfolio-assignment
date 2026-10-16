@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { gsap } from 'gsap'
+import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
 
 /**
  * Auge XP Signature Preloader with Custom Brand Hierarchy
@@ -32,6 +33,7 @@ export default function AugePreloader({
   const containerRef = useRef(null)
   const backdropRef = useRef(null)
   const maskRef = useRef(null)
+  const floatingRef = useRef(null)
   
   const topTextRef = useRef(null)
   const portfolioRef = useRef(null)
@@ -161,6 +163,10 @@ export default function AugePreloader({
       .to(bottomEl, { yPercent: -130, duration: 0.65, ease: 'expo.inOut' }, 0.14)
       .to(counter, { yPercent: -130, duration: 0.65, ease: 'expo.inOut' }, 0.18)
       .to(statusLine, { opacity: 0, duration: 0.45, ease: 'power2.inOut' }, 0)
+
+    if (floatingRef.current) {
+      textTl.to(floatingRef.current, { y: -70, opacity: 0, duration: 0.65, ease: 'expo.inOut' }, 0)
+    }
 
     // Phase 2: Parabolic Curtain sweeps UPWARD to reveal the website
     const curtainTl = gsap.timeline({
@@ -325,6 +331,16 @@ export default function AugePreloader({
       0.4
     )
 
+    // Floating brand stickers fade & scale in
+    if (floatingRef.current) {
+      entranceTl.fromTo(
+        floatingRef.current,
+        { opacity: 0, scale: 0.94 },
+        { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' },
+        0.2
+      )
+    }
+
     // 4. Counter Ramp: Slower, cinematic progression (0 -> 48 -> 88 -> 100)
     const targetInterim = 87 + Math.floor(Math.random() * 5)
     const counterObj = { value: 0 }
@@ -449,8 +465,17 @@ export default function AugePreloader({
         }}
       />
 
-      {/* 3. Center Typography Trio */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-6">
+      {/* 3. Floating Brand Illustrations (From Featured Works) */}
+      <div
+        ref={floatingRef}
+        className="absolute inset-0 pointer-events-none z-10 overflow-hidden select-none"
+        aria-hidden="true"
+      >
+        <FeaturedWorksFloatingElements />
+      </div>
+
+      {/* 4. Center Typography Trio */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-6 z-20">
         
         {/* ROW 1: "om biswas" — Akira Expanded (crisp, high contrast, bold) */}
         <div className="overflow-hidden py-1 mb-1.5 sm:mb-2.5">
@@ -508,18 +533,18 @@ export default function AugePreloader({
 
       </div>
 
-      {/* 4. Top Micro Studio Metadata (in Fredoka font) */}
+      {/* 5. Top Micro Studio Metadata (in Fredoka font) */}
       <div
         ref={statusLineRef}
-        className="absolute top-6 left-6 right-6 flex items-center justify-between text-xs sm:text-[13px] tracking-[0.16em] font-fredoka font-medium uppercase text-neutral-400 pointer-events-none"
+        className="absolute top-6 left-6 right-6 z-30 flex items-center justify-between text-xs sm:text-[13px] tracking-[0.16em] font-fredoka font-medium uppercase text-neutral-400 pointer-events-none"
       >
         <span>PORTFOLIO // 2026</span>
         <span className="hidden sm:inline">CREATIVE TECHNOLOGY & DESIGN</span>
         <span>SHILLONG, IN</span>
       </div>
 
-      {/* 5. Bottom 3-Digit Monospace Counter */}
-      <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 overflow-hidden pointer-events-none">
+      {/* 6. Bottom 3-Digit Monospace Counter */}
+      <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 z-30 overflow-hidden pointer-events-none">
         <div className="flex flex-col items-center gap-1.5">
           <span
             ref={counterRef}
