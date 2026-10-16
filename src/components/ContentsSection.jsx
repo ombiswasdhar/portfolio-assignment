@@ -17,7 +17,6 @@ import AureusShowcase from './AureusShowcase'
 import AureusCaseStudyModal from './AureusCaseStudyModal'
 import PlayStaplesCaseStudyModal from './PlayStaplesCaseStudyModal'
 import DiagonalMarqueeCarousel from '@/components/ui/diagonal-marquee-carousel'
-import headphoneMockupImg from '../assets/work/headphone-mockup.png'
 import uiDiscover from '../assets/work/aureus/aureus-ui-discover.png'
 import uiProducts from '../assets/work/aureus/aureus-ui-products.png'
 import uiDetail from '../assets/work/aureus/aureus-ui-product-detail.png'
@@ -34,9 +33,6 @@ const aureusCarouselCards = [
   { id: 'aureus-3', url: uiProducts, title: 'Acoustic Collection Product Grid' },
   { id: 'aureus-4', url: uiDetail, title: 'Hardware Specs & Drivers Detail' },
   { id: 'aureus-5', url: uiCart, title: 'Streamlined Checkout Funnel' },
-  { id: 'aureus-6', url: headphoneMockupImg, title: '3D Headphone Render' },
-  { id: 'aureus-7', url: aureusIdeationImg, title: 'Aureus Ideation & Vision' },
-  { id: 'aureus-8', url: aureusAdvantagesImg, title: 'Strategic Hardware Advantages' },
 ]
 
 // The 14 replacement PlayStaples images from Downloads/playstaples/New folder.
