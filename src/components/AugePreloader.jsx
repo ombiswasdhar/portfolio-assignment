@@ -444,8 +444,12 @@ export default function AugePreloader({
       setTimeout(checkReadiness, 3800)
     }
 
-    // Keyboard listener for skip
+    // Keyboard listener for skip & prevent background scrolling on desktop
     const handleKeyDown = (e) => {
+      const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End']
+      if (scrollKeys.includes(e.code)) {
+        e.preventDefault()
+      }
       if (e.code === 'Space' || e.code === 'Escape') {
         handleSkip()
       }

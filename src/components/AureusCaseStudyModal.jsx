@@ -123,7 +123,7 @@ export default function AureusCaseStudyModal({ onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] w-screen h-screen bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
+      className="fixed inset-0 z-[100] w-full h-full bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
       role="dialog"
       aria-label="Aureus Audio Case Study Deck"
     >
