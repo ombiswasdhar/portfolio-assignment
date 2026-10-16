@@ -235,33 +235,20 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
       />
 
       {/* ============================================================ */}
-      {/* DYNAMIC STUDIO CORNER MARKINGS (UPDATING PER EDITION)        */}
+      {/* DYNAMIC STUDIO CORNER MARKINGS (CLEAN, NON-OVERLAPPING)      */}
       {/* ============================================================ */}
-      {/* Top Left: Vertical Agency Spec Tag */}
-      <div className="absolute top-4 left-4 pointer-events-none opacity-70 hover:opacity-100 transition-opacity z-20">
-        <span className="block font-fredoka text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-neutral-300 [writing-mode:vertical-lr] rotate-180 transition-all duration-300">
-          {activeEdition === 0
-            ? 'RAW - IDENTITY // RAW - LOVE, RAW - COLOUR'
-            : 'OM BISWAS // IDENTITY // 2026 PRINT SPEC'}
+      {/* Top Left: Studio Spec Tag (Horizontal layout - no collision with bottom) */}
+      <div className="absolute top-3.5 sm:top-4 left-3.5 sm:left-4 pointer-events-none z-20 flex flex-col items-start">
+        <span className="font-fredoka text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-neutral-300 font-medium transition-all duration-300">
+          {activeEdition === 0 ? 'RAW IDENTITY' : 'OM BISWAS'}
+        </span>
+        <span className="font-fredoka text-[7.5px] sm:text-[8.5px] uppercase tracking-[0.12em] text-neutral-400 font-normal transition-all duration-300">
+          {activeEdition === 0 ? 'CONCEPT SPEC' : 'ARTIST IDENTITY'}
         </span>
       </div>
 
-      {/* Bottom Left: Dimensions & Stock Spec */}
-      <div className="absolute bottom-4 left-4 pointer-events-none opacity-70 hover:opacity-100 transition-opacity z-20">
-        <div className="flex flex-col gap-0.5">
-          <span className="font-fredoka text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-neutral-300">
-            DIMENSIONS: 85 x 55mm
-          </span>
-          <span className="font-fredoka text-[8px] sm:text-[9px] uppercase tracking-[0.12em] text-neutral-400 font-normal transition-all duration-300">
-            {activeEdition === 0
-              ? '350GSM MATTE SILK CARDSTOCK'
-              : 'COSMIC VELVET SOFT-TOUCH EMBOSS'}
-          </span>
-        </div>
-      </div>
-
       {/* Top Right: Studio Branding in Akira Expanded & Edition Indicator */}
-      <div className="absolute top-4 right-4 pointer-events-none opacity-90 hover:opacity-100 transition-opacity flex flex-col items-end z-20 text-right">
+      <div className="absolute top-3.5 sm:top-4 right-3.5 sm:right-4 pointer-events-none opacity-90 flex flex-col items-end z-20 text-right">
         <span className="font-akira text-[9px] sm:text-[11px] tracking-wider text-white uppercase font-black leading-tight">
           ONI DESIGN STUDIOS
         </span>
@@ -270,48 +257,32 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
         </span>
       </div>
 
-      {/* Bottom Right: Season & Edition Tag */}
-      <div className="absolute bottom-4 right-4 pointer-events-none opacity-70 hover:opacity-100 transition-opacity text-right z-20">
-        <span className="font-fredoka text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-neutral-300 block transition-all duration-300">
-          {activeEdition === 0 ? '2ND YEAR COURSEWORK // 2026' : 'FEATURED IDENTITY // 2026'}
+      {/* Bottom Left: Dimensions & Stock Spec (Compact & clear of center button) */}
+      <div className="absolute bottom-3 sm:bottom-4 left-3.5 sm:left-4 pointer-events-none z-20">
+        <div className="flex flex-col gap-0.5 max-w-[120px] sm:max-w-[150px]">
+          <span className="font-fredoka text-[8px] sm:text-[9px] uppercase tracking-[0.14em] text-neutral-400 font-medium">
+            85 x 55mm
+          </span>
+          <span className="font-fredoka text-[7.5px] sm:text-[8.5px] uppercase tracking-[0.12em] text-neutral-500 font-normal truncate transition-all duration-300">
+            {activeEdition === 0 ? '350GSM MATTE SILK' : 'VELVET SOFT-TOUCH'}
+          </span>
+        </div>
+      </div>
+
+      {/* Bottom Right: Season & Edition Tag (Compact & clear of center button) */}
+      <div className="absolute bottom-3 sm:bottom-4 right-3.5 sm:right-4 pointer-events-none text-right z-20">
+        <span className="font-fredoka text-[8px] sm:text-[9px] uppercase tracking-[0.14em] text-neutral-400 block transition-all duration-300">
+          {activeEdition === 0 ? '2ND YEAR // 2026' : 'FEATURED // 2026'}
+        </span>
+        <span className="font-fredoka text-[7.5px] sm:text-[8.5px] uppercase tracking-[0.12em] text-neutral-500 block transition-all duration-300">
+          PRINT PRODUCTION
         </span>
       </div>
 
       {/* ============================================================ */}
-      {/* INTERACTIVE EDITION TOGGLE BUTTON (TEXT-FREE)                */}
-      {/* ============================================================ */}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation()
-          setActiveEdition((prev) => (prev === 0 ? 1 : 0))
-        }}
-        aria-label="Switch between cards"
-        title="Switch between cards"
-        className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/65 hover:bg-black/90 active:scale-90 border border-white/20 hover:border-[#E84A4A] backdrop-blur-md shadow-2xl transition-all duration-300 group cursor-pointer hover:shadow-[0_0_16px_rgba(232,74,74,0.5)]"
-      >
-        <svg
-          className={`w-4 h-4 text-white/80 group-hover:text-white transition-transform duration-500 ${
-            activeEdition === 1 ? 'rotate-180 text-[#E84A4A]' : ''
-          }`}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-          <path d="M3 3v5h5" />
-          <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-          <path d="M16 21h5v-5" />
-        </svg>
-      </button>
-
-      {/* ============================================================ */}
       {/* MAIN STAGE RIG (BUTTER-SMOOTH GPU CROSSFADE BETWEEN EDITIONS) */}
       {/* ============================================================ */}
-      <div key={animationCycle} className="relative w-full h-full flex items-center justify-center">
+      <div key={animationCycle} className="relative w-full h-full flex items-center justify-center -translate-y-2 sm:-translate-y-3">
         {/* ========================================================== */}
         {/* EDITION 01: ISOMETRIC DECK SHUFFLE SHOWCASE                */}
         {/* ========================================================== */}
@@ -452,6 +423,37 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
           </div>
         </div>
       </div>
+
+      {/* ============================================================ */}
+      {/* INTERACTIVE EDITION CYCLE BUTTON (ALWAYS ON TOP OF CARDS)   */}
+      {/* ============================================================ */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          setActiveEdition((prev) => (prev === 0 ? 1 : 0))
+        }}
+        aria-label="Cycle between card editions"
+        title="Cycle between Edition 01 and Edition 02"
+        className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/85 hover:bg-[#E84A4A] active:scale-90 border border-white/30 hover:border-[#E84A4A] backdrop-blur-md shadow-2xl transition-all duration-300 group cursor-pointer hover:shadow-[0_0_16px_rgba(232,74,74,0.6)]"
+      >
+        <svg
+          className={`w-4 h-4 text-white transition-transform duration-500 ${
+            activeEdition === 1 ? 'rotate-180 text-white' : ''
+          }`}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+          <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+          <path d="M16 21h5v-5" />
+        </svg>
+      </button>
     </div>
   )
 }
