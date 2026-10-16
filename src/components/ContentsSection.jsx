@@ -11,6 +11,7 @@ import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
 import oniCardsHoverImg from '../assets/work/headphone-mockup.png'
 import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
+import previewMelodyImg from '../assets/work/preview_melody.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 import AureusIsometricAnimation from './AureusIsometricAnimation'
 import AureusShowcase from './AureusShowcase'
@@ -342,6 +343,136 @@ const projectsData = [
   },
 ]
 
+const getProjectGallery = (project) => {
+  if (!project) return { hero: null, secondary: [] }
+
+  if (project.id === 'playstaples') {
+    return {
+      hero: {
+        img: projectPlaystaplesImg,
+        title: 'PlayStaples // Kaali Peeli Premier Padmini Collectible Wooden Toy',
+        caption: '3D CAD Product Model & Authentic Mumbai Taxi Livery',
+      },
+      secondary: [
+        {
+          img: kaaliPeeliHoverImg,
+          title: '02 // Lifestyle Packaging & Staging',
+          subtitle: 'Collectible Retail Box Artwork & Scene Staging',
+        },
+        {
+          img: psCycle01BombayImg,
+          title: '03 // Cultural Heritage Study',
+          subtitle: 'Premier Padmini Archive & Iconic Street Nostalgia',
+        },
+        {
+          img: psCycleBd01Img,
+          title: '04 // Tactile Wooden Toy Prototype',
+          subtitle: 'Warm Grain Hardwood & Precision Proportions',
+        },
+        {
+          img: psCycleRetroRohtakImg,
+          title: '05 // Retail Livery & Typography',
+          subtitle: 'Authentic Fare Meter Details & Graphic Treatment',
+        },
+      ],
+    }
+  }
+
+  if (project.id === 'business-cards') {
+    return {
+      hero: {
+        img: oniCardsHoverImg,
+        title: 'Oni Design Studios // Corporate & Freelance Identity Showcase',
+        caption: 'Diagonal Dynamic Layout & Cyberpunk Lilac Colorway',
+      },
+      secondary: [
+        {
+          img: oniCardFrontImg,
+          title: '02 // Iteration 01 • Front View',
+          subtitle: 'Lilac Dual Brand Spec & Mascot Framing',
+        },
+        {
+          img: oniCardBackImg,
+          title: '03 // Iteration 01 • Back View',
+          subtitle: 'Typography Layout & Integrated QR Code',
+        },
+        {
+          img: oniCard2FrontImg,
+          title: '04 // Iteration 02 • Cosmic Oni Mask',
+          subtitle: 'Om Biswas Print Spec & Cosmic Velvet Finish',
+        },
+        {
+          img: oniCard2BackImg,
+          title: '05 // Iteration 02 • Back View',
+          subtitle: 'Embossed Soft-Touch Typography & Dimensions',
+        },
+      ],
+    }
+  }
+
+  if (project.id === 'aureaus') {
+    return {
+      hero: {
+        img: projectAureausImg,
+        title: 'Aureus Audio // 3D Hardware Telemetry & Audio Lookbook',
+        caption: 'Blender 3D Modeling & Editorial Magazine Typography Spread',
+      },
+      secondary: [
+        {
+          img: uiDiscover,
+          title: '02 // Acoustic Discovery & Lookbook',
+          subtitle: 'Magazine Spread Layout & Typography Hierarchy',
+        },
+        {
+          img: uiProducts,
+          title: '03 // Acoustic Collection Catalog',
+          subtitle: 'Dark Mode Product Grid & Hardware Metrics',
+        },
+        {
+          img: uiDetail,
+          title: '04 // Hardware Specifications & Drivers',
+          subtitle: 'Driver Telemetry & Modern Audiophile Reviews',
+        },
+        {
+          img: uiCart,
+          title: '05 // Streamlined Purchase Funnel',
+          subtitle: 'Minimal Cart System & Frictionless Checkout',
+        },
+      ],
+    }
+  }
+
+  if (project.id === 'melody') {
+    return {
+      hero: {
+        img: projectMelodyImg,
+        title: 'Melody Tickets // Entertainment Ticketing & User Flow Funnel',
+        caption: 'Comprehensive Booking Journey Wireframes & UI Prototypes',
+      },
+      secondary: [
+        {
+          img: previewMelodyImg,
+          title: '02 // Interactive Concert Booking Funnel',
+          subtitle: 'Seat Selector Flow & Ticket Confirmation Modal',
+        },
+        {
+          img: projectMelodyImg,
+          title: '03 // Campaign Identity & Chromatic Visuals',
+          subtitle: 'Promotional Banners & Floating 3D Geometries',
+        },
+      ],
+    }
+  }
+
+  return {
+    hero: {
+      img: project.thumbnail,
+      title: project.title,
+      caption: project.subtitle,
+    },
+    secondary: [],
+  }
+}
 
 export default function ContentsSection() {
   const [activeProject, setActiveProject] = React.useState(null)
@@ -614,107 +745,321 @@ export default function ContentsSection() {
         </div>
       </div>
 
-      {/* CASE STUDY DETAIL MODAL */}
-      {/* CASE STUDY DETAIL MODAL - EMPTIED */}
-      {activeProject && (
-        <div
-          className="fixed inset-0 z-[100] w-full h-full bg-[#070709] text-white flex flex-col overflow-hidden animate-fadeIn"
-          role="dialog"
-          aria-modal="true"
-        >
-          {/* STICKY TOP FULLSCREEN HEADER */}
-          <header
-            style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top, 0.75rem))' }}
-            className="sticky top-0 z-40 bg-[#0A0A0D] border-b border-white/10 px-3 sm:px-8 py-3 flex items-center justify-between gap-3 shrink-0 shadow-lg"
-          >
-            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 pr-2">
-              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: activeProject.folderColor || '#FFE500' }} />
-              <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3 min-w-0">
-                <span className="font-akira text-xs sm:text-base font-black tracking-wider text-white uppercase truncate">
-                  {activeProject.displayTitle || activeProject.title}
-                </span>
-                <span className="text-[9px] sm:text-xs font-ca-mono text-white/50 tracking-wider truncate hidden xs:inline sm:inline">
-                  Coursework Assignment • {activeProject.category}
-                </span>
-              </div>
-            </div>
+      {/* CASE STUDY DETAIL MODAL - STUDIO EDITORIAL LAYOUT */}
+      {activeProject && (() => {
+        const gallery = getProjectGallery(activeProject)
+        const otherProjects = projectsData.filter((p) => p.id !== activeProject.id)
 
-            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-              <button
-                type="button"
-                onClick={toggleFullscreen}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono text-white transition-colors cursor-pointer"
-                title={isFullscreen ? 'Exit Full Screen' : 'Toggle Full Screen'}
-              >
-                {isFullscreen ? (
-                  <Minimize2 className="w-3.5 h-3.5 text-[#FFE500]" />
-                ) : (
-                  <Maximize2 className="w-3.5 h-3.5 text-[#FFE500]" />
-                )}
-                <span className="hidden md:inline">
-                  {isFullscreen ? 'Exit Fullscreen' : 'Full Screen'}
-                </span>
-              </button>
-
-              <button
-                onClick={handleCloseProject}
-                type="button"
-                className="min-w-[38px] min-h-[38px] p-2 sm:px-3.5 sm:py-1.5 rounded-full bg-white/15 hover:bg-red-600 active:bg-red-700 text-white border border-white/20 transition-all active:scale-95 cursor-pointer text-xs font-ca-mono flex items-center justify-center gap-1.5 shadow-md"
-                title="Close (Esc)"
-                aria-label="Close project"
-              >
-                <X className="w-4 h-4" />
-                <span className="hidden sm:inline">Close</span>
-              </button>
-            </div>
-          </header>
-
-          {/* SCROLLABLE FULLSCREEN ASSIGNMENT FEED - EMPTIED */}
+        return (
           <div
-            id="project-fullscreen-container"
-            className="flex-1 w-full overflow-y-auto px-4 sm:px-8 py-12 flex flex-col items-center justify-center overscroll-contain"
-            style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
+            className="fixed inset-0 z-[100] w-full h-full bg-[#08080C] text-white flex flex-col overflow-hidden animate-fadeIn"
+            role="dialog"
+            aria-modal="true"
           >
-            <div className="max-w-md w-full mx-auto text-center flex flex-col items-center gap-5 p-8 sm:p-10 rounded-2xl border border-white/10 bg-[#0F0F14] shadow-2xl">
-              <div 
-                className="w-14 h-14 rounded-full flex items-center justify-center border border-white/15 shadow-inner"
-                style={{ backgroundColor: `${activeProject.folderColor || '#FFE500'}18` }}
-              >
-                <span 
-                  className="w-3.5 h-3.5 rounded-full"
-                  style={{ backgroundColor: activeProject.folderColor || '#FFE500' }}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <span className="font-ca-mono text-[10px] sm:text-xs tracking-[0.2em] uppercase text-neutral-400">
-                  {activeProject.num || '00'} // CASE STUDY
+            {/* STICKY STUDIO BROWSER HEADER */}
+            <header
+              style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top, 0.75rem))' }}
+              className="sticky top-0 z-40 bg-[#0C0C12]/95 backdrop-blur-md border-b border-white/10 px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3 shrink-0 shadow-xl"
+            >
+              {/* LEFT PILLS: Studio Badge / Menu / Active Project */}
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <span className="px-3 py-1 rounded-full bg-white text-black font-akira text-[10px] sm:text-xs font-black tracking-wider uppercase shrink-0">
+                  OM.STUDIO
                 </span>
-                <h3 className="font-akira text-xl sm:text-2xl text-white uppercase font-black tracking-wide">
-                  {activeProject.displayTitle || activeProject.title}
-                </h3>
-                <p className="font-ca-mono text-xs text-neutral-400">
-                  {activeProject.category}
-                </p>
+                <span className="hidden sm:inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/10 text-white font-ca-mono text-[11px] tracking-wider uppercase">
+                  Menu
+                </span>
+                <div className="hidden md:flex items-center gap-1.5 text-white/60">
+                  <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-ca-mono uppercase truncate max-w-[200px]">
+                    {activeProject.displayTitle || activeProject.title}
+                  </span>
+                </div>
               </div>
 
-              <div className="h-px w-20 bg-white/10 my-1" />
+              {/* CENTER BROWSER ADDRESS PILL */}
+              <div className="hidden lg:flex items-center justify-center flex-1 max-w-md mx-4">
+                <div className="w-full px-4 py-1.5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center gap-2 text-xs font-ca-mono text-white/70">
+                  <span
+                    className="w-2 h-2 rounded-full shrink-0"
+                    style={{ backgroundColor: activeProject.folderColor || '#FFE500' }}
+                  />
+                  <span className="text-white/40">studio.ombiswas /</span>
+                  <span className="text-white font-medium">{activeProject.id}</span>
+                </div>
+              </div>
 
-              <p className="font-poppins text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                Project case study content, high-resolution galleries, and deliverables are currently being curated.
-              </p>
+              {/* RIGHT ACTIONS: Fullscreen + Close */}
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                <button
+                  type="button"
+                  onClick={toggleFullscreen}
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-ca-mono text-white transition-colors cursor-pointer"
+                  title={isFullscreen ? 'Exit Full Screen' : 'Toggle Full Screen'}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="w-3.5 h-3.5 text-[#FFE500]" />
+                  ) : (
+                    <Maximize2 className="w-3.5 h-3.5 text-[#FFE500]" />
+                  )}
+                  <span className="hidden md:inline">
+                    {isFullscreen ? 'Exit' : 'Fullscreen'}
+                  </span>
+                </button>
 
-              <button
-                type="button"
-                onClick={handleCloseProject}
-                className="mt-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-xs font-ca-mono text-white transition-all cursor-pointer"
-              >
-                ← Back to Featured Works
-              </button>
+                <button
+                  onClick={handleCloseProject}
+                  type="button"
+                  className="min-w-[36px] min-h-[36px] p-2 sm:px-3.5 sm:py-1.5 rounded-full bg-white/15 hover:bg-[#E84A4A] text-white border border-white/20 transition-all active:scale-95 cursor-pointer text-xs font-ca-mono flex items-center justify-center gap-1.5 shadow-md"
+                  title="Close (Esc)"
+                  aria-label="Close project"
+                >
+                  <X className="w-4 h-4" />
+                  <span className="hidden sm:inline">Close</span>
+                </button>
+              </div>
+            </header>
+
+            {/* SCROLLABLE MAIN CONTENT (STUDIO EDITORIAL DUAL COLUMN) */}
+            <div
+              id="project-fullscreen-container"
+              className="flex-1 w-full overflow-y-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 overscroll-contain"
+              style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
+            >
+              <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[380px_1fr] xl:grid-cols-[430px_1fr] gap-6 lg:gap-8 items-start">
+                {/* LEFT COLUMN: Project Dossier Card + Other Works Switcher */}
+                <div className="flex flex-col gap-6">
+                  {/* CARD 1: PROJECT DOSSIER */}
+                  <div className="bg-[#0F0F16] rounded-3xl p-6 sm:p-7 border border-white/10 shadow-2xl relative overflow-hidden flex flex-col gap-5">
+                    {/* Top Row: Title + Date */}
+                    <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
+                      <div className="flex flex-col gap-1 min-w-0">
+                        <span className="font-ca-mono text-[10px] uppercase tracking-[0.2em] text-[#FFE500]">
+                          {activeProject.num || '01'} // CASE STUDY
+                        </span>
+                        <h2 className="font-akira text-xl sm:text-2xl font-black text-white uppercase tracking-wide leading-tight">
+                          {activeProject.title}
+                        </h2>
+                      </div>
+                      <span className="font-ca-mono text-xs font-semibold text-white/80 bg-white/10 border border-white/15 px-3 py-1 rounded-full shrink-0">
+                        {activeProject.date ? activeProject.date.split(',')[1]?.trim() || activeProject.date : '2026'}
+                      </span>
+                    </div>
+
+                    {/* Editorial Narrative / Summary */}
+                    <div className="space-y-3">
+                      <p className="font-poppins text-xs sm:text-sm text-neutral-300 leading-relaxed font-normal">
+                        {activeProject.description}
+                      </p>
+                      {activeProject.highlights && (
+                        <div
+                          className="border-l-2 pl-3 py-1 text-xs font-poppins text-neutral-400 italic"
+                          style={{ borderColor: activeProject.folderColor || '#FFE500' }}
+                        >
+                          "{activeProject.highlights}"
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Deliverables / Scope */}
+                    {activeProject.deliverables && activeProject.deliverables.length > 0 && (
+                      <div className="space-y-2 border-t border-white/10 pt-4">
+                        <h3 className="font-ca-mono text-[11px] uppercase tracking-[0.2em] text-white/50">
+                          Scope & Key Deliverables
+                        </h3>
+                        <ul className="space-y-1.5">
+                          {activeProject.deliverables.map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-xs font-poppins text-neutral-300">
+                              <span
+                                className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                                style={{ backgroundColor: activeProject.folderColor || '#FFE500' }}
+                              />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Tools & Tech Stack */}
+                    {activeProject.tools && activeProject.tools.length > 0 && (
+                      <div className="space-y-2 border-t border-white/10 pt-4">
+                        <h3 className="font-ca-mono text-[11px] uppercase tracking-[0.2em] text-white/50">
+                          Discipline & Tools
+                        </h3>
+                        <div className="flex flex-wrap gap-1.5">
+                          {activeProject.tools.map((tool, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] font-ca-mono text-neutral-300"
+                            >
+                              {tool}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* External Figma Link if present */}
+                    {activeProject.figmaUrl && (
+                      <a
+                        href={activeProject.figmaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-2xl bg-[#E84A4A] hover:bg-[#ff5252] text-white font-akira text-xs font-black uppercase tracking-wider transition-all shadow-lg hover:shadow-red-500/20 active:scale-[0.98] cursor-pointer"
+                      >
+                        Inspect Figma Workspace
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
+
+                  {/* CARD 2: "TRABALHOS" / OTHER WORKS SWITCHER */}
+                  <div className="bg-[#0F0F16] rounded-3xl p-5 sm:p-6 border border-white/10 shadow-2xl flex flex-col gap-4">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#FFE500]" />
+                        <h3 className="font-akira text-xs sm:text-sm font-black uppercase text-white tracking-wider">
+                          Other Works
+                        </h3>
+                      </div>
+                      <span className="font-ca-mono text-[10px] text-white/40 tracking-wider">
+                        {otherProjects.length} Projects
+                      </span>
+                    </div>
+
+                    {/* 2-Column Switcher Grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                      {otherProjects.map((p) => (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => {
+                            setActiveProject(p)
+                            const container = document.getElementById('project-fullscreen-container')
+                            if (container) container.scrollTo({ top: 0, behavior: 'smooth' })
+                          }}
+                          className="group text-left flex flex-col gap-2 p-2 rounded-2xl bg-[#14141E] hover:bg-[#1A1A28] border border-white/10 hover:border-white/30 transition-all cursor-pointer"
+                        >
+                          <div className="w-full aspect-square rounded-xl overflow-hidden bg-[#0A0A0E] relative border border-white/5">
+                            <img
+                              src={p.thumbnail || p.hoverImage}
+                              alt={p.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <span className="font-ca-mono text-[10px] font-bold text-white bg-black/80 px-2 py-1 rounded-full border border-white/20">
+                                View ↗
+                              </span>
+                            </div>
+                          </div>
+                          <div className="px-1 min-w-0">
+                            <p className="font-akira text-[10px] sm:text-[11px] font-bold text-white uppercase truncate group-hover:text-[#FFE500] transition-colors">
+                              {p.tabTitle || p.title}
+                            </p>
+                            <span className="font-ca-mono text-[9px] text-neutral-400 block truncate">
+                              {p.category}
+                            </span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* RIGHT COLUMN: Large Hero Card + 2-Column Secondary Visuals */}
+                <div className="flex flex-col gap-6">
+                  {/* HERO SHOWCASE CARD */}
+                  {gallery.hero && (
+                    <div className="bg-[#0F0F16] rounded-3xl overflow-hidden border border-white/10 shadow-2xl group transition-all hover:border-white/20 flex flex-col">
+                      <div
+                        className="relative w-full bg-[#050508] overflow-hidden cursor-zoom-in flex items-center justify-center min-h-[300px] sm:min-h-[440px] lg:min-h-[500px]"
+                        onClick={() => setActiveImageZoom(gallery.hero.img)}
+                      >
+                        <img
+                          src={gallery.hero.img}
+                          alt={gallery.hero.title}
+                          className="w-full h-full object-contain max-h-[640px] group-hover:scale-[1.015] transition-transform duration-500"
+                        />
+
+                        {/* Hover Overlay Zoom Pill */}
+                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white font-ca-mono text-xs">
+                            <ZoomIn className="w-3.5 h-3.5 text-[#FFE500]" />
+                            Click to Inspect
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Hero Info Bar */}
+                      <div className="p-4 sm:p-5 bg-[#12121A] border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="space-y-1 min-w-0">
+                          <h3 className="font-ca-mono text-xs sm:text-sm font-bold text-white uppercase tracking-wider truncate">
+                            {gallery.hero.title}
+                          </h3>
+                          <p className="font-poppins text-xs text-neutral-400 truncate">
+                            {gallery.hero.caption}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setActiveImageZoom(gallery.hero.img)}
+                          className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-xs font-ca-mono text-white/80 transition-colors cursor-pointer self-start sm:self-auto"
+                        >
+                          <ZoomIn className="w-3.5 h-3.5 text-[#FFE500]" />
+                          Inspect Full Res
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SECONDARY VISUALS 2-COLUMN GRID */}
+                  {gallery.secondary && gallery.secondary.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+                      {gallery.secondary.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="bg-[#0F0F16] rounded-3xl overflow-hidden border border-white/10 shadow-xl group hover:border-white/25 transition-all flex flex-col"
+                        >
+                          {/* Image box */}
+                          <div
+                            className="relative aspect-[4/3] sm:aspect-[16/10] bg-[#07070B] overflow-hidden cursor-zoom-in flex items-center justify-center"
+                            onClick={() => setActiveImageZoom(item.img)}
+                          >
+                            <img
+                              src={item.img}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              loading="lazy"
+                            />
+                            {/* Hover zoom pill */}
+                            <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/25 text-white font-ca-mono text-xs">
+                                <ZoomIn className="w-3.5 h-3.5 text-[#FFE500]" />
+                                Zoom
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Caption bar */}
+                          <div className="p-4 bg-[#12121A] border-t border-white/10 flex flex-col gap-0.5">
+                            <h4 className="font-ca-mono text-xs font-bold text-white uppercase tracking-wider truncate">
+                              {item.title}
+                            </h4>
+                            <p className="font-poppins text-[11px] sm:text-xs text-neutral-400 line-clamp-1">
+                              {item.subtitle}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
 
       {/* FULL RESOLUTION IMAGE ZOOM LIGHTBOX */}
       {activeImageZoom && (
