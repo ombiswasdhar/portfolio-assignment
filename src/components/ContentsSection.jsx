@@ -16,11 +16,28 @@ import AureusIsometricAnimation from './AureusIsometricAnimation'
 import AureusShowcase from './AureusShowcase'
 import AureusCaseStudyModal from './AureusCaseStudyModal'
 import PlayStaplesCaseStudyModal from './PlayStaplesCaseStudyModal'
+import DiagonalMarqueeCarousel from '@/components/ui/diagonal-marquee-carousel'
+import headphoneMockupImg from '../assets/work/headphone-mockup.png'
+import uiDiscover from '../assets/work/aureus/aureus-ui-discover.png'
+import uiProducts from '../assets/work/aureus/aureus-ui-products.png'
+import uiDetail from '../assets/work/aureus/aureus-ui-product-detail.png'
+import uiCart from '../assets/work/aureus/aureus-ui-cart.png'
 import aureusIdeationImg from '../assets/work/aureus/aureus-01-ideation.png'
 import aureusUserStudyImg from '../assets/work/aureus/aureus-02-user-study.png'
 import aureusPainPointsImg from '../assets/work/aureus/aureus-03-pain-points.png'
 import aureusPersonaImg from '../assets/work/aureus/aureus-04-persona.png'
 import aureusAdvantagesImg from '../assets/work/aureus/aureus-05-advantages.png'
+
+const aureusCarouselCards = [
+  { id: 'aureus-1', url: projectAureausImg, title: 'Aureus Audio Flagship Hero' },
+  { id: 'aureus-2', url: uiDiscover, title: 'Discover Acoustics & Lookbook' },
+  { id: 'aureus-3', url: uiProducts, title: 'Acoustic Collection Product Grid' },
+  { id: 'aureus-4', url: uiDetail, title: 'Hardware Specs & Drivers Detail' },
+  { id: 'aureus-5', url: uiCart, title: 'Streamlined Checkout Funnel' },
+  { id: 'aureus-6', url: headphoneMockupImg, title: '3D Headphone Render' },
+  { id: 'aureus-7', url: aureusIdeationImg, title: 'Aureus Ideation & Vision' },
+  { id: 'aureus-8', url: aureusAdvantagesImg, title: 'Strategic Hardware Advantages' },
+]
 
 // The 14 replacement PlayStaples images from Downloads/playstaples/New folder.
 import psCycle01Img from '../assets/playstaples/user-cycle/01.jpg'
@@ -555,7 +572,13 @@ export default function ContentsSection() {
                   {card.isIsometricCards ? (
                     <OniCardIsometricAnimation isPaused={hoveredCardId === card.id} />
                   ) : card.isAureusIsometric ? (
-                    <AureusIsometricAnimation isPaused={hoveredCardId === card.id} isCompact={true} />
+                    <DiagonalMarqueeCarousel
+                      cards={aureusCarouselCards}
+                      angle={-22}
+                      baseSpeed={80}
+                      className="h-full w-full min-h-0 bg-neutral-950"
+                      cardClassName="h-[120px] w-[180px] sm:h-[135px] sm:w-[200px] md:h-[145px] md:w-[220px] rounded-lg shadow-xl border border-white/10"
+                    />
                   ) : card.flipImages ? (
                     <FlippingBusinessCard
                       front={card.flipImages[0]}
