@@ -476,7 +476,7 @@ export default function ContentsSection() {
               disclaimer !
             </h2>
             <p className="font-myfont text-2xl sm:text-3xl md:text-4xl lg:text-[42px] xl:text-[46px] text-neutral-100 font-medium leading-[1.45] sm:leading-[1.4] max-w-3xl lg:max-w-4xl mx-auto lowercase">
-              all the projects showcased here are my 2nd year college assignments (4 projects) which i created as part of my coursework.
+              all the projects showcased here are my 2nd , 3rd and internship projects.
             </p>
             <div className="w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto my-5 sm:my-7 flex justify-center opacity-45">
               <svg className="w-full h-3 text-neutral-400" viewBox="0 0 500 6" fill="none" preserveAspectRatio="none">

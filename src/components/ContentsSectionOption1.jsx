@@ -263,7 +263,7 @@ export default function ContentsSection() {
 
             {/* Main Statement */}
             <p className="font-myfont text-xl sm:text-2xl md:text-[28px] lg:text-[32px] text-neutral-100 font-medium leading-[1.65] max-w-2xl mx-auto lowercase">
-              all the projects showcased here are my 2nd year college assignments (4 projects) which i created as part of my coursework.
+              all the projects showcased here are my 2nd , 3rd and internship projects.
             </p>
 
             {/* Hand-drawn Organic Divider Line */}
