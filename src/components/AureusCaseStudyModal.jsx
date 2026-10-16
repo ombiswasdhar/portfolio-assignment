@@ -144,31 +144,6 @@ export default function AureusCaseStudyModal({ onClose }) {
           </div>
         </div>
 
-        {/* Desktop Quick Jump Navigation Bar */}
-        <nav className="hidden lg:flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-2 py-1">
-          <span className="text-[10px] font-mono uppercase text-neutral-400 font-semibold px-2">
-            Jump to:
-          </span>
-          <button
-            type="button"
-            onClick={() => scrollToFrame('aureus-3d-showcase')}
-            className="px-2.5 py-1 rounded-full text-xs font-mono text-[#F08264] hover:text-black hover:bg-[#F08264] transition-all cursor-pointer whitespace-nowrap active:scale-95 font-bold flex items-center gap-1.5"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#E84A4A] animate-pulse" />
-            ✦ 3D UI Showcase
-          </button>
-          {AUREUS_FRAMES.map((frame) => (
-            <button
-              key={frame.id}
-              type="button"
-              onClick={() => scrollToFrame(frame.id)}
-              className="px-2.5 py-1 rounded-full text-xs font-mono text-neutral-300 hover:text-black hover:bg-[#F08264] transition-all cursor-pointer whitespace-nowrap active:scale-95"
-            >
-              {frame.num}. {frame.shortLabel || frame.title.split(' ')[0]}
-            </button>
-          ))}
-        </nav>
-
         {/* Header Actions */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
@@ -200,105 +175,43 @@ export default function AureusCaseStudyModal({ onClose }) {
         </div>
       </header>
 
-      {/* Main Continuous Scrolling Feed of Images */}
+      {/* Main Empty State Container */}
       <div
         ref={scrollContainerRef}
-        className="flex-1 w-full overflow-y-auto px-3 sm:px-6 md:px-10 py-6 sm:py-10 overscroll-contain"
+        className="flex-1 w-full overflow-y-auto px-4 sm:px-8 py-12 flex flex-col items-center justify-center overscroll-contain"
         style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
       >
-        <main className="w-full max-w-[1500px] mx-auto flex flex-col gap-8 sm:gap-12">
-          {/* ======================================================== */}
-          {/* HERO: 3D ISOMETRIC UI SHOWCASE (PIN.IT/7HBZLQRAW)        */}
-          {/* ======================================================== */}
-          <section
-            id="aureus-3d-showcase"
-            className="flex flex-col gap-3 group scroll-mt-24"
+        <div className="max-w-md w-full mx-auto text-center flex flex-col items-center gap-5 p-8 sm:p-10 rounded-2xl border border-white/10 bg-[#0F0F14] shadow-2xl">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center border border-white/15 bg-[#F08264]/10 shadow-inner">
+            <span className="w-3.5 h-3.5 rounded-full bg-[#F08264]" />
+          </div>
+
+          <div className="space-y-2">
+            <span className="font-mono text-[10px] sm:text-xs tracking-[0.2em] uppercase text-neutral-400">
+              03 // CASE STUDY
+            </span>
+            <h3 className="font-akira text-xl sm:text-2xl text-white uppercase font-black tracking-wide">
+              AUREAUS ©
+            </h3>
+            <p className="font-mono text-xs text-neutral-400">
+              UX Case Study &amp; 3D Design
+            </p>
+          </div>
+
+          <div className="h-px w-20 bg-white/10 my-1" />
+
+          <p className="font-poppins text-xs sm:text-sm text-neutral-400 leading-relaxed">
+            Project case study content, high-resolution galleries, and deliverables are currently being curated.
+          </p>
+
+          <button
+            type="button"
+            onClick={handleClose}
+            className="mt-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-xs font-mono text-white transition-all cursor-pointer"
           >
-            {/* Minimal Section Header Tag */}
-            <div className="flex items-center justify-between px-2 text-xs font-mono">
-              <div className="flex items-center gap-2 text-neutral-400">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#E84A4A] animate-pulse" />
-                <span className="font-bold text-white uppercase tracking-wider">
-                  Featured 3D Webflow UI Showcase • Aureus Audio
-                </span>
-              </div>
-              <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[#F08264] text-[10px] uppercase tracking-wider font-bold">
-                Continuous Motion • Hover to Pause
-              </span>
-            </div>
-
-            {/* Interactive 3D Stage Container */}
-            <div className="relative w-full h-[520px] sm:h-[620px] md:h-[700px] lg:h-[760px] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden border border-white/15 shadow-[0_30px_90px_rgba(0,0,0,0.9)] bg-[#ECE8E1]">
-              <AureusIsometricAnimation
-                onOpenZoom={(img) => setActiveZoomImage(img)}
-              />
-            </div>
-          </section>
-          {AUREUS_FRAMES.map((frame, idx) => (
-            <article
-              id={frame.id}
-              key={frame.id}
-              className="flex flex-col gap-3 group scroll-mt-24"
-            >
-              {/* Minimal Frame Header Tag */}
-              <div className="flex items-center justify-between px-2 text-xs font-mono">
-                <div className="flex items-center gap-2 text-neutral-400">
-                  <span className="w-2 h-2 rounded-full bg-[#F08264]" />
-                  <span className="font-bold text-white uppercase tracking-wider">
-                    Frame {frame.num} • {frame.title}
-                  </span>
-                </div>
-                <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-[10px] uppercase tracking-wider">
-                  {frame.category}
-                </span>
-              </div>
-
-              {/* High-Resolution Frame Image with Click to Zoom */}
-              <div
-                className="group/img relative w-full rounded-xl sm:rounded-2xl overflow-hidden border border-white/15 bg-neutral-950 shadow-[0_20px_70px_rgba(0,0,0,0.85)] hover:border-[#F08264]/60 transition-colors cursor-zoom-in"
-                onClick={() => setActiveZoomImage(frame.image)}
-              >
-                <img
-                  src={frame.image}
-                  alt={frame.alt}
-                  loading={idx < 2 ? 'eager' : 'lazy'}
-                  className="w-full h-auto object-contain block select-none mx-auto transition-transform duration-500 group-hover/img:scale-[1.008]"
-                />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                  <span className="px-4 py-2 rounded-full bg-black/80 text-white font-mono text-xs font-bold border border-white/30 flex items-center gap-2 shadow-2xl">
-                    <ZoomIn className="w-4 h-4 text-[#F08264]" /> Click to Zoom
-                  </span>
-                </div>
-              </div>
-            </article>
-          ))}
-
-          {/* Footer Actions */}
-          <footer className="mt-8 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs font-mono text-neutral-400">
-              <span>End of Aureus Audio Assignment Deck</span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={scrollToTop}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-[#F08264] hover:text-black text-white border border-white/20 hover:border-[#F08264] text-xs font-mono uppercase tracking-wider transition-all cursor-pointer active:scale-95"
-              >
-                <ArrowUp className="w-4 h-4" />
-                <span>Back to Top</span>
-              </button>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E84A4A] hover:bg-[#ff5757] text-white text-xs font-mono uppercase tracking-wider transition-all cursor-pointer active:scale-95 shadow-lg"
-              >
-                <X className="w-4 h-4" />
-                <span>Close</span>
-              </button>
-            </div>
-          </footer>
-        </main>
+            ← Back to Featured Works
+          </button>
+        </div>
       </div>
 
       {/* Full-Screen Image Lightbox */}

@@ -140,82 +140,42 @@ export default function PlayStaplesCaseStudyModal({ onClose }) {
         </div>
       </header>
 
-      {/* ================= SCROLLABLE ASSIGNMENT ARTBOARD FEED ================= */}
+      {/* ================= SCROLLABLE ASSIGNMENT FEED - EMPTIED ================= */}
       <div
         ref={scrollContainerRef}
-        className="flex-1 w-full overflow-y-auto px-2 sm:px-6 md:px-10 py-6 sm:py-8 space-y-6 overscroll-contain"
+        className="flex-1 w-full overflow-y-auto px-4 sm:px-8 py-12 flex flex-col items-center justify-center overscroll-contain"
         style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
       >
-        <div className="w-full max-w-[1500px] mx-auto space-y-6">
-          {/* HERO PAGE: UT A1 2.PDF */}
-          <div
-            className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-white/15 bg-black cursor-zoom-in shadow-2xl transition-all duration-300 hover:border-white/30"
-            onClick={() => setActiveZoomImage(heroPosterImg)}
+        <div className="max-w-md w-full mx-auto text-center flex flex-col items-center gap-5 p-8 sm:p-10 rounded-2xl border border-white/10 bg-[#0F0F14] shadow-2xl">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center border border-white/15 bg-[#FFE500]/10 shadow-inner">
+            <span className="w-3.5 h-3.5 rounded-full bg-[#FFE500]" />
+          </div>
+
+          <div className="space-y-2">
+            <span className="font-ca-mono text-[10px] sm:text-xs tracking-[0.2em] uppercase text-neutral-400">
+              01 // CASE STUDY
+            </span>
+            <h3 className="font-akira text-xl sm:text-2xl text-white uppercase font-black tracking-wide">
+              PLAYSTAPLES ©
+            </h3>
+            <p className="font-ca-mono text-xs text-neutral-400">
+              Toy Design &amp; Branding
+            </p>
+          </div>
+
+          <div className="h-px w-20 bg-white/10 my-1" />
+
+          <p className="font-poppins text-xs sm:text-sm text-neutral-400 leading-relaxed">
+            Project case study content, high-resolution galleries, and deliverables are currently being curated.
+          </p>
+
+          <button
+            type="button"
+            onClick={handleClose}
+            className="mt-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-xs font-ca-mono text-white transition-all cursor-pointer"
           >
-            <img
-              src={heroPosterImg}
-              alt="PlayStaples Usability Testing Infographic Poster"
-              className="w-full h-auto object-contain block mx-auto transition-transform duration-500 group-hover:scale-[1.008]"
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-              <span className="px-4 py-2 rounded-full bg-black/80 text-white font-ca-mono text-xs font-bold border border-white/30 flex items-center gap-2 shadow-2xl">
-                <ZoomIn className="w-4 h-4 text-[#FFE500]" /> Click to Zoom
-              </span>
-            </div>
-          </div>
-
-          {/* FRAME 490.PDF: CONTINUOUS ARTBOARD SLICES */}
-          <div className="space-y-4">
-            {FRAME_490_SLICES.map((sliceImg, idx) => (
-              <div
-                key={`frame490-slice-${idx}`}
-                className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-white/15 bg-black cursor-zoom-in shadow-2xl transition-all duration-300 hover:border-white/30"
-                onClick={() => setActiveZoomImage(sliceImg)}
-              >
-                <img
-                  src={sliceImg}
-                  alt={`PlayStaples Usability Testing Study Slice ${idx + 1}`}
-                  className="w-full h-auto object-contain block mx-auto transition-transform duration-500 group-hover:scale-[1.008]"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                  <span className="px-4 py-2 rounded-full bg-black/80 text-white font-ca-mono text-xs font-bold border border-white/30 flex items-center gap-2 shadow-2xl">
-                    <ZoomIn className="w-4 h-4 text-[#FFE500]" /> Click to Zoom
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* ================= FOOTER ================= */}
-          <footer className="border-t border-white/15 pt-8 pb-4 flex items-center justify-between gap-4">
-            <button
-              type="button"
-              onClick={scrollToTop}
-              className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <ArrowUp className="w-3.5 h-3.5" /> Back to Top
-            </button>
-
-            <div className="flex items-center gap-3">
-              <a
-                href="https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-ca-mono flex items-center gap-1.5 transition-colors"
-              >
-                <ExternalLink className="w-3.5 h-3.5 text-[#FFE500]" /> Figma Design ↗
-              </a>
-
-              <button
-                type="button"
-                onClick={handleClose}
-                className="px-5 py-2 rounded-full bg-[#FFE500] hover:bg-[#ffe833] text-black font-ca-mono text-xs font-bold transition-transform active:scale-95 cursor-pointer shadow-lg shadow-[#FFE500]/20"
-              >
-                Close
-              </button>
-            </div>
-          </footer>
+            ← Back to Featured Works
+          </button>
         </div>
       </div>
 

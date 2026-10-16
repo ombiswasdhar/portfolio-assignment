@@ -690,110 +690,46 @@ export default function ContentsSection() {
               </button>
             </div>
 
-            {/* Modal Body */}
-            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 sm:gap-8 pt-6 sm:pt-8 items-start">
-              {/* Full-resolution Heading Image Preview with Click-to-Zoom */}
-              <div className="flex flex-col gap-3">
-                <div
-                  onClick={() => setActiveImageZoom(activeProject.thumbnail)}
-                  className="relative rounded-xl overflow-hidden border-2 border-white/20 shadow-xl bg-black cursor-zoom-in group/zoom"
-                  title="Click for full-screen lightbox zoom"
-                >
-                  <img
-                    src={activeProject.thumbnail}
-                    alt={activeProject.title}
-                    className="w-full h-auto max-h-[500px] object-contain mx-auto"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/zoom:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                    <span className="px-3.5 py-1.5 rounded-full bg-black/80 text-white border border-white/30 text-xs font-ca-mono flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                      </svg>
-                      <span>Click to expand full lightbox</span>
-                    </span>
-                  </div>
-                </div>
-                <p className="text-[11px] font-ca-mono text-neutral-400 text-center">
-                  Original Assignment Submission • Symbiosis Institute of Design
+            {/* Modal Body - EMPTIED */}
+            <div className="py-12 px-4 flex flex-col items-center justify-center text-center">
+              <div 
+                className="w-14 h-14 rounded-full flex items-center justify-center border border-white/15 shadow-inner mb-5"
+                style={{ backgroundColor: `${activeProject.accentColor || '#FFE500'}20` }}
+              >
+                <span 
+                  className="w-3.5 h-3.5 rounded-full"
+                  style={{ backgroundColor: activeProject.accentColor || '#FFE500' }}
+                />
+              </div>
+
+              <div className="space-y-2 max-w-md">
+                <span className="font-poppins-light text-xs tracking-[0.2em] uppercase text-neutral-400">
+                  {activeProject.num || '00'} // CASE STUDY
+                </span>
+                <h3 className="font-akira text-xl sm:text-2xl text-white uppercase font-black tracking-wide">
+                  {activeProject.title}
+                </h3>
+                <p className="font-poppins-light text-xs text-neutral-400">
+                  {activeProject.category}
                 </p>
               </div>
 
-              {/* Case Study Details & Deliverables */}
-              <div className="flex flex-col gap-6">
-                {/* Coursework Assignment Context */}
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h4 className="font-poppins-light font-medium text-xs uppercase tracking-widest text-neutral-300 mb-2">
-                    Coursework Brief
-                  </h4>
-                  <p className="font-poppins font-normal text-xs sm:text-sm text-neutral-200 leading-relaxed">
-                    {activeProject.description}
-                  </p>
-                </div>
+              <div className="h-px w-20 bg-white/10 my-4" />
 
-                {/* Key Deliverables */}
-                <div>
-                  <h4 className="text-xs font-ca-mono font-bold uppercase tracking-widest text-neutral-300 mb-3 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                    <span>Key Deliverables &amp; Artifacts</span>
-                  </h4>
-                  <ul className="space-y-2">
-                    {activeProject.deliverables.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-300">
-                        <span className="text-[#E84A4A] font-bold shrink-0 mt-0.5">✦</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <p className="font-poppins font-light text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-md">
+                Project case study content, high-resolution galleries, and deliverables are currently being curated.
+              </p>
 
-                {/* Highlights */}
-                <div>
-                  <h4 className="text-xs font-ca-mono font-bold uppercase tracking-widest text-neutral-300 mb-2">
-                    Design Highlights
-                  </h4>
-                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                    {activeProject.highlights}
-                  </p>
-                </div>
-
-                {/* Tools used & Actions */}
-                <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeProject.tools.map((tool, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2.5 py-1 rounded-md bg-white/10 text-neutral-200 font-ca-mono text-xs"
-                      >
-                        {tool}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-2.5">
-                    {activeProject.figmaUrl && (
-                      <a
-                        href={activeProject.figmaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 rounded-xl bg-[#FACC15] text-black font-ca-mono font-bold text-xs uppercase tracking-wider hover:bg-[#EAB308] transition-colors cursor-pointer inline-flex items-center gap-2 shadow-lg"
-                      >
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4zm8 0a4 4 0 0 0-4 4v4h4a4 4 0 0 0 0-8zm-8 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8zm8 0a4 4 0 0 0-4 4v4a4 4 0 0 0 4-4 4 4 0 0 0 0-4zM8 18a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4v-4H8z"/>
-                        </svg>
-                        <span>Open in Figma</span>
-                      </a>
-                    )}
-
-                    <button
-                      onClick={() => setActiveProject(null)}
-                      className="px-4 py-2 rounded-xl bg-white text-black font-ca-mono font-bold text-xs uppercase tracking-wider hover:bg-neutral-200 transition-colors cursor-pointer"
-                    >
-                      Done Reading
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={() => setActiveProject(null)}
+                className="mt-6 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-xs font-poppins-light uppercase tracking-wider text-white transition-all cursor-pointer"
+              >
+                ← Back to Featured Works
+              </button>
             </div>
+          </div>
+        </div>
           </div>
         </div>
       )}
