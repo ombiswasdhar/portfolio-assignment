@@ -473,9 +473,7 @@ export default function AugePreloader({
   return (
     <div
       ref={containerRef}
-      onClick={handleSkip}
-      title="Click or press Space to skip"
-      className="fixed inset-0 z-[99999] overflow-hidden select-none cursor-pointer touch-none overscroll-none"
+      className="fixed inset-0 z-[99999] overflow-hidden select-none touch-none overscroll-none"
       style={{ touchAction: 'none', overscrollBehavior: 'none' }}
       aria-label="Loading site..."
       role="status"
@@ -595,17 +593,12 @@ export default function AugePreloader({
 
       {/* 6. Bottom 3-Digit Monospace Counter */}
       <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 z-30 overflow-hidden pointer-events-none">
-        <div className="flex flex-col items-center gap-1.5">
-          <span
-            ref={counterRef}
-            className="block font-mono text-xs sm:text-sm font-semibold tracking-[0.3em] text-white/90 tabular-nums uppercase leading-none"
-          >
-            000
-          </span>
-          <span className="text-[10px] font-fredoka tracking-[0.18em] text-white/40 uppercase">
-            TAP TO SKIP
-          </span>
-        </div>
+        <span
+          ref={counterRef}
+          className="block font-mono text-xs sm:text-sm font-semibold tracking-[0.3em] text-white/90 tabular-nums uppercase leading-none"
+        >
+          000
+        </span>
       </div>
     </div>
   )
