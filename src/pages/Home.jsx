@@ -7,6 +7,7 @@ import AboutSection from '../components/AboutSection'
 import SkillSetSection from '../components/SkillSetSection'
 import MarqueeBar from '../components/MarqueeBar'
 import ContentsSection from '../components/ContentsSection'
+import PaperStoreSection from '../components/PaperStoreSection'
 import CVSection from '../components/CVSection'
 import ScrollProgressBar from '../components/ScrollProgressBar'
 import ConstellationGrid from '@/components/ui/constellation-grid'
@@ -79,6 +80,7 @@ export default function Home() {
         <SkillSetSection />
         <MarqueeBar direction="right" className="border-t border-black relative z-10" />
         <ContentsSection />
+        <PaperStoreSection />
         <CVSection />
       </main>
     </div>
