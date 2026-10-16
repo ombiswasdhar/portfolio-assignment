@@ -258,6 +258,7 @@ const projectsData = [
     description:
       'Students were given the assignment of researching business cards and designing their own card, either as a freelancer or an employee of any brand. Analysis of the card was done after preparing different iterations which include the logo, colours, typefaces, and dimensions.',
     thumbnail: oniCardFrontImg,
+    hoverImage: oniCardsHoverImg,
     isIsometricCards: true,
     previewPhotos: [oniCardFrontImg, oniCardBackImg, oniCard2FrontImg, oniCard2BackImg, projectCardsImg],
     tags: ['Brand Identity', 'Print Design', 'Figma', 'Procreate', 'Typography'],
