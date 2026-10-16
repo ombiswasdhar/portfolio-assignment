@@ -55,6 +55,19 @@ export default function AugePreloader({
     glitchIteration: 0
   })
 
+  // Controller to unlock scrolling across mobile and desktop
+  const scrollBlockersRef = useRef({
+    preventScroll: null,
+    enforceTop: null,
+  })
+
+  const unlockScroll = useCallback(() => {
+    document.documentElement.style.overflow = ''
+    document.body.style.overflow = ''
+    document.documentElement.style.overscrollBehavior = ''
+    document.body.style.overscrollBehavior = ''
+  }, [])
+
   // Glitch Shatter (Auge XP createBandGlitch on the user's custom font)
   const triggerBandGlitch = useCallback(() => {
     const overlay = portfolioGlitchOverlayRef.current
@@ -173,7 +186,14 @@ export default function AugePreloader({
       delay: 0.35,
       onComplete: () => {
         gsap.set(mask, { willChange: 'auto' })
-        document.body.style.overflow = ''
+        if (scrollBlockersRef.current.preventScroll) {
+          window.removeEventListener('touchmove', scrollBlockersRef.current.preventScroll)
+          window.removeEventListener('wheel', scrollBlockersRef.current.preventScroll)
+        }
+        if (scrollBlockersRef.current.enforceTop) {
+          window.removeEventListener('scroll', scrollBlockersRef.current.enforceTop)
+        }
+        unlockScroll()
         setIsDone(true)
         if (onComplete) onComplete()
       }
@@ -229,8 +249,30 @@ export default function AugePreloader({
   }, [finishCounterAndExit])
 
   useEffect(() => {
-    // Lock scroll during preloader
+    // Lock scroll across both mobile (html/body) and desktop
+    document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
+    document.documentElement.style.overscrollBehavior = 'none'
+    document.body.style.overscrollBehavior = 'none'
+
+    // Prevent touch dragging / wheel gestures on mobile
+    const preventScroll = (e) => {
+      e.preventDefault()
+    }
+
+    const enforceTop = () => {
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0)
+      }
+    }
+
+    scrollBlockersRef.current.preventScroll = preventScroll
+    scrollBlockersRef.current.enforceTop = enforceTop
+
+    window.scrollTo(0, 0)
+    window.addEventListener('touchmove', preventScroll, { passive: false })
+    window.addEventListener('wheel', preventScroll, { passive: false })
+    window.addEventListener('scroll', enforceTop, { passive: true })
 
     const mask = maskRef.current
     const backdrop = backdropRef.current
@@ -412,12 +454,19 @@ export default function AugePreloader({
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
+      if (scrollBlockersRef.current.preventScroll) {
+        window.removeEventListener('touchmove', scrollBlockersRef.current.preventScroll)
+        window.removeEventListener('wheel', scrollBlockersRef.current.preventScroll)
+      }
+      if (scrollBlockersRef.current.enforceTop) {
+        window.removeEventListener('scroll', scrollBlockersRef.current.enforceTop)
+      }
+      unlockScroll()
       if (state.glitchTimer) clearTimeout(state.glitchTimer)
       counterTl.kill()
       entranceTl.kill()
-      document.body.style.overflow = ''
     }
-  }, [finishCounterAndExit, handleSkip, scrambleText, triggerBandGlitch, portfolioText])
+  }, [finishCounterAndExit, handleSkip, scrambleText, triggerBandGlitch, portfolioText, unlockScroll])
 
   if (isDone) return null
 
@@ -426,7 +475,8 @@ export default function AugePreloader({
       ref={containerRef}
       onClick={handleSkip}
       title="Click or press Space to skip"
-      className="fixed inset-0 z-[99999] overflow-hidden select-none cursor-pointer"
+      className="fixed inset-0 z-[99999] overflow-hidden select-none cursor-pointer touch-none overscroll-none"
+      style={{ touchAction: 'none', overscrollBehavior: 'none' }}
       aria-label="Loading site..."
       role="status"
     >
