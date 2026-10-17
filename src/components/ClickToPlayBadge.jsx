@@ -25,8 +25,8 @@ export default function ClickToPlayBadge({ mousePos = { x: 0, y: 0 } }) {
           togglePlay()
         }
       }}
-      title={isPlaying ? 'Pause Sunflower Instrumental' : 'Play Sunflower Instrumental'}
-      aria-label={isPlaying ? 'Pause Sunflower Instrumental' : 'Play Sunflower Instrumental'}
+      title={isPlaying ? 'Click to pause Sunflower Instrumental' : 'Click to play Sunflower Instrumental'}
+      aria-label={isPlaying ? 'Click to pause Sunflower Instrumental' : 'Click to play Sunflower Instrumental'}
       style={{
         transform: `translate3d(${-mousePos.x * 0.75}px, ${-mousePos.y * 0.75}px, 0)`,
         transition: 'transform 0.2s ease-out',

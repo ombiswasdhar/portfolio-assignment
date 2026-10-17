@@ -506,7 +506,7 @@ export function MusicProvider({ children }) {
       <audio
         ref={sunflowerAudioRef}
         src={TRACKS[0].src}
-        preload="auto"
+        preload="none"
         playsInline
         loop
         onTimeUpdate={handleSunflowerTimeUpdate}
@@ -517,7 +517,7 @@ export function MusicProvider({ children }) {
       <audio
         ref={nobleAudioRef}
         src={TRACKS[1].src}
-        preload="auto"
+        preload="none"
         playsInline
         loop
         onTimeUpdate={handleNobleTimeUpdate}

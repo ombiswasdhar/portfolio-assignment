@@ -141,20 +141,6 @@ export const GradientSvg: React.FC<GradientSvgProps> = ({
     [svgDefs]
   )
 
-  const variants = React.useMemo(
-    () => ({
-      hovered: {
-        gradientTransform: transforms,
-        transition: { duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
-      },
-      notHovered: {
-        gradientTransform: transforms,
-        transition: { duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
-      },
-    }),
-    [transforms]
-  )
-
   return (
     <svg
       className={className}
@@ -166,13 +152,13 @@ export const GradientSvg: React.FC<GradientSvgProps> = ({
     >
       <rect width="1030" height="280" rx="140" fill={`url(#${gradientId})`} />
       <defs>
-        <motion.radialGradient
+        <radialGradient
           id={gradientId}
           cx="0"
           cy="0"
           r="1"
           gradientUnits="userSpaceOnUse"
-          animate={isHovered ? variants.hovered : variants.notHovered}
+          gradientTransform={transforms[0]}
         >
           {stopsArray.map((stopList, index) => (
             <motion.stop
@@ -192,7 +178,7 @@ export const GradientSvg: React.FC<GradientSvgProps> = ({
               }}
             />
           ))}
-        </motion.radialGradient>
+        </radialGradient>
       </defs>
     </svg>
   )

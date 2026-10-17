@@ -6,6 +6,7 @@ import About from './pages/About'
 import Skills from './pages/Skills'
 import CV from './pages/CV'
 import Contact from './pages/Contact'
+import Sketchbook from './pages/Sketchbook'
 import AureusPage from './pages/Aureus'
 import CustomCursor from './components/CustomCursor'
 import ConstellationGrid from '@/components/ui/constellation-grid'
@@ -57,6 +58,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/get-in-touch" element={<Contact />} />
             <Route path="/connect" element={<Contact />} />
+            <Route path="/sketchbook" element={<Sketchbook />} />
             <Route path="/aureus" element={<AureusPage />} />
             <Route path="/aureaus" element={<AureusPage />} />
             <Route path="/demo" element={<ConstellationGrid />} />

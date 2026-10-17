@@ -102,14 +102,16 @@ export default function Nav() {
           setScrollSection((current) => current === nextSection ? current : nextSection)
         }
 
-        // Check whether the top header is over the light section.
-        const lightSection = document.querySelector('[data-theme="light"], .ca-dotted-grid-bg')
-        const isOverLight = lightSection
-          ? (() => {
-              const rect = lightSection.getBoundingClientRect()
-              return rect.top <= 88 && rect.bottom >= 0
-            })()
-          : false
+        // Check whether the top header is over any light section.
+        const lightSections = document.querySelectorAll('[data-theme="light"], .ca-dotted-grid-bg')
+        let isOverLight = false
+        for (let i = 0; i < lightSections.length; i++) {
+          const rect = lightSections[i].getBoundingClientRect()
+          if (rect.top <= 88 && rect.bottom >= 0) {
+            isOverLight = true
+            break
+          }
+        }
         setIsLightBg((current) => current === isOverLight ? current : isOverLight)
       })
     }

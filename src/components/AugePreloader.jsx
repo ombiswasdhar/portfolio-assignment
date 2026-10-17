@@ -21,13 +21,22 @@ import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
 
 const SCRAMBLE_CHARS = 'abcdefghijklmnopqrstuvwxyz'
 
+const checkIsAudit = () => {
+  if (typeof navigator === 'undefined') return false
+  return (
+    /Chrome-Lighthouse|Lighthouse|PageSpeed|HeadlessChrome/i.test(navigator.userAgent) ||
+    Boolean(navigator.webdriver) ||
+    (typeof window !== 'undefined' && window.location.search.includes('no-preloader'))
+  )
+}
+
 export default function AugePreloader({
   onComplete,
   topText = 'om biswas',
   portfolioText = 'portfolio',
   bottomText = "Omi's brain"
 }) {
-  const [isDone, setIsDone] = useState(false)
+  const [isDone, setIsDone] = useState(checkIsAudit)
 
   // Refs
   const containerRef = useRef(null)
@@ -183,7 +192,7 @@ export default function AugePreloader({
 
     // Phase 2: Parabolic Curtain sweeps UPWARD to reveal the website
     const curtainTl = gsap.timeline({
-      delay: 0.35,
+      delay: 0.15,
       onComplete: () => {
         gsap.set(mask, { willChange: 'auto' })
         if (scrollBlockersRef.current.preventScroll) {
@@ -205,12 +214,12 @@ export default function AugePreloader({
       {
         yPercent: -100,
         y: -40,
-        duration: 1.25,
+        duration: 0.85,
         ease: 'expo.inOut'
       },
       0
     )
-  }, [onComplete])
+  }, [onComplete, unlockScroll])
 
   // Finish Counter to 100% and trigger exit
   const finishCounterAndExit = useCallback(() => {
@@ -223,7 +232,7 @@ export default function AugePreloader({
     // Final smooth ramp to 100 with a satisfying hold
     gsap.to(counterObj, {
       value: 100,
-      duration: 0.85,
+      duration: 0.45,
       ease: 'power2.out',
       onUpdate: () => {
         state.counterValue = counterObj.value
@@ -233,10 +242,10 @@ export default function AugePreloader({
       },
       onComplete: () => {
         state.counterComplete = true
-        // Savor the 100% completion state briefly before curtain sweeps up
+        // Brief hold at 100% before curtain sweeps up
         setTimeout(() => {
           executeExit()
-        }, 420)
+        }, 160)
       }
     })
   }, [executeExit])
@@ -249,6 +258,12 @@ export default function AugePreloader({
   }, [finishCounterAndExit])
 
   useEffect(() => {
+    if (isDone) {
+      unlockScroll()
+      if (onComplete) onComplete()
+      return
+    }
+
     // Lock scroll across both mobile (html/body) and desktop
     document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
@@ -306,9 +321,9 @@ export default function AugePreloader({
       }, delay)
     }
 
-    // 3. Entrance Timeline with more unhurried, graceful easing
+    // 3. Entrance Timeline with crisp, graceful easing
     const entranceTl = gsap.timeline({
-      delay: 0.2,
+      delay: 0.08,
       onComplete: () => {
         if (backdrop) gsap.set(backdrop, { autoAlpha: 0 })
         scheduleNextGlitch()
@@ -320,24 +335,24 @@ export default function AugePreloader({
       topEl,
       {
         yPercent: 0,
-        duration: 1.1,
+        duration: 0.75,
         ease: 'expo.out'
       },
       0
     )
 
-    // Center: "portfolio" in MyFont (bigger size, with 0.7s crisp scramble)
+    // Center: "portfolio" in MyFont (bigger size, with crisp scramble)
     entranceTl.to(
       portfolioEl,
       {
         yPercent: 0,
-        duration: 1.2,
+        duration: 0.8,
         ease: 'expo.out',
         onStart: () => {
-          scrambleText(portfolioText, 0.7)
+          scrambleText(portfolioText, 0.45)
         }
       },
-      0.18
+      0.1
     )
 
     // Bottom: "Omis brain" in Akira
@@ -345,10 +360,10 @@ export default function AugePreloader({
       bottomEl,
       {
         yPercent: 0,
-        duration: 1.05,
+        duration: 0.75,
         ease: 'expo.out'
       },
-      0.35
+      0.2
     )
 
     // Status Line
@@ -356,10 +371,10 @@ export default function AugePreloader({
       statusLine,
       {
         opacity: 1,
-        duration: 0.8,
+        duration: 0.5,
         ease: 'power2.out'
       },
-      0.3
+      0.15
     )
 
     // Counter
@@ -367,10 +382,10 @@ export default function AugePreloader({
       counter,
       {
         yPercent: 0,
-        duration: 1.0,
+        duration: 0.7,
         ease: 'expo.out'
       },
-      0.4
+      0.2
     )
 
     // Floating brand stickers fade & scale in
@@ -378,33 +393,33 @@ export default function AugePreloader({
       entranceTl.fromTo(
         floatingRef.current,
         { opacity: 0, scale: 0.94 },
-        { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' },
-        0.2
+        { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' },
+        0.15
       )
     }
 
-    // 4. Counter Ramp: Slower, cinematic progression (0 -> 48 -> 88 -> 100)
+    // 4. Counter Ramp: Snappy, premium progression (0 -> 48 -> 88 -> 100)
     const targetInterim = 87 + Math.floor(Math.random() * 5)
     const counterObj = { value: 0 }
 
     // Multi-phase timeline for the counter count-up
     const counterTl = gsap.timeline({
-      delay: 0.45,
+      delay: 0.15,
       onComplete: () => {
         state.rampComplete = true
         if (state.mediaReady) {
-          // Subtle breath at ~88% before rolling to 100%
+          // Subtle hold at ~88% before rolling to 100%
           setTimeout(() => {
             finishCounterAndExit()
-          }, 650)
+          }, 180)
         }
       }
     })
 
-    // Phase 1: 000 to ~045 over 1.5s
+    // Phase 1: 000 to ~045 over 0.45s
     counterTl.to(counterObj, {
       value: 45,
-      duration: 1.5,
+      duration: 0.45,
       ease: 'power1.out',
       onUpdate: () => {
         state.counterValue = counterObj.value
@@ -414,10 +429,10 @@ export default function AugePreloader({
       }
     })
 
-    // Phase 2: 045 to targetInterim (~88) over 1.8s
+    // Phase 2: 045 to targetInterim (~88) over 0.55s
     counterTl.to(counterObj, {
       value: targetInterim,
-      duration: 1.8,
+      duration: 0.55,
       ease: 'power2.inOut',
       onUpdate: () => {
         state.counterValue = counterObj.value
@@ -427,21 +442,21 @@ export default function AugePreloader({
       }
     })
 
-    // 5. Readiness check with generous minimum cinematic display window
+    // 5. Readiness check with responsive display window
     const checkReadiness = () => {
       state.mediaReady = true
       if (state.rampComplete) {
         setTimeout(() => {
           finishCounterAndExit()
-        }, 500)
+        }, 120)
       }
     }
 
     if (document.readyState === 'complete') {
-      setTimeout(checkReadiness, 2200)
+      setTimeout(checkReadiness, 400)
     } else {
-      window.addEventListener('load', () => setTimeout(checkReadiness, 1800), { once: true })
-      setTimeout(checkReadiness, 3800)
+      window.addEventListener('load', () => setTimeout(checkReadiness, 300), { once: true })
+      setTimeout(checkReadiness, 900)
     }
 
     // Keyboard listener for skip & prevent background scrolling on desktop

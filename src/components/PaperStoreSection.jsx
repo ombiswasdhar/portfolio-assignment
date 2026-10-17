@@ -1,19 +1,10 @@
 import React, { useState, useRef } from 'react'
 import {
-  Search,
-  Menu,
-  SlidersHorizontal,
-  MoreHorizontal,
-  Share,
-  Trash2,
-  Plus,
   ChevronLeft,
   ChevronRight,
-  X,
-  BookOpen,
-  Sparkles,
-  Check
+  X
 } from 'lucide-react'
+import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
 
 // Authentic artwork from Om's portfolio for the sketchbook pages
 import aureusIdeationImg from '../assets/work/aureus/aureus-01-ideation.png'
@@ -56,7 +47,7 @@ const SKETCHBOOK_SPREADS = [
   {
     id: 'spread-3',
     spreadNum: '03 / 03',
-    leftTitle: 'TACTILE COLLECTIBLES & LIIVERY',
+    leftTitle: 'TACTILE COLLECTIBLES & LIVERY',
     leftDate: 'JAN 2026 // PLAYSTAPLES',
     leftNotes: [
       'Kaali Peeli Mumbai Premier Padmini wooden toy collectible.',
@@ -74,19 +65,10 @@ export default function PaperStoreSection() {
   const [isOpen, setIsOpen] = useState(false)
   const [currentSpread, setCurrentSpread] = useState(0)
   const [paperTexture, setPaperTexture] = useState('dots') // 'dots' | 'blank' | 'grid'
-  const [toastMessage, setToastMessage] = useState('')
-  const [showOptionsPopover, setShowOptionsPopover] = useState(false)
-  const [showInfoPopover, setShowInfoPopover] = useState(false)
-  const [notebookTitle, setNotebookTitle] = useState('2m 💋 🐷')
 
   // 3D tilt tracking for closed cover
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const coverRef = useRef(null)
-
-  const showToast = (msg) => {
-    setToastMessage(msg)
-    setTimeout(() => setToastMessage(''), 2400)
-  }
 
   const handleMouseMove = (e) => {
     if (isOpen || !coverRef.current) return
@@ -103,204 +85,52 @@ export default function PaperStoreSection() {
     setTilt({ x: 0, y: 0 })
   }
 
-  const handleShare = () => {
-    navigator.clipboard?.writeText(window.location.href)
-    showToast('Sketchbook link copied to clipboard!')
-  }
-
-  const handleResetOrTrash = () => {
-    setIsOpen(false)
-    setCurrentSpread(0)
-    showToast('Sketchbook closed and reset to cover')
-  }
-
-  const handleAddPage = () => {
-    if (!isOpen) {
-      setIsOpen(true)
-      showToast('Sketchbook opened!')
-    } else {
-      if (currentSpread < SKETCHBOOK_SPREADS.length - 1) {
-        setCurrentSpread(prev => prev + 1)
-        showToast('Turned to next spread!')
-      } else {
-        showToast('You are on the latest sketchbook spread!')
-      }
-    }
-  }
-
   const activeSpread = SKETCHBOOK_SPREADS[currentSpread]
 
   return (
     <section
       id="sketchbook"
-      className="w-full relative py-12 sm:py-16 px-4 sm:px-8 overflow-hidden select-none flex flex-col items-center justify-between min-h-[920px] transition-colors duration-500"
-      style={{
-        background: 'radial-gradient(ellipse at 50% 40%, #757192 0%, #696584 60%, #595572 100%)'
-      }}
+      data-theme="light"
+      className="w-full relative pt-16 sm:pt-24 md:pt-28 pb-16 sm:pb-24 px-4 sm:px-8 overflow-hidden select-none flex flex-col items-center justify-between min-h-[920px] ca-dotted-grid-bg text-neutral-900 border-b-4 border-black transition-colors duration-500"
     >
-      {/* BACKGROUND SUBTLE NOISE / AMBIENT LIGHT */}
-      <div className="absolute inset-0 bg-white/[0.02] pointer-events-none" />
+      {/* FEATURED WORKS DOTTED GRID CANVAS PATTERN */}
+      <div className="ca-dotted-grid-pattern" aria-hidden="true" />
 
-      {/* FLOATING TOAST NOTIFICATION */}
-      {toastMessage && (
-        <div className="fixed top-8 z-50 px-5 py-2.5 rounded-full bg-black/85 backdrop-blur-md border border-white/20 text-white text-xs font-ca-mono shadow-2xl flex items-center gap-2 animate-fadeIn">
-          <Sparkles className="w-3.5 h-3.5 text-[#FFE500]" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      {/* DYNAMIC FLOATING BACKGROUND ELEMENTS (FROM FEATURED WORKS) */}
+      <FeaturedWorksFloatingElements />
 
-      {/* TOP IPAD APP HEADER BAR */}
-      <div className="w-full max-w-6xl mx-auto flex items-center justify-between relative z-20 pt-2">
-        {/* LEFT: Paper Store Logo Pill */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md">
-            {/* The 3 tally lines icon from Paper by FiftyThree */}
-            <svg viewBox="0 0 24 24" className="w-4 h-4 text-black" fill="currentColor">
-              <rect x="5" y="4" width="2.2" height="16" rx="0.5" />
-              <rect x="10.5" y="4" width="2.2" height="16" rx="0.5" />
-              <path d="M16 4.5L19 19.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-            </svg>
+      {/* SECTION HEADER: "MY SKETCHES" IN SAME FONT & STYLE AS FEATURED WORKS */}
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center mb-8 sm:mb-12">
+        <div className="flex flex-col items-center">
+          <div className="font-myfont text-3xl sm:text-4xl text-neutral-800 font-medium tracking-wide flex items-center justify-center min-h-[2.5rem] sm:min-h-[3rem] lowercase">
+            explore my notebook!
           </div>
-          <span className="font-poppins font-medium text-white/95 text-sm sm:text-base tracking-tight">
-            Paper Store
+          <svg viewBox="0 0 64 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="mt-1 h-3.5 w-24 sm:w-28 text-[#E84A4A]">
+            <path d="M3 4c18-3 40-3 58 0" />
+            <path d="M9 9c14-2.5 32-2.5 46 0" />
+          </svg>
+        </div>
+        <h2 className="mt-6 font-akira text-[26px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight text-neutral-950 uppercase font-black text-center">
+          MY SKETCHES
+        </h2>
+        <div className="mt-8 max-w-md -rotate-[3.6deg] hover:rotate-0 transition-transform duration-300 mb-2">
+          <span className="ca-tape-clip inline-block px-6 py-2.5 text-xs sm:text-sm font-ca-mono font-bold uppercase tracking-wider text-black bg-[#FFE57F] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-amber-300/60">
+            Visual development, character studies, and tactile archives.
           </span>
         </div>
-
-        {/* TOP CENTER: Multitasking dots + Title + Pages count */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center top-0">
-          {/* iPad 3 dots window handle */}
-          <div className="flex items-center gap-1 mb-1">
-            <span className="w-1 h-1 rounded-full bg-white/40" />
-            <span className="w-1 h-1 rounded-full bg-white/40" />
-            <span className="w-1 h-1 rounded-full bg-white/40" />
-          </div>
-
-          {/* Title */}
-          <h2 className="font-poppins font-bold text-base sm:text-xl text-white tracking-tight flex items-center gap-1.5 cursor-pointer hover:opacity-85 transition-opacity"
-            onClick={() => {
-              const newTitle = prompt('Rename journal:', notebookTitle)
-              if (newTitle) setNotebookTitle(newTitle)
-            }}
-            title="Click to rename journal"
-          >
-            <span>{notebookTitle}</span>
-          </h2>
-
-          {/* Subtitle with folded page icon */}
-          <div 
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center gap-1 text-[11px] sm:text-xs text-white/75 font-poppins cursor-pointer hover:text-white transition-colors mt-0.5"
-            title={isOpen ? 'Click to close journal' : 'Click to open journal'}
-          >
-            {/* Folded paper icon */}
-            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
-              <path d="M6 6l10 10" />
-            </svg>
-            <span>{isOpen ? `Spread ${currentSpread + 1} of ${SKETCHBOOK_SPREADS.length}` : '3 Pages'}</span>
-          </div>
-        </div>
-
-        {/* RIGHT: Action Buttons (123, Search, Menu) */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* 123 Page Jumper Button */}
-          <button
-            type="button"
-            onClick={() => {
-              setIsOpen(true)
-              setCurrentSpread(prev => (prev + 1) % SKETCHBOOK_SPREADS.length)
-              showToast(`Jumped to Spread ${(currentSpread + 1) % SKETCHBOOK_SPREADS.length + 1}`)
-            }}
-            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white/90 text-xs font-bold font-poppins flex items-center justify-center transition-all cursor-pointer shadow-sm"
-            title="Page Spreads"
-          >
-            123
-          </button>
-
-          {/* Search Button */}
-          <button
-            type="button"
-            onClick={() => showToast('Search: Visual Development, 3D CAD, Oni Studios')}
-            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white/90 flex items-center justify-center transition-all cursor-pointer shadow-sm"
-            title="Search Sketchbook"
-          >
-            <Search className="w-4 h-4" />
-          </button>
-
-          {/* Hamburger Menu Button */}
-          <button
-            type="button"
-            onClick={() => setShowOptionsPopover(!showOptionsPopover)}
-            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white/90 flex items-center justify-center transition-all cursor-pointer shadow-sm"
-            title="Sketchbook Menu"
-          >
-            <Menu className="w-4 h-4" />
-          </button>
-        </div>
       </div>
-
-      {/* ASSISTIVETOUCH FLOATING WIDGET (ICONIC IPAD ACCENT) */}
-      <div 
-        onClick={() => setIsOpen(!isOpen)}
-        className="hidden lg:flex w-12 h-12 rounded-2xl bg-black/30 hover:bg-black/45 backdrop-blur-md border border-white/15 absolute left-10 top-36 cursor-pointer items-center justify-center shadow-2xl transition-all hover:scale-105 active:scale-95 z-20 group"
-        title="AssistiveTouch Shortcut: Toggle Notebook"
-      >
-        <div className="w-7 h-7 rounded-full bg-white/20 border border-white/50 flex items-center justify-center group-hover:scale-110 transition-transform">
-          <div className="w-3.5 h-3.5 rounded-full bg-white/80 shadow-inner" />
-        </div>
-      </div>
-
-      {/* OPTIONS POPOVER MODAL */}
-      {showOptionsPopover && (
-        <div className="absolute top-20 right-6 sm:right-16 z-40 bg-[#16161E]/95 backdrop-blur-xl border border-white/15 p-4 rounded-2xl shadow-2xl w-64 flex flex-col gap-2.5 animate-fadeIn text-white text-xs font-poppins">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2">
-            <span className="font-semibold text-white/90">Journal Settings</span>
-            <button onClick={() => setShowOptionsPopover(false)} className="text-white/50 hover:text-white">
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-          <button
-            onClick={() => {
-              setIsOpen(!isOpen)
-              setShowOptionsPopover(false)
-            }}
-            className="w-full text-left py-1.5 px-2.5 rounded-lg hover:bg-white/10 transition-colors flex items-center justify-between"
-          >
-            <span>{isOpen ? 'Close Notebook' : 'Open Notebook'}</span>
-            <BookOpen className="w-3.5 h-3.5 text-neutral-400" />
-          </button>
-          <div className="border-t border-white/10 pt-2 flex flex-col gap-1.5">
-            <span className="text-[10px] text-white/50 font-ca-mono uppercase">Paper Texture</span>
-            <div className="grid grid-cols-3 gap-1.5">
-              {['dots', 'blank', 'grid'].map(tex => (
-                <button
-                  key={tex}
-                  onClick={() => {
-                    setPaperTexture(tex)
-                    showToast(`Paper switched to ${tex}`)
-                  }}
-                  className={`py-1 rounded text-center uppercase text-[10px] font-ca-mono border transition-all ${
-                    paperTexture === tex ? 'bg-white text-black border-white' : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
-                  }`}
-                >
-                  {tex}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* CENTER STAGE: THE 3D MOLESKINE NOTEBOOK */}
-      <div className="my-auto py-8 sm:py-12 flex flex-col items-center justify-center relative z-10 w-full max-w-5xl">
+      <div className="my-auto py-6 sm:py-10 flex flex-col items-center justify-center relative z-10 w-full max-w-5xl">
         {!isOpen ? (
-          /* ================= CLOSED NOTEBOOK (EXACT REPLICA OF PINTEREST PIN) ================= */
+          /* ================= CLOSED NOTEBOOK ================= */
           <div
             ref={coverRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onClick={() => setIsOpen(true)}
             className="relative cursor-pointer transition-transform duration-200 ease-out group"
+            data-sketchbook-cover="true"
             style={{
               perspective: '1200px',
               transformStyle: 'preserve-3d'
@@ -308,12 +138,12 @@ export default function PaperStoreSection() {
           >
             {/* AMBIENT DROP SHADOW BENEATH THE FLOATING BOOK */}
             <div
-              className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[85%] h-14 bg-black/55 blur-2xl rounded-full pointer-events-none transition-all duration-300 group-hover:scale-105 group-hover:bg-black/65"
+              className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[90%] h-16 bg-neutral-950/35 blur-2xl rounded-full pointer-events-none transition-all duration-300 group-hover:scale-105 group-hover:bg-neutral-950/45"
             />
 
             {/* THE TACTILE MOLESKINE BOOK COVER */}
             <div
-              className="relative w-[300px] xs:w-[330px] sm:w-[380px] h-[410px] xs:h-[450px] sm:h-[510px] bg-[#242429] rounded-r-[26px] sm:rounded-r-[30px] rounded-l-[3px] border-t border-r border-b border-white/10 overflow-hidden transition-all duration-300 group-hover:shadow-[0_45px_85px_-15px_rgba(15,10,30,0.8)] shadow-[0_35px_70px_-15px_rgba(20,15,40,0.7)]"
+              className="relative w-[300px] xs:w-[330px] sm:w-[380px] h-[410px] xs:h-[450px] sm:h-[510px] bg-[#222226] rounded-r-[26px] sm:rounded-r-[30px] rounded-l-[4px] border border-neutral-800/80 overflow-hidden transition-all duration-300 group-hover:shadow-[0_45px_85px_-15px_rgba(0,0,0,0.45)] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.35)]"
               style={{
                 transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
                 transition: 'transform 0.15s ease-out'
@@ -336,24 +166,10 @@ export default function PaperStoreSection() {
               {/* COVER RIGHT EDGE SUBTLE EMBOSS / CREASE */}
               <div className="absolute top-0 bottom-0 right-0 w-3 bg-gradient-to-l from-white/10 to-transparent pointer-events-none" />
 
-              {/* COVER TOP-RIGHT SLIDERS / ADJUSTMENT BUTTON (EXACT PINTEREST PIN DETAIL) */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowOptionsPopover(true)
-                }}
-                className="absolute top-4 right-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#18181D] hover:bg-[#202026] active:scale-95 border border-white/15 text-white/80 flex items-center justify-center transition-all cursor-pointer shadow-md"
-                title="Customize Notebook"
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-              </button>
-
-              {/* CENTER "CLICK TO OPEN" BADGE */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="px-4 py-2 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white font-ca-mono text-xs shadow-2xl flex items-center gap-1.5 transform group-hover:scale-105 transition-transform">
-                  <BookOpen className="w-3.5 h-3.5 text-[#FFE500]" />
-                  <span>Click to Open Journal</span>
+              {/* CENTER "CLICK TO OPEN" BADGE - FONT MYFONT, NO ICON */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="px-6 py-2.5 rounded-full bg-black/85 backdrop-blur-md border border-white/25 text-white font-myfont text-2xl sm:text-3xl tracking-wide shadow-2xl flex items-center justify-center transform group-hover:scale-105 transition-transform lowercase">
+                  <span>click to open</span>
                 </div>
               </div>
             </div>
@@ -362,20 +178,20 @@ export default function PaperStoreSection() {
           /* ================= OPEN TWO-PAGE SKETCHBOOK SPREAD ================= */
           <div className="w-full max-w-4xl relative animate-fadeIn flex flex-col items-center">
             {/* SPREAD TOOLBAR (PREV / NEXT / CLOSE) */}
-            <div className="w-full flex items-center justify-between mb-3 px-2 text-white/90 font-poppins text-xs">
+            <div className="w-full flex items-center justify-between mb-3 px-2 text-neutral-800 font-poppins text-xs">
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 hover:bg-black/60 border border-white/20 text-white transition-all cursor-pointer active:scale-95 shadow-md"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-50 border border-neutral-300/80 text-neutral-800 transition-all cursor-pointer active:scale-95 shadow-sm font-medium"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-3.5 h-3.5 text-neutral-600" />
                 <span>Close Cover</span>
               </button>
 
-              <div className="flex items-center gap-2 font-ca-mono text-xs">
-                <span>Spread {currentSpread + 1} of {SKETCHBOOK_SPREADS.length}</span>
-                <span className="w-1 h-1 rounded-full bg-white/40" />
-                <span className="text-white/60">{activeSpread.leftTitle.slice(0, 24)}...</span>
+              <div className="flex items-center gap-2 font-ca-mono text-xs text-neutral-700">
+                <span className="font-semibold">Spread {currentSpread + 1} of {SKETCHBOOK_SPREADS.length}</span>
+                <span className="w-1 h-1 rounded-full bg-neutral-400" />
+                <span className="text-neutral-500">{activeSpread.leftTitle.slice(0, 24)}...</span>
               </div>
 
               <div className="flex items-center gap-1.5">
@@ -383,26 +199,26 @@ export default function PaperStoreSection() {
                   type="button"
                   disabled={currentSpread === 0}
                   onClick={() => setCurrentSpread(prev => Math.max(0, prev - 1))}
-                  className="w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 disabled:opacity-30 border border-white/20 flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                  className="w-8 h-8 rounded-full bg-white hover:bg-neutral-50 disabled:opacity-35 border border-neutral-300/80 flex items-center justify-center transition-all cursor-pointer active:scale-95 shadow-sm text-neutral-800"
                   title="Previous spread"
                 >
-                  <ChevronLeft className="w-4 h-4 text-white" />
+                  <ChevronLeft className="w-4 h-4 text-neutral-700" />
                 </button>
                 <button
                   type="button"
                   disabled={currentSpread === SKETCHBOOK_SPREADS.length - 1}
                   onClick={() => setCurrentSpread(prev => Math.min(SKETCHBOOK_SPREADS.length - 1, prev + 1))}
-                  className="w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 disabled:opacity-30 border border-white/20 flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                  className="w-8 h-8 rounded-full bg-white hover:bg-neutral-50 disabled:opacity-35 border border-neutral-300/80 flex items-center justify-center transition-all cursor-pointer active:scale-95 shadow-sm text-neutral-800"
                   title="Next spread"
                 >
-                  <ChevronRight className="w-4 h-4 text-white" />
+                  <ChevronRight className="w-4 h-4 text-neutral-700" />
                 </button>
               </div>
             </div>
 
             {/* OPEN BOOK SPREAD CONTAINER */}
             <div
-              className="w-full bg-[#FAF7F0] text-neutral-900 rounded-3xl shadow-[0_45px_95px_-20px_rgba(15,10,35,0.75)] border border-black/10 overflow-hidden relative flex flex-col md:flex-row min-h-[460px] sm:min-h-[520px]"
+              className="w-full bg-[#FAF7F0] text-neutral-900 rounded-3xl shadow-[0_35px_75px_-20px_rgba(0,0,0,0.22)] border border-neutral-300/80 overflow-hidden relative flex flex-col md:flex-row min-h-[460px] sm:min-h-[520px]"
               style={{
                 backgroundImage:
                   paperTexture === 'dots'
@@ -492,54 +308,6 @@ export default function PaperStoreSection() {
             </div>
           </div>
         )}
-      </div>
-
-      {/* BOTTOM ACTION BAR: 4 CIRCULAR WHITE BUTTONS (EXACT PINTEREST PIN REPLICA) */}
-      <div className="w-full flex flex-col items-center relative z-20 pb-2">
-        <div className="flex items-center gap-3 sm:gap-4">
-          {/* 1. More Options (...) */}
-          <button
-            type="button"
-            onClick={() => setShowOptionsPopover(!showOptionsPopover)}
-            className="w-12 h-12 rounded-full bg-white hover:bg-neutral-100 active:scale-95 text-black flex items-center justify-center transition-all cursor-pointer shadow-lg hover:shadow-xl"
-            title="More Options"
-          >
-            <MoreHorizontal className="w-5 h-5 text-neutral-800" />
-          </button>
-
-          {/* 2. Share / Export (↑) */}
-          <button
-            type="button"
-            onClick={handleShare}
-            className="w-12 h-12 rounded-full bg-white hover:bg-neutral-100 active:scale-95 text-black flex items-center justify-center transition-all cursor-pointer shadow-lg hover:shadow-xl"
-            title="Share Journal"
-          >
-            <Share className="w-4 h-4 text-neutral-800" />
-          </button>
-
-          {/* 3. Trash / Reset (🗑) */}
-          <button
-            type="button"
-            onClick={handleResetOrTrash}
-            className="w-12 h-12 rounded-full bg-white hover:bg-neutral-100 active:scale-95 text-black flex items-center justify-center transition-all cursor-pointer shadow-lg hover:shadow-xl"
-            title="Close & Reset Journal"
-          >
-            <Trash2 className="w-4 h-4 text-neutral-800" />
-          </button>
-
-          {/* 4. Add / New Page (+) */}
-          <button
-            type="button"
-            onClick={handleAddPage}
-            className="w-12 h-12 rounded-full bg-white hover:bg-neutral-100 active:scale-95 text-black flex items-center justify-center transition-all cursor-pointer shadow-lg hover:shadow-xl"
-            title="Add Page / Turn Page"
-          >
-            <Plus className="w-5 h-5 text-neutral-800" />
-          </button>
-        </div>
-
-        {/* IPAD HOME INDICATOR BAR (EXACT PINTEREST PIN REPLICA) */}
-        <div className="w-36 sm:w-44 h-1 sm:h-1.5 bg-black/85 rounded-full mt-7" />
       </div>
     </section>
   )

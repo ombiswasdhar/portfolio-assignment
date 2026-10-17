@@ -60,55 +60,38 @@ import Auralis from '@/components/ui/auralis'
 import MarqueeBar from './MarqueeBar'
 import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
 
-function CyclingProjectImage({ images, alt, className, onImageClick }) {
+function CyclingProjectImage({ images, alt, className, onImageClick, isHovered }) {
   const [imageIndex, setImageIndex] = React.useState(0)
   const imageList = images?.length ? images : []
-  const imageListKey = imageList.join('|')
 
   React.useEffect(() => {
-    if (imageList.length < 2 || imageList.every((image) => image === imageList[0])) return undefined
+    if (!isHovered || imageList.length < 2) {
+      setImageIndex(0)
+      return undefined
+    }
 
-    setImageIndex(0)
     let currentIndex = 0
-    let cycleTimer
-    let isActive = true
+    const interval = window.setInterval(() => {
+      currentIndex = (currentIndex + 1) % imageList.length
+      setImageIndex(currentIndex)
+    }, 750)
 
-    const scheduleNext = () => {
-      cycleTimer = window.setTimeout(() => {
-        const nextIndex = (currentIndex + 1) % imageList.length
-        const preloadedImage = new Image()
-        let didFinishLoading = false
-        const beginFade = () => {
-          if (didFinishLoading || !isActive) return
-          didFinishLoading = true
-          currentIndex = nextIndex
-          setImageIndex(nextIndex)
-          scheduleNext()
-        }
-        preloadedImage.onload = beginFade
-        preloadedImage.onerror = () => {
-          if (!isActive) return
-          currentIndex = nextIndex
-          scheduleNext()
-        }
-        preloadedImage.src = imageList[nextIndex]
-        if (preloadedImage.complete) beginFade()
-      }, 500)
-    }
-
-    scheduleNext()
-    return () => {
-      isActive = false
-      window.clearTimeout(cycleTimer)
-    }
-  }, [imageListKey])
+    return () => window.clearInterval(interval)
+  }, [isHovered, imageList.length])
 
   const src = imageList[imageIndex] || imageList[0]
   const handleClick = (event, imageSrc) => onImageClick?.(event, imageSrc)
 
   return (
     <span className="relative block h-full w-full overflow-hidden">
-      <img src={src} alt={alt} className={`absolute inset-0 ${className}`} onClick={(event) => handleClick(event, src)} />
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        className={`absolute inset-0 ${className}`}
+        onClick={(event) => handleClick(event, src)}
+      />
     </span>
   )
 }
@@ -707,12 +690,15 @@ export default function ContentsSection() {
                     <CyclingProjectImage 
                       images={card.previewPhotos} 
                       alt={card.title} 
+                      isHovered={hoveredCardId === card.id}
                       className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105" 
                     />
                   ) : (
                     <img 
                       src={card.thumbnail} 
                       alt={card.title} 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                     />
                   )}

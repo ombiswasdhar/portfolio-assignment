@@ -21,7 +21,7 @@ export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="absolute -right-[4%] sm:-right-[5.87%] -top-[14%] sm:-top-[16.36%] w-[17%] sm:w-[14.65%] aspect-square z-30 group cursor-pointer transition-transform duration-300 ease-out hover:scale-110 drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)] pointer-events-auto"
-      title={isPlaying ? `Pause ${track.title} (Apple Music)` : `Play ${track.title} (Apple Music)`}
+      title={isPlaying ? `Pause ${track.title} - Spider-Verse • Apple Music` : `Play ${track.title} - Spider-Verse • Apple Music`}
       style={{
         transform: `translate3d(${-mousePos.x * 0.9}px, ${-mousePos.y * 0.9}px, 0)`,
         transition: 'transform 0.2s ease-out',
@@ -34,7 +34,7 @@ export default function HeroCD({ mousePos = { x: 0, y: 0 } }) {
           togglePlay()
         }
       }}
-      aria-label={isPlaying ? `Pause ${track.title} (Apple Music)` : `Play ${track.title} (Apple Music)`}
+      aria-label={isPlaying ? `Pause ${track.title} - Spider-Verse • Apple Music` : `${track.title} - Spider-Verse • Apple Music - Click to play`}
     >
       {/* Active Audio Pulse / Soundwave Badge */}
       {isPlaying && (

@@ -1,0 +1,27 @@
+# Om Biswas Portfolio
+
+> The creative portfolio of Om Biswas, a visual, UI/UX, and product designer studying at Symbiosis Institute of Design. Exploring brand identity, 3D collectible toys (Kaali Peeli), and digital experiences.
+
+## Core Navigation
+
+- [Home](https://portfolio-assignment-chi-five.vercel.app/): Interactive portfolio showcasing hero animations, philosophy, skills, and featured work.
+- [Featured Works](https://portfolio-assignment-chi-five.vercel.app/#work): Curated assignments in UI/UX design, 3D hardware design, and brand experiences.
+- [Sketchbook](https://portfolio-assignment-chi-five.vercel.app/#sketchbook): Interactive 3D Moleskine journal with ideation notes, character mascot print specs, and toy design sketches.
+- [About](https://portfolio-assignment-chi-five.vercel.app/#about): Design philosophy, creative approach, and visual arts background.
+- [Skills](https://portfolio-assignment-chi-five.vercel.app/#skills): Creative toolkit including Figma, Procreate, Blender 3D, After Effects, and Antigravity.
+- [Curriculum Vitae](https://portfolio-assignment-chi-five.vercel.app/#cv): Comprehensive resume, experience, education at Symbiosis Institute of Design, and achievements.
+- [Contact](https://portfolio-assignment-chi-five.vercel.app/contact): Direct communication channels, social profiles, and collaboration inquiries.
+
+## Featured Projects
+
+- [PlayStaples Kaali Peeli](https://portfolio-assignment-chi-five.vercel.app/#work): Handcrafted wooden toy collectible celebrating the iconic Mumbai Premier Padmini taxi, featuring 3D product CAD visualization, custom livery, physical packaging, and brand storytelling.
+- [Aureus Audio](https://portfolio-assignment-chi-five.vercel.app/aureus): Luxury audiophile e-commerce and hardware lookbook with isometric product telemetry, 3D modeling, and interactive case study.
+- [Oni Design Studios](https://portfolio-assignment-chi-five.vercel.app/#work): Cyberpunk character mascot design, holographic print production, and corporate identity system.
+- [Melody Music App](https://portfolio-assignment-chi-five.vercel.app/#work): Intuitive spatial audio streaming application concept focusing on gesture-driven micro-interactions.
+
+## Contact & Profiles
+
+- [Email](mailto:ombiswasatwork@gmail.com): ombiswasatwork@gmail.com
+- [LinkedIn](https://www.linkedin.com/in/om-biswas-6447842a2/): Professional profile and network.
+- [Behance](https://www.behance.net/ombiswas): Creative case studies and design projects.
+- [Instagram](https://www.instagram.com/o.m.i_24): Visual experiments and character sketches.
