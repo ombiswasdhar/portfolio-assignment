@@ -16,6 +16,7 @@ import MusicPlayer from './components/MusicPlayer'
 import { MusicProvider } from './context/MusicContext'
 import { getDeviceTier } from './utils/deviceTier'
 import AugePreloader from './components/AugePreloader'
+import MengToSketchbookScene from './components/MengToSketchbookScene'
 
 // Initialize device performance tier & attributes immediately
 if (typeof window !== 'undefined') {
@@ -65,6 +66,8 @@ function App() {
             <Route path="/constellation" element={<ConstellationGrid />} />
             <Route path="/quantum-swarm" element={<QuantumSwarmDemo />} />
             <Route path="/helix-chrono-matrix" element={<HelixChronoMatrixDemo />} />
+            <Route path="/sketchbook/threeui" element={<MengToSketchbookScene />} />
+            <Route path="/threeui-sketchbook" element={<MengToSketchbookScene />} />
           </Routes>
         </div>
       </MusicProvider>

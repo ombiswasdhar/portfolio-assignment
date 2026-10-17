@@ -1,10 +1,7 @@
-import React, { useState, useRef } from 'react'
-import {
-  ChevronLeft,
-  ChevronRight,
-  X
-} from 'lucide-react'
+import React, { useState, useRef, useEffect } from 'react'
 import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
+import ThreeUISketchbookViewer from './ThreeUISketchbookViewer'
+import { createSpreadImage } from '../utils/sketchbookRenderer'
 
 // Authentic artwork from Om's portfolio for the sketchbook pages
 import aureusIdeationImg from '../assets/work/aureus/aureus-01-ideation.png'
@@ -63,12 +60,44 @@ const SKETCHBOOK_SPREADS = [
 
 export default function PaperStoreSection() {
   const [isOpen, setIsOpen] = useState(false)
-  const [currentSpread, setCurrentSpread] = useState(0)
-  const [paperTexture, setPaperTexture] = useState('dots') // 'dots' | 'blank' | 'grid'
+  const [spreadPages, setSpreadPages] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   // 3D tilt tracking for closed cover
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const coverRef = useRef(null)
+
+  // Generate high-resolution spread canvas images on mount
+  useEffect(() => {
+    let isMounted = true
+
+    Promise.all(
+      SKETCHBOOK_SPREADS.map((spread, idx) =>
+        createSpreadImage(spread, idx, SKETCHBOOK_SPREADS.length)
+      )
+    )
+      .then((urls) => {
+        if (!isMounted) return
+        setSpreadPages(
+          urls.map((url, i) => ({
+            url,
+            title: SKETCHBOOK_SPREADS[i].leftTitle,
+            date: SKETCHBOOK_SPREADS[i].leftDate,
+            caption: SKETCHBOOK_SPREADS[i].rightCaption,
+            tags: SKETCHBOOK_SPREADS[i].tags
+          }))
+        )
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        console.error('Failed to pre-render sketchbook spreads:', err)
+        if (isMounted) setIsLoading(false)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const handleMouseMove = (e) => {
     if (isOpen || !coverRef.current) return
@@ -84,8 +113,6 @@ export default function PaperStoreSection() {
   const handleMouseLeave = () => {
     setTilt({ x: 0, y: 0 })
   }
-
-  const activeSpread = SKETCHBOOK_SPREADS[currentSpread]
 
   return (
     <section
@@ -175,140 +202,24 @@ export default function PaperStoreSection() {
             </div>
           </div>
         ) : (
-          /* ================= OPEN TWO-PAGE SKETCHBOOK SPREAD ================= */
-          <div className="w-full max-w-4xl relative animate-fadeIn flex flex-col items-center">
-            {/* SPREAD TOOLBAR (PREV / NEXT / CLOSE) */}
-            <div className="w-full flex items-center justify-between mb-3 px-2 text-neutral-800 font-poppins text-xs">
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-50 border border-neutral-300/80 text-neutral-800 transition-all cursor-pointer active:scale-95 shadow-sm font-medium"
-              >
-                <X className="w-3.5 h-3.5 text-neutral-600" />
-                <span>Close Cover</span>
-              </button>
-
-              <div className="flex items-center gap-2 font-ca-mono text-xs text-neutral-700">
-                <span className="font-semibold">Spread {currentSpread + 1} of {SKETCHBOOK_SPREADS.length}</span>
-                <span className="w-1 h-1 rounded-full bg-neutral-400" />
-                <span className="text-neutral-500">{activeSpread.leftTitle.slice(0, 24)}...</span>
+          /* ================= OPEN THREEUI 3D SKETCHBOOK SPREAD ================= */
+          <div className="w-full max-w-4xl relative">
+            {spreadPages.length > 0 ? (
+              <ThreeUISketchbookViewer
+                pages={spreadPages}
+                onClose={() => setIsOpen(false)}
+                autoRiffle={true}
+              />
+            ) : (
+              <div className="py-24 flex flex-col items-center justify-center text-neutral-600 gap-3">
+                <div className="w-8 h-8 border-2 border-neutral-900 border-t-transparent rounded-full animate-spin" />
+                <span className="font-ca-mono text-xs uppercase tracking-wider">Opening sketchbook...</span>
               </div>
-
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  disabled={currentSpread === 0}
-                  onClick={() => setCurrentSpread(prev => Math.max(0, prev - 1))}
-                  className="w-8 h-8 rounded-full bg-white hover:bg-neutral-50 disabled:opacity-35 border border-neutral-300/80 flex items-center justify-center transition-all cursor-pointer active:scale-95 shadow-sm text-neutral-800"
-                  title="Previous spread"
-                >
-                  <ChevronLeft className="w-4 h-4 text-neutral-700" />
-                </button>
-                <button
-                  type="button"
-                  disabled={currentSpread === SKETCHBOOK_SPREADS.length - 1}
-                  onClick={() => setCurrentSpread(prev => Math.min(SKETCHBOOK_SPREADS.length - 1, prev + 1))}
-                  className="w-8 h-8 rounded-full bg-white hover:bg-neutral-50 disabled:opacity-35 border border-neutral-300/80 flex items-center justify-center transition-all cursor-pointer active:scale-95 shadow-sm text-neutral-800"
-                  title="Next spread"
-                >
-                  <ChevronRight className="w-4 h-4 text-neutral-700" />
-                </button>
-              </div>
-            </div>
-
-            {/* OPEN BOOK SPREAD CONTAINER */}
-            <div
-              className="w-full bg-[#FAF7F0] text-neutral-900 rounded-3xl shadow-[0_35px_75px_-20px_rgba(0,0,0,0.22)] border border-neutral-300/80 overflow-hidden relative flex flex-col md:flex-row min-h-[460px] sm:min-h-[520px]"
-              style={{
-                backgroundImage:
-                  paperTexture === 'dots'
-                    ? 'radial-gradient(#C5BFB0 1.1px, transparent 1.1px)'
-                    : paperTexture === 'grid'
-                    ? 'linear-gradient(to right, #ECE6D8 1px, transparent 1px), linear-gradient(to bottom, #ECE6D8 1px, transparent 1px)'
-                    : 'none',
-                backgroundSize: paperTexture === 'dots' ? '18px 18px' : '20px 20px'
-              }}
-            >
-              {/* CENTER SPINE CREASE / SHADOW */}
-              <div className="hidden md:block absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-8 bg-gradient-to-r from-black/15 via-black/25 to-black/15 pointer-events-none z-10 shadow-inner" />
-
-              {/* LEFT PAGE: EDITORIAL NOTES & SKETCHES */}
-              <div className="flex-1 p-6 sm:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-black/10 relative">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-black/10 pb-3">
-                    <span className="font-ca-mono text-[10px] tracking-widest uppercase text-neutral-500 font-semibold">
-                      {activeSpread.leftDate}
-                    </span>
-                    <span className="font-ca-mono text-xs font-bold text-neutral-400">
-                      p. {currentSpread * 2 + 1}
-                    </span>
-                  </div>
-
-                  <h3 className="font-akira text-base sm:text-lg font-black text-neutral-900 uppercase tracking-wide leading-snug">
-                    {activeSpread.leftTitle}
-                  </h3>
-
-                  <div className="space-y-3 pt-2">
-                    {activeSpread.leftNotes.map((note, idx) => (
-                      <p key={idx} className="font-poppins text-xs sm:text-sm text-neutral-700 leading-relaxed font-normal">
-                        • {note}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-black/10 flex flex-wrap gap-1.5 items-center justify-between">
-                  <div className="flex flex-wrap gap-1">
-                    {activeSpread.tags.map((tag, i) => (
-                      <span key={i} className="px-2 py-0.5 rounded bg-black/5 text-[10px] font-ca-mono text-neutral-600">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                  <span className="font-ca-mono text-[10px] text-neutral-400">
-                    OM BISWAS SKETCH ARCHIVE
-                  </span>
-                </div>
-              </div>
-
-              {/* RIGHT PAGE: HIGH-RES ARTWORK & VISUAL DISPLAY */}
-              <div className="flex-1 p-6 sm:p-8 flex flex-col justify-between bg-black/[0.015] relative">
-                <div className="flex items-center justify-between border-b border-black/10 pb-3 mb-4">
-                  <span className="font-ca-mono text-[10px] tracking-widest uppercase text-neutral-500 font-semibold">
-                    VISUAL SPECIFICATION
-                  </span>
-                  <span className="font-ca-mono text-xs font-bold text-neutral-400">
-                    p. {currentSpread * 2 + 2}
-                  </span>
-                </div>
-
-                {/* Primary Artwork */}
-                <div className="w-full flex-1 flex flex-col items-center justify-center rounded-2xl overflow-hidden bg-white/70 border border-black/10 shadow-sm p-3 relative group">
-                  <img
-                    src={activeSpread.rightImage}
-                    alt={activeSpread.rightCaption}
-                    className="max-h-[300px] w-full object-contain rounded-xl transition-transform duration-300 group-hover:scale-105"
-                  />
-                  {activeSpread.rightImageSecondary && (
-                    <div className="mt-3 w-full flex justify-center gap-2">
-                      <img
-                        src={activeSpread.rightImageSecondary}
-                        alt="Secondary preview"
-                        className="h-16 object-contain rounded border border-black/10 shadow-xs"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="pt-4 flex items-center justify-between text-neutral-500 font-ca-mono text-[11px]">
-                  <span className="truncate">{activeSpread.rightCaption}</span>
-                  <span className="shrink-0 text-neutral-400">300 DPI // 1:1</span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         )}
       </div>
     </section>
   )
 }
+

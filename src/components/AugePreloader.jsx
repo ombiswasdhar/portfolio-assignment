@@ -199,9 +199,9 @@ export default function AugePreloader({
       }
     })
 
-    // Curved mask sweeps up with extended luxury ease
+    // Curved mask & backdrop sweep up together with extended luxury ease
     curtainTl.to(
-      mask,
+      [mask, backdropRef.current].filter(Boolean),
       {
         yPercent: -100,
         y: -40,
