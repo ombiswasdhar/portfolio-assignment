@@ -1,22 +1,23 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
-import Work from './pages/Work'
-import About from './pages/About'
-import Skills from './pages/Skills'
-import CV from './pages/CV'
-import Contact from './pages/Contact'
-import Sketchbook from './pages/Sketchbook'
-import AureusPage from './pages/Aureus'
 import CustomCursor from './components/CustomCursor'
 import ConstellationGrid from '@/components/ui/constellation-grid'
-import QuantumSwarmDemo from './components/examples/quantum-swarm-demo'
-import HelixChronoMatrixDemo from './components/examples/helix-chrono-matrix-demo'
 import MusicPlayer from './components/MusicPlayer'
 import { MusicProvider } from './context/MusicContext'
 import { getDeviceTier } from './utils/deviceTier'
 import AugePreloader from './components/AugePreloader'
-import MengToSketchbookScene from './components/MengToSketchbookScene'
+
+const Work = lazy(() => import('./pages/Work'))
+const About = lazy(() => import('./pages/About'))
+const Skills = lazy(() => import('./pages/Skills'))
+const CV = lazy(() => import('./pages/CV'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Sketchbook = lazy(() => import('./pages/Sketchbook'))
+const AureusPage = lazy(() => import('./pages/Aureus'))
+const QuantumSwarmDemo = lazy(() => import('./components/examples/quantum-swarm-demo'))
+const HelixChronoMatrixDemo = lazy(() => import('./components/examples/helix-chrono-matrix-demo'))
+const MengToSketchbookScene = lazy(() => import('./components/MengToSketchbookScene'))
 
 // Initialize device performance tier & attributes immediately
 if (typeof window !== 'undefined') {
@@ -47,6 +48,7 @@ function App() {
         <CustomCursor />
         <MusicPlayer />
         <div className="relative min-h-screen">
+          <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/work" element={<Work />} />
@@ -69,6 +71,7 @@ function App() {
             <Route path="/sketchbook/threeui" element={<MengToSketchbookScene />} />
             <Route path="/threeui-sketchbook" element={<MengToSketchbookScene />} />
           </Routes>
+          </Suspense>
         </div>
       </MusicProvider>
     </BrowserRouter>

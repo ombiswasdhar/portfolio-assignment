@@ -44,6 +44,14 @@
 .sb-arrow:active {
   transform: scale(0.95);
 }
+.sb-arrow:disabled {
+  color: rgba(43, 39, 33, 0.18);
+  cursor: default;
+}
+.sb-arrow:disabled:hover {
+  color: rgba(43, 39, 33, 0.18);
+  transform: none;
+}
 
 /* 3D perspective stage */
 .sb-3d {
@@ -277,7 +285,7 @@
   top: var(--pg, 0%);
   bottom: var(--pg, 0%);
   pointer-events: none;
-  background: #fffaf0;
+  background: #fff;
   opacity: calc(var(--shade, 0) * var(--lit, 1) * var(--lit, 1) * 0.20);
 }
 

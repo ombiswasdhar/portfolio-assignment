@@ -1,103 +1,32 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
 import ThreeUISketchbookViewer from './ThreeUISketchbookViewer'
-import { createSpreadImage } from '../utils/sketchbookRenderer'
 
-// Authentic artwork from Om's portfolio for the sketchbook pages
-import aureusIdeationImg from '../assets/work/aureus/aureus-01-ideation.png'
-import aureusPersonaImg from '../assets/work/aureus/aureus-04-persona.png'
-import oniCardFrontImg from '../assets/work/oni-card-front.png'
-import oniCard2FrontImg from '../assets/work/oni-card-2-front.png'
-import psCycle01BombayImg from '../assets/playstaples/user-cycle/01_Bombay.jpg'
-import psCycleBd01Img from '../assets/playstaples/user-cycle/BD_01.jpg'
+const PDF_PAGE_NUMBERS = Array.from({ length: 87 }, (_, index) => index + 1)
+  .filter((pageNumber) => pageNumber !== 31 && pageNumber !== 32)
 
-const SKETCHBOOK_SPREADS = [
-  {
-    id: 'spread-1',
-    spreadNum: '01 / 03',
-    leftTitle: 'VISUAL DEVELOPMENT & 3D HARDWARE',
-    leftDate: 'MAR 2026 // LAB NOTEBOOK',
-    leftNotes: [
-      'Initial brainstorming for Aureus Audio flagship headphone lookbook.',
-      'Explored isometric angles, tactile floating geometries, and high-contrast editorial magazine typography.',
-      'Goal: Fuse industrial luxury aesthetics with audiophile telemetry metrics.'
-    ],
-    rightImage: aureusIdeationImg,
-    rightCaption: 'Aureus Audio • Ideation & Wireframe Telemetry',
-    tags: ['Blender 3D', 'Editorial UI', 'Telemetry']
-  },
-  {
-    id: 'spread-2',
-    spreadNum: '02 / 03',
-    leftTitle: 'CHARACTER MASCOT & PRINT PRODUCTION',
-    leftDate: 'MAR 2026 // ONI STUDIOS',
-    leftNotes: [
-      'Corporate & freelance identity design for Oni Studios.',
-      'Illustrated anime mascot studies with cyberpunk lavender and crimson colorways.',
-      'Precision dimensions: 3.5" x 2.0" with velvet soft-touch finish and custom vector QR code integration.'
-    ],
-    rightImage: oniCardFrontImg,
-    rightImageSecondary: oniCard2FrontImg,
-    rightCaption: 'Oni Studios • Dual Mascot Print Iterations',
-    tags: ['Procreate', 'Print Design', 'Character Art']
-  },
-  {
-    id: 'spread-3',
-    spreadNum: '03 / 03',
-    leftTitle: 'TACTILE COLLECTIBLES & LIVERY',
-    leftDate: 'JAN 2026 // PLAYSTAPLES',
-    leftNotes: [
-      'Kaali Peeli Mumbai Premier Padmini wooden toy collectible.',
-      '"For the ones who carved dreams on the trunk."',
-      'Organic hardwood proportions, handcrafted rooftop luggage rack, and authentic taxi meter livery typography.'
-    ],
-    rightImage: psCycle01BombayImg,
-    rightImageSecondary: psCycleBd01Img,
-    rightCaption: 'PlayStaples • Heritage Taxi Archive & Prototype',
-    tags: ['Toy Design', '3D CAD', 'Packaging']
+const PDF_SKETCH_SPREADS = Array.from({ length: Math.ceil(PDF_PAGE_NUMBERS.length / 2) }, (_, index) => {
+  const pagesInSpread = PDF_PAGE_NUMBERS.slice(index * 2, index * 2 + 2)
+  const pageRange = pagesInSpread.length === 1
+    ? `${pagesInSpread[0]}`
+    : `${pagesInSpread[0]}-${pagesInSpread[pagesInSpread.length - 1]}`
+
+  return {
+    url: `/assets/sketchbook/om-paya-${String(index + 1).padStart(2, '0')}.jpg`,
+    title: `Om Paya sketch archive - pages ${pageRange}`,
+    date: 'OM PAYA // SKETCH ARCHIVE',
+    caption: `Original sketchbook scans - ${pageRange}`,
+    tags: ['Sketch archive', 'Character studies']
   }
-]
+})
 
 export default function PaperStoreSection() {
   const [isOpen, setIsOpen] = useState(false)
-  const [spreadPages, setSpreadPages] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const spreadPages = PDF_SKETCH_SPREADS
 
   // 3D tilt tracking for closed cover
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const coverRef = useRef(null)
-
-  // Generate high-resolution spread canvas images on mount
-  useEffect(() => {
-    let isMounted = true
-
-    Promise.all(
-      SKETCHBOOK_SPREADS.map((spread, idx) =>
-        createSpreadImage(spread, idx, SKETCHBOOK_SPREADS.length)
-      )
-    )
-      .then((urls) => {
-        if (!isMounted) return
-        setSpreadPages(
-          urls.map((url, i) => ({
-            url,
-            title: SKETCHBOOK_SPREADS[i].leftTitle,
-            date: SKETCHBOOK_SPREADS[i].leftDate,
-            caption: SKETCHBOOK_SPREADS[i].rightCaption,
-            tags: SKETCHBOOK_SPREADS[i].tags
-          }))
-        )
-        setIsLoading(false)
-      })
-      .catch((err) => {
-        console.error('Failed to pre-render sketchbook spreads:', err)
-        if (isMounted) setIsLoading(false)
-      })
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
 
   const handleMouseMove = (e) => {
     if (isOpen || !coverRef.current) return
@@ -204,18 +133,11 @@ export default function PaperStoreSection() {
         ) : (
           /* ================= OPEN THREEUI 3D SKETCHBOOK SPREAD ================= */
           <div className="w-full max-w-4xl relative">
-            {spreadPages.length > 0 ? (
-              <ThreeUISketchbookViewer
-                pages={spreadPages}
-                onClose={() => setIsOpen(false)}
-                autoRiffle={true}
-              />
-            ) : (
-              <div className="py-24 flex flex-col items-center justify-center text-neutral-600 gap-3">
-                <div className="w-8 h-8 border-2 border-neutral-900 border-t-transparent rounded-full animate-spin" />
-                <span className="font-ca-mono text-xs uppercase tracking-wider">Opening sketchbook...</span>
-              </div>
-            )}
+            <ThreeUISketchbookViewer
+              pages={spreadPages}
+              onClose={() => setIsOpen(false)}
+              autoRiffle={false}
+            />
           </div>
         )}
       </div>

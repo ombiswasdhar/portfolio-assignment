@@ -398,9 +398,10 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
       setIdx(state.idx);
       state.turn = null;
     }
+    if ((dir === 'next' && state.idx >= M - 1) || (dir === 'prev' && state.idx <= 0)) return;
     shoveLoupe(dir);
     const from = state.idx;
-    const to = dir === 'next' ? (from + 1) % M : (from - 1 + M) % M;
+    const to = dir === 'next' ? from + 1 : from - 1;
     state.turn = { dir, from, to, t };
     paint();
   }, [M, paint, shoveLoupe]);
@@ -432,9 +433,10 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
       setIdx(state.idx);
       state.turn = null;
     }
+    if ((dir === 'next' && state.idx >= M - 1) || (dir === 'prev' && state.idx <= 0)) return;
     startTurn(dir, 0);
     commit();
-  }, [commit, startTurn]);
+  }, [M, commit, startTurn]);
 
   const goTo = useCallback((i) => {
     if (state.introOn) endIntro();
@@ -443,10 +445,9 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
       state.idx = state.turn.to;
       state.turn = null;
     }
-    const fwd = (i - state.idx + M) % M;
-    const back = (state.idx - i + M) % M;
-    if (Math.min(fwd, back) === 1) {
-      step(fwd === 1 ? 'next' : 'prev');
+    const distance = i - state.idx;
+    if (Math.abs(distance) === 1) {
+      step(distance > 0 ? 'next' : 'prev');
       return;
     }
     state.idx = i;
@@ -634,6 +635,9 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   };
 
   const activePage = pages[idx];
+  const visibleSpreadIndexes = M <= 5
+    ? pages.map((_, i) => i)
+    : [...new Set([0, idx - 1, idx, idx + 1].filter((i) => i >= 0 && i < M))];
 
   return (
     <div ref={containerRef} className="w-full flex flex-col items-center animate-fadeIn select-none">
@@ -651,19 +655,25 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
 
         {/* Center: Interactive Spread Index Pills */}
         <div className="flex items-center gap-1.5 bg-neutral-900/5 p-1 rounded-full border border-neutral-300/60">
-          {pages.map((p, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => goTo(i)}
-              className={`px-3 py-1 rounded-full text-xs font-ca-mono transition-all cursor-pointer ${
-                i === idx
-                  ? 'bg-neutral-900 text-white font-bold shadow-sm'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
-              }`}
-            >
-              Spread 0{i + 1}
-            </button>
+          {visibleSpreadIndexes.map((i, visibleIndex) => (
+            <React.Fragment key={i}>
+              {visibleIndex > 0 && i - visibleSpreadIndexes[visibleIndex - 1] > 1 && (
+                <span className="px-1 text-xs text-neutral-400" aria-hidden="true">…</span>
+              )}
+              <button
+                type="button"
+                onClick={() => goTo(i)}
+                aria-label={`Go to spread ${i + 1}`}
+                aria-current={i === idx ? 'page' : undefined}
+                className={`px-3 py-1 rounded-full text-xs font-ca-mono transition-all cursor-pointer ${
+                  i === idx
+                    ? 'bg-neutral-900 text-white font-bold shadow-sm'
+                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
+                }`}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </button>
+            </React.Fragment>
           ))}
         </div>
 
@@ -722,8 +732,9 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
             type="button"
             className="sb-arrow prev"
             onClick={() => step('prev')}
+            disabled={idx === 0}
             aria-label="Previous page"
-            title="Previous page (or drag right-to-left)"
+            title="Previous page"
           >
             <ChevronLeft className="w-7 h-7 sm:w-8 sm:h-8" />
           </button>
@@ -767,8 +778,9 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
             type="button"
             className="sb-arrow next"
             onClick={() => step('next')}
+            disabled={idx === M - 1}
             aria-label="Next page"
-            title="Next page (or drag left-to-right)"
+            title="Next page"
           >
             <ChevronRight className="w-7 h-7 sm:w-8 sm:h-8" />
           </button>

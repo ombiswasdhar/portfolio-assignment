@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import KineticMatrix from '@/components/ui/kinetic-matrix'
-import frame41 from '../assets/hero/frame41.png'
 import halftone from '../assets/hero/halftone.png'
 import portfolioText from '../assets/hero/portfolio_text.svg'
 import centerLogo from '../assets/hero/center_logo.svg'
@@ -216,7 +215,8 @@ export default function Hero() {
           <div className="relative w-full h-full rounded-[20px] sm:rounded-[32px] md:rounded-[50px] overflow-hidden bg-[#BA1F1F] shadow-[0_20px_60px_rgba(186,31,31,0.25)]">
             {/* Cyberpunk Lucy Anime Illustration (Left portion) */}
             <img
-              src={frame41}
+              src="/assets/hero/frame41.png"
+              fetchPriority="high"
               alt=""
               aria-hidden="true"
               className="absolute left-0 top-0 h-full w-auto object-cover object-left pointer-events-none select-none"
