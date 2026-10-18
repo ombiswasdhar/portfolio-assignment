@@ -634,7 +634,6 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
     if (loupeRef.current) loupeRef.current.classList.remove('held');
   };
 
-  const activePage = pages[idx];
   const visibleSpreadIndexes = M <= 5
     ? pages.map((_, i) => i)
     : [...new Set([0, idx - 1, idx, idx + 1].filter((i) => i >= 0 && i < M))];
@@ -642,7 +641,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   return (
     <div ref={containerRef} className="w-full flex flex-col items-center animate-fadeIn select-none">
       {/* SPREAD TOOLBAR (CLOSE, SPREAD NUMBER, ZOOM, LOUPE, ARROWS) */}
-      <div className="w-full max-w-4xl flex flex-wrap items-center justify-between gap-3 mb-4 px-2">
+      <div className="w-full max-w-6xl flex flex-wrap items-center justify-between gap-3 mb-4 px-2">
         {/* Left: Close Cover button */}
         <button
           type="button"
@@ -786,12 +785,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
           </button>
         </div>
 
-        {/* Dynamic Spread Caption & Drag Hint */}
-        <div className="sb-captions mt-2">
-          <p className="sb-caption font-ca-mono text-xs sm:text-sm font-semibold tracking-widest text-neutral-800 uppercase">
-            {activePage ? activePage.title : ''}
-          </p>
-        </div>
+        {/* Drag hint */}
         {!hasTurned && (
           <p className="sb-hint font-ca-mono text-[11px] text-neutral-500 uppercase tracking-widest -mt-2">
             Tip: Drag page edges with cursor to peel & turn

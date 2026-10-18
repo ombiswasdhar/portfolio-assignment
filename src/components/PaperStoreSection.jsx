@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import FeaturedWorksFloatingElements from './FeaturedWorksFloatingElements'
 import ThreeUISketchbookViewer from './ThreeUISketchbookViewer'
 
 const PDF_PAGE_NUMBERS = Array.from({ length: 87 }, (_, index) => index + 1)
@@ -13,10 +12,7 @@ const PDF_SKETCH_SPREADS = Array.from({ length: Math.ceil(PDF_PAGE_NUMBERS.lengt
 
   return {
     url: `/assets/sketchbook/om-paya-${String(index + 1).padStart(2, '0')}.jpg`,
-    title: `Om Paya sketch archive - pages ${pageRange}`,
-    date: 'OM PAYA // SKETCH ARCHIVE',
-    caption: `Original sketchbook scans - ${pageRange}`,
-    tags: ['Sketch archive', 'Character studies']
+    title: `Sketchbook spread ${pageRange}`
   }
 })
 
@@ -52,9 +48,6 @@ export default function PaperStoreSection() {
       {/* FEATURED WORKS DOTTED GRID CANVAS PATTERN */}
       <div className="ca-dotted-grid-pattern" aria-hidden="true" />
 
-      {/* DYNAMIC FLOATING BACKGROUND ELEMENTS (FROM FEATURED WORKS) */}
-      <FeaturedWorksFloatingElements />
-
       {/* SECTION HEADER: "MY SKETCHES" IN SAME FONT & STYLE AS FEATURED WORKS */}
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center mb-8 sm:mb-12">
         <div className="flex flex-col items-center">
@@ -69,11 +62,6 @@ export default function PaperStoreSection() {
         <h2 className="mt-6 font-akira text-[26px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight text-neutral-950 uppercase font-black text-center">
           MY SKETCHES
         </h2>
-        <div className="mt-8 max-w-md -rotate-[3.6deg] hover:rotate-0 transition-transform duration-300 mb-2">
-          <span className="ca-tape-clip inline-block px-6 py-2.5 text-xs sm:text-sm font-ca-mono font-bold uppercase tracking-wider text-black bg-[#FFE57F] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-amber-300/60">
-            Visual development, character studies, and tactile archives.
-          </span>
-        </div>
       </div>
 
       {/* CENTER STAGE: THE 3D MOLESKINE NOTEBOOK */}
@@ -99,7 +87,7 @@ export default function PaperStoreSection() {
 
             {/* THE TACTILE MOLESKINE BOOK COVER */}
             <div
-              className="relative w-[300px] xs:w-[330px] sm:w-[380px] h-[410px] xs:h-[450px] sm:h-[510px] bg-[#222226] rounded-r-[26px] sm:rounded-r-[30px] rounded-l-[4px] border border-neutral-800/80 overflow-hidden transition-all duration-300 group-hover:shadow-[0_45px_85px_-15px_rgba(0,0,0,0.45)] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.35)]"
+              className="relative w-[340px] xs:w-[390px] sm:w-[500px] md:w-[560px] h-[460px] xs:h-[530px] sm:h-[680px] md:h-[760px] bg-[#222226] rounded-r-[26px] sm:rounded-r-[30px] rounded-l-[4px] border border-neutral-800/80 overflow-hidden transition-all duration-300 group-hover:shadow-[0_45px_85px_-15px_rgba(0,0,0,0.45)] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.35)]"
               style={{
                 transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
                 transition: 'transform 0.15s ease-out'
@@ -132,7 +120,7 @@ export default function PaperStoreSection() {
           </div>
         ) : (
           /* ================= OPEN THREEUI 3D SKETCHBOOK SPREAD ================= */
-          <div className="w-full max-w-4xl relative">
+          <div className="w-full max-w-6xl relative">
             <ThreeUISketchbookViewer
               pages={spreadPages}
               onClose={() => setIsOpen(false)}
