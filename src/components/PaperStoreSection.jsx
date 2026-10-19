@@ -43,7 +43,7 @@ export default function PaperStoreSection() {
     <section
       id="sketchbook"
       data-theme="light"
-      className="w-full relative pt-16 sm:pt-24 md:pt-28 pb-16 sm:pb-24 px-4 sm:px-8 overflow-hidden select-none flex flex-col items-center justify-between min-h-[920px] ca-dotted-grid-bg text-neutral-900 border-b-4 border-black transition-colors duration-500"
+      className="w-full relative pt-14 sm:pt-24 md:pt-28 pb-12 sm:pb-24 px-2 xs:px-4 sm:px-8 overflow-hidden select-none flex flex-col items-center justify-between min-h-[580px] xs:min-h-[640px] sm:min-h-[760px] md:min-h-[920px] ca-dotted-grid-bg text-neutral-900 border-b-4 border-black transition-colors duration-500"
     >
       {/* FEATURED WORKS DOTTED GRID CANVAS PATTERN */}
       <div className="ca-dotted-grid-pattern" aria-hidden="true" />
@@ -65,7 +65,7 @@ export default function PaperStoreSection() {
       </div>
 
       {/* CENTER STAGE: THE 3D MOLESKINE NOTEBOOK */}
-      <div className="my-auto py-6 sm:py-10 flex flex-col items-center justify-center relative z-10 w-full max-w-5xl">
+      <div className="my-auto py-4 sm:py-10 flex flex-col items-center justify-center relative z-10 w-full max-w-5xl">
         {!isOpen ? (
           /* ================= CLOSED NOTEBOOK ================= */
           <div
@@ -82,12 +82,12 @@ export default function PaperStoreSection() {
           >
             {/* AMBIENT DROP SHADOW BENEATH THE FLOATING BOOK */}
             <div
-              className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[90%] h-16 bg-neutral-950/35 blur-2xl rounded-full pointer-events-none transition-all duration-300 group-hover:scale-105 group-hover:bg-neutral-950/45"
+              className="absolute -bottom-8 sm:-bottom-10 left-1/2 -translate-x-1/2 w-[90%] h-12 sm:h-16 bg-neutral-950/35 blur-2xl rounded-full pointer-events-none transition-all duration-300 group-hover:scale-105 group-hover:bg-neutral-950/45"
             />
 
             {/* THE TACTILE MOLESKINE BOOK COVER */}
             <div
-              className="relative w-[340px] xs:w-[390px] sm:w-[500px] md:w-[560px] h-[460px] xs:h-[530px] sm:h-[680px] md:h-[760px] bg-[#222226] rounded-r-[26px] sm:rounded-r-[30px] rounded-l-[4px] border border-neutral-800/80 overflow-hidden transition-all duration-300 group-hover:shadow-[0_45px_85px_-15px_rgba(0,0,0,0.45)] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.35)]"
+              className="relative w-[195px] xs:w-[225px] sm:w-[380px] md:w-[560px] h-[275px] xs:h-[315px] sm:h-[530px] md:h-[760px] bg-[#222226] rounded-r-[20px] xs:rounded-r-[24px] sm:rounded-r-[30px] rounded-l-[4px] border border-neutral-800/80 overflow-hidden transition-all duration-300 group-hover:shadow-[0_45px_85px_-15px_rgba(0,0,0,0.45)] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.35)]"
               style={{
                 transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
                 transition: 'transform 0.15s ease-out'
@@ -102,9 +102,9 @@ export default function PaperStoreSection() {
               />
 
               {/* LEFT SPINE BINDING TAPE */}
-              <div className="absolute top-0 bottom-0 left-0 w-[42px] sm:w-[48px] bg-[#16161A] border-r border-black/60 shadow-[inset_-3px_0_6px_rgba(0,0,0,0.5)] flex flex-col justify-between py-6">
-                <div className="w-full h-8 border-b border-black/30" />
-                <div className="w-full h-8 border-t border-black/30" />
+              <div className="absolute top-0 bottom-0 left-0 w-[28px] xs:w-[34px] sm:w-[48px] bg-[#16161A] border-r border-black/60 shadow-[inset_-3px_0_6px_rgba(0,0,0,0.5)] flex flex-col justify-between py-4 sm:py-6">
+                <div className="w-full h-6 sm:h-8 border-b border-black/30" />
+                <div className="w-full h-6 sm:h-8 border-t border-black/30" />
               </div>
 
               {/* COVER RIGHT EDGE SUBTLE EMBOSS / CREASE */}
@@ -112,7 +112,7 @@ export default function PaperStoreSection() {
 
               {/* CENTER "CLICK TO OPEN" BADGE - FONT MYFONT, NO ICON */}
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="px-6 py-2.5 rounded-full bg-black/85 backdrop-blur-md border border-white/25 text-white font-myfont text-2xl sm:text-3xl tracking-wide shadow-2xl flex items-center justify-center transform group-hover:scale-105 transition-transform lowercase">
+                <div className="px-4 xs:px-5 sm:px-6 py-2 sm:py-2.5 rounded-full bg-black/85 backdrop-blur-md border border-white/25 text-white font-myfont text-xl xs:text-2xl sm:text-3xl tracking-wide shadow-2xl flex items-center justify-center transform group-hover:scale-105 transition-transform lowercase">
                   <span>click to open</span>
                 </div>
               </div>

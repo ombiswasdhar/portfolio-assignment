@@ -14,6 +14,26 @@
   user-drag: none;
 }
 
+.sketchbook-viewer.is-zoomed {
+  padding-top: 64px;
+}
+
+.sb-toolbar.is-zoomed {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  z-index: 40;
+  width: calc(100% - 24px);
+  margin: 0;
+  padding: 8px;
+  transform: translateX(-50%);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
 .sb-stage {
   display: flex;
   align-items: center;
@@ -51,6 +71,63 @@
 .sb-arrow:disabled:hover {
   color: rgba(43, 39, 33, 0.18);
   transform: none;
+}
+
+/* Keep page navigation within the book footprint while the spread is zoomed. */
+.sb-stage.is-zoomed .sb-arrow {
+  position: absolute;
+  top: 12px;
+  z-index: 30;
+  padding: 9px;
+  border: 1px solid rgba(43, 39, 33, 0.16);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: rgba(43, 39, 33, 0.8);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(8px);
+}
+
+.sb-stage.is-zoomed .sb-arrow.prev {
+  left: 6%;
+}
+
+.sb-stage.is-zoomed .sb-arrow.next {
+  right: 6%;
+}
+
+.sb-stage.is-zoomed .sb-arrow:hover {
+  color: #111111;
+  transform: scale(1.08);
+}
+
+/* On mobile devices, position arrows absolute overlaying page edges so book gets 100% width */
+@media (max-width: 640px) {
+  .sb-stage:not(.is-zoomed) .sb-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+    padding: 7px;
+    border: 1px solid rgba(43, 39, 33, 0.16);
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.90);
+    color: rgba(43, 39, 33, 0.85);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(8px);
+  }
+  .sb-stage:not(.is-zoomed) .sb-arrow.prev {
+    left: -2px;
+  }
+  .sb-stage:not(.is-zoomed) .sb-arrow.next {
+    right: -2px;
+  }
+  .sb-stage:not(.is-zoomed) .sb-arrow:hover {
+    color: #111111;
+    transform: translateY(-50%) scale(1.08);
+  }
+  .sb-stage:not(.is-zoomed) .sb-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+  }
 }
 
 /* 3D perspective stage */
@@ -436,12 +513,18 @@
 }
 
 .sb-hint {
-  margin: 0;
+  /* Keep the hint below the book's maximum 1.5x zoom footprint. */
+  margin: clamp(64px, 12vw, 140px) 0 0;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #888888;
   transition: opacity 0.4s ease;
+}
+@media (max-width: 640px) {
+  .sb-hint {
+    margin: 18px 0 0;
+  }
 }
 .sb-hint.gone {
   opacity: 0;

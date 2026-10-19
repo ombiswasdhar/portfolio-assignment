@@ -3,7 +3,6 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  Search,
   ZoomIn,
   ZoomOut,
   RotateCcw
@@ -22,7 +21,7 @@ const MAG = 2.3;
 export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = true }) {
   const M = pages.length;
   const [idx, setIdx] = useState(0);
-  const [loupeOn, setLoupeOn] = useState(false);
+  const [loupeOn] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [hasTurned, setHasTurned] = useState(false);
 
@@ -639,45 +638,59 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
     : [...new Set([0, idx - 1, idx, idx + 1].filter((i) => i >= 0 && i < M))];
 
   return (
-    <div ref={containerRef} className="w-full flex flex-col items-center animate-fadeIn select-none">
+    <div
+      ref={containerRef}
+      className={`sketchbook-viewer w-full flex flex-col items-center animate-fadeIn select-none ${zoomLevel > 1.02 ? 'is-zoomed' : ''}`}
+    >
       {/* SPREAD TOOLBAR (CLOSE, SPREAD NUMBER, ZOOM, LOUPE, ARROWS) */}
-      <div className="w-full max-w-6xl flex flex-wrap items-center justify-between gap-3 mb-4 px-2">
+      <div className={`sb-toolbar w-full max-w-6xl flex flex-wrap items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-4 px-1 sm:px-2 ${zoomLevel > 1.02 ? 'is-zoomed' : ''}`}>
         {/* Left: Close Cover button */}
         <button
           type="button"
           onClick={onClose}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 transition-all cursor-pointer active:scale-95 shadow-sm font-medium text-xs font-poppins"
+          className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 transition-all cursor-pointer active:scale-95 shadow-sm font-medium text-xs font-poppins"
         >
           <X className="w-3.5 h-3.5 text-neutral-600" />
           <span>Close Cover</span>
         </button>
 
         {/* Center: Interactive Spread Index Pills */}
-        <div className="flex items-center gap-1.5 bg-neutral-900/5 p-1 rounded-full border border-neutral-300/60">
-          {visibleSpreadIndexes.map((i, visibleIndex) => (
-            <React.Fragment key={i}>
-              {visibleIndex > 0 && i - visibleSpreadIndexes[visibleIndex - 1] > 1 && (
-                <span className="px-1 text-xs text-neutral-400" aria-hidden="true">…</span>
-              )}
-              <button
-                type="button"
-                onClick={() => goTo(i)}
-                aria-label={`Go to spread ${i + 1}`}
-                aria-current={i === idx ? 'page' : undefined}
-                className={`px-3 py-1 rounded-full text-xs font-ca-mono transition-all cursor-pointer ${
-                  i === idx
-                    ? 'bg-neutral-900 text-white font-bold shadow-sm'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
-                }`}
-              >
-                {String(i + 1).padStart(2, '0')}
-              </button>
-            </React.Fragment>
-          ))}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-1.5 bg-neutral-900/5 p-0.5 sm:p-1 rounded-full border border-neutral-300/60">
+            {visibleSpreadIndexes.map((i, visibleIndex) => (
+              <React.Fragment key={i}>
+                {visibleIndex > 0 && i - visibleSpreadIndexes[visibleIndex - 1] > 1 && (
+                  <span className="px-0.5 sm:px-1 text-xs text-neutral-400 font-fredoka" aria-hidden="true">…</span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => goTo(i)}
+                  aria-label={`Go to spread ${i + 1}`}
+                  aria-current={i === idx ? 'page' : undefined}
+                  className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-fredoka transition-all cursor-pointer ${
+                    i === idx
+                      ? 'bg-neutral-900 text-white font-bold shadow-sm'
+                      : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/60'
+                  }`}
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="tool"
+            onClick={() => setView(0, 0, 1)}
+            title="Reset Zoom"
+            aria-label="Reset zoom"
+          >
+            <RotateCcw className="w-3 h-3" />
+          </button>
         </div>
 
-        {/* Right: Zoom & Loupe controls */}
-        <div className="sb-tools">
+        {/* Right: Zoom controls */}
+        <div className="sb-tools flex items-center gap-1.5 sm:gap-3">
           <button
             type="button"
             className="tool"
@@ -687,7 +700,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
           >
             <ZoomOut className="w-3.5 h-3.5" />
           </button>
-          <span className="zoom-read font-ca-mono">{Math.round(zoomLevel * 100)}%</span>
+          <span className="zoom-read font-fredoka">{Math.round(zoomLevel * 100)}%</span>
           <button
             type="button"
             className="tool"
@@ -697,35 +710,12 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
           >
             <ZoomIn className="w-3.5 h-3.5" />
           </button>
-          <div className="tool-sep" />
-          <button
-            type="button"
-            className="tool"
-            onClick={() => setView(0, 0, 1)}
-            title="Reset Zoom"
-          >
-            <RotateCcw className="w-3 h-3" />
-          </button>
-          <div className="tool-sep" />
-          <button
-            type="button"
-            className="tool"
-            aria-pressed={loupeOn}
-            onClick={() => {
-              const next = !loupeOn;
-              setLoupeOn(next);
-              if (next && state.lx === null) restLoupe();
-            }}
-            title="Toggle Magnifier Loupe"
-          >
-            <Search className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
 
       {/* 3D SKETCHBOOK STAGE */}
       <div className="sb-wrap">
-        <div ref={stageRef} className="sb-stage">
+        <div ref={stageRef} className={`sb-stage ${zoomLevel > 1.02 ? 'is-zoomed' : ''}`}>
           {/* Previous Arrow */}
           <button
             type="button"
@@ -787,7 +777,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
 
         {/* Drag hint */}
         {!hasTurned && (
-          <p className="sb-hint font-ca-mono text-[11px] text-neutral-500 uppercase tracking-widest -mt-2">
+          <p className="sb-hint font-fredoka text-[11px] text-neutral-500 uppercase tracking-widest">
             Tip: Drag page edges with cursor to peel & turn
           </p>
         )}
