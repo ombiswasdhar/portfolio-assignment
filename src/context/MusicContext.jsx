@@ -538,7 +538,7 @@ export function MusicProvider({ children }) {
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#DE2020]" />
           </span>
           <span className="text-xs font-semibold tracking-wide font-fredoka">
-            Click anywhere to play {currentTrack.title} ♫
+            Click anywhere to play the song ♫
           </span>
         </div>
       )}
