@@ -1,13 +1,20 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import AureusCaseStudyModal from '../components/AureusCaseStudyModal'
+import ProjectCaseStudyModal from '../components/ProjectCaseStudyModal'
+import { projectsData } from '../components/ContentsSection'
 
 export default function AureusPage() {
   const navigate = useNavigate()
+  const aureusProject = projectsData.find((p) => p.id === 'aureaus') || projectsData[2]
 
   return (
-    <AureusCaseStudyModal
+    <ProjectCaseStudyModal
+      project={aureusProject}
       onClose={() => navigate('/#work')}
+      allProjects={projectsData}
+      onSelectProject={(p) => {
+        if (p.id !== 'aureaus') navigate('/#work')
+      }}
     />
   )
 }

@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react'
 import ThreeUISketchbookViewer from './ThreeUISketchbookViewer'
 import sketchbookFace from '../assets/sketchbook-face.png'
+import sketchbookFlowerSticker from '../assets/sketchbook-flower-sticker.png'
+import sketchbookCatSticker from '../assets/sketchbook-cat-sticker.png'
+import sketchbookHydrantSticker from '../assets/sketchbook-hydrant-sticker.png'
 
 const PDF_PAGE_NUMBERS = Array.from({ length: 87 }, (_, index) => index + 1)
   .filter((pageNumber) => pageNumber !== 31 && pageNumber !== 32)
@@ -60,16 +63,18 @@ export default function PaperStoreSection() {
             <path d="M9 9c14-2.5 32-2.5 46 0" />
           </svg>
         </div>
-        <div className="mt-6 flex items-center justify-center gap-0 xs:gap-1">
+        <div className="mt-6 flex w-full items-center justify-center gap-0">
           <h2 className="font-akira text-[26px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight text-neutral-950 uppercase font-black text-center">
             I ALSO SKETCH
           </h2>
-          <img
-            src={sketchbookFace}
-            alt=""
-            aria-hidden="true"
-            className="w-[50px] h-[50px] xs:w-[60px] xs:h-[60px] sm:w-[88px] sm:h-[88px] md:w-[110px] md:h-[110px] object-contain shrink-0 rotate-12"
-          />
+          <div className="shrink-0 animate-float-gentle">
+            <img
+              src={sketchbookFace}
+              alt=""
+              aria-hidden="true"
+              className="w-[75px] h-[75px] xs:w-[90px] xs:h-[90px] sm:w-[132px] sm:h-[132px] md:w-[165px] md:h-[165px] object-contain rotate-[15.6deg]"
+            />
+          </div>
         </div>
       </div>
 
@@ -108,6 +113,30 @@ export default function PaperStoreSection() {
                 style={{
                   background: `radial-gradient(circle at ${50 + tilt.y * 3}% ${50 - tilt.x * 3}%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 65%)`
                 }}
+              />
+
+              {/* RED FLOWER STICKER */}
+              <img
+                src={sketchbookFlowerSticker}
+                alt=""
+                aria-hidden="true"
+                className="absolute right-2 top-2 sm:right-4 sm:top-4 md:right-6 md:top-6 z-10 w-[72px] xs:w-[88px] sm:w-[140px] md:w-[170px] bg-white object-contain pointer-events-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.35)]"
+              />
+
+              {/* WHITE CAT STICKER */}
+              <img
+                src={sketchbookCatSticker}
+                alt=""
+                aria-hidden="true"
+                className="absolute right-[12%] bottom-[9%] z-10 w-[76px] xs:w-[90px] sm:w-[135px] md:w-[175px] rotate-[40deg] object-contain pointer-events-none"
+              />
+
+              {/* YELLOW HYDRANT STICKER */}
+              <img
+                src={sketchbookHydrantSticker}
+                alt=""
+                aria-hidden="true"
+                className="absolute left-[5%] top-1/2 z-10 w-[115px] xs:w-[130px] sm:w-[190px] md:w-[240px] -translate-y-1/2 object-contain pointer-events-none"
               />
 
               {/* LEFT SPINE BINDING TAPE */}
