@@ -48,7 +48,7 @@ export default function PaperStoreSection() {
       {/* FEATURED WORKS DOTTED GRID CANVAS PATTERN */}
       <div className="ca-dotted-grid-pattern" aria-hidden="true" />
 
-      {/* SECTION HEADER: "MY SKETCHES" IN SAME FONT & STYLE AS FEATURED WORKS */}
+      {/* SECTION HEADER: "I ALSO SKETCH" IN SAME FONT & STYLE AS FEATURED WORKS */}
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center mb-8 sm:mb-12">
         <div className="flex flex-col items-center">
           <div className="font-myfont text-3xl sm:text-4xl text-neutral-800 font-medium tracking-wide flex items-center justify-center min-h-[2.5rem] sm:min-h-[3rem] lowercase">
@@ -60,7 +60,7 @@ export default function PaperStoreSection() {
           </svg>
         </div>
         <h2 className="mt-6 font-akira text-[26px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight text-neutral-950 uppercase font-black text-center">
-          MY SKETCHES
+          I ALSO SKETCH
         </h2>
       </div>
 
