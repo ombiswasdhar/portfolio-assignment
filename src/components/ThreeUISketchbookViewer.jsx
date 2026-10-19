@@ -24,6 +24,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   const [loupeOn] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [hasTurned, setHasTurned] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches);
 
   const containerRef = useRef(null);
   const stageRef = useRef(null);
@@ -55,6 +56,14 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
 
   const state = stateRef.current;
   state.idx = idx;
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia('(max-width: 640px)');
+    const updateMobile = () => setIsMobile(mobileQuery.matches);
+    updateMobile();
+    mobileQuery.addEventListener('change', updateMobile);
+    return () => mobileQuery.removeEventListener('change', updateMobile);
+  }, []);
 
   // Helper to kick animation frame loop
   const kick = useCallback(() => {
@@ -644,7 +653,9 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
     if (loupeRef.current) loupeRef.current.classList.remove('held');
   };
 
-  const visibleSpreadIndexes = M <= 5
+  const visibleSpreadIndexes = isMobile && M > 3
+    ? idx <= 2 ? [0, 1, 2] : [0, 1, idx]
+    : M <= 5
     ? pages.map((_, i) => i)
     : [...new Set([0, idx - 1, idx, idx + 1].filter((i) => i >= 0 && i < M))];
 
