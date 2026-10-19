@@ -60,7 +60,7 @@ export default function PaperStoreSection() {
             <path d="M9 9c14-2.5 32-2.5 46 0" />
           </svg>
         </div>
-        <div className="mt-6 flex items-center justify-center gap-1 xs:gap-2">
+        <div className="mt-6 flex items-center justify-center gap-0 xs:gap-1">
           <h2 className="font-akira text-[26px] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight text-neutral-950 uppercase font-black text-center">
             I ALSO SKETCH
           </h2>
@@ -68,7 +68,7 @@ export default function PaperStoreSection() {
             src={sketchbookFace}
             alt=""
             aria-hidden="true"
-            className="w-10 h-10 xs:w-12 xs:h-12 sm:w-[70px] sm:h-[70px] md:w-[88px] md:h-[88px] object-contain shrink-0 rotate-6"
+            className="w-[50px] h-[50px] xs:w-[60px] xs:h-[60px] sm:w-[88px] sm:h-[88px] md:w-[110px] md:h-[110px] object-contain shrink-0 rotate-12"
           />
         </div>
       </div>
