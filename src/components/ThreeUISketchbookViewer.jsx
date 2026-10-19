@@ -523,6 +523,10 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
       stage.setPointerCapture(e.pointerId);
 
       const r = bookRef.current.getBoundingClientRect();
+      if (e.pointerType === 'touch') {
+        state.drag = { dir: null, x0: e.clientX, w: r.width, moved: 0, vel: 0, tPrev: performance.now() };
+        return;
+      }
       const dir = (e.clientX - r.left) / r.width > 0.5 ? 'next' : 'prev';
       startTurn(dir, 0);
       state.drag = { dir, x0: e.clientX, w: r.width, moved: 0, vel: 0, tPrev: performance.now() };
@@ -532,6 +536,11 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
       if (!state.drag) return;
       const dx = e.clientX - state.drag.x0;
       state.drag.moved = Math.max(state.drag.moved, Math.abs(dx));
+      if (!state.drag.dir && state.drag.moved > 8) {
+        state.drag.dir = dx < 0 ? 'next' : 'prev';
+        startTurn(state.drag.dir, 0);
+      }
+      if (!state.drag.dir || !state.turn) return;
       const raw = (state.drag.dir === 'next' ? -dx : dx) / (state.drag.w * 0.62);
       const t = Math.max(0, Math.min(1, raw));
       const now = performance.now();
@@ -548,11 +557,13 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
       const d = state.drag;
       state.drag = null;
       if (!state.turn) return;
+      if (!d.dir) return;
       if (d.moved < 8) {
         commit();
         return;
       }
-      const go = state.turn.t > 0.42 || d.vel > 1.1;
+      const touchSwipe = d.dir && d.moved >= Math.min(64, d.w * 0.14) && state.turn.t > 0.16;
+      const go = touchSwipe || state.turn.t > 0.42 || d.vel > 1.1;
       if (go) commit();
       else cancel();
     };
@@ -725,7 +736,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
             aria-label="Previous page"
             title="Previous page"
           >
-            <ChevronLeft className="w-7 h-7 sm:w-8 sm:h-8" />
+            <ChevronLeft className="w-5 h-5 sm:w-8 sm:h-8" />
           </button>
 
           {/* 3D Container with Perspective */}
@@ -771,7 +782,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
             aria-label="Next page"
             title="Next page"
           >
-            <ChevronRight className="w-7 h-7 sm:w-8 sm:h-8" />
+            <ChevronRight className="w-5 h-5 sm:w-8 sm:h-8" />
           </button>
         </div>
 

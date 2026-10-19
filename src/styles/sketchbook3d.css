@@ -107,7 +107,7 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 30;
-    padding: 7px;
+    padding: 5px;
     border: 1px solid rgba(43, 39, 33, 0.16);
     border-radius: 9999px;
     background: rgba(255, 255, 255, 0.90);
@@ -127,6 +127,9 @@
   }
   .sb-stage:not(.is-zoomed) .sb-arrow:active {
     transform: translateY(-50%) scale(0.95);
+  }
+  .sb-stage.is-zoomed .sb-arrow {
+    padding: 5px;
   }
 }
 
