@@ -665,15 +665,17 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
       className={`sketchbook-viewer w-full flex flex-col items-center animate-fadeIn select-none ${zoomLevel > 1.02 ? 'is-zoomed' : ''}`}
     >
       {/* SPREAD TOOLBAR (CLOSE, SPREAD NUMBER, ZOOM, LOUPE, ARROWS) */}
-      <div className={`sb-toolbar w-full max-w-6xl flex flex-wrap items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-4 px-1 sm:px-2 ${zoomLevel > 1.02 ? 'is-zoomed' : ''}`}>
+      <div className={`sb-toolbar w-full max-w-6xl flex flex-wrap items-center justify-between gap-1.5 sm:gap-3 mb-3 sm:mb-4 px-0 sm:px-2 ${zoomLevel > 1.02 ? 'is-zoomed' : ''}`}>
         {/* Left: Close Cover button */}
         <button
           type="button"
           onClick={onClose}
-          className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 transition-all cursor-pointer active:scale-95 shadow-sm font-medium text-xs font-poppins"
+          aria-label="Close cover"
+          title="Close cover"
+          className="inline-flex items-center gap-1 sm:gap-1.5 p-1.5 sm:px-3.5 sm:py-1.5 rounded-full bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 transition-all cursor-pointer active:scale-95 shadow-sm font-medium text-xs font-poppins"
         >
           <X className="w-3.5 h-3.5 text-neutral-600" />
-          <span>Close Cover</span>
+          <span className="hidden sm:inline">Close Cover</span>
         </button>
 
         {/* Center: Interactive Spread Index Pills */}
@@ -703,9 +705,12 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
           <button
             type="button"
             className="tool"
-            onClick={() => setView(0, 0, 1)}
-            title="Reset Zoom"
-            aria-label="Reset zoom"
+            onClick={() => {
+              setView(0, 0, 1);
+              goTo(0);
+            }}
+            title="Reset to Page 1 & Default Zoom"
+            aria-label="Reset to page 1 and default zoom"
           >
             <RotateCcw className="w-3 h-3" />
           </button>
