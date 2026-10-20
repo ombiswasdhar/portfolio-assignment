@@ -17,7 +17,7 @@
 - [PlayStaples Kaali Peeli](https://omisbrain.vercel.app/#work): Handcrafted wooden toy collectible celebrating the iconic Mumbai Premier Padmini taxi, featuring 3D product CAD visualization, custom livery, physical packaging, and brand storytelling.
 - [Aureus Audio](https://omisbrain.vercel.app/aureus): Luxury audiophile e-commerce and hardware lookbook with isometric product telemetry, 3D modeling, and interactive case study.
 - [Oni Design Studios](https://omisbrain.vercel.app/#work): Cyberpunk character mascot design, holographic print production, and corporate identity system.
-- [Melody Music App](https://omisbrain.vercel.app/#work): Intuitive spatial audio streaming application concept focusing on gesture-driven micro-interactions.
+- [Melody Concert Ticketing](https://omisbrain.vercel.app/#work): End-to-end desktop UI/UX concept for a live music and concert ticketing platform, featuring atmospheric discovery, split-theme event lineups, two-column checkout, and vibrant 3D periwinkle visual framing.
 
 ## Contact & Profiles
 

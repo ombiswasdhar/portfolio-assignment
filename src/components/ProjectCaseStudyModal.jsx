@@ -49,16 +49,18 @@ const PROJECT_STORIES = {
   },
   melody: {
     challenge:
-      'Online ticket booking systems are notorious for high friction, confusing seating maps, and anxious checkout timers that cause drop-offs. The goal was to build "Melody"—an energetic, celebratory live-entertainment booking platform that transforms seat selection into an intuitive, delightful visual experience.',
+      'Live concert ticketing platforms frequently suffer from cluttered visual noise, disjointed page transitions, and anxiety-inducing checkout flows that drain the raw anticipation of seeing live music. The objective for Melody was to design a unified, end-to-end desktop web experience that channels the electric atmosphere of rock concerts and live festivals while providing effortless clarity, immediate event discovery, and zero-friction ticket purchasing.',
     approach:
-      'We mapped an uninterrupted end-to-end user flow: from artist discovery and tour date exploration to interactive venue seat selection and zero-friction mobile checkout. Vibrant chromatic accents, floating 3D spheres, and micro-interactions celebrate the excitement of attending live music.',
+      'We architected an uninterrupted desktop user journey staged against an energetic periwinkle canvas accented with tactile 3D spheres and circular "MELODY." orbital typography. The discovery begins with an atmospheric dark-mode hero featuring bold poster cards that instantly command attention for live acts. When an event is selected, the interface transitions into an intentional split-theme layout—pairing a dramatic, stage-lit promotional header with a clean, light-mode section detailing venue info, tour schedules, and an artist photo grid. The booking journey then funnels into a focused two-column checkout view that positions the ticket summary directly alongside a streamlined card payment form, keeping the user grounded without unnecessary multi-step friction.',
     outcome:
-      'A rhythm-driven entertainment platform that eliminates booking anxiety and celebrates fandom. Clear step-by-step progress, transparent pricing, and instant ticket pass wallet generation create an effortless customer journey.',
+      'Melody turns ticket purchasing from a stressful digital errand into an exhilarating prologue to the live concert. The journey wraps up with a high-impact "Thank You For Your Purchase!!" confirmation screen and an authentic "About" section backdropped by immersive concert-crowd photography. By balancing moody festival energy with disciplined information architecture, the concept proves that high-voltage rock aesthetics and intuitive UX conversion can harmoniously amplify each other.',
     whatWeDid: [
-      'Designed complete user flow from tour discovery to ticket checkout.',
-      'Developed interactive visual seat selection and confirmation modals.',
-      'Created bold promotional campaign banners and chromatic visual identity.',
-      'Formatted responsive mobile and desktop breakpoint wireframes.',
+      'Mapped a comprehensive end-to-end desktop user journey from show discovery to purchase confirmation.',
+      'Designed an atmospheric dark-mode hero experience with high-contrast rock act and concert poster cards.',
+      'Engineered a split-theme event detail layout combining dark stage visuals with an airy, light-mode artist grid.',
+      'Streamlined the checkout funnel into a focused two-column architecture pairing order summary and card payment.',
+      'Created celebratory confirmation screens and brand storytelling backed by live concert photography.',
+      'Developed a cohesive visual presentation system featuring vibrant periwinkle staging and floating 3D spheres.',
     ],
   },
 }

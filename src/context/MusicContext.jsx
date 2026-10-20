@@ -26,7 +26,7 @@ export const TRACKS = [
     cover: '/noble_cover.jpg',
     appleMusicEmbedUrl: 'https://embed.music.apple.com/us/album/noble/1878172174?i=1878172181',
     appleMusicUrl: 'https://music.apple.com/us/album/noble/1878172174?i=1878172181',
-    duration: 186,
+    duration: 45, // Spotlight duration: plays for ~40-45s before transitioning back to Sunflower
   },
 ]
 
@@ -60,6 +60,11 @@ export function MusicProvider({ children }) {
   const fadeRafRef = useRef(null)
   const cleanupGestureListenersRef = useRef(null)
 
+  // Noble auto-transition tracking
+  const nobleAutoTransitionedRef = useRef(false)
+  const nobleAutoFadingRef = useRef(false)
+  const aboutTriggeredForCurrentVisitRef = useRef(false)
+
   // Keep references in sync with state
   useEffect(() => {
     currentTrackIndexRef.current = currentTrackIndex
@@ -78,8 +83,8 @@ export function MusicProvider({ children }) {
   }, [isMuted])
 
   // Crossfade between Sunflower (index 0) and Noble (index 1)
-  // When leaving About Me, Sunflower resumes seamlessly from the exact timestamp where it faded out
-  const crossfadeToTrack = useCallback((targetIndex) => {
+  // When switching back to Sunflower, Sunflower resumes seamlessly from the exact timestamp where it faded out
+  const crossfadeToTrack = useCallback((targetIndex, customFadeDuration = 1100) => {
     if (targetIndex === currentTrackIndexRef.current) return
 
     const fromTrack = currentTrackIndexRef.current
@@ -93,9 +98,16 @@ export function MusicProvider({ children }) {
 
     if (!fromAudio || !toAudio) return
 
+    // If starting Noble, reset to beginning (0:00) so the 40-45s experience starts fresh
+    if (toTrack === 1) {
+      toAudio.currentTime = 0
+      nobleAutoTransitionedRef.current = false
+      nobleAutoFadingRef.current = false
+    }
+
     // Immediately sync current time and duration to the active track
     setCurrentTime(toAudio.currentTime || 0)
-    setDuration(toAudio.duration || TRACKS[toTrack].duration)
+    setDuration(toTrack === 1 ? 45 : (toAudio.duration || TRACKS[toTrack].duration))
 
     // CRITICAL: If user explicitly paused music or player is not playing, STAY PAUSED!
     // Never auto-play on scroll if the user clicked pause!
@@ -137,7 +149,7 @@ export function MusicProvider({ children }) {
         })
     }
 
-    const fadeDuration = 1100 // 1.1s smooth musical crossfade
+    const fadeDuration = customFadeDuration
     const startTime = performance.now()
 
     const step = (now) => {
@@ -146,6 +158,7 @@ export function MusicProvider({ children }) {
         fromAudio.pause()
         toAudio.pause()
         fadeRafRef.current = null
+        nobleAutoFadingRef.current = false
         return
       }
 
@@ -172,15 +185,17 @@ export function MusicProvider({ children }) {
         // Crucial: fromAudio.currentTime is PRESERVED so Sunflower resumes from this exact second later!
         toAudio.volume = targetVol
         fadeRafRef.current = null
+        nobleAutoFadingRef.current = false
       }
     }
 
     fadeRafRef.current = requestAnimationFrame(step)
   }, [])
 
-  // Auto-switch track between Sunflower and NOBLE on scroll:
-  // - While scrolling to the About Me page: Sunflower fades out, Noble fades in.
-  // - After scrolling out of About Me: Noble fades out, Sunflower fades in FROM WHERE IT FADED OUT EARLIER!
+  // Auto-switch track to NOBLE on scroll into About Me:
+  // - When scrolling to the About Me section: Sunflower fades out, Noble starts and continues playing for ~40-45s.
+  // - While Noble is playing its 40-45s spotlight, it is NOT interrupted if the user scrolls away!
+  // - After ~40-45s, Noble smoothly crossfades back to Sunflower (from where Sunflower left off).
   useEffect(() => {
     let scrollRaf = 0
 
@@ -189,11 +204,9 @@ export function MusicProvider({ children }) {
 
       const aboutEl = document.getElementById('about')
 
-      // If About section doesn't exist on page (e.g. /contact), default to Sunflower
+      // If About section doesn't exist on page, reset visit flag
       if (!aboutEl) {
-        if (currentTrackIndexRef.current === 1) {
-          crossfadeToTrack(0)
-        }
+        aboutTriggeredForCurrentVisitRef.current = false
         return
       }
 
@@ -205,12 +218,17 @@ export function MusicProvider({ children }) {
       // - Bottom has not scrolled past (rect.bottom >= winHeight * 0.25)
       const inAbout = rect.top <= winHeight * 0.5 && rect.bottom >= winHeight * 0.25
 
-      if (inAbout && currentTrackIndexRef.current !== 1) {
-        // Entering About Me -> fade out Sunflower, fade in Noble!
-        crossfadeToTrack(1)
-      } else if (!inAbout && currentTrackIndexRef.current === 1) {
-        // Scrolling out of About Me -> fade out Noble, fade in Sunflower from where it faded out!
-        crossfadeToTrack(0)
+      if (inAbout) {
+        // Trigger Noble once per visit to About Me
+        if (!aboutTriggeredForCurrentVisitRef.current && currentTrackIndexRef.current !== 1) {
+          aboutTriggeredForCurrentVisitRef.current = true
+          crossfadeToTrack(1)
+        }
+      } else {
+        // User scrolled away from About Me: reset flag so next visit can trigger again.
+        // DO NOT prematurely interrupt Noble! Noble will continue playing its 40-45s duration
+        // and then smoothly fade back to Sunflower automatically.
+        aboutTriggeredForCurrentVisitRef.current = false
       }
     }
 
@@ -417,6 +435,11 @@ export function MusicProvider({ children }) {
     activeAudio.currentTime = 0
     setCurrentTime(0)
 
+    if (currentTrackIndexRef.current === 1) {
+      nobleAutoTransitionedRef.current = false
+      nobleAutoFadingRef.current = false
+    }
+
     // If user has paused, rewind to 0:00 but KEEP IT PAUSED!
     if (userPausedRef.current || !isPlayingRef.current) {
       activeAudio.pause()
@@ -445,6 +468,10 @@ export function MusicProvider({ children }) {
     if (activeAudio && activeAudio.currentTime > 3) {
       activeAudio.currentTime = 0
       setCurrentTime(0)
+      if (currentTrackIndexRef.current === 1) {
+        nobleAutoTransitionedRef.current = false
+        nobleAutoFadingRef.current = false
+      }
       return
     }
     const prevIndex = (currentTrackIndexRef.current - 1 + TRACKS.length) % TRACKS.length
@@ -471,13 +498,27 @@ export function MusicProvider({ children }) {
 
   const handleNobleTimeUpdate = () => {
     if (currentTrackIndexRef.current === 1 && nobleAudioRef.current) {
-      setCurrentTime(nobleAudioRef.current.currentTime)
+      const cur = nobleAudioRef.current.currentTime
+      setCurrentTime(cur)
+
+      // When Noble plays for ~40-45 seconds (initiating fade at 42s), smoothly crossfade back to Sunflower!
+      if (
+        cur >= 42.0 &&
+        !nobleAutoTransitionedRef.current &&
+        !nobleAutoFadingRef.current &&
+        isPlayingRef.current &&
+        !userPausedRef.current
+      ) {
+        nobleAutoTransitionedRef.current = true
+        nobleAutoFadingRef.current = true
+        crossfadeToTrack(0, 1800) // 1.8s smooth musical crossfade
+      }
     }
   }
 
   const handleNobleLoadedMetadata = () => {
     if (currentTrackIndexRef.current === 1 && nobleAudioRef.current) {
-      setDuration(nobleAudioRef.current.duration || TRACKS[1].duration)
+      setDuration(45)
     }
   }
 
@@ -519,9 +560,13 @@ export function MusicProvider({ children }) {
         src={TRACKS[1].src}
         preload="none"
         playsInline
-        loop
         onTimeUpdate={handleNobleTimeUpdate}
         onLoadedMetadata={handleNobleLoadedMetadata}
+        onEnded={() => {
+          if (currentTrackIndexRef.current === 1) {
+            crossfadeToTrack(0, 1800)
+          }
+        }}
       />
 
       {/* Floating Gentle Prompt if Browser Blocks Autoplay on Refresh (Hidden if user explicitly paused) */}
