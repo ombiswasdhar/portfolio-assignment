@@ -21,16 +21,18 @@ const PROJECT_STORIES = {
   },
   'business-cards': {
     challenge:
-      'Business cards often fall into rigid corporate conventions or over-stylized clutter. The challenge was to create a distinct personal and freelance brand identity for Oni Studios that bridges anime/cyberpunk culture with refined editorial print production, ensuring strict print standard compliance while commanding attention during creative agency networking.',
+      'Personal branding collateral often risks falling into two extremes: either generic corporate monotony or illegible, over-stylized clutter that fails in physical print production. The challenge was to develop "ONI / OM"—a versatile personal identity system that captures a love for Japanese folklore, anime aesthetics, and modern typography across three radically different creative directions, while adhering to strict dimensional and print-finish standards.',
     approach:
-      'We conducted brand benchmarking across global design agencies, then paired a bespoke illustrated anime mascot avatar with a bold cosmic lilac and deep violet color system. Multiple typographic systems and card stock finishes were iterated—incorporating diagonal layout dynamics, tactile foil deboss specifications, and high-contrast scannable QR integration.',
+      'The visual development began with traditional pencil sketches on paper, exploring Oni demon mask motifs, monogram geometry, and card layout compositions. From this foundation, three contrasting directions were engineered: Concept 1 (Split-Mask Illustration) sets a horizontal half-face Oni portrait over swirled cosmic marbling and bold magenta staging with a high-contrast four-color palette; Concept 2 (Minimalist Monogram) embraces two-tone monochrome with a speckled black texture, oversized interlocking monogram, and spacious contact typography; and Concept 3 (Vertical Character Cutout) blends an anime character portrait in pastel lilac with geometric color bars, monogram, and corner QR code. The journey concluded with floating, angled 3D perspective mockups demonstrating physical print translation.',
     outcome:
-      'A memorable, striking identity system that balances playful anime flair with sophisticated print craftsmanship. The final business card iterations convey creative confidence, commanding attention in any studio, gallery, or portfolio review.',
+      'A multi-faceted brand identity showcase that demonstrates creative range—proving how a single personal brand can seamlessly flex between high-voltage character illustration and understated editorial minimalism. The 3D physical mockups bridge digital art and real-world print craftsmanship, resulting in a memorable networking artifact that leaves an indelible creative impression.',
     whatWeDid: [
-      'Developed custom anime mascot avatar and cyberpunk color palette.',
-      'Designed multiple card layouts with diagonal dynamic grid systems.',
-      'Integrated scannable vector QR codes and custom typography hierarchy.',
-      'Prepared print-ready production assets, bleeds, and tactile finish specs.',
+      'Explored traditional pencil ideation and rough paper sketches for Oni motifs and monogram layouts.',
+      'Illustrated Concept 1: horizontal split-face Oni mask with swirled cosmic marbling on magenta.',
+      'Designed Concept 2: minimalist monochrome layout with speckled paper texture and oversized monogram.',
+      'Engineered Concept 3: pastel lilac vertical card with anime character cutout, color bars, and QR code.',
+      'Built print-ready vector production assets with accurate bleed, trim, and tactile finish specifications.',
+      'Rendered floating 3D perspective mockups to showcase physical card weight and tactile presence.',
     ],
   },
   aureaus: {
