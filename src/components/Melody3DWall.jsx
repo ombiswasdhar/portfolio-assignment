@@ -26,8 +26,8 @@ function MelodyCard({ item }) {
         <img
           src={item.img}
           alt={item.title}
-          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/card:scale-105"
-          loading="lazy"
+          className="w-full h-full object-cover object-top select-none pointer-events-none transition-transform duration-500 group-hover/card:scale-105"
+          loading="eager"
           decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
@@ -46,17 +46,17 @@ function MelodyCard({ item }) {
 
 export default function Melody3DWall({ className = '', isPaused = false }) {
   const containerRef = React.useRef(null)
-  const [isInView, setIsInView] = React.useState(false)
+  const [isInView, setIsInView] = React.useState(true)
 
   React.useEffect(() => {
     const el = containerRef.current
-    if (!el) return
+    if (!el || typeof IntersectionObserver === 'undefined') return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting)
       },
-      { rootMargin: '80px' }
+      { rootMargin: '250px' }
     )
 
     observer.observe(el)
@@ -91,8 +91,8 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
         <Marquee
           vertical
           pauseOnHover
-          repeat={2}
-          className={`[--duration:24s] [--gap:0.9rem] ${shouldPause ? '[&_[data-slot]]:[animation-play-state:paused]' : ''}`}
+          repeat={4}
+          className={`[--duration:24s] [--gap:0.9rem] ${shouldPause ? '[&_.animate-marquee-vertical]:[animation-play-state:paused]' : ''}`}
         >
           {col1.map((item) => (
             <MelodyCard key={item.id} item={item} />
@@ -104,8 +104,8 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
           vertical
           pauseOnHover
           reverse
-          repeat={2}
-          className={`[--duration:20s] [--gap:0.9rem] ${shouldPause ? '[&_[data-slot]]:[animation-play-state:paused]' : ''}`}
+          repeat={4}
+          className={`[--duration:20s] [--gap:0.9rem] ${shouldPause ? '[&_.animate-marquee-vertical]:[animation-play-state:paused]' : ''}`}
         >
           {col2.map((item) => (
             <MelodyCard key={item.id} item={item} />
