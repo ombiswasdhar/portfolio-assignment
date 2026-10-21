@@ -76,6 +76,7 @@ const projectsData = [
     highlights:
       'Seamlessly integrated tactile 3D floating geometries with monochromatic high-contrast audio hardware presentation for modern audiophiles.',
     tools: ['Blender', 'Figma', 'Photoshop'],
+    behanceUrl: 'https://www.behance.net/gallery/257300003/Aureaus',
   },
   {
     id: 'melody',

@@ -40,16 +40,18 @@ const PROJECT_STORIES = {
   },
   aureaus: {
     challenge:
-      'High-end audiophile headphones are often marketed with dry technical spec sheets or generic corporate e-commerce grids. Aureus needed an editorial lookbook and telemetry UX that conveys acoustic luxury, acoustic science, and tactile hardware presence simultaneously, making complex acoustic metrics accessible and seductive.',
+      'High-end audiophile audio products often suffer from fragmented digital experiences: dry technical spec sheets fail to evoke luxury, while generic corporate e-commerce grids fail to convey acoustic science and tactile hardware craftsmanship. The challenge for Aureus was to create an editorial design system, immersive 3D hardware lookbook, and telemetry dashboard that make complex acoustic engineering accessible, elegant, and seductive.',
     approach:
-      'We paired high-fidelity 3D Blender hardware model lighting and monochromatic staging with a magazine-style editorial design system. Floating geometric props in 3D space create depth, while structured telemetry dashboards, frequency response curves, and driver breakdown diagrams deliver authoritative data without overwhelming the consumer.',
+      'We engineered a comprehensive end-to-end UX case study published on Behance, combining user research, persona profiling, and market positioning with high-fidelity 3D hardware modeling in Blender. Monochromatic staging, bespoke studio lighting, and tactile floating geometric props establish an editorial magazine aesthetic. The digital experience integrates intuitive frequency response curves, driver breakdown diagrams, and real-time telemetry metrics—funneling seamlessly into a minimal, distraction-free cart and checkout flow.',
     outcome:
-      'Aureus sets a new standard for luxury audio UX—merging high-fashion editorial aesthetics with surgical acoustic telemetry. The frictionless cart and checkout funnel ensures seamless conversion from lookbook discovery to ownership.',
+      'Aureus redefines high-end acoustic UX on Behance, bridging the precision of audio engineering with the refined luxury of editorial fashion publishing. The frictionless checkout funnel and clear telemetry diagnostics elevate user confidence, driving conversion from lookbook discovery to audio ownership.',
     whatWeDid: [
-      'Modeled and staged 3D luxury headphones with custom lighting in Blender.',
-      'Designed editorial audio lookbook with high-contrast typography hierarchy.',
-      'Architected telemetry dashboard and driver specification breakdown screens.',
-      'Streamlined the end-to-end checkout funnel and cart interaction flow.',
+      'Engineered complete Behance UX case study presentation deck and acoustic design system.',
+      'Modeled and staged 3D luxury headphones with custom studio lighting and reflections in Blender.',
+      'Conducted user research, audiophile persona profiling, and competitive market landscape analysis.',
+      'Crafted an editorial lookbook featuring high-contrast typographic hierarchy and magazine layouts.',
+      'Architected acoustic telemetry dashboards, frequency response curves, and driver spec breakdowns.',
+      'Designed a streamlined dark-mode e-commerce experience with frictionless cart and checkout.',
     ],
   },
   melody: {
@@ -183,7 +185,7 @@ export default function ProjectCaseStudyModal({
 
   // TRIONN grid arrangement: Full width (col-span-2) for sequential case study boards, or staggered for photo sets
   const getItemSpan = (index) => {
-    if (project.id === 'playstaples') return 'col-span-2'
+    if (project.id === 'playstaples' || project.id === 'aureaus') return 'col-span-2'
     if (index === 0 || index === 1) return 'col-span-2'
     const offset = index - 2
     const pattern = offset % 3
@@ -405,20 +407,20 @@ export default function ProjectCaseStudyModal({
           {/* ============================================================= */}
           <div
             className={`col-span-12 lg:col-span-7 xl:col-span-8 pt-0 lg:pt-2 ${
-              project.id === 'playstaples'
+              project.id === 'playstaples' || project.id === 'aureaus'
                 ? 'flex flex-col gap-0 rounded-2xl overflow-hidden border border-black/10 shadow-[0_4px_25px_rgba(0,0,0,0.08)] bg-white'
                 : 'grid grid-cols-2 gap-5 sm:gap-6'
             }`}
           >
             {images.map((imgSrc, idx) => {
               const spanClass = getItemSpan(idx)
-              const isPlaystaples = project.id === 'playstaples'
+              const isSeamless = project.id === 'playstaples' || project.id === 'aureaus'
 
               return (
                 <div
                   key={idx}
                   className={`${
-                    isPlaystaples
+                    isSeamless
                       ? 'w-full relative cursor-pointer block leading-none overflow-hidden m-0 p-0 border-0'
                       : `${spanClass} relative rounded-2xl overflow-hidden bg-white border border-black/10 shadow-[0_4px_20px_rgba(0,0,0,0.05)] cursor-pointer`
                   }`}
@@ -432,7 +434,7 @@ export default function ProjectCaseStudyModal({
                   />
 
                   {/* Corner visual index for standard card layouts */}
-                  {!isPlaystaples && (
+                  {!isSeamless && (
                     <div className="absolute top-3 left-3 pointer-events-none">
                       <span className="text-[11px] font-fredoka font-semibold text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-xs backdrop-blur-md">
                         #{String(idx + 1).padStart(2, '0')}

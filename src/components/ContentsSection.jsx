@@ -41,6 +41,10 @@ const aureusCarouselCards = [
   { id: 'aureus-5', url: uiCart, title: 'Streamlined Checkout Funnel' },
 ]
 
+// Aureus full Behance UX Case Study presentation board
+// https://www.behance.net/gallery/257300003/Aureaus
+import aureusCaseFullImg from '../assets/work/aureus/case-study/aureus_case_full.webp'
+
 // PlayStaples full Behance UX Case Study presentation boards
 // https://www.behance.net/gallery/249987899/Play-Staples-Ux-Case-Study
 import psCase01Img from '../assets/playstaples/case-study/playstaples_case_01.webp'
@@ -287,19 +291,11 @@ export const projectsData = [
       'Aureus is your go-to site for discovering top quality headphones made by the best brands for audio in the market. We focus on bringing you a carefully chosen range of luxurious, high performance headphones that combine superior sound with sleek design.',
     thumbnail: projectAureausImg,
     previewPhotos: [
-      projectAureausImg,
-      uiDiscover,
-      uiProducts,
-      uiDetail,
-      uiCart,
-      aureusIdeationImg,
-      aureusUserStudyImg,
-      aureusPersonaImg,
-      aureusPainPointsImg,
-      aureusAdvantagesImg,
+      aureusCaseFullImg,
     ],
-    tags: ['3D Modeling', 'Blender', 'Editorial UI', 'Telemetry', 'Hardware Lookbook'],
+    tags: ['UX Case Study', '3D Modeling', 'Blender', 'Editorial UI', 'Telemetry', 'Hardware Lookbook'],
     deliverables: [
+      'Full Behance UX case study presentation: user research to high-fidelity UI',
       '3D headphone model rendering & lighting setups in Blender',
       'Editorial audio lookbook & magazine spread typography',
       'Headphone review breakdown & telemetry dashboard',
@@ -308,7 +304,8 @@ export const projectsData = [
     ],
     highlights:
       'Seamlessly integrated tactile 3D floating geometries with monochromatic high-contrast audio hardware presentation for modern audiophiles.',
-    tools: ['Blender', 'Figma', 'Photoshop'],
+    tools: ['Blender', 'Figma', 'Photoshop', 'UX Research'],
+    behanceUrl: 'https://www.behance.net/gallery/257300003/Aureaus',
   },
   {
     id: 'melody',
@@ -425,9 +422,9 @@ const getProjectGallery = (project) => {
   if (project.id === 'aureaus') {
     return {
       hero: {
-        img: projectAureausImg,
+        img: aureusCaseFullImg,
         title: 'Aureus Audio // 3D Hardware Telemetry & Audio Lookbook',
-        caption: 'Blender 3D Modeling & Editorial Magazine Typography Spread',
+        caption: 'Featured Behance UX Case Study: Blender 3D Modeling & Editorial Magazine Typography',
       },
       secondary: [
         {
