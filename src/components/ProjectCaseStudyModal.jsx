@@ -402,29 +402,42 @@ export default function ProjectCaseStudyModal({
           {/* ============================================================= */}
           {/* RIGHT COLUMN: SCROLLABLE MEDIA GALLERY (TRIONN STYLE)         */}
           {/* ============================================================= */}
-          <div className="col-span-12 lg:col-span-7 xl:col-span-8 pt-0 lg:pt-2 grid grid-cols-2 gap-5 sm:gap-6">
+          <div
+            className={`col-span-12 lg:col-span-7 xl:col-span-8 pt-0 lg:pt-2 ${
+              project.id === 'playstaples'
+                ? 'flex flex-col gap-0 rounded-2xl overflow-hidden border border-black/10 shadow-[0_4px_25px_rgba(0,0,0,0.08)] bg-white'
+                : 'grid grid-cols-2 gap-5 sm:gap-6'
+            }`}
+          >
             {images.map((imgSrc, idx) => {
               const spanClass = getItemSpan(idx)
+              const isPlaystaples = project.id === 'playstaples'
 
               return (
                 <div
                   key={idx}
-                  className={`${spanClass} relative rounded-2xl overflow-hidden bg-white border border-black/10 shadow-[0_4px_20px_rgba(0,0,0,0.05)] cursor-pointer`}
+                  className={`${
+                    isPlaystaples
+                      ? 'w-full relative cursor-pointer block leading-none overflow-hidden m-0 p-0 border-0'
+                      : `${spanClass} relative rounded-2xl overflow-hidden bg-white border border-black/10 shadow-[0_4px_20px_rgba(0,0,0,0.05)] cursor-pointer`
+                  }`}
                   onClick={() => setActiveZoomImage(imgSrc)}
                 >
                   <img
                     src={imgSrc}
                     alt={`${project.title} showcase visual ${idx + 1}`}
                     loading={idx <= 2 ? 'eager' : 'lazy'}
-                    className="w-full h-auto object-cover block"
+                    className="w-full h-auto object-cover block m-0 p-0"
                   />
 
-                  {/* Corner visual index */}
-                  <div className="absolute top-3 left-3 pointer-events-none">
-                    <span className="text-[11px] font-fredoka font-semibold text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-xs backdrop-blur-md">
-                      #{String(idx + 1).padStart(2, '0')}
-                    </span>
-                  </div>
+                  {/* Corner visual index for standard card layouts */}
+                  {!isPlaystaples && (
+                    <div className="absolute top-3 left-3 pointer-events-none">
+                      <span className="text-[11px] font-fredoka font-semibold text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-xs backdrop-blur-md">
+                        #{String(idx + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+                  )}
                 </div>
               )
             })}
