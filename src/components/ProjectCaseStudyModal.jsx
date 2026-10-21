@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Maximize2, Minimize2, ZoomIn, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
+import { X, Maximize2, Minimize2, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
 
 // TRIONN-style storytelling tab details for each project
@@ -67,67 +67,32 @@ const PROJECT_STORIES = {
   },
 }
 
-// Project-specific color themes and per-detail-image responsive background palettes
+// Project-specific color themes matching the project detail image & branding
 const PROJECT_THEMES = {
   'business-cards': {
     baseBg: '#F8F4FA',
     defaultGlow1: '#D8B4E2', // Soft pastel lilac
     defaultGlow2: '#FF2E93', // Split-mask hot magenta
-    imageColors: [
-      { glow1: '#FF2E93', glow2: '#C99BD8', baseBg: '#F9F2FA' }, // Full assignment board
-      { glow1: '#C99BD8', glow2: '#8B7DE8', baseBg: '#F7F3FB' }, // Concept 3 Lilac
-      { glow1: '#FF2E93', glow2: '#9333EA', baseBg: '#FAF0F6' }, // Concept 1 Magenta
-      { glow1: '#E11D48', glow2: '#7C3AED', baseBg: '#FBF0F5' }, // Anime character front
-      { glow1: '#71717A', glow2: '#A1A1AA', baseBg: '#F5F5F7' }, // Monochrome card back
-      { glow1: '#FF2E93', glow2: '#EC4899', baseBg: '#FAF0F6' }, // Concept 1 back
-    ],
   },
   'oni-studios': {
     baseBg: '#F8F4FA',
     defaultGlow1: '#D8B4E2',
     defaultGlow2: '#FF2E93',
-    imageColors: [
-      { glow1: '#FF2E93', glow2: '#C99BD8', baseBg: '#F9F2FA' },
-      { glow1: '#C99BD8', glow2: '#8B7DE8', baseBg: '#F7F3FB' },
-      { glow1: '#FF2E93', glow2: '#9333EA', baseBg: '#FAF0F6' },
-      { glow1: '#E11D48', glow2: '#7C3AED', baseBg: '#FBF0F5' },
-      { glow1: '#71717A', glow2: '#A1A1AA', baseBg: '#F5F5F7' },
-      { glow1: '#FF2E93', glow2: '#EC4899', baseBg: '#FAF0F6' },
-    ],
   },
   playstaples: {
     baseBg: '#F1F9F6',
     defaultGlow1: '#48C9A8', // Fresh mint
     defaultGlow2: '#FFB800', // Mumbai taxi yellow / amber
-    imageColors: [
-      { glow1: '#48C9A8', glow2: '#FFB800', baseBg: '#F0F9F5' }, // Kaali Peeli toy hero
-      { glow1: '#FFB800', glow2: '#FF6584', baseBg: '#FDF7EE' }, // Retail box & packaging
-      { glow1: '#F59E0B', glow2: '#FBBF24', baseBg: '#FCF7EC' }, // Archival Mumbai photo
-      { glow1: '#48C9A8', glow2: '#2DD4BF', baseBg: '#EFF9F5' }, // 3D wood prototype
-      { glow1: '#10B981', glow2: '#F59E0B', baseBg: '#F2FAF6' },
-      { glow1: '#F59E0B', glow2: '#E76F51', baseBg: '#FDF6EE' },
-    ],
   },
   aureaus: {
     baseBg: '#FAF5F0',
     defaultGlow1: '#F08264', // Coral peach
     defaultGlow2: '#EAB854', // Champagne gold
-    imageColors: [
-      { glow1: '#F08264', glow2: '#EAB854', baseBg: '#FAF4EF' }, // Hero 3D hardware
-      { glow1: '#F08264', glow2: '#3B82F6', baseBg: '#F9F5F3' }, // Lookbook spread
-      { glow1: '#64748B', glow2: '#EAB854', baseBg: '#F5F6F8' }, // Catalog grid
-      { glow1: '#14B8A6', glow2: '#F08264', baseBg: '#F2FAF7' }, // Drivers & specs telemetry
-      { glow1: '#EAB854', glow2: '#F08264', baseBg: '#FAF5EE' }, // Cart & checkout
-    ],
   },
   melody: {
     baseBg: '#F2F1FA',
     defaultGlow1: '#8B7DE8', // Periwinkle lavender
     defaultGlow2: '#FF6584', // Electric rock pink / coral
-    imageColors: [
-      { glow1: '#8B7DE8', glow2: '#FF6584', baseBg: '#F2F1FB' }, // Full desktop journey
-      { glow1: '#7C3AED', glow2: '#FF6584', baseBg: '#F4F0FA' }, // Split-theme event detail
-    ],
   },
 }
 
@@ -140,16 +105,9 @@ export default function ProjectCaseStudyModal({
   const [activeTab, setActiveTab] = useState('challenge') // 'challenge' | 'approach' | 'outcome' | 'whatWeDid'
   const [activeZoomImage, setActiveZoomImage] = useState(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [hoveredImageIdx, setHoveredImageIdx] = useState(null)
-  const [mousePos, setMousePos] = useState({ x: 600, y: 300 })
   const scrollContainerRef = useRef(null)
 
   useBodyScrollLock(true)
-
-  // Track cursor position for interactive dynamic aura spotlight across dotted canvas
-  const handleMouseMove = (e) => {
-    setMousePos({ x: e.clientX, y: e.clientY })
-  }
 
   // Track browser native fullscreen state
   useEffect(() => {
@@ -190,7 +148,6 @@ export default function ProjectCaseStudyModal({
   // Reset tab and scroll when active project changes
   useEffect(() => {
     setActiveTab('challenge')
-    setHoveredImageIdx(null)
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({ top: 0, behavior: 'instant' })
     }
@@ -200,18 +157,6 @@ export default function ProjectCaseStudyModal({
 
   const story = PROJECT_STORIES[project.id] || PROJECT_STORIES.playstaples
   const theme = PROJECT_THEMES[project.id] || PROJECT_THEMES.playstaples
-
-  // Determine active dynamic background colors (reacts to hovered detail image)
-  const hoveredColors =
-    hoveredImageIdx !== null && theme.imageColors && theme.imageColors[hoveredImageIdx]
-      ? theme.imageColors[hoveredImageIdx]
-      : null
-
-  const activeColors = hoveredColors || {
-    glow1: theme.defaultGlow1,
-    glow2: theme.defaultGlow2,
-    baseBg: theme.baseBg,
-  }
 
   // Calculate previous and next projects
   const currentIndex = allProjects.findIndex((p) => p.id === project.id)
@@ -245,28 +190,26 @@ export default function ProjectCaseStudyModal({
   return (
     <div
       ref={scrollContainerRef}
-      onMouseMove={handleMouseMove}
-      className="fixed inset-0 z-[100] w-full h-full text-neutral-900 flex flex-col overflow-y-auto overflow-x-hidden selection:bg-[#E84A4A] selection:text-white animate-fadeIn"
+      className="fixed inset-0 z-[100] w-full h-full text-neutral-900 flex flex-col overflow-y-auto overflow-x-hidden selection:bg-[#E84A4A] selection:text-white"
       style={{
-        backgroundColor: activeColors.baseBg || theme.baseBg,
-        transition: 'background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        backgroundColor: theme.baseBg,
+        backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.22) 1.25px, transparent 1.25px)',
+        backgroundSize: '28px 28px',
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'repeat',
       }}
       role="dialog"
       aria-modal="true"
     >
-      {/* SIGNATURE DOTTED GRID CANVAS (Matches Featured Works) */}
-      <div className="ca-dotted-grid-pattern fixed inset-0 pointer-events-none z-0 opacity-75" aria-hidden="true" />
-
-      {/* INTERACTIVE AMBIENT DYNAMIC AURA (Reacts to cursor & detail images) */}
+      {/* FIXED AMBIENT PROJECT AURA BACKDROP */}
       <div
-        className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-700 ease-out"
+        className="fixed inset-0 pointer-events-none -z-10"
         style={{
           background: `
-            radial-gradient(750px circle at ${mousePos.x}px ${mousePos.y}px, ${activeColors.glow1}22, transparent 70%),
-            radial-gradient(900px circle at 85% 15%, ${activeColors.glow2}18, transparent 65%),
-            radial-gradient(800px circle at 15% 85%, ${activeColors.glow1}14, transparent 65%)
+            radial-gradient(900px circle at 50% 20%, ${theme.defaultGlow1}20, transparent 70%),
+            radial-gradient(1000px circle at 85% 15%, ${theme.defaultGlow2}18, transparent 65%),
+            radial-gradient(900px circle at 15% 85%, ${theme.defaultGlow1}14, transparent 65%)
           `,
-          transition: 'background 0.5s ease',
         }}
         aria-hidden="true"
       />
@@ -276,9 +219,9 @@ export default function ProjectCaseStudyModal({
         <button
           onClick={onClose}
           type="button"
-          className="inline-flex items-center gap-2 text-xs font-ca-mono tracking-widest uppercase text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer group"
+          className="inline-flex items-center gap-2 text-xs font-ca-mono tracking-widest uppercase text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1 text-[#E84A4A]" />
+          <ArrowLeft className="w-4 h-4 text-[#E84A4A]" />
           <span>Back to work</span>
         </button>
 
@@ -296,7 +239,7 @@ export default function ProjectCaseStudyModal({
           <button
             onClick={onClose}
             type="button"
-            className="w-8 h-8 rounded-full bg-black/5 hover:bg-[#E84A4A] hover:text-white text-neutral-700 flex items-center justify-center transition-all cursor-pointer border border-black/10 shadow-xs"
+            className="w-8 h-8 rounded-full bg-black/5 hover:bg-[#E84A4A] hover:text-white text-neutral-700 flex items-center justify-center transition-colors cursor-pointer border border-black/10 shadow-xs"
             title="Close (Esc)"
             aria-label="Close case study"
           >
@@ -366,93 +309,47 @@ export default function ProjectCaseStudyModal({
                         key={tab.id}
                         type="button"
                         onClick={() => setActiveTab(tab.id)}
-                        className={`pb-1 text-xs sm:text-sm font-poppins tracking-wide transition-all cursor-pointer relative ${
+                        className={`pb-1 text-xs sm:text-sm font-poppins tracking-wide cursor-pointer relative ${
                           isActive
-                            ? 'text-neutral-950 font-bold'
-                            : 'text-neutral-500 hover:text-neutral-900'
+                            ? 'text-neutral-950 font-bold border-b-2 border-[#E84A4A]'
+                            : 'text-neutral-500 hover:text-neutral-900 border-b-2 border-transparent'
                         }`}
                       >
                         {tab.label}
-                        {isActive && (
-                          <motion.span
-                            layoutId="activeTabUnderline"
-                            className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#E84A4A]"
-                            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                          />
-                        )}
                       </button>
                     )
                   })}
                 </div>
 
-                {/* Tab Content Display */}
+                {/* Tab Content Display - completely steady with no layout jump or movement */}
                 <div className="min-h-[140px] text-xs sm:text-sm font-poppins text-neutral-700 leading-relaxed">
-                  <AnimatePresence mode="wait">
-                    {activeTab === 'challenge' && (
-                      <motion.p
-                        key="challenge"
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {story.challenge}
-                      </motion.p>
-                    )}
-                    {activeTab === 'approach' && (
-                      <motion.p
-                        key="approach"
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {story.approach}
-                      </motion.p>
-                    )}
-                    {activeTab === 'outcome' && (
-                      <motion.p
-                        key="outcome"
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {story.outcome}
-                      </motion.p>
-                    )}
-                    {activeTab === 'whatWeDid' && (
-                      <motion.ul
-                        key="whatWeDid"
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.2 }}
-                        className="space-y-2"
-                      >
-                        {story.whatWeDid.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#E84A4A] mt-1.5 shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </motion.ul>
-                    )}
-                  </AnimatePresence>
+                  {activeTab === 'challenge' && <p>{story.challenge}</p>}
+                  {activeTab === 'approach' && <p>{story.approach}</p>}
+                  {activeTab === 'outcome' && <p>{story.outcome}</p>}
+                  {activeTab === 'whatWeDid' && (
+                    <ul className="space-y-2">
+                      {story.whatWeDid.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#E84A4A] mt-1.5 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
 
-              {/* External Link (TRIONN Animated Button) */}
+              {/* External Link (TRIONN Button) */}
               {project.figmaUrl && (
                 <div className="mb-8">
                   <a
                     href={project.figmaUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 text-xs font-akira font-black uppercase tracking-wider text-neutral-950 border-b-2 border-neutral-950 pb-1 hover:text-[#E84A4A] hover:border-[#E84A4A] transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 text-xs font-akira font-black uppercase tracking-wider text-neutral-950 border-b-2 border-neutral-950 pb-1 hover:text-[#E84A4A] hover:border-[#E84A4A] transition-colors cursor-pointer"
                   >
                     <span>View on Figma</span>
-                    <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
               )}
@@ -463,10 +360,10 @@ export default function ProjectCaseStudyModal({
               <button
                 type="button"
                 onClick={handlePrevProject}
-                className="flex items-center gap-2 hover:text-neutral-950 transition-colors cursor-pointer group"
+                className="flex items-center gap-2 text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
                 title={`Previous: ${prevProject.title}`}
               >
-                <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1 text-[#E84A4A]" />
+                <ChevronLeft className="w-4 h-4 text-[#E84A4A]" />
                 <span className="font-semibold">Previous</span>
               </button>
 
@@ -477,11 +374,11 @@ export default function ProjectCaseStudyModal({
               <button
                 type="button"
                 onClick={handleNextProject}
-                className="flex items-center gap-2 hover:text-neutral-950 transition-colors cursor-pointer group ml-auto"
+                className="flex items-center gap-2 text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer ml-auto"
                 title={`Next: ${nextProject.title}`}
               >
                 <span className="font-semibold">Next</span>
-                <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-[#E84A4A]" />
+                <ChevronRight className="w-4 h-4 text-[#E84A4A]" />
               </button>
             </div>
           </div>
@@ -496,30 +393,20 @@ export default function ProjectCaseStudyModal({
               return (
                 <div
                   key={idx}
-                  className={`${spanClass} group relative rounded-2xl overflow-hidden bg-white/90 border border-black/10 hover:border-black/25 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)] cursor-zoom-in`}
-                  onMouseEnter={() => setHoveredImageIdx(idx)}
-                  onMouseLeave={() => setHoveredImageIdx(null)}
+                  className={`${spanClass} relative rounded-2xl overflow-hidden bg-white border border-black/10 shadow-[0_4px_20px_rgba(0,0,0,0.05)] cursor-pointer`}
                   onClick={() => setActiveZoomImage(imgSrc)}
                 >
                   <img
                     src={imgSrc}
                     alt={`${project.title} showcase visual ${idx + 1}`}
                     loading={idx <= 2 ? 'eager' : 'lazy'}
-                    className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-[1.015]"
+                    className="w-full h-auto object-cover block"
                   />
 
-                  {/* Corner ornament / visual index */}
-                  <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <span className="text-[10px] font-ca-mono text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-sm backdrop-blur-md">
+                  {/* Corner visual index */}
+                  <div className="absolute top-3 left-3 pointer-events-none">
+                    <span className="text-[10px] font-ca-mono text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-xs backdrop-blur-md">
                       #{String(idx + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-
-                  {/* Hover Zoom pill */}
-                  <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-950/90 text-white font-ca-mono text-[11px] shadow-xl backdrop-blur-md border border-white/20">
-                      <ZoomIn className="w-3 h-3 text-[#E84A4A]" />
-                      <span>Inspect</span>
                     </span>
                   </div>
                 </div>
