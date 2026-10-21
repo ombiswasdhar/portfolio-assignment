@@ -36,21 +36,19 @@ const aureusCarouselCards = [
   { id: 'aureus-5', url: uiCart, title: 'Streamlined Checkout Funnel' },
 ]
 
-// The 14 replacement PlayStaples images from Downloads/playstaples/New folder.
-import psCycle01Img from '../assets/playstaples/user-cycle/01.jpg'
-import psCycle01BombayImg from '../assets/playstaples/user-cycle/01_Bombay.jpg'
-import psCycle03Img from '../assets/playstaples/user-cycle/03.jpg'
-import psCycle129Img from '../assets/playstaples/user-cycle/129.jpg'
-import psCycle131Img from '../assets/playstaples/user-cycle/131.jpg'
-import psCycle132Img from '../assets/playstaples/user-cycle/132.jpg'
-import psCycle19Img from '../assets/playstaples/user-cycle/19.jpg'
-import psCycle22Img from '../assets/playstaples/user-cycle/22.jpg'
-import psCycle23Img from '../assets/playstaples/user-cycle/23.jpg'
-import psCycle35Img from '../assets/playstaples/user-cycle/35.jpg'
-import psCycleBd01Img from '../assets/playstaples/user-cycle/BD_01.jpg'
-import psCycleCorbett04Img from '../assets/playstaples/user-cycle/corbett 04.jpg'
-import psCyclePost1303Img from '../assets/playstaples/user-cycle/Post 13_03.jpg'
-import psCycleRetroRohtakImg from '../assets/playstaples/user-cycle/Retro Rohtak_PS.jpg'
+// PlayStaples full Behance UX Case Study presentation boards
+// https://www.behance.net/gallery/249987899/Play-Staples-Ux-Case-Study
+import psCase01Img from '../assets/playstaples/case-study/playstaples_case_01.webp'
+import psCase02Img from '../assets/playstaples/case-study/playstaples_case_02.webp'
+import psCase03Img from '../assets/playstaples/case-study/playstaples_case_03.webp'
+import psCase04Img from '../assets/playstaples/case-study/playstaples_case_04.webp'
+import psCase05Img from '../assets/playstaples/case-study/playstaples_case_05.webp'
+import psCase06Img from '../assets/playstaples/case-study/playstaples_case_06.webp'
+import psCase07Img from '../assets/playstaples/case-study/playstaples_case_07.webp'
+import psCase08Img from '../assets/playstaples/case-study/playstaples_case_08.webp'
+import psCase09Img from '../assets/playstaples/case-study/playstaples_case_09.webp'
+import psCase10Img from '../assets/playstaples/case-study/playstaples_case_10.webp'
+import psCase11Img from '../assets/playstaples/case-study/playstaples_case_11.webp'
 
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -188,42 +186,39 @@ export const projectsData = [
     accentColor: '#FF6584',
     date: 'FEB 20, 2026',
     title: 'PlayStaples',
-    subtitle: 'Kaali Peeli Toy Design & Brand Experience',
-    category: 'Toy Design & Branding',
-    bulletSummary: 'Kaali Peeli Toy Design • 3D CAD Modeling • Retail Packaging',
+    subtitle: 'E-Commerce UX Case Study & Handcrafted Collectible Brand Experience',
+    category: 'UX Case Study & Toy Design',
+    bulletSummary: 'Behance Case Study • Heuristic Evaluation • IA & Design System • 3D Toy Craft',
     description:
-      'PlayStaples celebrates iconic Indian street culture through tactile collectible design. "Kaali Peeli" reimagines the legendary Mumbai Premier Padmini taxi as a handcrafted wooden toy—celebrating nostalgia "for the ones who carved dreams on the trunk." Developed with 3D product visualization, custom taxi livery, physical packaging, and brand storytelling.',
+      'PlayStaples is an end-to-end e-commerce UX case study and collectible brand experience celebrating iconic Indian street culture. Grounded in Jakob Nielsen\'s usability heuristics, user research, and wireframe prototyping, the project overhauls the digital retail journey—from discovery and 360° product exploration to frictionless checkout—while spotlighting "Kaali Peeli", a handcrafted wooden Premier Padmini taxi collectible.',
     thumbnail: projectPlaystaplesImg,
     hoverImage: kaaliPeeliHoverImg,
     previewPhotos: [
-      projectPlaystaplesImg,
-      kaaliPeeliHoverImg,
-      psCycle01BombayImg,
-      psCycleBd01Img,
-      psCycle01Img,
-      psCycle03Img,
-      psCycle19Img,
-      psCycle22Img,
-      psCycle23Img,
-      psCycle35Img,
-      psCycleRetroRohtakImg,
-      psCycle129Img,
-      psCycle131Img,
-      psCycle132Img,
-      psCycleCorbett04Img,
-      psCyclePost1303Img,
+      psCase01Img,
+      psCase02Img,
+      psCase03Img,
+      psCase04Img,
+      psCase05Img,
+      psCase06Img,
+      psCase07Img,
+      psCase08Img,
+      psCase09Img,
+      psCase10Img,
+      psCase11Img,
     ],
-    tags: ['Toy Design', '3D Modeling', 'Branding', 'Packaging', 'Figma', 'Collectibles'],
+    tags: ['UX Case Study', 'Heuristic Evaluation', 'UI Design System', 'E-Commerce', '3D Modeling', 'Figma'],
     deliverables: [
-      'Handcrafted wooden toy conceptualization & 3D CAD modeling',
-      'Authentic "Kaali Peeli" Mumbai taxi colorway & livery details',
-      'Custom rooftop luggage rack & tactile wooden wheel proportions',
-      'Complete retail packaging design, hangtags & typography',
-      'Interactive 3D renders & lifestyle product scene staging',
+      'Heuristic evaluation across 10 usability principles & user interview synthesis',
+      'Information architecture overhaul, sitemap & low-to-high fidelity wireframes',
+      'Design system: typography hierarchy, color tokens & reusable UI component library',
+      'High-fidelity e-commerce experience: homepage, catalog filters, 360° PDP & drawer cart',
+      'Full end-to-end checkout funnel redesign reducing drop-off friction',
+      'Physical "Kaali Peeli" Premier Padmini wooden collectible 3D CAD modeling & packaging',
     ],
     highlights:
-      'Transformed an ubiquitous Mumbai cultural emblem into a sleek, nostalgic collectible wooden toy—blending warm organic wood grain with pop-art industrial styling and playful brand identity.',
-    tools: ['Figma', '3D Modeling', 'Photoshop', 'Packaging Design'],
+      'Complete ground-up UX overhaul published on Behance, merging heuristic research and intuitive digital e-commerce with nostalgic Indian toy craftsmanship.',
+    tools: ['Figma', 'UX Research', 'Design System', '3D CAD', 'Photoshop'],
+    behanceUrl: 'https://www.behance.net/gallery/249987899/Play-Staples-Ux-Case-Study',
     figmaUrl:
       'https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0',
   },
@@ -345,30 +340,30 @@ const getProjectGallery = (project) => {
   if (project.id === 'playstaples') {
     return {
       hero: {
-        img: projectPlaystaplesImg,
-        title: 'PlayStaples // Kaali Peeli Premier Padmini Collectible Wooden Toy',
-        caption: '3D CAD Product Model & Authentic Mumbai Taxi Livery',
+        img: psCase01Img,
+        title: 'PlayStaples // UX Case Study & Collectible E-Commerce',
+        caption: 'Behance Featured UX Case Study: Research, IA, Design System & 3D Craft',
       },
       secondary: [
         {
-          img: kaaliPeeliHoverImg,
-          title: '02 // Lifestyle Packaging & Staging',
-          subtitle: 'Collectible Retail Box Artwork & Scene Staging',
+          img: psCase02Img,
+          title: '02 // Research & Problem Discovery',
+          subtitle: 'Usability Heuristics, Pain Points & User Persona Mapping',
         },
         {
-          img: psCycle01BombayImg,
-          title: '03 // Cultural Heritage Study',
-          subtitle: 'Premier Padmini Archive & Iconic Street Nostalgia',
+          img: psCase05Img,
+          title: '03 // UI Design System & Component Library',
+          subtitle: 'Consistent Typography, Color Tokens & Atomic Components',
         },
         {
-          img: psCycleBd01Img,
-          title: '04 // Tactile Wooden Toy Prototype',
-          subtitle: 'Warm Grain Hardwood & Precision Proportions',
+          img: psCase06Img,
+          title: '04 // High-Fidelity UI Screens & Catalog Flow',
+          subtitle: 'Curated Indian Collectibles Discovery & Sticky Navigation',
         },
         {
-          img: psCycleRetroRohtakImg,
-          title: '05 // Retail Livery & Typography',
-          subtitle: 'Authentic Fare Meter Details & Graphic Treatment',
+          img: psCase09Img,
+          title: '05 // Kaali Peeli Wooden Toy & Packaging Design',
+          subtitle: 'Handcrafted Mumbai Premier Padmini 3D CAD & Retail Box',
         },
       ],
     }
@@ -698,6 +693,14 @@ export default function ContentsSection() {
                       back={card.flipImages[1]}
                       alt={card.title}
                       className="transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : card.id === 'playstaples' ? (
+                    <img 
+                      src={card.thumbnail} 
+                      alt={card.title} 
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                     />
                   ) : card.previewPhotos && card.previewPhotos.length > 1 ? (
                     <CyclingProjectImage 

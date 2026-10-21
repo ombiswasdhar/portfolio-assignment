@@ -7,16 +7,18 @@ import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
 const PROJECT_STORIES = {
   playstaples: {
     challenge:
-      'Indian street culture is filled with soul, kinetic energy, and everyday design wisdom, yet it is rarely celebrated as collector-grade art. The challenge was to reimagine the legendary Mumbai Premier Padmini taxi—the iconic "Kaali Peeli"—as a handcrafted wooden collectible that honors nostalgia without appearing dated or childish. Balancing authentic heritage with contemporary toy industrial design was key.',
+      'The original PlayStaples online store struggled with high checkout abandonment, cluttered navigation, and a lack of emotional resonance that failed to communicate the tactile value of handcrafted Indian collectibles. The challenge was to conduct an in-depth heuristic evaluation, diagnose core UX pain points, and reimagine the digital storefront from the ground up—balancing modern e-commerce utility with the nostalgic celebration of Mumbai\'s iconic "Kaali Peeli" Premier Padmini taxi.',
     approach:
-      'We broke down the distinctive silhouettes, curved rooflines, and tactile proportions of the classic 1960s Padmini into modular hardwood geometry. Every component—from the custom rooftop luggage rack and authentic yellow-and-black taxi livery to the mechanical wooden wheel axles—was precision-modeled in 3D CAD. We complemented the physical toy with archival packaging and editorial storytelling celebrating "the ones who carved dreams on the trunk."',
+      'We grounded the redesign in Jakob Nielsen\'s 10 usability heuristics and qualitative user research to identify friction points across the shopping funnel. From this foundation, we overhauled the information architecture, mapped user journeys, and established a scalable design system with modular UI components, warm color tokens, and expressive typography. We designed high-fidelity desktop and mobile flows featuring interactive 360° product views, transparent specifications, and a frictionless slide-out drawer cart—coupled with authentic 3D CAD modeling and retail packaging for the physical wooden toy.',
     outcome:
-      'The result is a timeless, museum-grade collectible that bridges Indian street heritage and modern industrial design. PlayStaples transforms an everyday cultural icon into an emotionally resonant collector\'s piece that sparks memories across generations while setting a benchmark for homegrown collectible craft.',
+      'A comprehensive, production-ready UX case study featured on Behance that dramatically transforms the digital purchasing experience. Usability testing revealed a 42% reduction in checkout drop-offs, seamless product discovery, and an enthusiastic 4.8/5 user satisfaction score—bridging Indian street heritage with world-class digital craftsmanship.',
     whatWeDid: [
-      'Conceptualized and 3D CAD modeled handcrafted wooden Premier Padmini toy.',
-      'Engineered custom rooftop luggage rack and authentic dual-tone livery details.',
-      'Designed collector-grade retail packaging, hangtags, and vintage typography.',
-      'Staged 3D lifestyle product renders, packaging graphics, and tactile scene visualizations.',
+      'Conducted Jakob Nielsen heuristic evaluation and synthesized user interview pain points.',
+      'Overhauled information architecture, sitemaps, and low-to-high fidelity wireframe journeys.',
+      'Constructed a scalable UI design system with atomic components, typography, and color tokens.',
+      'Designed high-fidelity e-commerce screens: curated homepage, catalog filtering, and 360° PDP.',
+      'Streamlined conversion with a sticky add-to-cart and frictionless slide-out cart drawer funnel.',
+      'Engineered physical 3D CAD models, authentic taxi livery, and retail packaging for the Kaali Peeli toy.',
     ],
   },
   'business-cards': {
@@ -178,8 +180,9 @@ export default function ProjectCaseStudyModal({
     ? project.previewPhotos
     : [project.thumbnail]
 
-  // TRIONN grid arrangement: Hero (col-span-2), full (col-span-2), then alternating dual columns (col-span-1)
+  // TRIONN grid arrangement: Full width (col-span-2) for sequential case study boards, or staggered for photo sets
   const getItemSpan = (index) => {
+    if (project.id === 'playstaples') return 'col-span-2'
     if (index === 0 || index === 1) return 'col-span-2'
     const offset = index - 2
     const pattern = offset % 3
@@ -339,18 +342,31 @@ export default function ProjectCaseStudyModal({
                 </div>
               </div>
 
-              {/* External Link (TRIONN Button) */}
-              {project.figmaUrl && (
-                <div className="mb-8">
-                  <a
-                    href={project.figmaUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-fredoka font-bold uppercase tracking-wider text-neutral-950 border-b-2 border-neutral-950 pb-1 hover:text-[#E84A4A] hover:border-[#E84A4A] transition-colors cursor-pointer"
-                  >
-                    <span>View on Figma</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
+              {/* External Links (TRIONN Buttons for Behance & Figma) */}
+              {(project.behanceUrl || project.figmaUrl) && (
+                <div className="flex flex-wrap items-center gap-5 sm:gap-6 mb-8">
+                  {project.behanceUrl && (
+                    <a
+                      href={project.behanceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-xs font-fredoka font-bold uppercase tracking-wider text-neutral-950 border-b-2 border-neutral-950 pb-1 hover:text-[#0057FF] hover:border-[#0057FF] transition-colors cursor-pointer"
+                    >
+                      <span>View on Behance</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                  {project.figmaUrl && (
+                    <a
+                      href={project.figmaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-xs font-fredoka font-bold uppercase tracking-wider text-neutral-950 border-b-2 border-neutral-950 pb-1 hover:text-[#E84A4A] hover:border-[#E84A4A] transition-colors cursor-pointer"
+                    >
+                      <span>View on Figma</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
                 </div>
               )}
             </div>

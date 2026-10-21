@@ -143,6 +143,7 @@ const projectsData = [
     highlights:
       'Transformed an ubiquitous Mumbai cultural emblem into a sleek, nostalgic collectible wooden toy—blending warm organic wood grain with pop-art industrial styling and playful brand identity.',
     tools: ['Figma', '3D Modeling', 'Photoshop', 'Packaging Design'],
+    behanceUrl: 'https://www.behance.net/gallery/249987899/Play-Staples-Ux-Case-Study',
     figmaUrl:
       'https://www.figma.com/design/eHCTRQ3nwpXcfMDtlNUO9Q/PlayStaples--Copy-?node-id=474-5581&t=O1mLutYpZ2gweGkb-0',
   },
