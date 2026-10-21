@@ -171,19 +171,19 @@ export default function AugePreloader({
     })
 
     textTl
-      .to(topEl, { yPercent: -130, duration: 0.65, ease: 'expo.inOut' }, 0)
-      .to(portfolioEl, { yPercent: -130, duration: 0.72, ease: 'expo.inOut' }, 0.08)
-      .to(bottomEl, { yPercent: -130, duration: 0.65, ease: 'expo.inOut' }, 0.14)
-      .to(counter, { yPercent: -130, duration: 0.65, ease: 'expo.inOut' }, 0.18)
-      .to(statusLine, { opacity: 0, duration: 0.45, ease: 'power2.inOut' }, 0)
+      .to(topEl, { yPercent: -130, duration: 0.42, ease: 'expo.inOut' }, 0)
+      .to(portfolioEl, { yPercent: -130, duration: 0.46, ease: 'expo.inOut' }, 0.04)
+      .to(bottomEl, { yPercent: -130, duration: 0.42, ease: 'expo.inOut' }, 0.08)
+      .to(counter, { yPercent: -130, duration: 0.42, ease: 'expo.inOut' }, 0.1)
+      .to(statusLine, { opacity: 0, duration: 0.28, ease: 'power2.inOut' }, 0)
 
     if (floatingRef.current) {
-      textTl.to(floatingRef.current, { y: -70, opacity: 0, duration: 0.65, ease: 'expo.inOut' }, 0)
+      textTl.to(floatingRef.current, { y: -70, opacity: 0, duration: 0.42, ease: 'expo.inOut' }, 0)
     }
 
     // Phase 2: Parabolic Curtain sweeps UPWARD to reveal the website
     const curtainTl = gsap.timeline({
-      delay: 0.35,
+      delay: 0.1,
       onComplete: () => {
         gsap.set(mask, { willChange: 'auto' })
         if (scrollBlockersRef.current.preventScroll) {
@@ -205,7 +205,7 @@ export default function AugePreloader({
       {
         yPercent: -100,
         y: -40,
-        duration: 1.25,
+        duration: 0.8,
         ease: 'expo.inOut'
       },
       0
@@ -220,10 +220,10 @@ export default function AugePreloader({
 
     const counterObj = { value: state.counterValue }
 
-    // Final smooth ramp to 100 with a satisfying hold
+    // Final smooth ramp to 100 with a crisp finish
     gsap.to(counterObj, {
       value: 100,
-      duration: 0.85,
+      duration: 0.35,
       ease: 'power2.out',
       onUpdate: () => {
         state.counterValue = counterObj.value
@@ -233,10 +233,10 @@ export default function AugePreloader({
       },
       onComplete: () => {
         state.counterComplete = true
-        // Savor the 100% completion state briefly before curtain sweeps up
+        // Brief pause at 100% before curtain sweep
         setTimeout(() => {
           executeExit()
-        }, 420)
+        }, 120)
       }
     })
   }, [executeExit])
@@ -383,28 +383,27 @@ export default function AugePreloader({
       )
     }
 
-    // 4. Counter Ramp: Slower, cinematic progression (0 -> 48 -> 88 -> 100)
+    // 4. Counter Ramp: Crisp, cinematic progression (0 -> 48 -> 88 -> 100)
     const targetInterim = 87 + Math.floor(Math.random() * 5)
     const counterObj = { value: 0 }
 
     // Multi-phase timeline for the counter count-up
     const counterTl = gsap.timeline({
-      delay: 0.45,
+      delay: 0.2,
       onComplete: () => {
         state.rampComplete = true
         if (state.mediaReady) {
-          // Subtle breath at ~88% before rolling to 100%
           setTimeout(() => {
             finishCounterAndExit()
-          }, 650)
+          }, 120)
         }
       }
     })
 
-    // Phase 1: 000 to ~045 over 1.5s
+    // Phase 1: 000 to ~045 over 0.6s
     counterTl.to(counterObj, {
       value: 45,
-      duration: 1.5,
+      duration: 0.6,
       ease: 'power1.out',
       onUpdate: () => {
         state.counterValue = counterObj.value
@@ -414,10 +413,10 @@ export default function AugePreloader({
       }
     })
 
-    // Phase 2: 045 to targetInterim (~88) over 1.8s
+    // Phase 2: 045 to targetInterim (~88) over 0.65s
     counterTl.to(counterObj, {
       value: targetInterim,
-      duration: 1.8,
+      duration: 0.65,
       ease: 'power2.inOut',
       onUpdate: () => {
         state.counterValue = counterObj.value
@@ -427,22 +426,27 @@ export default function AugePreloader({
       }
     })
 
-    // 5. Readiness check with generous minimum cinematic display window
+    // 5. Readiness check with responsive timing
     const checkReadiness = () => {
       state.mediaReady = true
       if (state.rampComplete) {
         setTimeout(() => {
           finishCounterAndExit()
-        }, 500)
+        }, 80)
       }
     }
 
     if (document.readyState === 'complete') {
-      setTimeout(checkReadiness, 2200)
+      setTimeout(checkReadiness, 500)
     } else {
-      window.addEventListener('load', () => setTimeout(checkReadiness, 1800), { once: true })
-      setTimeout(checkReadiness, 3800)
+      window.addEventListener('load', () => setTimeout(checkReadiness, 300), { once: true })
+      setTimeout(checkReadiness, 1000)
     }
+
+    // Safety fallback: guaranteed unblock after 2.4s under ANY device stalls
+    const safetyTimer = setTimeout(() => {
+      handleSkip()
+    }, 2400)
 
     // Keyboard listener for skip & prevent background scrolling on desktop
     const handleKeyDown = (e) => {
@@ -457,6 +461,7 @@ export default function AugePreloader({
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
+      clearTimeout(safetyTimer)
       window.removeEventListener('keydown', handleKeyDown)
       if (scrollBlockersRef.current.preventScroll) {
         window.removeEventListener('touchmove', scrollBlockersRef.current.preventScroll)
@@ -477,9 +482,10 @@ export default function AugePreloader({
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[99999] overflow-hidden select-none touch-none overscroll-none"
+      onClick={handleSkip}
+      className="fixed inset-0 z-[99999] overflow-hidden select-none touch-none overscroll-none cursor-pointer"
       style={{ touchAction: 'none', overscrollBehavior: 'none' }}
-      aria-label="Loading site..."
+      aria-label="Loading site. Tap anywhere to enter immediately."
       role="status"
     >
       {/* 1. Backdrop with White Dotted Grid */}
@@ -595,13 +601,18 @@ export default function AugePreloader({
         <span>SHILLONG, IN</span>
       </div>
 
-      {/* 6. Bottom 3-Digit Monospace Counter */}
-      <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 z-30 overflow-hidden pointer-events-none">
-        <span
-          ref={counterRef}
-          className="block font-mono text-xs sm:text-sm font-semibold tracking-[0.3em] text-white/90 tabular-nums uppercase leading-none"
-        >
-          000
+      {/* 6. Bottom 3-Digit Monospace Counter & Skip Hint */}
+      <div className="absolute bottom-8 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1.5 pointer-events-none">
+        <div className="overflow-hidden">
+          <span
+            ref={counterRef}
+            className="block font-mono text-xs sm:text-sm font-semibold tracking-[0.3em] text-white/90 tabular-nums uppercase leading-none"
+          >
+            000
+          </span>
+        </div>
+        <span className="text-[10px] sm:text-[11px] font-fredoka uppercase tracking-[0.2em] text-white/40">
+          Click or press Space to skip
         </span>
       </div>
     </div>

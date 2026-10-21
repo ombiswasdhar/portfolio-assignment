@@ -152,6 +152,10 @@ const Auralis = ({
       gl.viewport(0, 0, canvas.width, canvas.height);
     };
 
+    const ro = new ResizeObserver(resize);
+    ro.observe(container);
+    resize();
+
     let isVisible = false;
     let raf: number = 0;
 

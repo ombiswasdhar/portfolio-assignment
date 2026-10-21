@@ -207,10 +207,9 @@ export default function Hero() {
         <div
           className="absolute left-[4%] sm:left-[6%] md:left-[9.17%] top-[25%] sm:top-[25.5%] md:top-[25.88%] w-[92%] sm:w-[88%] md:w-[81.67%] h-[46%] md:h-[47.75%] z-10"
           style={{
-            transform: `perspective(1200px) rotateX(${-mousePos.y * 0.35}deg) rotateY(${mousePos.x * 0.35}deg) scale(${bannerScale})`,
-            opacity: bannerOpacity,
-            transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
-            willChange: 'transform, opacity',
+            transform: `perspective(1200px) rotateX(${-mousePos.y * 0.35}deg) rotateY(${mousePos.x * 0.35}deg)`,
+            transition: 'transform 0.15s ease-out',
+            willChange: 'transform',
           }}
         >
           {/* Base Rounded Banner (Red background + Lucy anime + Halftone) */}
