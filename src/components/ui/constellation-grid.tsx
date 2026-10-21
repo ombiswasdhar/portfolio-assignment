@@ -60,8 +60,8 @@ export default function ConstellationGrid() {
         // High-end (desktop rigs, M-series Macs, flagship phones): 55px (dense, full visual richness)
         // Mid-end (Intel UHD, AMD Vega, mid-end phones): 70px on desktop/laptop (cuts pairwise math by 65%), 76px on mobile
         // Low-end (Intel HD, Celeron/Pentium, dual-core): 84px on desktop/laptop (cuts pairwise math by 84%), 92px on mobile
-        const spacing = isLow ? (isMobile ? 92 : 84) :
-                        isMedium ? (isMobile ? 76 : 70) : 55;
+        const spacing = isLow ? (isMobile ? 96 : 88) :
+                        isMedium ? (isMobile ? 84 : 76) : 68;
 
         // Dynamic connection distance
         const MAX_CONN_DIST = isLow ? (isMobile ? 60 : 64) : (isMedium ? (isMobile ? 86 : 72) : 75);
@@ -160,9 +160,15 @@ export default function ConstellationGrid() {
                 return;
             }
 
-            // Yield frame rate during active scrolling on mid/low-tier laptops, desktops, and phones
-            if ((isMedium || isLow) && isScrolling) {
-                if (now - lastRenderTime < 34) {
+            // If scrolled deep into the page where background is completely covered, pause drawing to save 100% GPU
+            if (window.scrollY > window.innerHeight * 1.5) {
+                animationFrameId = requestAnimationFrame(render);
+                return;
+            }
+
+            // Yield frame rate during active scrolling on all devices to ensure butter-smooth 60/120fps scrolling
+            if (isScrolling) {
+                if (now - lastRenderTime < 33) {
                     animationFrameId = requestAnimationFrame(render);
                     return;
                 }
@@ -227,14 +233,17 @@ export default function ConstellationGrid() {
                 n.y += n.vy * dt * 60;
             }
 
-            // Draw Connections (Optimized Distance Culling with Rapid Coordinate Rejection)
+            // Draw Connections (Batched into a single draw call for locked 60/120 FPS performance)
+            ctx.strokeStyle = `rgba(${nodeColor}, ${isDarkMode ? 0.14 : 0.07})`;
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();
             for (let i = 0; i < nodes.length; i++) {
                 const n = nodes[i];
 
                 for (let j = i + 1; j < nodes.length; j++) {
                     const n2 = nodes[j];
 
-                    // Rapid bounding box reject before expensive sqrt/multiplication
+                    // Rapid bounding box reject before expensive calculation
                     const ndx = n.x - n2.x;
                     if (ndx > MAX_CONN_DIST || ndx < -MAX_CONN_DIST) continue;
                     const ndy = n.y - n2.y;
@@ -243,18 +252,12 @@ export default function ConstellationGrid() {
                     const distSq = ndx * ndx + ndy * ndy;
 
                     if (distSq < MAX_CONN_DIST_SQ) {
-                        const nDist = Math.sqrt(distSq);
-                        const alpha = (1 - nDist / MAX_CONN_DIST) * (isDarkMode ? 0.18 : 0.08);
-
-                        ctx.strokeStyle = `rgba(${nodeColor}, ${alpha})`;
-                        ctx.lineWidth = 0.7;
-                        ctx.beginPath();
                         ctx.moveTo(n.x, n.y);
                         ctx.lineTo(n2.x, n2.y);
-                        ctx.stroke();
                     }
                 }
             }
+            ctx.stroke();
 
             // Render Node Points & Interactive Highlights
             for (let i = 0; i < nodes.length; i++) {

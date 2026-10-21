@@ -496,7 +496,6 @@ const getProjectGallery = (project) => {
 export default function ContentsSection() {
   const [activeProject, setActiveProject] = React.useState(null)
   const [activeImageZoom, setActiveImageZoom] = React.useState(null)
-  const [hoveredCardId, setHoveredCardId] = React.useState(null)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
 
   // Track browser native fullscreen state
@@ -699,14 +698,12 @@ export default function ContentsSection() {
                 } ${
                   idx % 2 === 0 ? 'md:border-r-4 md:border-black' : ''
                 }`}
-                onMouseEnter={() => setHoveredCardId(card.id)}
-                onMouseLeave={() => setHoveredCardId(null)}
                 onClick={() => handleOpenProject(card)}
               >
                 {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
                 <div className={`relative w-full aspect-[4/3] flex-1 overflow-hidden ${card.flipImages ? 'bg-[#c99bd8]' : 'bg-neutral-900'}`}>
                   {card.isIsometricCards ? (
-                    <OniCardIsometricAnimation isPaused={hoveredCardId === card.id} />
+                    <OniCardIsometricAnimation />
                   ) : card.isAureusIsometric ? (
                     <DiagonalMarqueeCarousel
                       cards={aureusCarouselCards}
@@ -716,7 +713,7 @@ export default function ContentsSection() {
                       cardClassName="h-[120px] w-[180px] sm:h-[135px] sm:w-[200px] md:h-[145px] md:w-[220px] rounded-lg shadow-xl border border-white/10"
                     />
                   ) : card.isMelody3D || card.id === 'melody' ? (
-                    <Melody3DWall isPaused={hoveredCardId === card.id} />
+                    <Melody3DWall />
                   ) : card.flipImages ? (
                     <FlippingBusinessCard
                       front={card.flipImages[0]}

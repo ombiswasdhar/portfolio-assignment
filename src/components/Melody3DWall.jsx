@@ -21,13 +21,14 @@ const col2 = [
 
 function MelodyCard({ item }) {
   return (
-    <div className="w-[195px] sm:w-[225px] md:w-[255px] rounded-2xl overflow-hidden border border-white/25 bg-neutral-900/95 shadow-[0_16px_40px_rgba(0,0,0,0.75)] backdrop-blur-xs transition-transform duration-300 hover:scale-105 shrink-0 group/card">
+    <div className="w-[195px] sm:w-[225px] md:w-[255px] rounded-2xl overflow-hidden border border-white/20 bg-neutral-900 shadow-[0_16px_40px_rgba(0,0,0,0.75)] transition-transform duration-300 hover:scale-105 shrink-0 group/card will-change-transform">
       <div className="relative aspect-[16/10.5] w-full overflow-hidden bg-neutral-950">
         <img
           src={item.img}
           alt={item.title}
           className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/card:scale-105"
           loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
         <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between gap-1.5 pointer-events-none">
@@ -44,8 +45,29 @@ function MelodyCard({ item }) {
 }
 
 export default function Melody3DWall({ className = '', isPaused = false }) {
+  const containerRef = React.useRef(null)
+  const [isInView, setIsInView] = React.useState(false)
+
+  React.useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { rootMargin: '80px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const shouldPause = isPaused || !isInView
+
   return (
     <div
+      ref={containerRef}
       className={`relative h-full w-full overflow-hidden bg-[#090710] flex items-center justify-center [perspective:420px] select-none ${className}`}
     >
       {/* Dynamic concert stage lighting aura in background */}
@@ -59,7 +81,7 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
 
       {/* 3D Angled Wall Transform - Zoomed in closer with fewer large screens */}
       <div
-        className="flex flex-row items-center gap-3.5 sm:gap-4.5 z-10 shrink-0"
+        className="flex flex-row items-center gap-3.5 sm:gap-4.5 z-10 shrink-0 will-change-transform"
         style={{
           transform:
             'translateX(-10px) translateY(0px) translateZ(10px) scale(1.15) rotateX(18deg) rotateY(-8deg) rotateZ(16deg)',
@@ -69,8 +91,8 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
         <Marquee
           vertical
           pauseOnHover
-          repeat={3}
-          className={`[--duration:24s] [--gap:0.9rem] ${isPaused ? '[&_[data-slot]]:[animation-play-state:paused]' : ''}`}
+          repeat={2}
+          className={`[--duration:24s] [--gap:0.9rem] ${shouldPause ? '[&_[data-slot]]:[animation-play-state:paused]' : ''}`}
         >
           {col1.map((item) => (
             <MelodyCard key={item.id} item={item} />
@@ -82,8 +104,8 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
           vertical
           pauseOnHover
           reverse
-          repeat={3}
-          className={`[--duration:20s] [--gap:0.9rem] ${isPaused ? '[&_[data-slot]]:[animation-play-state:paused]' : ''}`}
+          repeat={2}
+          className={`[--duration:20s] [--gap:0.9rem] ${shouldPause ? '[&_[data-slot]]:[animation-play-state:paused]' : ''}`}
         >
           {col2.map((item) => (
             <MelodyCard key={item.id} item={item} />

@@ -152,11 +152,14 @@ const Auralis = ({
       gl.viewport(0, 0, canvas.width, canvas.height);
     };
 
-    const ro = new ResizeObserver(resize);
-    ro.observe(container);
+    let isVisible = false;
+    let raf: number = 0;
 
-    let raf: number;
     const render = (t: number) => {
+      if (!isVisible) {
+        raf = 0;
+        return;
+      }
       gl.uniform2f(locs.res, canvas.width, canvas.height);
       gl.uniform1f(locs.time, t * 0.001 * speed);
       gl.uniform1f(locs.grain, grain);
@@ -168,10 +171,21 @@ const Auralis = ({
       raf = requestAnimationFrame(render);
     };
 
-    raf = requestAnimationFrame(render);
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !raf) {
+          raf = requestAnimationFrame(render);
+        }
+      },
+      { rootMargin: "60px" }
+    );
+    io.observe(container);
+
     return () => {
       ro.disconnect();
-      cancelAnimationFrame(raf);
+      io.disconnect();
+      if (raf) cancelAnimationFrame(raf);
       gl.deleteProgram(program);
     };
   }, [colors, speed, grain]);

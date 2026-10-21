@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 /**
  * ScrollProgressBar
  * A sleek, high-precision neon scroll tracker along the top of the viewport
- * with ambient red glow.
+ * with ambient red glow. Directly animated on the compositor layer with zero React re-renders.
  */
 export default function ScrollProgressBar() {
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const barRef = useRef(null)
 
   useEffect(() => {
     let ticking = false
@@ -14,12 +14,14 @@ export default function ScrollProgressBar() {
     const updateScrollProgress = () => {
       const scrollTotal = document.documentElement.scrollHeight - window.innerHeight
       if (scrollTotal <= 0) {
-        setScrollProgress(0)
+        if (barRef.current) barRef.current.style.transform = 'scaleX(0)'
         return
       }
       const currentScroll = window.scrollY
-      const progress = Math.min(100, Math.max(0, (currentScroll / scrollTotal) * 100))
-      setScrollProgress(progress)
+      const progress = Math.min(1, Math.max(0, currentScroll / scrollTotal))
+      if (barRef.current) {
+        barRef.current.style.transform = `scaleX(${progress})`
+      }
       ticking = false
     }
 
@@ -31,9 +33,13 @@ export default function ScrollProgressBar() {
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
     updateScrollProgress()
 
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [])
 
   return (
@@ -42,8 +48,9 @@ export default function ScrollProgressBar() {
       aria-hidden="true"
     >
       <div
-        className="h-full bg-gradient-to-r from-red-600 via-[#BA1F1F] to-rose-400 shadow-[0_0_12px_rgba(186,31,31,0.85)] transition-all duration-150 ease-out will-change-[width]"
-        style={{ width: `${scrollProgress}%` }}
+        ref={barRef}
+        className="h-full w-full bg-gradient-to-r from-red-600 via-[#BA1F1F] to-rose-400 shadow-[0_0_12px_rgba(186,31,31,0.85)] origin-left will-change-transform"
+        style={{ transform: 'scaleX(0)' }}
       >
         {/* Glow head point at the right tip */}
         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_10px_#ff4d4d,0_0_20px_#ba1f1f]" />

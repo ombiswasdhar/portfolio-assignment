@@ -41,6 +41,8 @@ const Card = ({ card, className }: { card: CardItem; className?: string }) => {
       <img
         src={card.url}
         alt={card.title}
+        loading="lazy"
+        decoding="async"
         className="h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-black/40" />
@@ -53,11 +55,13 @@ const MarqueeRow = ({
   speed,
   direction,
   cardClassName,
+  isPaused,
 }: {
   cards: CardItem[];
   speed: number;
   direction: 1 | -1;
   cardClassName?: string;
+  isPaused?: boolean;
 }) => {
   const animationClass =
     direction === -1 ? "animate-marquee-left" : "animate-marquee-right";
@@ -69,18 +73,21 @@ const MarqueeRow = ({
           "flex shrink-0 cursor-pointer hover:[animation-play-state:paused]",
           animationClass,
         )}
-        style={{ "--speed": `${speed}s` } as React.CSSProperties}
+        style={{
+          "--speed": `${speed}s`,
+          animationPlayState: isPaused ? "paused" : "running",
+        } as React.CSSProperties}
       >
         <div className="flex shrink-0">
           {cards.map((card, idx) => (
-            <div key={`${card.id}-${idx}`} className="shrink-0 pr-8">
+            <div key={`${card.id}-${idx}`} className="shrink-0 pr-6">
               <Card card={card} className={cardClassName} />
             </div>
           ))}
         </div>
         <div className="flex shrink-0">
           {cards.map((card, idx) => (
-            <div key={`${card.id}-${idx}-copy`} className="shrink-0 pr-8">
+            <div key={`${card.id}-${idx}-copy`} className="shrink-0 pr-6">
               <Card card={card} className={cardClassName} />
             </div>
           ))}
@@ -99,15 +106,35 @@ export default function DiagonalMarqueeCarousel({
   cardClassName = "",
   fadeClassName = "",
 }: DiagonalMarqueeCarouselProps) {
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const [isInView, setIsInView] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { rootMargin: "80px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const rotationStyle = {
     transform: `rotate(${angle}deg)`,
   };
 
-  const rowCards = [...cards, ...cards, ...cards];
-  const rowCardsReverse = [...rowCards].reverse();
+  // Keep a concise loop of 4 cards per row (8 cards per row with duplicate) for silky 60fps performance
+  const displayCards = cards.length > 0 ? cards.slice(0, 4) : DEFAULT_CARDS.slice(0, 4);
+  const rowCardsReverse = [...displayCards].reverse();
 
   return (
     <div
+      ref={containerRef}
       className={cn(
         "relative flex h-screen w-full items-center justify-center overflow-hidden bg-neutral-950",
         className,
@@ -126,32 +153,28 @@ export default function DiagonalMarqueeCarousel({
         }
         .animate-marquee-left {
           animation: marquee-left var(--speed) linear infinite;
+          will-change: transform;
         }
         .animate-marquee-right {
           animation: marquee-right var(--speed) linear infinite;
+          will-change: transform;
         }
       `,
         }}
       />
       <div
-        className="absolute z-0 flex w-[200vw] flex-col gap-8"
+        className="absolute z-0 flex w-[140vw] flex-col gap-6"
         style={rotationStyle}
       >
-        <MarqueeRow cards={rowCards} speed={baseSpeed} direction={-1} cardClassName={cardClassName} />
+        <MarqueeRow cards={displayCards} speed={baseSpeed} direction={-1} cardClassName={cardClassName} isPaused={!isInView} />
         <MarqueeRow
           cards={rowCardsReverse}
-          speed={baseSpeed - 15 > 20 ? baseSpeed - 15 : 30}
+          speed={baseSpeed - 12 > 20 ? baseSpeed - 12 : 30}
           direction={alternateDirections ? 1 : -1}
           cardClassName={cardClassName}
+          isPaused={!isInView}
         />
-        <MarqueeRow cards={rowCards} speed={baseSpeed + 15} direction={-1} cardClassName={cardClassName} />
-        <MarqueeRow
-          cards={rowCardsReverse}
-          speed={baseSpeed - 6 > 20 ? baseSpeed - 6 : 35}
-          direction={alternateDirections ? 1 : -1}
-          cardClassName={cardClassName}
-        />
-        <MarqueeRow cards={rowCards} speed={baseSpeed + 24} direction={-1} cardClassName={cardClassName} />
+        <MarqueeRow cards={displayCards} speed={baseSpeed + 12} direction={-1} cardClassName={cardClassName} isPaused={!isInView} />
       </div>
 
       <div

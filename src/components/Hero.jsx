@@ -13,15 +13,15 @@ import HeroCD from './HeroCD'
 import ClickToPlayBadge from './ClickToPlayBadge'
 
 export default function Hero() {
-  const [scrollY, setScrollY] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [isDesktop, setIsDesktop] = useState(
     typeof window !== 'undefined' ? window.innerWidth >= 768 : true
   )
-  const [arrowPos, setArrowPos] = useState({ x: 0, y: 0, rot: 0, ready: false })
   const heroRef = useRef(null)
   const anchorRef = useRef(null)
   const anchorDocPos = useRef(null)
+  const arrowBtnRef = useRef(null)
+  const arrowImgRef = useRef(null)
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -70,7 +70,13 @@ export default function Hero() {
     const y = (heroY - currentScrollY) * (1 - p) + dockY * p
     const rot = p * 45
 
-    setArrowPos({ x, y, rot, ready: true })
+    if (arrowBtnRef.current) {
+      arrowBtnRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`
+      arrowBtnRef.current.style.opacity = '1'
+    }
+    if (arrowImgRef.current) {
+      arrowImgRef.current.style.transform = `rotate(${rot}deg)`
+    }
   }
 
   useLayoutEffect(() => {
@@ -93,7 +99,6 @@ export default function Hero() {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY)
           updateArrowPosition()
           ticking = false
         })
@@ -122,9 +127,6 @@ export default function Hero() {
     const y = ((e.clientY / innerHeight) - 0.5) * 16
     setMousePos({ x, y })
   }
-
-  const bannerScale = Math.max(0.95, 1 - (scrollY / 3000))
-  const bannerOpacity = Math.max(0.85, 1 - (scrollY / 4000))
 
   return (
     <section
@@ -400,22 +402,20 @@ export default function Hero() {
 
       {/* Floating Back-to-Top Arrow: pure white arrow, smoothly turns up and fixes into place */}
       <button
+        ref={arrowBtnRef}
         onClick={scrollToTop}
         title="Scroll to top"
         aria-label="Scroll to top"
-        className="fixed left-0 top-0 z-50 p-2 -m-2 bg-transparent border-0 cursor-pointer pointer-events-auto select-none flex items-center justify-center focus:outline-none"
+        className="fixed left-0 top-0 z-50 p-2 -m-2 bg-transparent border-0 cursor-pointer pointer-events-auto select-none flex items-center justify-center focus:outline-none opacity-0 will-change-transform"
         style={{
-          transform: `translate3d(${arrowPos.x}px, ${arrowPos.y}px, 0)`,
-          willChange: 'transform',
-          opacity: arrowPos.ready ? 1 : 0,
           transition: 'opacity 0.2s ease-out',
         }}
       >
         <img
+          ref={arrowImgRef}
           src={arrowLogo}
           alt="Scroll to top"
           style={{
-            transform: `rotate(${arrowPos.rot}deg)`,
             transformOrigin: 'center center',
             transition: 'transform 0.15s ease-out',
           }}
