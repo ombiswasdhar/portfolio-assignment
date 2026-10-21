@@ -12,9 +12,14 @@ import oniAssignmentFullImg from '../assets/work/oni_assignment_full.jpg'
 import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import previewMelodyImg from '../assets/work/preview_melody.png'
+import melodyCheckout from '../assets/work/melody/melody_checkout.png'
+import melodyEvents from '../assets/work/melody/melody_events.jpg'
+import melodyAbout from '../assets/work/melody/melody_about.jpg'
+import melodyArtists from '../assets/work/melody/melody_artists.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 import AureusIsometricAnimation from './AureusIsometricAnimation'
 import AureusShowcase from './AureusShowcase'
+import Melody3DWall from './Melody3DWall'
 import ProjectCaseStudyModal from './ProjectCaseStudyModal'
 import DiagonalMarqueeCarousel from '@/components/ui/diagonal-marquee-carousel'
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
@@ -314,11 +319,19 @@ export const projectsData = [
     title: 'Melody Tickets',
     subtitle: 'Live Concert Ticketing & End-to-End Desktop UX',
     category: 'UI/UX & Desktop Journey',
-    bulletSummary: 'Live Music Discovery • Split-Theme Lineups • 2-Column Checkout',
+    bulletSummary: 'Live Music Discovery • Split-Theme Lineups • 2-Column Checkout • 3D Wall',
+    isMelody3D: true,
+    hoverImage: projectMelodyImg,
     description:
       'Melody is an immersive web UI/UX design concept for a live music and concert ticketing platform, engineered as an end-to-end desktop user journey. Contrasting sleek, dark-mode stage interfaces against a vibrant periwinkle backdrop accented with floating 3D spheres and circular "MELODY." typography, the platform bridges festival energy with frictionless utility—guiding fans seamlessly from atmospheric concert discovery and split-theme artist lineups into a focused two-column checkout and celebratory confirmation.',
     thumbnail: projectMelodyImg,
-    previewPhotos: [projectMelodyImg, previewMelodyImg],
+    previewPhotos: [
+      projectMelodyImg,
+      melodyEvents,
+      melodyArtists,
+      melodyCheckout,
+      melodyAbout,
+    ],
     tags: ['UI/UX Design', 'User Journey', 'Concert Ticketing', 'Figma', 'Visual Direction'],
     deliverables: [
       'Complete end-to-end desktop user journey: event discovery to post-purchase celebration',
@@ -442,14 +455,24 @@ const getProjectGallery = (project) => {
       },
       secondary: [
         {
-          img: previewMelodyImg,
-          title: '02 // Event Details & Performing Artist Lineup',
-          subtitle: 'Split-Theme Layout: Moody Stage Header & Clean Light-Mode Artist Photo Grid',
+          img: melodyEvents,
+          title: '02 // Upcoming Events & Poster Gallery',
+          subtitle: 'Dark Mode Stage Atmosphere with Featured Live Concert Lineups & Headliners',
         },
         {
-          img: projectMelodyImg,
-          title: '03 // Frictionless Two-Column Checkout & Celebration',
-          subtitle: 'Live Order Summary, Streamlined Payment Form & Crowd-Backed Confirmation Screen',
+          img: melodyArtists,
+          title: '03 // Metallica Lineup & Performing Artists',
+          subtitle: 'Split-Theme Layout: Atmospheric Band Header with Clean Musician Profile Grid',
+        },
+        {
+          img: melodyCheckout,
+          title: '04 // Streamlined Order Summary & Payment',
+          subtitle: 'Focused Two-Column Checkout with Real-Time Ticket Total and Card Details',
+        },
+        {
+          img: melodyAbout,
+          title: '05 // Purchase Confirmation & Brand Story',
+          subtitle: 'Celebratory Post-Purchase Flow Backdropped by Immersive Concert Crowd Imagery',
         },
       ],
     }
@@ -687,6 +710,8 @@ export default function ContentsSection() {
                       className="h-full w-full min-h-0 bg-neutral-950"
                       cardClassName="h-[120px] w-[180px] sm:h-[135px] sm:w-[200px] md:h-[145px] md:w-[220px] rounded-lg shadow-xl border border-white/10"
                     />
+                  ) : card.isMelody3D || card.id === 'melody' ? (
+                    <Melody3DWall isPaused={hoveredCardId === card.id} />
                   ) : card.flipImages ? (
                     <FlippingBusinessCard
                       front={card.flipImages[0]}
