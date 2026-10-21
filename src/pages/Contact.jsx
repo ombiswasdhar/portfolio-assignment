@@ -68,6 +68,16 @@ export default function Contact() {
     {
       id: 5,
       num: '(5)',
+      label: 'BEHANCE',
+      value: 'BEHANCE.NET/OMBISWASXD',
+      href: 'https://www.behance.net/OmBiswasXD',
+      isUnderlined: true,
+      isExternal: true,
+      actionLabel: 'Open Behance portfolio',
+    },
+    {
+      id: 6,
+      num: '(6)',
       label: 'REFERENCES',
       value: 'UPON REQUEST',
       href: 'mailto:ombiswasatwork@gmail.com?subject=Reference%20Request',
