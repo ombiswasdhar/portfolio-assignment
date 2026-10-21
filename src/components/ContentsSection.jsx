@@ -317,7 +317,7 @@ export const projectsData = [
     category: 'UI/UX & Desktop Journey',
     bulletSummary: 'Live Music Discovery • Split-Theme Lineups • 2-Column Checkout • 3D Wall',
     isMelody3D: true,
-    hoverImage: null,
+    hoverImage: projectMelodyImg,
     description:
       'Melody is an immersive web UI/UX design concept for a live music and concert ticketing platform, engineered as an end-to-end desktop user journey. Contrasting sleek, dark-mode stage interfaces against a vibrant periwinkle backdrop accented with floating 3D spheres and circular "MELODY." typography, the platform bridges festival energy with frictionless utility—guiding fans seamlessly from atmospheric concert discovery and split-theme artist lineups into a focused two-column checkout and celebratory confirmation.',
     thumbnail: projectMelodyImg,
@@ -724,9 +724,7 @@ export default function ContentsSection() {
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                       />
                     )}
-                    {!card.isMelody3D && (
-                      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />
-                    )}
+                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />
                     {!(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards || card.isAureusIsometric || card.id === 'aureaus' || card.id === 'melody') && (
                       <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
                         View Case Study ↗

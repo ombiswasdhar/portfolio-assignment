@@ -173,28 +173,28 @@ export default function DiagonalMarqueeCarousel({
           speed={baseSpeed}
           direction={-1}
           cardClassName={cardClassName}
-          isPaused={!isInView}
+          isPaused={false}
         />
         <MarqueeRow
           cards={rowCardsReverse}
           speed={Math.max(25, baseSpeed - 10)}
           direction={alternateDirections ? 1 : -1}
           cardClassName={cardClassName}
-          isPaused={!isInView}
+          isPaused={false}
         />
         <MarqueeRow
           cards={rowCards}
           speed={baseSpeed + 8}
           direction={-1}
           cardClassName={cardClassName}
-          isPaused={!isInView}
+          isPaused={false}
         />
         <MarqueeRow
           cards={rowCardsReverse}
           speed={Math.max(25, baseSpeed - 6)}
           direction={alternateDirections ? 1 : -1}
           cardClassName={cardClassName}
-          isPaused={!isInView}
+          isPaused={false}
         />
       </div>
 

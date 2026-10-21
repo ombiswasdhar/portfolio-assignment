@@ -63,13 +63,32 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
     return () => observer.disconnect()
   }, [])
 
-  const shouldPause = isPaused || !isInView
+  const shouldPause = isPaused
 
   return (
     <div
       ref={containerRef}
       className={`relative h-full w-full overflow-hidden bg-[#090710] flex items-center justify-center [perspective:420px] select-none ${className}`}
     >
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        @keyframes marquee-vertical {
+          from {
+            transform: translateY(0);
+          }
+          to {
+            transform: translateY(calc(-100% - var(--gap, 0.9rem)));
+          }
+        }
+        .animate-marquee-vertical {
+          animation: marquee-vertical var(--duration, 24s) linear infinite;
+          will-change: transform;
+        }
+      `,
+        }}
+      />
+
       {/* Dynamic concert stage lighting aura in background */}
       <div
         className="pointer-events-none absolute inset-0 opacity-55 -z-0"
@@ -90,7 +109,6 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
         {/* Column 1: Downwards */}
         <Marquee
           vertical
-          pauseOnHover
           repeat={4}
           className={`[--duration:24s] [--gap:0.9rem] ${shouldPause ? '[&_.animate-marquee-vertical]:[animation-play-state:paused]' : ''}`}
         >
@@ -102,7 +120,6 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
         {/* Column 2: Upwards (reverse) */}
         <Marquee
           vertical
-          pauseOnHover
           reverse
           repeat={4}
           className={`[--duration:20s] [--gap:0.9rem] ${shouldPause ? '[&_.animate-marquee-vertical]:[animation-play-state:paused]' : ''}`}
