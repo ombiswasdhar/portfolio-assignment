@@ -219,7 +219,7 @@ export default function ProjectCaseStudyModal({
         <button
           onClick={onClose}
           type="button"
-          className="inline-flex items-center gap-2 text-xs font-ca-mono tracking-widest uppercase text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-fredoka font-semibold tracking-wider uppercase text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 text-[#E84A4A]" />
           <span>Back to work</span>
@@ -229,7 +229,7 @@ export default function ProjectCaseStudyModal({
           <button
             type="button"
             onClick={toggleFullscreen}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/5 hover:bg-black/10 border border-black/10 text-xs font-ca-mono text-neutral-700 hover:text-neutral-950 transition-colors cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/5 hover:bg-black/10 border border-black/10 text-xs font-fredoka font-semibold text-neutral-700 hover:text-neutral-950 transition-colors cursor-pointer"
             title={isFullscreen ? 'Exit Full Screen' : 'Toggle Full Screen'}
           >
             {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -262,11 +262,11 @@ export default function ProjectCaseStudyModal({
               {/* Category tag */}
               <div className="flex items-center gap-2 mb-3">
                 <span className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: project.folderColor || '#E84A4A' }} />
-                <span className="text-[11px] font-ca-mono tracking-[0.2em] uppercase text-neutral-600 font-semibold">
+                <span className="text-[11px] font-fredoka font-semibold tracking-[0.16em] uppercase text-neutral-600">
                   {project.category || 'CASE STUDY'}
                 </span>
-                <span className="text-neutral-300 font-ca-mono text-[11px]">/</span>
-                <span className="text-[11px] font-ca-mono text-neutral-500 uppercase">
+                <span className="text-neutral-300 font-fredoka text-[11px]">/</span>
+                <span className="text-[11px] font-fredoka font-medium text-neutral-500 uppercase">
                   {project.date ? project.date.split(',')[1]?.trim() || project.date : '2026'}
                 </span>
               </div>
@@ -309,9 +309,9 @@ export default function ProjectCaseStudyModal({
                         key={tab.id}
                         type="button"
                         onClick={() => setActiveTab(tab.id)}
-                        className={`pb-1 text-xs sm:text-sm font-poppins tracking-wide cursor-pointer relative ${
+                        className={`pb-1 text-xs sm:text-sm font-fredoka font-semibold tracking-wide cursor-pointer relative ${
                           isActive
-                            ? 'text-neutral-950 font-bold border-b-2 border-[#E84A4A]'
+                            ? 'text-neutral-950 border-b-2 border-[#E84A4A]'
                             : 'text-neutral-500 hover:text-neutral-900 border-b-2 border-transparent'
                         }`}
                       >
@@ -346,7 +346,7 @@ export default function ProjectCaseStudyModal({
                     href={project.figmaUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-akira font-black uppercase tracking-wider text-neutral-950 border-b-2 border-neutral-950 pb-1 hover:text-[#E84A4A] hover:border-[#E84A4A] transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-2 text-xs font-fredoka font-bold uppercase tracking-wider text-neutral-950 border-b-2 border-neutral-950 pb-1 hover:text-[#E84A4A] hover:border-[#E84A4A] transition-colors cursor-pointer"
                   >
                     <span>View on Figma</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -356,28 +356,28 @@ export default function ProjectCaseStudyModal({
             </div>
 
             {/* Bottom Project Navigation (Previous / Next) */}
-            <div className="border-t border-black/10 pt-4 flex items-center justify-between text-xs font-ca-mono uppercase tracking-wider text-neutral-600 mt-6 lg:mt-auto">
+            <div className="border-t border-black/10 pt-4 flex items-center justify-between text-xs font-fredoka uppercase tracking-wider text-neutral-600 mt-6 lg:mt-auto">
               <button
                 type="button"
                 onClick={handlePrevProject}
-                className="flex items-center gap-2 text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
+                className="flex items-center gap-2 font-fredoka font-semibold text-xs tracking-wider uppercase text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
                 title={`Previous: ${prevProject.title}`}
               >
                 <ChevronLeft className="w-4 h-4 text-[#E84A4A]" />
-                <span className="font-semibold">Previous</span>
+                <span>Previous</span>
               </button>
 
-              <div className="text-[10px] text-neutral-500 font-ca-mono font-semibold">
+              <div className="text-[11px] text-neutral-500 font-fredoka font-semibold">
                 {currentIndex + 1} / {allProjects.length}
               </div>
 
               <button
                 type="button"
                 onClick={handleNextProject}
-                className="flex items-center gap-2 text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer ml-auto"
+                className="flex items-center gap-2 font-fredoka font-semibold text-xs tracking-wider uppercase text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer ml-auto"
                 title={`Next: ${nextProject.title}`}
               >
-                <span className="font-semibold">Next</span>
+                <span>Next</span>
                 <ChevronRight className="w-4 h-4 text-[#E84A4A]" />
               </button>
             </div>
@@ -405,7 +405,7 @@ export default function ProjectCaseStudyModal({
 
                   {/* Corner visual index */}
                   <div className="absolute top-3 left-3 pointer-events-none">
-                    <span className="text-[10px] font-ca-mono text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-xs backdrop-blur-md">
+                    <span className="text-[11px] font-fredoka font-semibold text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-xs backdrop-blur-md">
                       #{String(idx + 1).padStart(2, '0')}
                     </span>
                   </div>
