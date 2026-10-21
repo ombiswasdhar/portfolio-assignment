@@ -34,18 +34,18 @@ const Card = ({ card, className }: { card: CardItem; className?: string }) => {
   return (
     <div
       className={cn(
-        "group relative h-[300px] w-[400px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow-2xl",
+        "group relative h-[300px] w-[400px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow-2xl bg-neutral-900 border border-white/10",
         className,
       )}
     >
       <img
         src={card.url}
         alt={card.title}
-        loading="lazy"
+        loading="eager"
         decoding="async"
-        className="h-full w-full object-cover"
+        className="h-full w-full object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/15 transition-colors group-hover:bg-transparent" />
     </div>
   );
 };
@@ -99,25 +99,25 @@ const MarqueeRow = ({
 
 export default function DiagonalMarqueeCarousel({
   cards = DEFAULT_CARDS,
-  angle = -25,
-  baseSpeed = 120,
+  angle = -22,
+  baseSpeed = 60,
   alternateDirections = true,
   className = "",
   cardClassName = "",
   fadeClassName = "",
 }: DiagonalMarqueeCarouselProps) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const [isInView, setIsInView] = React.useState(false);
+  const [isInView, setIsInView] = React.useState(true);
 
   React.useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el || typeof IntersectionObserver === "undefined") return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { rootMargin: "80px" }
+      { rootMargin: "250px" }
     );
 
     observer.observe(el);
@@ -128,15 +128,17 @@ export default function DiagonalMarqueeCarousel({
     transform: `rotate(${angle}deg)`,
   };
 
-  // Keep a concise loop of 4 cards per row (8 cards per row with duplicate) for silky 60fps performance
-  const displayCards = cards.length > 0 ? cards.slice(0, 4) : DEFAULT_CARDS.slice(0, 4);
-  const rowCardsReverse = [...displayCards].reverse();
+  // Repeat cards 3 times per half (15 cards total for 5 source cards)
+  // This guarantees each block is >3500px wide, eliminating any gap or snap at loop boundaries
+  const sourceCards = cards.length > 0 ? cards : DEFAULT_CARDS;
+  const rowCards = [...sourceCards, ...sourceCards, ...sourceCards];
+  const rowCardsReverse = [...rowCards].reverse();
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "relative flex h-screen w-full items-center justify-center overflow-hidden bg-neutral-950",
+        "relative flex h-full w-full items-center justify-center overflow-hidden bg-neutral-950 select-none",
         className,
       )}
     >
@@ -163,18 +165,37 @@ export default function DiagonalMarqueeCarousel({
         }}
       />
       <div
-        className="absolute z-0 flex w-[140vw] flex-col gap-6"
+        className="absolute z-0 flex w-[220vw] flex-col gap-4 sm:gap-6"
         style={rotationStyle}
       >
-        <MarqueeRow cards={displayCards} speed={baseSpeed} direction={-1} cardClassName={cardClassName} isPaused={!isInView} />
+        <MarqueeRow
+          cards={rowCards}
+          speed={baseSpeed}
+          direction={-1}
+          cardClassName={cardClassName}
+          isPaused={!isInView}
+        />
         <MarqueeRow
           cards={rowCardsReverse}
-          speed={baseSpeed - 12 > 20 ? baseSpeed - 12 : 30}
+          speed={Math.max(25, baseSpeed - 10)}
           direction={alternateDirections ? 1 : -1}
           cardClassName={cardClassName}
           isPaused={!isInView}
         />
-        <MarqueeRow cards={displayCards} speed={baseSpeed + 12} direction={-1} cardClassName={cardClassName} isPaused={!isInView} />
+        <MarqueeRow
+          cards={rowCards}
+          speed={baseSpeed + 8}
+          direction={-1}
+          cardClassName={cardClassName}
+          isPaused={!isInView}
+        />
+        <MarqueeRow
+          cards={rowCardsReverse}
+          speed={Math.max(25, baseSpeed - 6)}
+          direction={alternateDirections ? 1 : -1}
+          cardClassName={cardClassName}
+          isPaused={!isInView}
+        />
       </div>
 
       <div

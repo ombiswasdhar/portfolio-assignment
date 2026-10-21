@@ -679,9 +679,9 @@ export default function ContentsSection() {
                     <DiagonalMarqueeCarousel
                       cards={aureusCarouselCards}
                       angle={-22}
-                      baseSpeed={80}
+                      baseSpeed={55}
                       className="h-full w-full min-h-0 bg-neutral-950"
-                      cardClassName="h-[120px] w-[180px] sm:h-[135px] sm:w-[200px] md:h-[145px] md:w-[220px] rounded-lg shadow-xl border border-white/10"
+                      cardClassName="h-[125px] w-[190px] sm:h-[140px] sm:w-[210px] md:h-[150px] md:w-[225px] rounded-xl shadow-2xl border border-white/15"
                     />
                   ) : card.isMelody3D || card.id === 'melody' ? (
                     <Melody3DWall />
