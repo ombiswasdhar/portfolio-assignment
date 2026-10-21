@@ -428,27 +428,37 @@ export default function ProjectCaseStudyModal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[120] bg-black/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6"
+            className="fixed inset-0 z-[120] bg-black/95 backdrop-blur-xl flex justify-center p-3 sm:p-6 overflow-y-auto"
             onClick={() => setActiveZoomImage(null)}
           >
             <button
               onClick={() => setActiveZoomImage(null)}
-              className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-white/10 hover:bg-[#E84A4A] text-white transition-colors cursor-pointer border border-white/20 shadow-lg"
+              className="fixed top-4 right-4 z-[130] p-2.5 rounded-full bg-black/80 hover:bg-[#E84A4A] text-white transition-colors cursor-pointer border border-white/20 shadow-xl"
               title="Close (Esc)"
               aria-label="Close zoom"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <motion.img
-              initial={{ scale: 0.94 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.94 }}
-              src={activeZoomImage}
-              alt="Full Resolution Preview"
-              className="max-w-[96vw] max-h-[92vh] object-contain rounded-xl shadow-2xl cursor-default"
+            <div
+              className="relative max-w-5xl w-full flex items-center justify-center m-auto py-4 sm:py-8"
               onClick={(e) => e.stopPropagation()}
-            />
+            >
+              <motion.img
+                initial={{ scale: 0.96 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.96 }}
+                src={activeZoomImage}
+                alt="Full Resolution Preview"
+                className="w-auto max-w-[96vw] max-h-[92vh] object-contain rounded-xl shadow-2xl cursor-default [&.tall-board]:max-h-none [&.tall-board]:w-full"
+                onLoad={(e) => {
+                  const img = e.currentTarget
+                  if (img.naturalHeight > img.naturalWidth * 1.5) {
+                    img.classList.add('tall-board')
+                  }
+                }}
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

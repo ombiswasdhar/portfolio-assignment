@@ -8,7 +8,7 @@ import oniCardFrontImg from '../assets/work/oni-card-front.png'
 import oniCardBackImg from '../assets/work/oni-card-back.png'
 import oniCard2FrontImg from '../assets/work/oni-card-2-front.png'
 import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
-import oniCardsHoverImg from '../assets/work/headphone-mockup.png'
+import oniAssignmentFullImg from '../assets/work/oni_assignment_full.jpg'
 import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
 import previewMelodyImg from '../assets/work/preview_melody.png'
@@ -242,11 +242,11 @@ export const projectsData = [
     bulletSummary: 'Ideation & Sketching • 3 Card Directions • Split-Mask & Monogram • 3D Mockups',
     description:
       'ONI / OM Business Card is a personal branding and print design showcase detailing the ideation, visual development, and physical translation of three distinct business card directions. Beginning with rough pencil sketches exploring Oni mask motifs and monogram placements, the project develops into three tactile concepts: a horizontal split-face Oni mask set over bold magenta and swirled cosmic textures, a sleek minimalist monogram with speckled monochrome paper stock, and an airy pastel lilac vertical layout featuring an anime character cutout, geometric color bars, and corner QR code integration—concluding in floating 3D perspective mockups for physical print production.',
-    thumbnail: oniCardFrontImg,
-    hoverImage: oniCardsHoverImg,
+    thumbnail: projectCardsImg,
+    hoverImage: projectCardsImg,
     isIsometricCards: true,
     previewPhotos: [
-      oniCardsHoverImg,
+      oniAssignmentFullImg,
       projectCardsImg,
       oniCard2FrontImg,
       oniCardFrontImg,
@@ -378,9 +378,9 @@ const getProjectGallery = (project) => {
   if (project.id === 'business-cards') {
     return {
       hero: {
-        img: oniCardsHoverImg,
-        title: 'ONI Studios // Personal Branding & Print Design Showcase',
-        caption: 'Ideation, Character Art & 3 Distinct Business Card Concepts with 3D Mockups',
+        img: oniAssignmentFullImg,
+        title: 'ONI Studios // Full Assignment Showcase & Print Design',
+        caption: 'Complete Assignment Board: Ideation Sketches, 3 Concepts & 3D Perspective Mockups',
       },
       secondary: [
         {
