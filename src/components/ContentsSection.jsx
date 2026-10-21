@@ -242,12 +242,11 @@ export const projectsData = [
     bulletSummary: 'Ideation & Sketching • 3 Card Directions • Split-Mask & Monogram • 3D Mockups',
     description:
       'ONI / OM Business Card is a personal branding and print design showcase detailing the ideation, visual development, and physical translation of three distinct business card directions. Beginning with rough pencil sketches exploring Oni mask motifs and monogram placements, the project develops into three tactile concepts: a horizontal split-face Oni mask set over bold magenta and swirled cosmic textures, a sleek minimalist monogram with speckled monochrome paper stock, and an airy pastel lilac vertical layout featuring an anime character cutout, geometric color bars, and corner QR code integration—concluding in floating 3D perspective mockups for physical print production.',
-    thumbnail: projectCardsImg,
-    hoverImage: projectCardsImg,
+    thumbnail: oniAssignmentFullImg,
+    hoverImage: oniAssignmentFullImg,
     isIsometricCards: true,
     previewPhotos: [
       oniAssignmentFullImg,
-      projectCardsImg,
       oniCard2FrontImg,
       oniCardFrontImg,
       oniCardBackImg,
@@ -384,24 +383,24 @@ const getProjectGallery = (project) => {
       },
       secondary: [
         {
-          img: projectCardsImg,
-          title: '02 // Concept 3 • Vertical Character Cutout',
-          subtitle: 'Pastel Lilac Theme, Pill-Shaped Color Bars & Integrated QR Code',
-        },
-        {
           img: oniCard2FrontImg,
-          title: '03 // Concept 1 • Split-Mask Illustration',
+          title: '02 // Concept 1 • Split-Mask Illustration',
           subtitle: 'Horizontal Split Oni Mask, Swirled Cosmic Texture & Magenta Staging',
         },
         {
           img: oniCardFrontImg,
-          title: '04 // Concept Artwork & Character Framing',
+          title: '03 // Concept Artwork & Character Framing',
           subtitle: 'Anime-Inspired Persona Illustration & Monogram Lockup',
         },
         {
           img: oniCardBackImg,
-          title: '05 // Print Layout & Back Typography',
+          title: '04 // Print Layout & Back Typography',
           subtitle: 'Contact Details, Studio Branding & Scannable QR Integration',
+        },
+        {
+          img: oniCard2BackImg,
+          title: '05 // Concept 1 Reverse & Print Production',
+          subtitle: 'Card Reverse Typography & Production Specifications',
         },
       ],
     }
