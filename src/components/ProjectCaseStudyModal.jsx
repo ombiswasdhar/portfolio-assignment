@@ -3,72 +3,23 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Maximize2, Minimize2, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
 
-// TRIONN-style storytelling tab details for each project
+// Project challenge copy for each case study
 const PROJECT_STORIES = {
   playstaples: {
     challenge:
       'The original PlayStaples online store struggled with high checkout abandonment, cluttered navigation, and a lack of emotional resonance that failed to communicate the tactile value of handcrafted Indian collectibles. The challenge was to conduct an in-depth heuristic evaluation, diagnose core UX pain points, and reimagine the digital storefront from the ground up—balancing modern e-commerce utility with the nostalgic celebration of Mumbai\'s iconic "Kaali Peeli" Premier Padmini taxi.',
-    approach:
-      'We kicked off the visual direction with a comprehensive moodboard exploring 3 main aesthetic layers across 5 distinct creative directions—Abstract 01, First Sight Look, Maggie, Airborne, and Buttermax—establishing an expressive, pop-art infused identity. Grounded in Jakob Nielsen\'s 10 usability heuristics and user research, we overhauled information architecture, mapped user journeys, and constructed an atomic design system with warm color tokens and expressive typography. We designed high-fidelity desktop and mobile flows featuring interactive 360° product views and a frictionless slide-out drawer cart—coupled with authentic 3D CAD modeling and retail packaging for the physical wooden toy.',
-    outcome:
-      'A comprehensive, production-ready UX case study featured on Behance that dramatically transforms the digital purchasing experience. Usability testing revealed a 42% reduction in checkout drop-offs, seamless product discovery, and an enthusiastic 4.8/5 user satisfaction score—bridging Indian street heritage with world-class digital craftsmanship.',
-    whatWeDid: [
-      'Developed comprehensive visual moodboards and art direction across 5 creative directions.',
-      'Conducted Jakob Nielsen heuristic evaluation and synthesized user interview pain points.',
-      'Overhauled information architecture, sitemaps, and low-to-high fidelity wireframe journeys.',
-      'Constructed a scalable UI design system with atomic components, typography, and color tokens.',
-      'Designed high-fidelity e-commerce screens: curated homepage, catalog filtering, and 360° PDP.',
-      'Streamlined conversion with a sticky add-to-cart and frictionless slide-out cart drawer funnel.',
-      'Engineered physical 3D CAD models, authentic taxi livery, and retail packaging for the Kaali Peeli toy.',
-    ],
   },
   'business-cards': {
     challenge:
       'Personal branding collateral often risks falling into two extremes: either generic corporate monotony or illegible, over-stylized clutter that fails in physical print production. The challenge was to develop "ONI / OM"—a versatile personal identity system that captures a love for Japanese folklore, anime aesthetics, and modern typography across three radically different creative directions, while adhering to strict dimensional and print-finish standards.',
-    approach:
-      'The visual development began with traditional pencil sketches on paper, exploring Oni demon mask motifs, monogram geometry, and card layout compositions. From this foundation, three contrasting directions were engineered: Concept 1 (Split-Mask Illustration) sets a horizontal half-face Oni portrait over swirled cosmic marbling and bold magenta staging with a high-contrast four-color palette; Concept 2 (Minimalist Monogram) embraces two-tone monochrome with a speckled black texture, oversized interlocking monogram, and spacious contact typography; and Concept 3 (Vertical Character Cutout) blends an anime character portrait in pastel lilac with geometric color bars, monogram, and corner QR code. The journey concluded with floating, angled 3D perspective mockups demonstrating physical print translation.',
-    outcome:
-      'A multi-faceted brand identity showcase that demonstrates creative range—proving how a single personal brand can seamlessly flex between high-voltage character illustration and understated editorial minimalism. The 3D physical mockups bridge digital art and real-world print craftsmanship, resulting in a memorable networking artifact that leaves an indelible creative impression.',
-    whatWeDid: [
-      'Explored traditional pencil ideation and rough paper sketches for Oni motifs and monogram layouts.',
-      'Illustrated Concept 1: horizontal split-face Oni mask with swirled cosmic marbling on magenta.',
-      'Designed Concept 2: minimalist monochrome layout with speckled paper texture and oversized monogram.',
-      'Engineered Concept 3: pastel lilac vertical card with anime character cutout, color bars, and QR code.',
-      'Built print-ready vector production assets with accurate bleed, trim, and tactile finish specifications.',
-      'Rendered floating 3D perspective mockups to showcase physical card weight and tactile presence.',
-    ],
   },
   aureaus: {
     challenge:
       'High-end audiophile audio products often suffer from fragmented digital experiences: dry technical spec sheets fail to evoke luxury, while generic corporate e-commerce grids fail to convey acoustic science and tactile hardware craftsmanship. The challenge for Aureus was to create an editorial design system, immersive 3D hardware lookbook, and telemetry dashboard that make complex acoustic engineering accessible, elegant, and seductive.',
-    approach:
-      'We engineered a comprehensive end-to-end UX case study published on Behance, combining user research, persona profiling, and market positioning with high-fidelity 3D hardware modeling in Blender. Monochromatic staging, bespoke studio lighting, and tactile floating geometric props establish an editorial magazine aesthetic. The digital experience integrates intuitive frequency response curves, driver breakdown diagrams, and real-time telemetry metrics—funneling seamlessly into a minimal, distraction-free cart and checkout flow.',
-    outcome:
-      'Aureus redefines high-end acoustic UX on Behance, bridging the precision of audio engineering with the refined luxury of editorial fashion publishing. The frictionless checkout funnel and clear telemetry diagnostics elevate user confidence, driving conversion from lookbook discovery to audio ownership.',
-    whatWeDid: [
-      'Engineered complete Behance UX case study presentation deck and acoustic design system.',
-      'Modeled and staged 3D luxury headphones with custom studio lighting and reflections in Blender.',
-      'Conducted user research, audiophile persona profiling, and competitive market landscape analysis.',
-      'Crafted an editorial lookbook featuring high-contrast typographic hierarchy and magazine layouts.',
-      'Architected acoustic telemetry dashboards, frequency response curves, and driver spec breakdowns.',
-      'Designed a streamlined dark-mode e-commerce experience with frictionless cart and checkout.',
-    ],
   },
   melody: {
     challenge:
       'Live concert ticketing platforms frequently suffer from cluttered visual noise, disjointed page transitions, and anxiety-inducing checkout flows that drain the raw anticipation of seeing live music. The objective for Melody was to design a unified, end-to-end desktop web experience that channels the electric atmosphere of rock concerts and live festivals while providing effortless clarity, immediate event discovery, and zero-friction ticket purchasing.',
-    approach:
-      'We architected an uninterrupted desktop user journey staged against an energetic periwinkle canvas accented with tactile 3D spheres and circular "MELODY." orbital typography. The discovery begins with an atmospheric dark-mode hero featuring bold poster cards that instantly command attention for live acts. When an event is selected, the interface transitions into an intentional split-theme layout—pairing a dramatic, stage-lit promotional header with a clean, light-mode section detailing venue info, tour schedules, and an artist photo grid. The booking journey then funnels into a focused two-column checkout view that positions the ticket summary directly alongside a streamlined card payment form, keeping the user grounded without unnecessary multi-step friction.',
-    outcome:
-      'Melody turns ticket purchasing from a stressful digital errand into an exhilarating prologue to the live concert. The journey wraps up with a high-impact "Thank You For Your Purchase!!" confirmation screen and an authentic "About" section backdropped by immersive concert-crowd photography. By balancing moody festival energy with disciplined information architecture, the concept proves that high-voltage rock aesthetics and intuitive UX conversion can harmoniously amplify each other.',
-    whatWeDid: [
-      'Mapped a comprehensive end-to-end desktop user journey from show discovery to purchase confirmation.',
-      'Designed an atmospheric dark-mode hero experience with high-contrast rock act and concert poster cards.',
-      'Engineered a split-theme event detail layout combining dark stage visuals with an airy, light-mode artist grid.',
-      'Streamlined the checkout funnel into a focused two-column architecture pairing order summary and card payment.',
-      'Created celebratory confirmation screens and brand storytelling backed by live concert photography.',
-      'Developed a cohesive visual presentation system featuring vibrant periwinkle staging and floating 3D spheres.',
-    ],
   },
 }
 
@@ -107,7 +58,6 @@ export default function ProjectCaseStudyModal({
   allProjects = [],
   onSelectProject,
 }) {
-  const [activeTab, setActiveTab] = useState('challenge') // 'challenge' | 'approach' | 'outcome' | 'whatWeDid'
   const [activeZoomImage, setActiveZoomImage] = useState(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const scrollContainerRef = useRef(null)
@@ -150,9 +100,8 @@ export default function ProjectCaseStudyModal({
     return () => window.removeEventListener('keydown', handleKeyDown)
   })
 
-  // Reset tab and scroll when active project changes
+  // Reset scroll when active project changes
   useEffect(() => {
-    setActiveTab('challenge')
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({ top: 0, behavior: 'instant' })
     }
@@ -299,50 +248,11 @@ export default function ProjectCaseStudyModal({
                 </ul>
               </div>
 
-              {/* TRIONN STORY TABS */}
+              {/* Project challenge */}
               <div className="border-t border-black/10 pt-6 mb-8">
-                {/* Tab Header Buttons */}
-                <div className="flex flex-wrap gap-4 sm:gap-6 border-b border-black/10 pb-3 mb-4">
-                  {[
-                    { id: 'challenge', label: 'The challenge' },
-                    { id: 'approach', label: 'Approach' },
-                    { id: 'outcome', label: 'Outcome' },
-                    { id: 'whatWeDid', label: 'What we did' },
-                  ].map((tab) => {
-                    const isActive = activeTab === tab.id
-                    return (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`pb-1 text-xs sm:text-sm font-fredoka font-semibold tracking-wide cursor-pointer relative ${
-                          isActive
-                            ? 'text-neutral-950 border-b-2 border-[#E84A4A]'
-                            : 'text-neutral-500 hover:text-neutral-900 border-b-2 border-transparent'
-                        }`}
-                      >
-                        {tab.label}
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {/* Tab Content Display - completely steady with no layout jump or movement */}
-                <div className="min-h-[140px] text-xs sm:text-sm font-poppins text-neutral-700 leading-relaxed">
-                  {activeTab === 'challenge' && <p>{story.challenge}</p>}
-                  {activeTab === 'approach' && <p>{story.approach}</p>}
-                  {activeTab === 'outcome' && <p>{story.outcome}</p>}
-                  {activeTab === 'whatWeDid' && (
-                    <ul className="space-y-2">
-                      {story.whatWeDid.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#E84A4A] mt-1.5 shrink-0" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                <p className="text-xs sm:text-sm font-poppins text-neutral-700 leading-relaxed">
+                  {story.challenge}
+                </p>
               </div>
 
               {/* External Links (TRIONN Buttons for Behance & Figma) */}

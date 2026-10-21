@@ -4,6 +4,7 @@ import { Layers, Grid3X3, LayoutList, Maximize2, Minimize2, ExternalLink, ZoomIn
 import projectCardsImg from '../assets/work/project_cards.jpg'
 import projectAureausImg from '../assets/work/project_aureaus.png'
 import projectMelodyImg from '../assets/work/project_melody.jpg'
+import melodyFullCaseImg from '../assets/work/melody/melody_fullcase.png'
 import oniCardFrontImg from '../assets/work/oni-card-front.png'
 import oniCardBackImg from '../assets/work/oni-card-back.png'
 import oniCard2FrontImg from '../assets/work/oni-card-2-front.png'
@@ -11,11 +12,6 @@ import oniCard2BackImg from '../assets/work/oni-card-2-back.png'
 import oniAssignmentFullImg from '../assets/work/oni_assignment_full.jpg'
 import projectPlaystaplesImg from '../assets/work/project_playstaples.png'
 import kaaliPeeliHoverImg from '../assets/playstaples/kaali-peeli-hover.png'
-import previewMelodyImg from '../assets/work/preview_melody.png'
-import melodyCheckout from '../assets/work/melody/melody_checkout.png'
-import melodyEvents from '../assets/work/melody/melody_events.jpg'
-import melodyAbout from '../assets/work/melody/melody_about.jpg'
-import melodyArtists from '../assets/work/melody/melody_artists.png'
 import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 import AureusIsometricAnimation from './AureusIsometricAnimation'
 import AureusShowcase from './AureusShowcase'
@@ -326,11 +322,7 @@ export const projectsData = [
       'Melody is an immersive web UI/UX design concept for a live music and concert ticketing platform, engineered as an end-to-end desktop user journey. Contrasting sleek, dark-mode stage interfaces against a vibrant periwinkle backdrop accented with floating 3D spheres and circular "MELODY." typography, the platform bridges festival energy with frictionless utility—guiding fans seamlessly from atmospheric concert discovery and split-theme artist lineups into a focused two-column checkout and celebratory confirmation.',
     thumbnail: projectMelodyImg,
     previewPhotos: [
-      projectMelodyImg,
-      melodyEvents,
-      melodyArtists,
-      melodyCheckout,
-      melodyAbout,
+      melodyFullCaseImg,
     ],
     tags: ['UI/UX Design', 'User Journey', 'Concert Ticketing', 'Figma', 'Visual Direction'],
     deliverables: [
@@ -454,32 +446,11 @@ const getProjectGallery = (project) => {
   if (project.id === 'melody') {
     return {
       hero: {
-        img: projectMelodyImg,
+        img: melodyFullCaseImg,
         title: 'Melody // Live Concert Ticketing & End-to-End Desktop Journey',
         caption: 'Full Journey Showcase: Atmospheric Dark Mode, Split-Theme Lineup & 3D Periwinkle Staging',
       },
-      secondary: [
-        {
-          img: melodyEvents,
-          title: '02 // Upcoming Events & Poster Gallery',
-          subtitle: 'Dark Mode Stage Atmosphere with Featured Live Concert Lineups & Headliners',
-        },
-        {
-          img: melodyArtists,
-          title: '03 // Metallica Lineup & Performing Artists',
-          subtitle: 'Split-Theme Layout: Atmospheric Band Header with Clean Musician Profile Grid',
-        },
-        {
-          img: melodyCheckout,
-          title: '04 // Streamlined Order Summary & Payment',
-          subtitle: 'Focused Two-Column Checkout with Real-Time Ticket Total and Card Details',
-        },
-        {
-          img: melodyAbout,
-          title: '05 // Purchase Confirmation & Brand Story',
-          subtitle: 'Celebratory Post-Purchase Flow Backdropped by Immersive Concert Crowd Imagery',
-        },
-      ],
+      secondary: [],
     }
   }
 
