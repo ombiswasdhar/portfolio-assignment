@@ -201,7 +201,6 @@ export const projectsData = [
     hoverImage: kaaliPeeliHoverImg,
     previewPhotos: [
       psCase01Img,
-      playStaplesMoodboardImg,
       psCase02Img,
       psCase03Img,
       psCase04Img,
@@ -212,6 +211,7 @@ export const projectsData = [
       psCase09Img,
       psCase10Img,
       psCase11Img,
+      playStaplesMoodboardImg,
     ],
     tags: ['UX Case Study', 'Moodboard', 'Heuristic Evaluation', 'UI Design System', 'E-Commerce', '3D Modeling'],
     deliverables: [
@@ -358,33 +358,33 @@ const getProjectGallery = (project) => {
       hero: {
         img: psCase01Img,
         title: 'PlayStaples // UX Case Study & Collectible E-Commerce',
-        caption: 'Featured UX Case Study: Ideation, IA, Design System & 3D Craft',
+        caption: 'Featured UX Case Study: Behance Case Study & Part 2 Ideation Moodboard',
       },
       secondary: [
         {
-          img: playStaplesMoodboardImg,
-          title: '02 // Ideation & Visual Moodboard',
-          subtitle: 'Art Direction Exploration: Abstract, Maggie, Airborne & Buttermax',
-        },
-        {
           img: psCase02Img,
-          title: '03 // Research & Problem Discovery',
+          title: '02 // Research & Problem Discovery',
           subtitle: 'Usability Heuristics, Pain Points & User Persona Mapping',
         },
         {
           img: psCase05Img,
-          title: '04 // UI Design System & Component Library',
+          title: '03 // UI Design System & Component Library',
           subtitle: 'Consistent Typography, Color Tokens & Atomic Components',
         },
         {
           img: psCase06Img,
-          title: '05 // High-Fidelity UI Screens & Catalog Flow',
+          title: '04 // High-Fidelity UI Screens & Catalog Flow',
           subtitle: 'Curated Indian Collectibles Discovery & Sticky Navigation',
         },
         {
           img: psCase09Img,
-          title: '06 // Kaali Peeli Wooden Toy & Packaging Design',
+          title: '05 // Kaali Peeli Wooden Toy & Packaging Design',
           subtitle: 'Handcrafted Mumbai Premier Padmini 3D CAD & Retail Box',
+        },
+        {
+          img: playStaplesMoodboardImg,
+          title: '06 // Part 2: Ideation & Visual Moodboard',
+          subtitle: 'Art Direction Exploration: Abstract, Maggie, Airborne & Buttermax',
         },
       ],
     }
