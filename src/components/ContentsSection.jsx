@@ -248,9 +248,9 @@ export const projectsData = [
     previewPhotos: [
       oniAssignmentFullImg,
       oniCard2FrontImg,
+      oniCard2BackImg,
       oniCardFrontImg,
       oniCardBackImg,
-      oniCard2BackImg,
     ],
     tags: ['Brand Identity', 'Print Design', 'Character Illustration', 'Figma', 'Procreate', 'Typography'],
     deliverables: [
@@ -388,19 +388,19 @@ const getProjectGallery = (project) => {
           subtitle: 'Horizontal Split Oni Mask, Swirled Cosmic Texture & Magenta Staging',
         },
         {
+          img: oniCard2BackImg,
+          title: '03 // Concept 1 Reverse & Print Production',
+          subtitle: 'Card Reverse Typography & Production Specifications',
+        },
+        {
           img: oniCardFrontImg,
-          title: '03 // Concept Artwork & Character Framing',
+          title: '04 // Concept Artwork & Character Framing',
           subtitle: 'Anime-Inspired Persona Illustration & Monogram Lockup',
         },
         {
           img: oniCardBackImg,
-          title: '04 // Print Layout & Back Typography',
+          title: '05 // Print Layout & Back Typography',
           subtitle: 'Contact Details, Studio Branding & Scannable QR Integration',
-        },
-        {
-          img: oniCard2BackImg,
-          title: '05 // Concept 1 Reverse & Print Production',
-          subtitle: 'Card Reverse Typography & Production Specifications',
         },
       ],
     }
