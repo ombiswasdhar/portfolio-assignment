@@ -54,6 +54,7 @@ import psCase08Img from '../assets/playstaples/case-study/playstaples_case_08.we
 import psCase09Img from '../assets/playstaples/case-study/playstaples_case_09.webp'
 import psCase10Img from '../assets/playstaples/case-study/playstaples_case_10.webp'
 import psCase11Img from '../assets/playstaples/case-study/playstaples_case_11.webp'
+import playStaplesMoodboardImg from '../assets/playstaples/case-study/playstaples_moodboard.png'
 
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -193,13 +194,14 @@ export const projectsData = [
     title: 'PlayStaples',
     subtitle: 'E-Commerce UX Case Study & Handcrafted Collectible Brand Experience',
     category: 'UX Case Study & Toy Design',
-    bulletSummary: 'Behance Case Study • Heuristic Evaluation • IA & Design System • 3D Toy Craft',
+    bulletSummary: 'UX Case Study • Ideation & Moodboard • IA & Design System • 3D Craft',
     description:
       'PlayStaples is an end-to-end e-commerce UX case study and collectible brand experience celebrating iconic Indian street culture. Grounded in Jakob Nielsen\'s usability heuristics, user research, and wireframe prototyping, the project overhauls the digital retail journey—from discovery and 360° product exploration to frictionless checkout—while spotlighting "Kaali Peeli", a handcrafted wooden Premier Padmini taxi collectible.',
     thumbnail: projectPlaystaplesImg,
     hoverImage: kaaliPeeliHoverImg,
     previewPhotos: [
       psCase01Img,
+      playStaplesMoodboardImg,
       psCase02Img,
       psCase03Img,
       psCase04Img,
@@ -211,8 +213,9 @@ export const projectsData = [
       psCase10Img,
       psCase11Img,
     ],
-    tags: ['UX Case Study', 'Heuristic Evaluation', 'UI Design System', 'E-Commerce', '3D Modeling', 'Figma'],
+    tags: ['UX Case Study', 'Moodboard', 'Heuristic Evaluation', 'UI Design System', 'E-Commerce', '3D Modeling'],
     deliverables: [
+      'Visual ideation & moodboard: 3-layer aesthetic exploration (Maggie, Airborne, Buttermax)',
       'Heuristic evaluation across 10 usability principles & user interview synthesis',
       'Information architecture overhaul, sitemap & low-to-high fidelity wireframes',
       'Design system: typography hierarchy, color tokens & reusable UI component library',
@@ -355,27 +358,32 @@ const getProjectGallery = (project) => {
       hero: {
         img: psCase01Img,
         title: 'PlayStaples // UX Case Study & Collectible E-Commerce',
-        caption: 'Behance Featured UX Case Study: Research, IA, Design System & 3D Craft',
+        caption: 'Featured UX Case Study: Ideation, IA, Design System & 3D Craft',
       },
       secondary: [
         {
+          img: playStaplesMoodboardImg,
+          title: '02 // Ideation & Visual Moodboard',
+          subtitle: 'Art Direction Exploration: Abstract, Maggie, Airborne & Buttermax',
+        },
+        {
           img: psCase02Img,
-          title: '02 // Research & Problem Discovery',
+          title: '03 // Research & Problem Discovery',
           subtitle: 'Usability Heuristics, Pain Points & User Persona Mapping',
         },
         {
           img: psCase05Img,
-          title: '03 // UI Design System & Component Library',
+          title: '04 // UI Design System & Component Library',
           subtitle: 'Consistent Typography, Color Tokens & Atomic Components',
         },
         {
           img: psCase06Img,
-          title: '04 // High-Fidelity UI Screens & Catalog Flow',
+          title: '05 // High-Fidelity UI Screens & Catalog Flow',
           subtitle: 'Curated Indian Collectibles Discovery & Sticky Navigation',
         },
         {
           img: psCase09Img,
-          title: '05 // Kaali Peeli Wooden Toy & Packaging Design',
+          title: '06 // Kaali Peeli Wooden Toy & Packaging Design',
           subtitle: 'Handcrafted Mumbai Premier Padmini 3D CAD & Retail Box',
         },
       ],
