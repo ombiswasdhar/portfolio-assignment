@@ -9,7 +9,7 @@
 - [Sketchbook](https://omisbrain.vercel.app/#sketchbook): Interactive 3D Moleskine journal with ideation notes, character mascot print specs, and toy design sketches.
 - [About](https://omisbrain.vercel.app/#about): Design philosophy, creative approach, and visual arts background.
 - [Skills](https://omisbrain.vercel.app/#skills): Creative toolkit including Figma, Procreate, Blender 3D, After Effects, and Antigravity.
-- [Curriculum Vitae](https://omisbrain.vercel.app/#cv): Comprehensive resume, experience, education at Symbiosis Institute of Design, and achievements.
+- [Curriculum Vitae](https://omisbrain.vercel.app/#cv): Comprehensive resume, experience, education at Symbiosis Institute of Design, and achievements. Direct formal PDF download: [Professional CV](https://omisbrain.vercel.app/Om_Biswas_Professional_CV.pdf).
 - [Contact](https://omisbrain.vercel.app/contact): Direct communication channels, social profiles, and collaboration inquiries.
 
 ## Featured Projects

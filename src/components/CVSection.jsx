@@ -4,6 +4,14 @@ import philosophyCardImg from '../assets/cv/philosophy_card_2x.png'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import ComicTapHintBubble from './ComicTapHintBubble'
 import {
+  FileDown,
+  FileText,
+  Eye,
+  ExternalLink,
+  X,
+  Printer,
+} from 'lucide-react'
+import {
   ProcreateIcon,
   SketchbookIcon,
   FigmaIcon,
@@ -41,6 +49,25 @@ export default function CVSection() {
   const [tilt, setTilt] = useState({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
   const [copiedEmail, setCopiedEmail] = useState(false)
   const [pinnedCard, setPinnedCard] = useState(null)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+
+  // Escape key and scroll lock for preview modal
+  useEffect(() => {
+    if (!isPreviewOpen) return
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setIsPreviewOpen(false)
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [isPreviewOpen])
 
   // Tap outside any zoom card to dismiss back to resting poster state (identical to About Me)
   useEffect(() => {
@@ -87,7 +114,7 @@ export default function CVSection() {
 
   const handlePrint = () => {
     if (typeof window !== 'undefined') {
-      window.open('/Om_Biswas_CV.pdf', '_blank')
+      window.open('/Om_Biswas_Professional_CV.pdf', '_blank')
     }
   }
 
@@ -131,14 +158,14 @@ export default function CVSection() {
             />
           </div>
 
-          {/* Action Bar: Download CV, Print, Copy Email */}
+          {/* Action Bar: Download Professional CV, Preview, Creative Poster, Print, Copy Email */}
           <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center font-fredoka">
 
             <button
               type="button"
               onClick={handleCopyEmail}
-              className="group inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-fredoka font-medium text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
-              title="Copy Email Address"
+              className="group inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-fredoka font-medium text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
+              title="Copy Email Address (ombiswasatwork@gmail.com)"
             >
               <span>{copiedEmail ? '✓ Copied!' : 'Copy Email'}</span>
             </button>
@@ -146,19 +173,42 @@ export default function CVSection() {
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-fredoka font-medium text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
-              title="Print CV or Save as PDF"
+              className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-fredoka font-medium text-neutral-300 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
+              title="Print Professional CV or Save as PDF"
             >
-              <span>Print / PDF</span>
+              <Printer className="w-3.5 h-3.5 text-neutral-400" />
+              <span>Print</span>
             </button>
 
             <a
               href={cvFullFrame}
-              download="Om_Biswas_CV.png"
-              className="inline-flex items-center gap-1.5 px-4 sm:px-4.5 py-2 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-fredoka font-bold tracking-wide shadow-[0_4px_16px_rgba(186,31,31,0.45)] hover:shadow-[0_6px_22px_rgba(186,31,31,0.65)] hover:scale-105 active:scale-95 transition-all min-h-[38px]"
+              download="Om_Biswas_Creative_CV_Poster.png"
+              className="group inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-full bg-neutral-900/80 border border-white/15 text-xs font-fredoka font-medium text-neutral-300 hover:text-white hover:border-white/30 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
+              title="Download illustrated creative bulletin poster (PNG)"
             >
-              <span>Download CV</span>
-              <span>↓</span>
+              <span>Creative Poster</span>
+              <span className="text-neutral-400 group-hover:text-white transition-colors">↓</span>
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setIsPreviewOpen(true)}
+              className="group inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full bg-neutral-900/90 border border-white/20 text-xs font-fredoka font-medium text-neutral-200 hover:text-white hover:border-red-500/50 hover:bg-neutral-800 transition-all active:scale-95 shadow-md cursor-pointer min-h-[38px]"
+              title="Preview Professional CV"
+            >
+              <Eye className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white transition-colors" />
+              <span>Preview CV</span>
+            </button>
+
+            <a
+              href="/Om_Biswas_Professional_CV.pdf"
+              download="Om_Biswas_Professional_CV.pdf"
+              className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-fredoka font-bold tracking-wide shadow-[0_4px_16px_rgba(186,31,31,0.5)] hover:shadow-[0_6px_24px_rgba(186,31,31,0.75)] hover:scale-105 active:scale-95 transition-all min-h-[38px] cursor-pointer"
+              title="Download Professional ATS-Friendly CV (PDF)"
+            >
+              <FileDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
+              <span>Download Professional CV</span>
+              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-black/30 text-white/95">PDF</span>
             </a>
           </div>
         </div>
@@ -539,6 +589,47 @@ export default function CVSection() {
           </div>
         </div>
 
+        {/* ================= RECRUITER / ATS PROFESSIONAL CV BANNER ================= */}
+        <div className="max-w-[760px] mx-auto mt-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-neutral-900/90 via-neutral-900/80 to-neutral-900/90 border border-white/10 backdrop-blur-sm shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5 text-left w-full sm:w-auto">
+            <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-[#BA1F1F] shrink-0">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-fredoka font-semibold text-white">Looking for my formal resume?</span>
+                <span className="text-[10px] font-fredoka font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                  ATS Ready
+                </span>
+              </div>
+              <p className="text-xs text-neutral-400 font-fredoka mt-0.5">
+                Standard 1-page clean CV with full work experience, skills, education & achievements.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end font-fredoka">
+            <button
+              type="button"
+              onClick={() => setIsPreviewOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-medium text-neutral-200 hover:text-white transition-all active:scale-95 cursor-pointer"
+              title="Preview Professional CV"
+            >
+              <Eye className="w-3.5 h-3.5 text-neutral-400" />
+              <span>Preview</span>
+            </button>
+            <a
+              href="/Om_Biswas_Professional_CV.pdf"
+              download="Om_Biswas_Professional_CV.pdf"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-bold shadow-[0_4px_14px_rgba(186,31,31,0.4)] hover:shadow-[0_6px_20px_rgba(186,31,31,0.6)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              title="Download Professional CV (PDF)"
+            >
+              <FileDown className="w-3.5 h-3.5" />
+              <span>Download PDF</span>
+            </a>
+          </div>
+        </div>
+
         {/* ================= SCREEN READER & SEO ACCESSIBILITY ================= */}
         <div className="sr-only">
           <h2>Om Biswas — Curriculum Vitae</h2>
@@ -550,8 +641,95 @@ export default function CVSection() {
           <p>Interests: Badminton, Table Tennis, Football, Basketball, Sketching, Animation, Gaming, Guitar, Traveling</p>
           <p>Languages: Fluent in English, Hindi, Bengali. Understanding: Assamese, Nepali</p>
           <p>Contact: Phone: 9383049271 | Email: ombiswasatwork@gmail.com | LinkedIn: ombiswasxd | Instagram: @jkitsnoah | Behance: OmBiswasXD</p>
+          <p><a href="/Om_Biswas_Professional_CV.pdf">Download Om Biswas Professional CV (PDF)</a></p>
         </div>
       </div>
+
+      {/* ================= PROFESSIONAL CV PREVIEW MODAL ================= */}
+      {isPreviewOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Om Biswas Professional CV Preview"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md"
+          onClick={() => setIsPreviewOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl h-[92vh] max-h-[920px] bg-[#141518] border border-white/15 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/10 bg-neutral-900/90">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-red-500/15 border border-red-500/30 flex items-center justify-center text-[#BA1F1F]">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm sm:text-base font-bold font-fredoka text-white">Om Biswas — Professional CV</h3>
+                    <span className="hidden xs:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-fredoka font-semibold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                      ATS Ready
+                    </span>
+                  </div>
+                  <p className="text-xs text-neutral-400 font-fredoka">UI/UX & Product Designer • 1-Page Formal Resume</p>
+                </div>
+              </div>
+
+              {/* Action Buttons in Modal Header */}
+              <div className="flex items-center gap-2 font-fredoka">
+                <a
+                  href="/Om_Biswas_Professional_CV.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 text-xs text-neutral-200 hover:text-white transition-colors"
+                  title="Open in new window"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Open Tab</span>
+                </a>
+                <a
+                  href="/Om_Biswas_Professional_CV.pdf"
+                  download="Om_Biswas_Professional_CV.pdf"
+                  className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-bold shadow-md hover:scale-105 active:scale-95 transition-all"
+                  title="Download Professional CV PDF"
+                >
+                  <FileDown className="w-3.5 h-3.5" />
+                  <span>Download PDF</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsPreviewOpen(false)}
+                  className="p-1.5 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white transition-colors ml-1 cursor-pointer"
+                  title="Close Preview (Esc)"
+                  aria-label="Close Preview"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body: PDF Viewer */}
+            <div className="relative flex-1 w-full bg-neutral-950 overflow-hidden flex flex-col">
+              <iframe
+                src="/Om_Biswas_Professional_CV.pdf#toolbar=1&navpanes=0"
+                title="Om Biswas Professional CV"
+                className="w-full flex-1 border-0"
+              />
+              {/* Mobile / Fallback Footer */}
+              <div className="sm:hidden px-4 py-2.5 bg-neutral-900 border-t border-white/10 flex items-center justify-between text-xs font-fredoka text-neutral-400">
+                <span>PDF preview restricted on mobile?</span>
+                <a
+                  href="/Om_Biswas_Professional_CV.pdf"
+                  download="Om_Biswas_Professional_CV.pdf"
+                  className="text-red-400 hover:text-red-300 font-bold underline"
+                >
+                  Download PDF
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
