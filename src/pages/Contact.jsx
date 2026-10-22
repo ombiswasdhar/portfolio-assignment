@@ -209,7 +209,7 @@ export default function Contact() {
       </main>
 
       {/* Clean Paper-style Footer */}
-      <footer className="relative z-10 border-t border-black/10 py-6 text-center text-xs text-neutral-500 font-mono tracking-wider bg-white/70 backdrop-blur-sm">
+      <footer className="relative z-10 border-t border-black/10 py-6 text-center text-xs text-neutral-500 font-fredoka tracking-wider bg-white/70 backdrop-blur-sm">
         OM BISWAS • SHILLONG, INDIA • DESIGN PORTFOLIO
       </footer>
     </div>

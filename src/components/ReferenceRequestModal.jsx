@@ -169,19 +169,19 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                 thank you, {formData.name || 'there'}!
               </p>
 
-              <div className="mt-5 p-4 bg-neutral-50 border-2 border-black text-left text-xs font-mono shadow-[2px_2px_0px_#000000]">
-                <div className="flex items-center gap-2 text-neutral-600 mb-2 font-bold uppercase tracking-wider">
+              <div className="mt-5 p-4 bg-neutral-50 border-2 border-black text-left text-xs shadow-[2px_2px_0px_#000000]">
+                <div className="flex items-center gap-2 text-neutral-600 font-fredoka mb-2 font-bold uppercase tracking-wider">
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   <span>Submission Summary:</span>
                 </div>
-                <div className="space-y-1 text-neutral-800">
-                  <p><span className="text-neutral-500">Applicant:</span> {formData.name}</p>
-                  <p><span className="text-neutral-500">Organization:</span> {formData.organization || 'N/A'}</p>
-                  <p><span className="text-neutral-500">Reply Email:</span> {formData.email}</p>
+                <div className="space-y-1 text-neutral-800 font-fredoka">
+                  <p><span className="text-neutral-500 font-fredoka">Applicant:</span> {formData.name}</p>
+                  <p><span className="text-neutral-500 font-fredoka">Organization:</span> {formData.organization || 'N/A'}</p>
+                  <p><span className="text-neutral-500 font-fredoka">Reply Email:</span> {formData.email}</p>
                 </div>
               </div>
 
-              <p className="text-xs text-neutral-600 font-sans mt-4 max-w-md mx-auto leading-relaxed">
+              <p className="text-xs text-neutral-600 font-fredoka mt-4 max-w-md mx-auto leading-relaxed">
                 Om will review your request and reply directly to <span className="font-bold text-black">{formData.email}</span> with referee details and contact authorization.
               </p>
 
@@ -208,7 +208,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                     upon request
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-neutral-600 font-sans mt-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-neutral-600 font-fredoka mt-2 leading-relaxed">
                   To protect referee confidentiality, professional references are shared upon request. Enter your details and reason below — the inquiry will be delivered directly to{' '}
                   <span className="font-mono font-semibold text-black bg-neutral-100 px-1.5 py-0.5 border border-black/20">
                     ombiswasatwork@gmail.com
@@ -250,7 +250,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="e.g. Sarah Jenkins"
-                        className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-sans placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors"
+                        className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-fredoka placeholder:font-fredoka placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors"
                       />
                       <User className="absolute right-3 top-3 w-4 h-4 text-neutral-400 pointer-events-none" />
                     </div>
@@ -268,7 +268,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="e.g. sarah@studio.com"
-                        className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-sans placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors"
+                        className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-fredoka placeholder:font-fredoka placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors"
                       />
                       <Mail className="absolute right-3 top-3 w-4 h-4 text-neutral-400 pointer-events-none" />
                     </div>
@@ -289,7 +289,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                         value={formData.organization}
                         onChange={handleChange}
                         placeholder="e.g. Studio Vertex / Freelance"
-                        className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-sans placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors"
+                        className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-fredoka placeholder:font-fredoka placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors"
                       />
                       <Building2 className="absolute right-3 top-3 w-4 h-4 text-neutral-400 pointer-events-none" />
                     </div>
@@ -305,7 +305,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                       value={formData.role}
                       onChange={handleChange}
                       placeholder="e.g. Design Director / Hiring Manager"
-                      className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-sans placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors"
+                      className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-fredoka placeholder:font-fredoka placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors"
                     />
                   </div>
                 </div>
@@ -316,7 +316,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                     <label className="block font-mono text-[11px] font-bold uppercase tracking-wider text-neutral-800">
                       Reason for Reference <span className="text-[#DE2020]">*</span>
                     </label>
-                    <span className="text-[11px] text-neutral-400 font-mono">
+                    <span className="text-[11px] text-neutral-400 font-fredoka">
                       (Brief explanation)
                     </span>
                   </div>
@@ -328,7 +328,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                       value={formData.reason}
                       onChange={handleChange}
                       placeholder="e.g. We are considering Om for a UI/UX Designer role for our new product launch, and would love to check his past collaboration and design handoff experience..."
-                      className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-sans placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors resize-none"
+                      className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-sm font-fredoka placeholder:font-fredoka placeholder:text-neutral-400 focus:border-[#DE2020] focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000000] transition-colors resize-none"
                     />
                     <FileText className="absolute right-3 top-3 w-4 h-4 text-neutral-400 pointer-events-none" />
                   </div>
@@ -338,7 +338,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <a
                     href={buildMailtoUrl()}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono text-neutral-600 hover:text-black underline underline-offset-4 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-xs font-fredoka text-neutral-600 hover:text-black underline underline-offset-4 cursor-pointer"
                     title="Open your device's default mail application"
                   >
                     <span>Or send via email app</span>
