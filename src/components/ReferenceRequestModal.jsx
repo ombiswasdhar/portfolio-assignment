@@ -133,7 +133,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
             <span className="font-mono text-[11px] sm:text-xs font-bold uppercase tracking-widest">
-              REFERENCE INQUIRY
+              CONFIDENTIAL • REFERENCE INQUIRY
             </span>
           </div>
 
@@ -158,7 +158,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
               </div>
 
               <div className="inline-block px-3 py-1 bg-black text-white font-mono text-[11px] uppercase tracking-wider font-bold mb-2">
-                Delivered to ombiswasatwork@gmail.com
+                Request Dispatched
               </div>
 
               <h3 className="font-sans font-black text-2xl sm:text-3xl tracking-tight text-black mt-2">
@@ -208,6 +208,9 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                     upon request
                   </span>
                 </div>
+                <p className="text-xs sm:text-sm text-neutral-600 font-fredoka mt-2 leading-relaxed">
+                  To protect referee confidentiality, professional references are shared upon request. Enter your details and a brief reason below.
+                </p>
               </div>
 
               {/* Error Notice if any */}
