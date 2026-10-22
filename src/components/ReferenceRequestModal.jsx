@@ -133,7 +133,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
             <span className="font-mono text-[11px] sm:text-xs font-bold uppercase tracking-widest">
-              CONFIDENTIAL • REFERENCE INQUIRY
+              REFERENCE INQUIRY
             </span>
           </div>
 
@@ -199,7 +199,7 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
             /* ================= FORM STATE ================= */
             <div>
               {/* Header Titles */}
-              <div className="mb-6">
+              <div className="mb-5">
                 <div className="flex items-baseline gap-2">
                   <span className="font-sans font-black text-2xl sm:text-3xl md:text-4xl tracking-tight text-black">
                     (6) REFERENCES
@@ -208,12 +208,6 @@ export default function ReferenceRequestModal({ isOpen, onClose }) {
                     upon request
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-neutral-600 font-fredoka mt-2 leading-relaxed">
-                  To protect referee confidentiality, professional references are shared upon request. Enter your details and reason below — the inquiry will be delivered directly to{' '}
-                  <span className="font-mono font-semibold text-black bg-neutral-100 px-1.5 py-0.5 border border-black/20">
-                    ombiswasatwork@gmail.com
-                  </span>.
-                </p>
               </div>
 
               {/* Error Notice if any */}
