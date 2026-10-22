@@ -271,3 +271,12 @@ export function BehanceIcon({ className = 'w-4 h-4 shrink-0' }) {
     </span>
   )
 }
+
+export function LinkedInIcon({ className = 'w-4 h-4 shrink-0' }) {
+  return (
+    <span className={`w-4 h-4 rounded-[4px] bg-[#0A66C2] text-white flex items-center justify-center text-[9px] font-black shrink-0 shadow-sm ${className}`}>
+      in
+    </span>
+  )
+}
+
