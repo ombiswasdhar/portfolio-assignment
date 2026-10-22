@@ -2,10 +2,12 @@ import React, { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import ContactFloatingElements from '../components/ContactFloatingElements'
+import ReferenceRequestModal from '../components/ReferenceRequestModal'
 
 export default function Contact() {
   const [toastMessage, setToastMessage] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
+  const [isRefModalOpen, setIsRefModalOpen] = useState(false)
   const toastTimeoutRef = useRef(null)
 
   const showToast = (msg) => {
@@ -80,10 +82,10 @@ export default function Contact() {
       num: '(6)',
       label: 'REFERENCES',
       value: 'UPON REQUEST',
-      href: 'mailto:ombiswasatwork@gmail.com?subject=Reference%20Request',
-      isUnderlined: false,
-      onAction: () => showToast('References available upon request!'),
-      actionLabel: 'Request references',
+      href: '#',
+      isUnderlined: true,
+      onAction: () => setIsRefModalOpen(true),
+      actionLabel: 'Click to submit a reference inquiry',
     },
   ]
 
@@ -111,6 +113,12 @@ export default function Contact() {
           <span>{toastMessage}</span>
         </div>
       </div>
+
+      {/* Interactive Reference Request Form Modal */}
+      <ReferenceRequestModal
+        isOpen={isRefModalOpen}
+        onClose={() => setIsRefModalOpen(false)}
+      />
 
       {/* Main Content Container */}
       <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-48 sm:pt-52 md:pt-40 lg:pt-36 pb-20 flex-1 flex flex-col justify-start md:justify-center">
