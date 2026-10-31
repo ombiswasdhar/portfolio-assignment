@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import burstStar from '../assets/work/floating/burst_star.png'
 import blueStar from '../assets/work/floating/blue_star.png'
@@ -8,8 +8,27 @@ import lightningBolt1 from '../assets/work/floating/lightning_bolt_1.png'
 import lightningBolt2 from '../assets/work/floating/lightning_bolt_2.png'
 
 export default function FeaturedWorksFloatingElements() {
+  const containerRef = useRef(null)
+  const [isInView, setIsInView] = useState(true)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { rootMargin: '150px 0px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div 
+      ref={containerRef}
       className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none"
       aria-hidden="true"
     >
@@ -20,11 +39,11 @@ export default function FeaturedWorksFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: -6 }}
-        animate={{
+        animate={isInView ? {
           x: [0, 28, -22, 35, -16, 0],
           y: [0, -24, 20, -18, 26, 0],
           rotate: [-6, 8, -12, 6, -10, -6],
-        }}
+        } : { x: 0, y: 0, rotate: -6 }}
         transition={{
           duration: 18,
           repeat: Infinity,
@@ -41,6 +60,8 @@ export default function FeaturedWorksFloatingElements() {
         <img
           src={catPointing}
           alt="Floating cat with cap"
+          loading="lazy"
+          decoding="async"
           className="w-18 xs:w-22 sm:w-28 md:w-36 lg:w-42 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.16)] will-change-transform"
           draggable={false}
         />
@@ -53,12 +74,12 @@ export default function FeaturedWorksFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 6 }}
-        animate={{
+        animate={isInView ? {
           x: [0, -32, 24, -28, 18, 0],
           y: [0, 26, -22, 28, -20, 0],
           rotate: [6, -10, 14, -8, 12, 6],
           scale: [1, 1.05, 0.97, 1.04, 0.98, 1],
-        }}
+        } : { x: 0, y: 0, rotate: 6, scale: 1 }}
         transition={{
           duration: 22,
           repeat: Infinity,
@@ -75,6 +96,8 @@ export default function FeaturedWorksFloatingElements() {
         <img
           src={burstStar}
           alt="Floating burst star"
+          loading="lazy"
+          decoding="async"
           className="w-20 xs:w-24 sm:w-32 md:w-40 lg:w-48 h-auto object-contain drop-shadow-[0_10px_22px_rgba(222,32,32,0.18)] will-change-transform"
           draggable={false}
         />
@@ -87,11 +110,11 @@ export default function FeaturedWorksFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 10 }}
-        animate={{
+        animate={isInView ? {
           x: [0, 32, -26, 22, -18, 0],
           y: [0, -30, 18, -26, 24, 0],
           rotate: [10, -6, 14, -4, 8, 10],
-        }}
+        } : { x: 0, y: 0, rotate: 10 }}
         transition={{
           duration: 24,
           repeat: Infinity,
@@ -108,6 +131,8 @@ export default function FeaturedWorksFloatingElements() {
         <img
           src={headphonesSticker}
           alt="Floating headphones sticker"
+          loading="lazy"
+          decoding="async"
           className="w-16 xs:w-20 sm:w-26 md:w-32 lg:w-38 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.15)] will-change-transform"
           draggable={false}
         />
@@ -120,11 +145,11 @@ export default function FeaturedWorksFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 0 }}
-        animate={{
+        animate={isInView ? {
           x: [0, -28, 22, -32, 14, 0],
           y: [0, -22, 28, -18, 20, 0],
           rotate: [0, 72, 144, 216, 288, 360],
-        }}
+        } : { x: 0, y: 0, rotate: 0 }}
         transition={{
           x: { duration: 17, repeat: Infinity, ease: 'easeInOut' },
           y: { duration: 19, repeat: Infinity, ease: 'easeInOut' },
@@ -140,6 +165,8 @@ export default function FeaturedWorksFloatingElements() {
         <img
           src={blueStar}
           alt="Floating blue chalk star"
+          loading="lazy"
+          decoding="async"
           className="w-12 xs:w-14 sm:w-18 md:w-22 lg:w-26 h-auto object-contain drop-shadow-[0_6px_14px_rgba(20,50,180,0.22)] will-change-transform"
           draggable={false}
         />
@@ -152,11 +179,11 @@ export default function FeaturedWorksFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: -14 }}
-        animate={{
+        animate={isInView ? {
           x: [0, -26, 30, -18, 22, 0],
           y: [0, 24, -28, 22, -18, 0],
           rotate: [-14, 4, -18, 6, -8, -14],
-        }}
+        } : { x: 0, y: 0, rotate: -14 }}
         transition={{
           duration: 20,
           repeat: Infinity,
@@ -173,23 +200,25 @@ export default function FeaturedWorksFloatingElements() {
         <img
           src={lightningBolt1}
           alt="Floating lightning bolt"
+          loading="lazy"
+          decoding="async"
           className="w-16 xs:w-20 sm:w-26 md:w-32 lg:w-38 h-auto object-contain drop-shadow-[0_8px_18px_rgba(222,32,32,0.2)] will-change-transform"
           draggable={false}
         />
       </motion.div>
 
-      {/* 6. UPPER-MIDDLE-LEFT: Secondary Tiny Blue Star (adds visual depth & float) */}
+      {/* 6. UPPER-MIDDLE-LEFT: Secondary Tiny Blue Star */}
       <motion.div
         className="hidden md:block absolute top-[18%] left-[28%] pointer-events-auto cursor-grab active:cursor-grabbing opacity-75 hover:opacity-100"
         drag
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 15 }}
-        animate={{
+        animate={isInView ? {
           x: [0, 22, -18, 25, -12, 0],
           y: [0, -18, 24, -15, 18, 0],
           rotate: [15, 85, 155, 225, 295, 375],
-        }}
+        } : { x: 0, y: 0, rotate: 15 }}
         transition={{
           x: { duration: 15, repeat: Infinity, ease: 'easeInOut' },
           y: { duration: 17, repeat: Infinity, ease: 'easeInOut' },
@@ -206,6 +235,8 @@ export default function FeaturedWorksFloatingElements() {
         <img
           src={blueStar}
           alt="Mini blue star"
+          loading="lazy"
+          decoding="async"
           className="w-8 md:w-10 lg:w-12 h-auto object-contain drop-shadow-[0_4px_10px_rgba(20,50,180,0.2)] will-change-transform"
           draggable={false}
         />
@@ -218,11 +249,11 @@ export default function FeaturedWorksFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 8 }}
-        animate={{
+        animate={isInView ? {
           x: [0, -18, 20, -14, 16, 0],
           y: [0, 16, -20, 18, -14, 0],
           rotate: [8, -8, 14, -6, 10, 8],
-        }}
+        } : { x: 0, y: 0, rotate: 8 }}
         transition={{
           duration: 16,
           repeat: Infinity,
@@ -240,6 +271,8 @@ export default function FeaturedWorksFloatingElements() {
         <img
           src={lightningBolt2}
           alt="Mini zig-zag lightning bolt"
+          loading="lazy"
+          decoding="async"
           className="w-14 sm:w-18 md:w-22 lg:w-26 h-auto object-contain drop-shadow-[0_6px_14px_rgba(222,32,32,0.22)] will-change-transform"
           draggable={false}
         />

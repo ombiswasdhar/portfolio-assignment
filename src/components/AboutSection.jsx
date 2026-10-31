@@ -7,9 +7,58 @@ import { useScrollReveal } from '../hooks/useScrollReveal'
 import KineticMatrix from '@/components/ui/kinetic-matrix'
 import ComicTapHintBubble from './ComicTapHintBubble'
 
+/**
+ * Detect whether the user is on a touch device (mobile phone, iPad, tablet)
+ * or a desktop / laptop with mouse hover capability.
+ */
+function getParagraphZoomHint() {
+  if (typeof window === 'undefined') return 'tap any paragraph to zoom in'
+
+  const ua = navigator.userAgent || ''
+  const maxTouch = navigator.maxTouchPoints || 0
+
+  // 1. Explicit iPad detection:
+  // - Classic iOS Safari UA contains 'iPad'
+  // - Modern iPadOS 13+ desktop-class Safari reports 'MacIntel' with touch points > 1
+  const isIPad = /iPad/i.test(ua) || (maxTouch > 1 && (navigator.platform === 'MacIntel' || /Macintosh/i.test(ua)))
+
+  // 2. Mobile phones & tablets (iPhone, iPod, Android phones, Android tablets, etc.)
+  const isMobileOrTabletUA = /iPhone|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini|Tablet/i.test(ua)
+
+  // 3. Media query check for touch devices without fine hover pointer
+  const isTouchPointer = window.matchMedia ? window.matchMedia('(pointer: coarse)').matches : false
+  const hasNoHover = window.matchMedia ? window.matchMedia('(hover: none)').matches : false
+
+  if (isIPad || isMobileOrTabletUA || (hasNoHover && isTouchPointer) || (isTouchPointer && window.innerWidth <= 1024)) {
+    return 'tap any paragraph to zoom in'
+  }
+
+  // Desktop / laptop device with mouse / trackpad
+  return 'hover on any paragraph to zoom in'
+}
+
 export default function AboutSection() {
   const [activeBubble, setActiveBubble] = useState(null)
   const [cardRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
+  const [bubbleHintText, setBubbleHintText] = useState(() => getParagraphZoomHint())
+
+  useEffect(() => {
+    const updateHint = () => {
+      setBubbleHintText(getParagraphZoomHint())
+    }
+
+    updateHint()
+    window.addEventListener('resize', updateHint)
+
+    const mqlHover = window.matchMedia ? window.matchMedia('(hover: hover) and (pointer: fine)') : null
+    mqlHover?.addEventListener?.('change', updateHint)
+
+    return () => {
+      window.removeEventListener('resize', updateHint)
+      mqlHover?.removeEventListener?.('change', updateHint)
+    }
+  }, [])
+
 
   // Tap outside any bubble to dismiss the active bubble back to resting state
   useEffect(() => {
@@ -76,7 +125,7 @@ export default function AboutSection() {
             </span>
             <ComicTapHintBubble
               active={activeBubble !== null}
-              text="tap any paragraph to zoom in"
+              text={bubbleHintText}
               onClick={(e) => {
                 e.stopPropagation()
                 setActiveBubble((prev) => (prev === null ? 0 : null))
@@ -276,7 +325,7 @@ export default function AboutSection() {
             </span>
             <ComicTapHintBubble
               active={activeBubble !== null}
-              text="tap any paragraph to zoom in"
+              text={bubbleHintText}
               onClick={(e) => {
                 e.stopPropagation()
                 setActiveBubble((prev) => (prev === null ? 0 : null))

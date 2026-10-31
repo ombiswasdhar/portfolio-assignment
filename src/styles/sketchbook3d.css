@@ -141,6 +141,7 @@
   max-width: 1100px;
   perspective: 1750px;
   perspective-origin: 50% 46%;
+  transform: translate3d(0, 0, 0);
 }
 
 .sb-tilt {
@@ -148,7 +149,6 @@
   transform-style: preserve-3d;
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--zoom, 1));
   will-change: transform;
-  transition: transform 0.05s ease-out;
 }
 
 .sb-book {
@@ -159,6 +159,7 @@
   z-index: 1;
   border-radius: 12px;
   box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.25);
+  contain: layout paint;
 }
 
 /* Ambient and contact shadows under the book */
@@ -166,6 +167,8 @@
   position: absolute;
   pointer-events: none;
   z-index: 0;
+  transform: translate3d(0, 0, 0);
+  will-change: opacity;
 }
 .sb-cast.ambient {
   left: 5%;

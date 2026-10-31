@@ -52,30 +52,36 @@
 
 @keyframes marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(calc(-100% - var(--gap, 1rem)));
+    transform: translate3d(calc(-100% - var(--gap, 1rem)), 0, 0);
   }
 }
 
 @keyframes marquee-vertical {
   from {
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateY(calc(-100% - var(--gap, 1rem)));
+    transform: translate3d(0, calc(-100% - var(--gap, 1rem)), 0);
   }
 }
 
 .animate-marquee {
   animation: marquee var(--duration, 40s) linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .animate-marquee-vertical {
   animation: marquee-vertical var(--duration, 40s) linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 :root {
@@ -484,10 +490,10 @@
 /* ================= Tape Marquee Keyframes ================= */
 @keyframes tape-marquee {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -496,15 +502,18 @@
   width: max-content;
   animation: tape-marquee 22s linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* ================= Top Header Marquee Scroll ================= */
 @keyframes marquee-scroll {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -513,6 +522,9 @@
   width: max-content;
   animation: marquee-scroll 28s linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .animate-marquee-scroll:hover {
@@ -521,10 +533,10 @@
 
 @keyframes marquee-scroll-reverse {
   0% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
   100% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
 }
 
@@ -533,6 +545,9 @@
   width: max-content;
   animation: marquee-scroll-reverse 28s linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .animate-marquee-scroll-reverse:hover {

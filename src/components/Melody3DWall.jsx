@@ -21,13 +21,13 @@ const col2 = [
 
 function MelodyCard({ item }) {
   return (
-    <div className="w-[195px] sm:w-[225px] md:w-[255px] rounded-2xl overflow-hidden border border-white/20 bg-neutral-900 shadow-[0_16px_40px_rgba(0,0,0,0.75)] transition-transform duration-300 hover:scale-105 shrink-0 group/card will-change-transform">
+    <div className="w-[195px] sm:w-[225px] md:w-[255px] rounded-2xl overflow-hidden border border-white/20 bg-neutral-900 shadow-lg transition-transform duration-300 hover:scale-105 shrink-0 group/card will-change-transform transform-gpu">
       <div className="relative aspect-[16/10.5] w-full overflow-hidden bg-neutral-950">
         <img
           src={item.img}
           alt={item.title}
           className="w-full h-full object-cover object-top select-none pointer-events-none transition-transform duration-500 group-hover/card:scale-105"
-          loading="eager"
+          loading="lazy"
           decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
@@ -56,14 +56,14 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
       ([entry]) => {
         setIsInView(entry.isIntersecting)
       },
-      { rootMargin: '250px' }
+      { rootMargin: '200px 0px' }
     )
 
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
 
-  const shouldPause = isPaused
+  const shouldPause = isPaused || !isInView
 
   return (
     <div
@@ -75,15 +75,18 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
           __html: `
         @keyframes marquee-vertical {
           from {
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
           to {
-            transform: translateY(calc(-100% - var(--gap, 0.9rem)));
+            transform: translate3d(0, calc(-100% - var(--gap, 0.9rem)), 0);
           }
         }
         .animate-marquee-vertical {
           animation: marquee-vertical var(--duration, 24s) linear infinite;
           will-change: transform;
+          transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
       `,
         }}
@@ -109,7 +112,7 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
         {/* Column 1: Downwards */}
         <Marquee
           vertical
-          repeat={4}
+          repeat={2}
           className={`[--duration:24s] [--gap:0.9rem] ${shouldPause ? '[&_.animate-marquee-vertical]:[animation-play-state:paused]' : ''}`}
         >
           {col1.map((item) => (
@@ -121,7 +124,7 @@ export default function Melody3DWall({ className = '', isPaused = false }) {
         <Marquee
           vertical
           reverse
-          repeat={4}
+          repeat={2}
           className={`[--duration:20s] [--gap:0.9rem] ${shouldPause ? '[&_.animate-marquee-vertical]:[animation-play-state:paused]' : ''}`}
         >
           {col2.map((item) => (

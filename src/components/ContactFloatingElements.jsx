@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import burstStar from '../assets/work/floating/burst_star.png'
 import blueStar from '../assets/work/floating/blue_star.png'
@@ -8,8 +8,27 @@ import lightningBolt1 from '../assets/work/floating/lightning_bolt_1.png'
 import lightningBolt2 from '../assets/work/floating/lightning_bolt_2.png'
 
 export default function ContactFloatingElements() {
+  const containerRef = useRef(null)
+  const [isInView, setIsInView] = useState(true)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { rootMargin: '150px 0px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div 
+      ref={containerRef}
       className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none"
       aria-hidden="true"
     >
@@ -20,11 +39,11 @@ export default function ContactFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: -6 }}
-        animate={{
+        animate={isInView ? {
           x: [0, 24, -18, 28, -14, 0],
           y: [0, -20, 16, -14, 22, 0],
           rotate: [-6, 8, -12, 6, -10, -6],
-        }}
+        } : { x: 0, y: 0, rotate: -6 }}
         transition={{
           duration: 18,
           repeat: Infinity,
@@ -41,6 +60,8 @@ export default function ContactFloatingElements() {
         <img
           src={catPointing}
           alt="Floating cat with cap"
+          loading="lazy"
+          decoding="async"
           className="w-14 xs:w-18 sm:w-24 md:w-30 lg:w-34 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.13)] will-change-transform opacity-90 hover:opacity-100 transition-opacity"
           draggable={false}
         />
@@ -53,12 +74,12 @@ export default function ContactFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 6 }}
-        animate={{
+        animate={isInView ? {
           x: [0, -28, 20, -24, 15, 0],
           y: [0, 22, -18, 24, -16, 0],
           rotate: [6, -10, 14, -8, 12, 6],
           scale: [1, 1.05, 0.97, 1.04, 0.98, 1],
-        }}
+        } : { x: 0, y: 0, rotate: 6, scale: 1 }}
         transition={{
           duration: 22,
           repeat: Infinity,
@@ -75,23 +96,25 @@ export default function ContactFloatingElements() {
         <img
           src={burstStar}
           alt="Floating burst star"
+          loading="lazy"
+          decoding="async"
           className="w-16 xs:w-20 sm:w-26 md:w-32 lg:w-38 h-auto object-contain drop-shadow-[0_10px_22px_rgba(222,32,32,0.15)] will-change-transform opacity-90 hover:opacity-100 transition-opacity"
           draggable={false}
         />
       </motion.div>
 
-      {/* 3. BOTTOM-LEFT: Halftone Headphones Sticker (clear of Return to Home button & mobile dock) */}
+      {/* 3. BOTTOM-LEFT: Halftone Headphones Sticker */}
       <motion.div
         className="absolute bottom-[13%] sm:bottom-[7%] md:bottom-[9%] left-[2%] sm:left-[5%] md:left-[8%] pointer-events-auto cursor-grab active:cursor-grabbing"
         drag
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 10 }}
-        animate={{
+        animate={isInView ? {
           x: [0, 26, -22, 18, -14, 0],
           y: [0, -26, 15, -22, 20, 0],
           rotate: [10, -6, 14, -4, 8, 10],
-        }}
+        } : { x: 0, y: 0, rotate: 10 }}
         transition={{
           duration: 24,
           repeat: Infinity,
@@ -108,6 +131,8 @@ export default function ContactFloatingElements() {
         <img
           src={headphonesSticker}
           alt="Floating headphones sticker"
+          loading="lazy"
+          decoding="async"
           className="w-14 xs:w-16 sm:w-22 md:w-26 lg:w-32 h-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.13)] will-change-transform opacity-90 hover:opacity-100 transition-opacity"
           draggable={false}
         />
@@ -120,11 +145,11 @@ export default function ContactFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 0 }}
-        animate={{
+        animate={isInView ? {
           x: [0, -24, 18, -26, 12, 0],
           y: [0, -18, 24, -15, 16, 0],
           rotate: [0, 72, 144, 216, 288, 360],
-        }}
+        } : { x: 0, y: 0, rotate: 0 }}
         transition={{
           x: { duration: 17, repeat: Infinity, ease: 'easeInOut' },
           y: { duration: 19, repeat: Infinity, ease: 'easeInOut' },
@@ -140,6 +165,8 @@ export default function ContactFloatingElements() {
         <img
           src={blueStar}
           alt="Floating blue chalk star"
+          loading="lazy"
+          decoding="async"
           className="w-11 xs:w-13 sm:w-16 md:w-20 lg:w-24 h-auto object-contain drop-shadow-[0_6px_14px_rgba(20,50,180,0.18)] will-change-transform opacity-85 hover:opacity-100 transition-opacity"
           draggable={false}
         />
@@ -152,11 +179,11 @@ export default function ContactFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: -14 }}
-        animate={{
+        animate={isInView ? {
           x: [0, -22, 26, -15, 18, 0],
           y: [0, 20, -24, 18, -15, 0],
           rotate: [-14, 4, -18, 6, -8, -14],
-        }}
+        } : { x: 0, y: 0, rotate: -14 }}
         transition={{
           duration: 20,
           repeat: Infinity,
@@ -173,6 +200,8 @@ export default function ContactFloatingElements() {
         <img
           src={lightningBolt1}
           alt="Floating lightning bolt"
+          loading="lazy"
+          decoding="async"
           className="w-15 xs:w-18 sm:w-24 md:w-28 lg:w-34 h-auto object-contain drop-shadow-[0_8px_18px_rgba(222,32,32,0.15)] will-change-transform opacity-90 hover:opacity-100 transition-opacity"
           draggable={false}
         />
@@ -185,11 +214,11 @@ export default function ContactFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 15 }}
-        animate={{
+        animate={isInView ? {
           x: [0, 18, -15, 20, -10, 0],
           y: [0, -15, 20, -12, 15, 0],
           rotate: [15, 85, 155, 225, 295, 375],
-        }}
+        } : { x: 0, y: 0, rotate: 15 }}
         transition={{
           x: { duration: 15, repeat: Infinity, ease: 'easeInOut' },
           y: { duration: 17, repeat: Infinity, ease: 'easeInOut' },
@@ -206,6 +235,8 @@ export default function ContactFloatingElements() {
         <img
           src={blueStar}
           alt="Mini blue star"
+          loading="lazy"
+          decoding="async"
           className="w-8 md:w-10 lg:w-12 h-auto object-contain drop-shadow-[0_4px_10px_rgba(20,50,180,0.18)] will-change-transform"
           draggable={false}
         />
@@ -218,11 +249,11 @@ export default function ContactFloatingElements() {
         dragSnapToOrigin
         dragElastic={0.35}
         initial={{ x: 0, y: 0, rotate: 8 }}
-        animate={{
+        animate={isInView ? {
           x: [0, -15, 16, -10, 12, 0],
           y: [0, 12, -16, 14, -10, 0],
           rotate: [8, -8, 14, -6, 10, 8],
-        }}
+        } : { x: 0, y: 0, rotate: 8 }}
         transition={{
           duration: 16,
           repeat: Infinity,
@@ -240,6 +271,8 @@ export default function ContactFloatingElements() {
         <img
           src={lightningBolt2}
           alt="Mini zig-zag lightning bolt"
+          loading="lazy"
+          decoding="async"
           className="w-14 sm:w-18 md:w-20 lg:w-24 h-auto object-contain drop-shadow-[0_6px_14px_rgba(222,32,32,0.16)] will-change-transform"
           draggable={false}
         />

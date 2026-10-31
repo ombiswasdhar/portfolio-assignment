@@ -389,53 +389,25 @@ export default function CVSection() {
               role="region"
               aria-label="Zoomed view: Experience"
             >
-              <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-1 border-b border-white/20">
-                MY EXPERIENCE
-              </h3>
+              <div className="flex items-center justify-between border-b border-white/20 pb-1">
+                <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white">
+                  WORK EXPERIENCE
+                </h3>
+                <span className="text-[9px] sm:text-[10px] text-neutral-400 font-semibold uppercase tracking-wider">
+                  2026 - Present
+                </span>
+              </div>
 
               <div className="space-y-1.5 sm:space-y-2 pt-1 text-[9.5px] sm:text-[11px] md:text-[12px] font-fredoka leading-tight text-neutral-100 select-text">
-                <div>
-                  <h4 className="font-bold text-white text-[10.5px] sm:text-[12px] font-fredoka">
-                    1. Sports Council Head :
-                  </h4>
-                  <ul className="list-disc list-inside text-neutral-200 pl-1 space-y-0.5 text-[8.5px] sm:text-[10px] font-fredoka">
-                    <li>Designed posters and promotional materials for college sports and other events.</li>
-                    <li>Helped organize and manage sports tournaments and activities.</li>
-                    <li>Collaborated with teams to ensure smooth execution and maximum participation.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
-                    2. Member of Placement Cell.
-                  </h4>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
-                    3. Conducted a workshop at a government school, sharing skills and guiding students.
-                  </h4>
-                </div>
-
-                <div className="flex items-center justify-between gap-2 pt-0.5 font-fredoka">
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
-                    4. Worked as a Graphics Designer at Mentorsity
-                  </h4>
-                  <a
-                    href="https://mentorsity.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-amber-400 hover:bg-yellow-300 text-black font-fredoka font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
-                  >
-                    <span>Mentorsity ↗</span>
-                  </a>
-                </div>
-
-                <div className="flex items-center justify-between gap-2 pt-0.5 font-fredoka">
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
-                    5. Re-designed a website from ground up for PLAYSTAPLES
-                  </h4>
+                <div className="flex items-center justify-between gap-2 font-fredoka">
+                  <div>
+                    <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                      1. PLAY STAPLES — UI/UX Designer <span className="text-neutral-400 font-normal text-[9px] sm:text-[10px]">(Aug 2026)</span>
+                    </h4>
+                    <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
+                      Spearheaded full e-commerce website redesign, usability testing, and semantic brand design system.
+                    </p>
+                  </div>
                   <a
                     href="#work"
                     onClick={(e) => {
@@ -443,10 +415,57 @@ export default function CVSection() {
                       const el = document.getElementById('featured-works') || document.getElementById('work')
                       if (el) el.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-fredoka font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-fredoka font-bold text-[8.5px] sm:text-[9.5px] tracking-wide transition-all shadow shrink-0"
                   >
-                    <span>PlayStaples ↗</span>
+                    <span>View ↗</span>
                   </a>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 font-fredoka">
+                  <div>
+                    <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                      2. MENTORSITY — Graphics Designer <span className="text-neutral-400 font-normal text-[9px] sm:text-[10px]">(Jan - Mar 2026)</span>
+                    </h4>
+                    <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
+                      Created engaging visual assets and graphic design solutions for digital presence.
+                    </p>
+                  </div>
+                  <a
+                    href="https://mentorsity.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-400 hover:bg-yellow-300 text-black font-fredoka font-bold text-[8.5px] sm:text-[9.5px] tracking-wide transition-all shadow shrink-0"
+                  >
+                    <span>Mentorsity ↗</span>
+                  </a>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                    3. F3K — Graphics / UI-UX Designer <span className="text-neutral-400 font-normal text-[9px] sm:text-[10px]">(Oct 2026 - Feb 2027)</span>
+                  </h4>
+                  <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
+                    Visual assets, digital presence, and cross-functional design solutions.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
+                    4. Sports Council Head & Badminton Team Captain
+                  </h4>
+                  <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
+                    Campus tournament branding, 4-year captain (4th of 38 teams), Placement Cell.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
+                    5. Sharvari Wasnik Foundation & Govt School Workshop
+                  </h4>
+                  <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
+                    Service learning accessibility project; interactive creative design thinking workshop.
+                  </p>
                 </div>
               </div>
             </div>
@@ -468,16 +487,19 @@ export default function CVSection() {
               aria-label="Zoomed view: Interests"
             >
               <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-1 border-b border-white/20">
-                INTERESTS
+                INTERESTS & ACHIEVEMENTS
               </h3>
 
               <div className="space-y-1.5 sm:space-y-2 pt-1 text-[9.5px] sm:text-[11px] md:text-[12px] font-fredoka leading-snug text-neutral-100 select-text">
                 <p>
-                  I'm passionate about both creativity and activity. I enjoy sports like badminton, table tennis, football, and basketball, which keep me energized and disciplined.
+                  Passionate about both creativity and sports. Active in badminton, table tennis, football, sketching, animating, playing guitar, and traveling.
                 </p>
-                <p>
-                  On the creative side, I love sketching, animating, gaming, playing the guitar, and watching movies. I'm also an avid traveler, always curious to explore new places, cultures, and experiences.
-                </p>
+                <div className="pt-1 border-t border-white/10 flex flex-wrap gap-1 text-[8.5px] sm:text-[9.5px]">
+                  <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">🏆 Best Visual Branding (SID Sharktank)</span>
+                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">🥇 2 Gold, 1 Silver (Starblaze)</span>
+                  <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">🏸 4-Yr SID Badminton Captain</span>
+                  <span className="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏃 2× 56km Symbithon</span>
+                </div>
               </div>
             </div>
 
@@ -514,7 +536,7 @@ export default function CVSection() {
                   title="Call 9383049271"
                 >
                   <PhoneIcon className="w-4 h-4 shrink-0 shadow-sm" />
-                  <span className="truncate">: 9383049271</span>
+                  <span className="truncate">: +91-9383049271</span>
                 </a>
                 <button
                   type="button"
@@ -589,58 +611,22 @@ export default function CVSection() {
           </div>
         </div>
 
-        {/* ================= RECRUITER / ATS PROFESSIONAL CV BANNER ================= */}
-        <div className="max-w-[760px] mx-auto mt-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-neutral-900/90 via-neutral-900/80 to-neutral-900/90 border border-white/10 backdrop-blur-sm shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5 text-left w-full sm:w-auto">
-            <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-[#BA1F1F] shrink-0">
-              <FileText className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-fredoka font-semibold text-white">Looking for my formal resume?</span>
-                <span className="text-[10px] font-fredoka font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
-                  ATS Ready
-                </span>
-              </div>
-              <p className="text-xs text-neutral-400 font-fredoka mt-0.5">
-                Standard 1-page clean CV with full work experience, skills, education & achievements.
-              </p>
-            </div>
-          </div>
 
-          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end font-fredoka">
-            <button
-              type="button"
-              onClick={() => setIsPreviewOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-medium text-neutral-200 hover:text-white transition-all active:scale-95 cursor-pointer"
-              title="Preview Professional CV"
-            >
-              <Eye className="w-3.5 h-3.5 text-neutral-400" />
-              <span>Preview</span>
-            </button>
-            <a
-              href="/Om_Biswas_Professional_CV.pdf"
-              download="Om_Biswas_Professional_CV.pdf"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#BA1F1F] hover:bg-red-600 text-white text-xs font-bold shadow-[0_4px_14px_rgba(186,31,31,0.4)] hover:shadow-[0_6px_20px_rgba(186,31,31,0.6)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
-              title="Download Professional CV (PDF)"
-            >
-              <FileDown className="w-3.5 h-3.5" />
-              <span>Download PDF</span>
-            </a>
-          </div>
-        </div>
 
         {/* ================= SCREEN READER & SEO ACCESSIBILITY ================= */}
         <div className="sr-only">
           <h2>Om Biswas — Curriculum Vitae</h2>
-          <p>Age: 22 | Designer | Shillong, India</p>
-          <p>Education: Symbiosis Institute of Design , Nagpur — B.Des in User Interface & User Experience AND Product Design</p>
-          <p>Philosophy: Keep Upgrading. Keep Evolving. ALWAYS at your Own pace.</p>
-          <p>Software: Procreate, Sketchbook, Figma, Premiere Pro, Antigravity, VS Code, After Effects, Illustrator, Procreate Dreams, Canva</p>
-          <p>Experience: Sports Council Head, Member of Placement Cell, Conducted workshop at government school, Graphics Designer at Mentorsity, Re-designed website for PLAYSTAPLES</p>
+          <p>Age: 22 | UI/UX & Product Designer | Shillong, India</p>
+          <p>Education: Symbiosis Institute of Design, Nagpur (2023 - 2027) — B.Des in User Interface & User Experience AND Product Design</p>
+          <p>About Me: A detail-oriented UI/UX and Product Design student at Symbiosis Institute of Design with a strong foundation in visual storytelling, digital illustration, and character design. Adept at using industry-standard software to deliver fresh, meaningful, and user-centric design solutions.</p>
+          <p>Skills - Design Disciplines: UI/UX Design, Graphic Design, Product Design, Illustration, Character Design</p>
+          <p>Software: Figma, Adobe Photoshop, Adobe Illustrator, Adobe Premiere Pro, Procreate, Canva, Antigravity, VS Code</p>
+          <p>Soft Skills: Team Leadership, Cross-functional Collaboration, Event Organization, Discipline & Focus</p>
+          <p>Work Experience: Play Staples (UI/UX Designer | August 2026), Mentorsity (Graphics Designer | Jan - Mar 2026), F3K (Graphics/UI-UX Designer | Oct 2026 - Feb 2027), Sports Council Head & Badminton Team Captain, Sharvari Wasnik Foundation (Service Learning Accessibility Project), Government School Design Workshop, Placement Cell Member</p>
+          <p>Achievements: Winner (Best Visual Branding) - SID Nagpur Sharktank, 2 Gold Medals and 1 Silver Medal - Starblaze SID Nagpur Sports, Represented SID Nagpur in Badminton for 4 consecutive years, Completed the 56km Symbithon twice</p>
           <p>Interests: Badminton, Table Tennis, Football, Basketball, Sketching, Animation, Gaming, Guitar, Traveling</p>
           <p>Languages: Fluent in English, Hindi, Bengali. Understanding: Assamese, Nepali</p>
-          <p>Contact: Phone: 9383049271 | Email: ombiswasatwork@gmail.com | LinkedIn: ombiswasxd | Instagram: @jkitsnoah | Behance: OmBiswasXD</p>
+          <p>Contact: Phone: +91-9383049271 | Email: ombiswasatwork@gmail.com | Portfolio: OMIs Brain (omisbrain.vercel.app) | LinkedIn: ombiswasxd | Instagram: @jkitsnoah | Behance: OmBiswasXD</p>
           <p><a href="/Om_Biswas_Professional_CV.pdf">Download Om Biswas Professional CV (PDF)</a></p>
         </div>
       </div>

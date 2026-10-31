@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Maximize2, Minimize2, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
+import { X, Maximize2, Minimize2, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft, Sparkles } from 'lucide-react'
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
+import PlayStaplesStoreView from './PlayStaplesStoreView'
 
 // Project challenge copy for each case study
 const PROJECT_STORIES = {
   playstaples: {
     challenge:
       'The original PlayStaples online store struggled with high checkout abandonment, cluttered navigation, and a lack of emotional resonance that failed to communicate the tactile value of handcrafted Indian collectibles. The challenge was to conduct an in-depth heuristic evaluation, diagnose core UX pain points, and reimagine the digital storefront from the ground up—balancing modern e-commerce utility with the nostalgic celebration of Mumbai\'s iconic "Kaali Peeli" Premier Padmini taxi.',
+  },
+  'playstaples-pt2': {
+    challenge:
+      'Following the initial heuristic evaluation and UX case study, PlayStaples required a production-ready website redesign bringing the digital store to life. The challenge was to transform the master Figma redesign into a multi-page interactive e-commerce website—featuring the dynamic Kaali Peeli homepage with live color swatches, the complete Series 01 Indian Terrain Vehicles catalog, and an immersive 360° product exploration page with a functional shopping cart.',
   },
   'business-cards': {
     challenge:
@@ -40,6 +45,11 @@ const PROJECT_THEMES = {
     defaultGlow1: '#48C9A8', // Fresh mint
     defaultGlow2: '#FFB800', // Mumbai taxi yellow / amber
   },
+  'playstaples-pt2': {
+    baseBg: '#FFFDF5',
+    defaultGlow1: '#FFE100', // Iconic taxi yellow
+    defaultGlow2: '#FF486A', // Coral red / pink
+  },
   aureaus: {
     baseBg: '#FAF5F0',
     defaultGlow1: '#F08264', // Coral peach
@@ -60,9 +70,14 @@ export default function ProjectCaseStudyModal({
 }) {
   const [activeZoomImage, setActiveZoomImage] = useState(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [activeTab, setActiveTab] = useState(project?.id === 'playstaples-pt2' ? 'website' : 'story')
   const scrollContainerRef = useRef(null)
 
   useBodyScrollLock(true)
+
+  useEffect(() => {
+    setActiveTab(project?.id === 'playstaples-pt2' ? 'website' : 'story')
+  }, [project?.id])
 
   // Track browser native fullscreen state
   useEffect(() => {
@@ -170,7 +185,7 @@ export default function ProjectCaseStudyModal({
       />
 
       {/* TOP FLOATING CONTROLS BAR (FROSTED GLASS LIGHT DESIGN) */}
-      <div className="sticky top-0 z-50 w-full px-4 sm:px-8 lg:px-14 py-3 bg-white/80 backdrop-blur-xl border-b border-black/10 flex items-center justify-between shadow-[0_2px_15px_rgba(0,0,0,0.03)]">
+      <div className="sticky top-0 z-50 w-full px-4 sm:px-8 lg:px-14 py-3 bg-white/80 backdrop-blur-xl border-b border-black/10 flex items-center justify-between shadow-[0_2px_15px_rgba(0,0,0,0.03)] gap-3 flex-wrap">
         <button
           onClick={onClose}
           type="button"
@@ -180,7 +195,56 @@ export default function ProjectCaseStudyModal({
           <span>Back to work</span>
         </button>
 
+        {/* Center mode switcher when project is PlayStaples PT2 */}
+        {project.id === 'playstaples-pt2' ? (
+          <div className="flex items-center gap-1.5 p-1 rounded-full bg-black/5 border border-black/10">
+            <button
+              type="button"
+              onClick={() => setActiveTab('website')}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-fredoka font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeTab === 'website'
+                  ? 'bg-amber-400 text-black shadow-xs'
+                  : 'text-neutral-600 hover:text-black'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-black" />
+              <span>Live Website</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('story')}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-fredoka font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                activeTab === 'story'
+                  ? 'bg-black text-white shadow-xs'
+                  : 'text-neutral-600 hover:text-black'
+              }`}
+            >
+              <span>Case Study & Story</span>
+            </button>
+          </div>
+        ) : (
+          <div className="hidden md:flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: project.folderColor || '#E84A4A' }} />
+            <span className="text-xs font-fredoka font-bold uppercase tracking-wider text-neutral-800">
+              {project.title}
+            </span>
+          </div>
+        )}
+
         <div className="flex items-center gap-2 sm:gap-3">
+          {project.id === 'playstaples-pt2' && (
+            <a
+              href="/playstaples-pt2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black text-amber-400 hover:bg-neutral-800 text-xs font-fredoka font-bold uppercase tracking-wider transition-all shadow-xs"
+              title="Open website in full separate window"
+            >
+              <span>New Window</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          )}
+
           <button
             type="button"
             onClick={toggleFullscreen}
@@ -203,8 +267,15 @@ export default function ProjectCaseStudyModal({
         </div>
       </div>
 
-      {/* TRIONN SPLIT SCREEN CONTAINER */}
-      <div className="relative z-10 w-full max-w-[1700px] mx-auto px-4 sm:px-8 lg:px-14 py-6 sm:py-10 lg:py-16">
+      {/* TRIONN SPLIT SCREEN CONTAINER OR EMBEDDED LIVE STORE */}
+      {project.id === 'playstaples-pt2' && activeTab === 'website' ? (
+        <div className="relative z-10 w-full max-w-[1700px] mx-auto px-2 sm:px-6 lg:px-10 py-3 sm:py-6 flex-1 flex flex-col">
+          <div className="w-full rounded-2xl overflow-hidden border-2 border-black/20 shadow-[0_16px_50px_rgba(0,0,0,0.12)] bg-white flex flex-col min-h-[85vh]">
+            <PlayStaplesStoreView isEmbedded={true} onClose={onClose} />
+          </div>
+        </div>
+      ) : (
+        <div className="relative z-10 w-full max-w-[1700px] mx-auto px-4 sm:px-8 lg:px-14 py-6 sm:py-10 lg:py-16">
         <div className="grid grid-cols-12 gap-8 lg:gap-14 items-start">
           
           {/* ============================================================= */}
@@ -255,9 +326,21 @@ export default function ProjectCaseStudyModal({
                 </p>
               </div>
 
-              {/* External Links (TRIONN Buttons for Behance & Figma) */}
-              {(project.behanceUrl || project.figmaUrl) && (
-                <div className="flex flex-wrap items-center gap-5 sm:gap-6 mb-8">
+              {/* External Links (TRIONN Buttons for Behance & Figma & Live Store) */}
+              {(project.behanceUrl || project.figmaUrl || project.storeUrl) && (
+                <div className="flex flex-wrap items-center gap-4 sm:gap-5 mb-8">
+                  {project.storeUrl && (
+                    <a
+                      href={project.storeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black text-amber-400 hover:bg-neutral-800 text-xs font-fredoka font-bold uppercase tracking-wider shadow-md hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Launch Live Website</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
                   {project.behanceUrl && (
                     <a
                       href={project.behanceUrl}
@@ -317,14 +400,33 @@ export default function ProjectCaseStudyModal({
           {/* ============================================================= */}
           <div
             className={`col-span-12 lg:col-span-7 xl:col-span-8 pt-0 lg:pt-2 ${
-              project.id === 'playstaples' || project.id === 'aureaus'
+              project.id === 'playstaples' || project.id === 'playstaples-pt2' || project.id === 'aureaus'
                 ? 'flex flex-col gap-0 rounded-2xl overflow-hidden border border-black/10 shadow-[0_4px_25px_rgba(0,0,0,0.08)] bg-white'
                 : 'grid grid-cols-2 gap-5 sm:gap-6'
             }`}
           >
+            {project.id === 'playstaples-pt2' && (
+              <div className="w-full bg-amber-400 border-b border-black px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2 text-black">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-black animate-pulse" />
+                  <span className="text-xs font-black uppercase tracking-wider">
+                    Interactive Multi-Page Storefront Active
+                  </span>
+                </div>
+                <a
+                  href="/playstaples-pt2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider transition-all shadow"
+                >
+                  <span>Open Fullscreen Store</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            )}
             {images.map((imgSrc, idx) => {
               const spanClass = getItemSpan(idx)
-              const isSeamless = project.id === 'playstaples' || project.id === 'aureaus'
+              const isSeamless = project.id === 'playstaples' || project.id === 'playstaples-pt2' || project.id === 'aureaus'
 
               return (
                 <div
@@ -358,6 +460,7 @@ export default function ProjectCaseStudyModal({
 
         </div>
       </div>
+      )}
 
       {/* FULL RESOLUTION LIGHTBOX ZOOM MODAL (Cinematic Dark Mode for high contrast preview) */}
       <AnimatePresence>

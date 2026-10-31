@@ -21,8 +21,8 @@ export default function ComicTapHintBubble({
       type="button"
       onClick={onClick}
       className={`group comic-tap-hint relative inline-flex items-center cursor-pointer select-none transition-all duration-200 hover:-translate-y-1 hover:scale-[1.03] active:translate-y-0.5 active:scale-[0.97] focus:outline-none ${className}`}
-      title={active ? 'Tap to close zoomed view' : text}
-      aria-label={`${text} • ${active ? 'Tap to close' : 'Tap to zoom'}`}
+      title={active ? (text.toLowerCase().includes('hover') ? 'Click to close zoomed view' : 'Tap to close zoomed view') : text}
+      aria-label={`${text} • ${active ? 'Tap or click to close' : 'Tap or hover to zoom'}`}
     >
       {/* Outer White Die-Cut Vinyl Sticker Border */}
       <div className={`relative inline-flex bg-white p-[6px] sm:p-[8px] pb-[12px] sm:pb-[14px] pr-[12px] sm:pr-[14px] rounded-[18px] sm:rounded-[22px] shadow-[0_12px_28px_rgba(0,0,0,0.75)] border transition-all ${active ? 'border-cyan-400 ring-2 ring-cyan-400/40 shadow-[0_16px_36px_rgba(56,182,255,0.45)]' : 'border-white/80 group-hover:shadow-[0_16px_36px_rgba(56,182,255,0.35)]'}`}>

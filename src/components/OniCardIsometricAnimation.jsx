@@ -7,39 +7,41 @@ import oniCard2Back from '../assets/work/oni-card-2-back.png'
 /**
  * OniCardIsometricAnimation
  * 
- * Dual-Mode Business Card Showcase for Oni Design Studios:
- * 
- * Edition 01 (Cyberpunk Lilac):
- * - 3D Isometric tabletop setup with smooth non-intersecting side-by-side shuffle.
- * - Distinct, offset trajectory lanes to prevent any edge grazing or collision.
- * 
- * Edition 02 (Cosmic Oni Mask / Om Biswas):
- * - Direct 1:1 reproduction of the 3D floating flip video: https://pin.it/4ShinExsz
- * - Card floats in 3D studio space with realistic depth and specular sheen.
- * - Smoothly flips 180° in 3D around its vertical axis to reveal Om Biswas's artist details & QR code.
- * 
- * Features:
- * - Butter-smooth, zero-lag GPU crossfade transition between the two editions.
- * - Both editions permanently retained in DOM (zero remount or image re-decoding lag).
- * - RAF-throttled mouse tracking for 60/120fps responsive 3D tilt.
- * - Inactive edition animations automatically paused to conserve GPU resources.
- * - Pauses on hover when inspected.
- * - Interactive glassmorphism edition toggle button.
- * - Typography: Studio branding in Akira Expanded, spec tags in Fredoka.
+ * High-performance, 60fps GPU-accelerated 3D Showcase for Oni Design Studios.
+ * Optimizations:
+ * - Direct CSS variables for mouse tracking without triggering React component re-renders.
+ * - Hardware-accelerated translate3d animations (zero box-shadow or filter re-rasterization).
+ * - Off-screen viewport detection via IntersectionObserver to freeze animations when not visible.
  */
 export default function OniCardIsometricAnimation({ className = '', isPaused = false }) {
   const [activeEdition, setActiveEdition] = useState(0) // 0: Lilac Shuffle, 1: Cosmic 3D Flip
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = useState(false)
+  const [isInView, setIsInView] = useState(true)
   const [animationCycle, setAnimationCycle] = useState(0)
+  const containerRef = useRef(null)
+  const stageRigRef = useRef(null)
   const wasCardPausedRef = useRef(false)
   const rafRef = useRef(null)
 
-  const isCardPaused = isHovered || isPaused
+  const isCardPaused = isHovered || isPaused || !isInView
 
-  // Restart the card choreography from its first frame when the hover ends.
-  // Remounting only the stage lets CSS ease naturally from the beginning while
-  // the parent hover artwork fades away.
+  // Viewport intersection observer to save 100% GPU when off-screen
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { rootMargin: '150px 0px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  // Restart choreography smoothly after hover ends
   useEffect(() => {
     if (wasCardPausedRef.current && !isCardPaused) {
       setAnimationCycle((cycle) => cycle + 1)
@@ -47,22 +49,28 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
     wasCardPausedRef.current = isCardPaused
   }, [isCardPaused])
 
-  // Auto-switch between Pink Card (Edition 01) and Black Card (Edition 02)
+  // Auto-switch between Pink Card (Edition 01) and Black Card (Edition 02) only when in view
   useEffect(() => {
+    if (!isInView || isHovered) return
     const timer = setInterval(() => {
       setActiveEdition((prev) => (prev === 0 ? 1 : 0))
-    }, 3500)
+    }, 4000)
     return () => clearInterval(timer)
-  }, [])
+  }, [isInView, isHovered])
 
+  // Direct CSS variable mouse tracking - ZERO React re-renders on mousemove
   const handleMouseMove = (e) => {
-    if (activeEdition !== 0) return
+    if (activeEdition !== 0 || !stageRigRef.current) return
     const rect = e.currentTarget.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width - 0.5
-    const y = (e.clientY - rect.top) / rect.height - 0.5
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2
+
     if (rafRef.current) cancelAnimationFrame(rafRef.current)
     rafRef.current = requestAnimationFrame(() => {
-      setMousePos({ x, y })
+      if (stageRigRef.current) {
+        stageRigRef.current.style.setProperty('--mx', x.toFixed(3))
+        stageRigRef.current.style.setProperty('--my', y.toFixed(3))
+      }
     })
   }
 
@@ -70,7 +78,10 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
   const handleMouseLeave = () => {
     setIsHovered(false)
     if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    setMousePos({ x: 0, y: 0 })
+    if (stageRigRef.current) {
+      stageRigRef.current.style.setProperty('--mx', '0')
+      stageRigRef.current.style.setProperty('--my', '0')
+    }
   }
 
   useEffect(() => {
@@ -81,6 +92,7 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
 
   return (
     <div
+      ref={containerRef}
       className={`relative w-full h-full min-h-[320px] flex items-center justify-center overflow-hidden select-none bg-[#0e0e12] ${className}`}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
@@ -89,102 +101,96 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
     >
       <style>{`
         /* ======================================================== */
-        /* EDITION 01: NON-COLLIDING SIDE-BY-SIDE ISOMETRIC SHUFFLE  */
-        /* (Uses offset parallel lanes so edges NEVER graze/touch)   */
+        /* EDITION 01: HARDWARE-ACCELERATED ISOMETRIC SHUFFLE       */
+        /* (Pure translate3d transforms for locked 60/120fps)       */
         /* ======================================================== */
 
-        /* CARD 1A (FRONT): Lane 1 (Shifted UP-RIGHT, glides out wide) */
         @keyframes oniShuffleCard1Front {
           0%, 16% {
             transform: translate3d(18px, -4px, 0) scale(1);
-            filter: blur(0px) brightness(1);
             z-index: 25;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 32px 64px -8px rgba(0,0,0,0.85), 0 16px 28px -8px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.15);
+            opacity: 1;
           }
           32%, 42% {
-            transform: translate3d(140px, 75px, 0) scale(0.98);
-            filter: blur(0px) brightness(1.02);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 40px 75px -10px rgba(0,0,0,0.9), 0 20px 36px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.18);
+            transform: translate3d(135px, 72px, 0) scale(0.98);
+            z-index: 25;
+            opacity: 1;
           }
-          38% {
+          43% {
             z-index: 10;
           }
           54%, 68% {
             transform: translate3d(-18px, 16px, 0) scale(0.95);
-            filter: blur(0.8px) brightness(0.92);
             z-index: 10;
-            box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+            opacity: 0.92;
           }
           82%, 90% {
-            transform: translate3d(140px, 75px, 0) scale(0.98);
-            filter: blur(0px) brightness(1.02);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 40px 75px -10px rgba(0,0,0,0.9), 0 20px 36px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.18);
+            transform: translate3d(135px, 72px, 0) scale(0.98);
+            z-index: 10;
+            opacity: 1;
           }
-          86% {
+          91% {
             z-index: 25;
           }
           100% {
             transform: translate3d(18px, -4px, 0) scale(1);
-            filter: blur(0px) brightness(1);
             z-index: 25;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 32px 64px -8px rgba(0,0,0,0.85), 0 16px 28px -8px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.15);
+            opacity: 1;
           }
         }
 
-        /* CARD 1B (BACK): Lane 2 (Shifted DOWN-LEFT, glides out wide) */
         @keyframes oniShuffleCard1Back {
           0%, 16% {
             transform: translate3d(-18px, 16px, 0) scale(0.95);
-            filter: blur(0.8px) brightness(0.92);
             z-index: 10;
-            box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+            opacity: 0.92;
           }
           32%, 42% {
-            transform: translate3d(-140px, -60px, 0) scale(0.98);
-            filter: blur(0px) brightness(1.02);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 40px 75px -10px rgba(0,0,0,0.9), 0 20px 36px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.18);
+            transform: translate3d(-135px, -58px, 0) scale(0.98);
+            z-index: 10;
+            opacity: 1;
           }
-          38% {
+          43% {
             z-index: 25;
           }
           54%, 68% {
             transform: translate3d(18px, -4px, 0) scale(1);
-            filter: blur(0px) brightness(1);
             z-index: 25;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25), 0 2px 0 rgba(0,0,0,0.6), 0 32px 64px -8px rgba(0,0,0,0.85), 0 16px 28px -8px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.15);
+            opacity: 1;
           }
           82%, 90% {
-            transform: translate3d(-140px, -60px, 0) scale(0.98);
-            filter: blur(0px) brightness(1.02);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 2px 0 rgba(0,0,0,0.6), 0 30px 60px -10px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.12);
+            transform: translate3d(-135px, -58px, 0) scale(0.98);
+            z-index: 25;
+            opacity: 1;
           }
-          86% {
+          91% {
             z-index: 10;
           }
           100% {
             transform: translate3d(-18px, 16px, 0) scale(0.95);
-            filter: blur(0.8px) brightness(0.92);
             z-index: 10;
-            box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 16px 32px -10px rgba(0,0,0,0.7), 0 6px 14px -6px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+            opacity: 0.92;
           }
         }
 
         .oni-card-1a-anim {
           animation: oniShuffleCard1Front 4.8s cubic-bezier(0.38, 0, 0.2, 1) infinite;
-          will-change: transform, filter, box-shadow;
+          will-change: transform;
+          transform: translate3d(0, 0, 0);
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
         }
 
         .oni-card-1b-anim {
           animation: oniShuffleCard1Back 4.8s cubic-bezier(0.38, 0, 0.2, 1) infinite;
-          will-change: transform, filter, box-shadow;
+          will-change: transform;
+          transform: translate3d(0, 0, 0);
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
         }
 
         /* ======================================================== */
-        /* EDITION 02: 3D FLOATING DUAL-FACE ROTATION (PIN.IT/4SHINEXSZ) */
+        /* EDITION 02: 3D FLOATING DUAL-FACE ROTATION               */
         /* ======================================================== */
         @keyframes oniCardFloatFlip {
           0%, 15% {
@@ -208,24 +214,25 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
           animation: oniCardFloatFlip 5.8s cubic-bezier(0.42, 0, 0.2, 1) infinite;
           transform-style: preserve-3d;
           will-change: transform;
+          transform: translate3d(0, 0, 0);
         }
 
-        /* Animated Floor Shadow matching Pin.it/4ShinExsz */
         @keyframes oniFloorShadowAnim {
           0%, 15%, 48%, 65%, 96%, 100% {
-            transform: scale(1);
+            transform: translate3d(0, 0, 0) scale(1);
             opacity: 0.55;
           }
           32%, 82% {
-            transform: scale(0.82);
+            transform: translate3d(0, 0, 0) scale(0.82);
             opacity: 0.28;
           }
         }
 
         .oni-floor-shadow {
           animation: oniFloorShadowAnim 5.8s cubic-bezier(0.42, 0, 0.2, 1) infinite;
+          will-change: transform, opacity;
+          transform: translate3d(0, 0, 0);
         }
-
       `}</style>
 
       {/* Atmospheric dark studio background spotlight */}
@@ -234,10 +241,7 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
         aria-hidden="true" 
       />
 
-      {/* ============================================================ */}
-      {/* DYNAMIC STUDIO CORNER MARKINGS (CLEAN, NON-OVERLAPPING)      */}
-      {/* ============================================================ */}
-      {/* Top Left: Studio Spec Tag (Horizontal layout - no collision with bottom) */}
+      {/* Top Left: Studio Spec Tag */}
       <div className="absolute top-3.5 sm:top-4 left-3.5 sm:left-4 pointer-events-none z-20 flex flex-col items-start">
         <span className="font-fredoka text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-neutral-300 font-medium transition-all duration-300">
           {activeEdition === 0 ? 'RAW IDENTITY' : 'OM BISWAS'}
@@ -247,17 +251,17 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
         </span>
       </div>
 
-      {/* Top Right: Studio Branding in Akira Expanded & Edition Indicator */}
-      <div className="absolute top-3.5 sm:top-4 right-3.5 sm:right-4 pointer-events-none opacity-90 flex flex-col items-end z-20 text-right">
-        <span className="font-akira text-[9px] sm:text-[11px] tracking-wider text-white uppercase font-black leading-tight">
-          ONI DESIGN STUDIOS
+      {/* Top Right: Studio Branding */}
+      <div className="absolute top-3.5 sm:top-4 right-3.5 sm:right-4 pointer-events-none text-right z-20">
+        <span className="font-akira font-black text-[9px] sm:text-[10px] uppercase tracking-[0.18em] text-white/90 block">
+          ONI STUDIOS
         </span>
-        <span className="font-fredoka text-[8px] sm:text-[9px] tracking-widest text-[#E84A4A] uppercase font-semibold mt-0.5 transition-all duration-300">
-          {activeEdition === 0 ? 'EDITION 01 • LILAC DUAL' : 'EDITION 02 • COSMIC ONI'}
+        <span className="font-fredoka text-[7.5px] sm:text-[8.5px] uppercase tracking-[0.14em] text-[#FF6584] font-semibold block transition-all duration-300">
+          {activeEdition === 0 ? 'EDITION 01 // LILAC' : 'EDITION 02 // 3D FLIP'}
         </span>
       </div>
 
-      {/* Bottom Left: Dimensions & Stock Spec (Compact & clear of center button) */}
+      {/* Bottom Left: Dimensions & Stock Spec */}
       <div className="absolute bottom-3 sm:bottom-4 left-3.5 sm:left-4 pointer-events-none z-20">
         <div className="flex flex-col gap-0.5 max-w-[120px] sm:max-w-[150px]">
           <span className="font-fredoka text-[8px] sm:text-[9px] uppercase tracking-[0.14em] text-neutral-400 font-medium">
@@ -269,7 +273,7 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
         </div>
       </div>
 
-      {/* Bottom Right: Season & Edition Tag (Compact & clear of center button) */}
+      {/* Bottom Right: Season & Edition Tag */}
       <div className="absolute bottom-3 sm:bottom-4 right-3.5 sm:right-4 pointer-events-none text-right z-20">
         <span className="font-fredoka text-[8px] sm:text-[9px] uppercase tracking-[0.14em] text-neutral-400 block transition-all duration-300">
           {activeEdition === 0 ? '2ND YEAR // 2026' : 'FEATURED // 2026'}
@@ -279,13 +283,9 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
         </span>
       </div>
 
-      {/* ============================================================ */}
-      {/* MAIN STAGE RIG (BUTTER-SMOOTH GPU CROSSFADE BETWEEN EDITIONS) */}
-      {/* ============================================================ */}
+      {/* MAIN STAGE RIG */}
       <div key={animationCycle} className="relative w-full h-full flex items-center justify-center -translate-y-2 sm:-translate-y-3">
-        {/* ========================================================== */}
-        {/* EDITION 01: ISOMETRIC DECK SHUFFLE SHOWCASE                */}
-        {/* ========================================================== */}
+        {/* EDITION 01: ISOMETRIC DECK SHUFFLE SHOWCASE */}
         <div
           className={`absolute inset-0 flex items-center justify-center transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[transform,opacity] ${
             activeEdition === 0
@@ -294,24 +294,27 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
           }`}
         >
           <div
-            className="relative flex items-center justify-center w-[60%] sm:w-[64%] max-w-[285px] aspect-[601/368]"
+            ref={stageRigRef}
+            className="relative flex items-center justify-center w-[60%] sm:w-[64%] max-w-[285px] aspect-[601/368] will-change-transform"
             style={{
-              transform: `rotateX(${55 + (isHovered && activeEdition === 0 ? mousePos.y * 14 : 0)}deg) rotateZ(${-36 + (isHovered && activeEdition === 0 ? mousePos.x * 14 : 0)}deg) rotateY(${6 + (isHovered && activeEdition === 0 ? mousePos.x * 10 : 0)}deg)`,
+              transform: `rotateX(calc(55deg + var(--my, 0) * 12deg)) rotateZ(calc(-36deg + var(--mx, 0) * 12deg)) rotateY(calc(6deg + var(--mx, 0) * 8deg))`,
               transformStyle: 'flat',
-              transition: 'transform 0.18s ease-out',
+              transition: 'transform 0.12s ease-out',
             }}
           >
-            {/* Card 1A: Front (Anime Character + Qi Design Studios) */}
+            {/* Card 1A: Front */}
             <div
-              className="absolute inset-0 rounded-[16px] sm:rounded-[20px] overflow-hidden cursor-pointer select-none oni-card-1a-anim"
+              className="absolute inset-0 rounded-[16px] sm:rounded-[20px] overflow-hidden cursor-pointer select-none oni-card-1a-anim shadow-[0_20px_45px_-8px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.15)]"
               style={{
                 backgroundColor: '#c59ad3',
-                animationPlayState: activeEdition !== 0 ? 'paused' : 'running',
+                animationPlayState: activeEdition !== 0 || isCardPaused ? 'paused' : 'running',
               }}
             >
               <img
                 src={oniCardFront}
                 alt="Oni Design Studios Card 1 Front"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover pointer-events-none select-none block"
                 draggable={false}
               />
@@ -321,17 +324,19 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
               />
             </div>
 
-            {/* Card 1B: Back (Qi Monogram + QR Code) */}
+            {/* Card 1B: Back */}
             <div
-              className="absolute inset-0 rounded-[16px] sm:rounded-[20px] overflow-hidden cursor-pointer select-none oni-card-1b-anim"
+              className="absolute inset-0 rounded-[16px] sm:rounded-[20px] overflow-hidden cursor-pointer select-none oni-card-1b-anim shadow-[0_20px_45px_-8px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.15)]"
               style={{
                 backgroundColor: '#c59ad3',
-                animationPlayState: activeEdition !== 0 ? 'paused' : 'running',
+                animationPlayState: activeEdition !== 0 || isCardPaused ? 'paused' : 'running',
               }}
             >
               <img
                 src={oniCardBack}
                 alt="Oni Design Studios Card 1 Back"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover pointer-events-none select-none block"
                 draggable={false}
               />
@@ -343,9 +348,7 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
           </div>
         </div>
 
-        {/* ========================================================== */}
-        {/* EDITION 02: 3D FLOATING DUAL-FACE FLIP (PIN.IT/4SHINEXSZ)  */}
-        {/* ========================================================== */}
+        {/* EDITION 02: 3D FLOATING DUAL-FACE FLIP */}
         <div
           className={`absolute inset-0 flex items-center justify-center transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[transform,opacity] ${
             activeEdition === 1
@@ -363,7 +366,7 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
             <div
               className="absolute -bottom-10 w-[78%] h-7 rounded-full bg-black/60 blur-xl pointer-events-none oni-floor-shadow"
               style={{
-                animationPlayState: activeEdition !== 1 ? 'paused' : 'running',
+                animationPlayState: activeEdition !== 1 || isCardPaused ? 'paused' : 'running',
               }}
               aria-hidden="true"
             />
@@ -373,25 +376,26 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
               className="relative w-full h-full rounded-[16px] sm:rounded-[20px] cursor-pointer select-none oni-card-2-flip-anim"
               style={{
                 transformStyle: 'preserve-3d',
-                animationPlayState: activeEdition !== 1 ? 'paused' : 'running',
+                animationPlayState: activeEdition !== 1 || isCardPaused ? 'paused' : 'running',
               }}
             >
-              {/* FRONT FACE: Cosmic Oni Mask + Qi Design Studios */}
+              {/* FRONT FACE: Cosmic Oni Mask */}
               <div
                 className="absolute inset-0 rounded-[16px] sm:rounded-[20px] overflow-hidden bg-[#120f18] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95),0_0_0_1px_rgba(255,255,255,0.18)]"
                 style={{
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden',
-                  transform: 'rotateY(0deg)',
+                  transform: 'translate3d(0, 0, 0) rotateY(0deg)',
                 }}
               >
                 <img
                   src={oniCard2Front}
                   alt="Oni Design Studios Card 2 Front (Cosmic Mask)"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover pointer-events-none select-none block"
                   draggable={false}
                 />
-                {/* Specular sheen across front */}
                 <div 
                   className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-black/25 via-transparent to-white/25" 
                   aria-hidden="true" 
@@ -404,16 +408,17 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
                 style={{
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden',
-                  transform: 'rotateY(180deg)',
+                  transform: 'translate3d(0, 0, 0) rotateY(180deg)',
                 }}
               >
                 <img
                   src={oniCard2Back}
                   alt="Oni Design Studios Card 2 Back (Om Biswas Artist)"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover pointer-events-none select-none block"
                   draggable={false}
                 />
-                {/* Specular sheen across back */}
                 <div 
                   className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-black/25 via-transparent to-white/25" 
                   aria-hidden="true" 
@@ -424,9 +429,7 @@ export default function OniCardIsometricAnimation({ className = '', isPaused = f
         </div>
       </div>
 
-      {/* ============================================================ */}
-      {/* INTERACTIVE EDITION CYCLE BUTTON (ALWAYS ON TOP OF CARDS)   */}
-      {/* ============================================================ */}
+      {/* INTERACTIVE EDITION CYCLE BUTTON */}
       <button
         type="button"
         onClick={(e) => {

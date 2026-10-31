@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import mentorsityLogo from '../assets/nav/mentorsity_logo.png'
 import playStaplesLogo from '../assets/nav/play_staples_logo.png'
@@ -19,10 +19,28 @@ export default function MarqueeBar({
   variant = 'logos',
   items,
 }) {
+  const containerRef = useRef(null)
+  const [isInView, setIsInView] = useState(true)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { rootMargin: '200px 0px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   const isReverse = direction === 'right' || reverse
   const isRoles = variant === 'roles'
-
   const rolesList = items && items.length > 0 ? items : DEFAULT_ROLES
+  const playState = isInView ? 'running' : 'paused'
 
   // Roles cell rendering
   const renderRoleCell = (role, key) => (
@@ -33,7 +51,7 @@ export default function MarqueeBar({
       <span className="font-akira font-black text-[10px] sm:text-[11px] md:text-xs tracking-wider uppercase text-neutral-900 group-hover/role:text-[#DE2020] transition-colors">
         {role}
       </span>
-      <span className="text-[#DE2020] text-xs font-bold shrink-0 drop-shadow-[0_0_6px_rgba(222,32,32,0.4)]">
+      <span className="text-[#DE2020] text-xs font-bold shrink-0 [text-shadow:0_0_8px_rgba(222,32,32,0.6)]">
         ✦
       </span>
     </div>
@@ -50,6 +68,8 @@ export default function MarqueeBar({
         <img
           src={mentorsityLogo}
           alt="Mentorsity"
+          loading="lazy"
+          decoding="async"
           className="h-4.5 sm:h-5 w-auto object-contain transition-transform duration-300 group-hover/logo:scale-105"
         />
       </div>
@@ -62,21 +82,24 @@ export default function MarqueeBar({
         <img
           src={playStaplesLogo}
           alt="Play Staples"
+          loading="lazy"
+          decoding="async"
           className="h-4.5 sm:h-5 w-auto object-contain transition-transform duration-300 group-hover/logo:scale-105"
         />
       </div>
     </React.Fragment>
   )
 
-  // Duplication counts for seamless infinite loop (guaranteeing at least 20 items per half)
-  const cycleCount = Math.max(3, Math.ceil(20 / rolesList.length))
+  // Duplication counts for seamless infinite loop (guaranteeing enough content across screens)
+  const cycleCount = Math.max(2, Math.ceil(14 / rolesList.length))
   const roleCycles = Array.from({ length: cycleCount }, (_, i) => i)
-  const logoCycles = Array.from({ length: 8 }, (_, i) => i)
+  const logoCycles = Array.from({ length: 5 }, (_, i) => i)
 
   return (
     <div
+      ref={containerRef}
       aria-label={isRoles ? 'Creative Roles Animated Marquee Bar' : 'Partner Logos Animated Marquee Bar'}
-      className={cn('relative w-full h-9 bg-white text-black border-b border-black select-none flex items-stretch overflow-hidden shadow-xs', className)}
+      className={cn('relative w-full h-9 bg-white text-black border-b border-black select-none flex items-stretch overflow-hidden shadow-xs will-change-transform', className)}
     >
       {/* Soft edge gradient fades for smooth edge entry and exit */}
       <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-12 z-10 bg-gradient-to-r from-white to-transparent" />
@@ -84,7 +107,10 @@ export default function MarqueeBar({
 
       {/* Infinite Scrolling Track */}
       <div className="relative w-full overflow-hidden h-full flex items-center">
-        <div className={`${isReverse ? 'animate-marquee-scroll-reverse' : 'animate-marquee-scroll'} flex items-center h-full`}>
+        <div
+          className={`${isReverse ? 'animate-marquee-scroll-reverse' : 'animate-marquee-scroll'} flex items-center h-full will-change-transform`}
+          style={{ animationPlayState: playState }}
+        >
           {/* Half 1 */}
           <div className="flex items-center h-full shrink-0">
             {isRoles

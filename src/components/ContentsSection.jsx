@@ -110,11 +110,11 @@ function FlippingBusinessCard({ front, back, alt, className }) {
   return (
     <div className={`relative h-full w-full overflow-hidden [perspective:1000px] ${className}`}>
       <div
-        className="relative h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.22,0.75,0.25,1)] [transform-style:preserve-3d]"
-        style={{ transform: showBack ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+        className="relative h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.22,0.75,0.25,1)] [transform-style:preserve-3d] will-change-transform"
+        style={{ transform: showBack ? 'translate3d(0, 0, 0) rotateY(180deg)' : 'translate3d(0, 0, 0) rotateY(0deg)' }}
       >
-        <img src={front} alt={`${alt}, front`} className="absolute inset-0 h-full w-full object-contain [backface-visibility:hidden]" />
-        <img src={back} alt={`${alt}, back`} className="absolute inset-0 h-full w-full object-contain [backface-visibility:hidden] [transform:rotateY(180deg)]" />
+        <img src={front} alt={`${alt}, front`} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-contain [backface-visibility:hidden] transform-gpu" />
+        <img src={back} alt={`${alt}, back`} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-contain [backface-visibility:hidden] [transform:translate3d(0,0,0)_rotateY(180deg)] transform-gpu" />
       </div>
     </div>
   )
@@ -337,6 +337,43 @@ export const projectsData = [
       'Reimagined live music ticketing by pairing atmospheric dark-mode concert discovery with an airy, split-theme artist lineup and a frictionless two-column checkout—turning booking anxiety into pre-show excitement.',
     tools: ['Figma', 'UI/UX Design', 'User Journey Mapping', 'Visual Direction'],
   },
+  {
+    id: 'playstaples-pt2',
+    num: '05',
+    tabTitle: 'PlayStaples PT2',
+    displayTitle: 'PLAYSTAPLES PT2 ©',
+    folderColor: '#FFE100', // Bombay Taxi Yellow
+    tabColor: '#FFE100',
+    accentColor: '#111111',
+    date: 'OCT 2026',
+    title: 'PlayStaples PT2',
+    subtitle: 'Production Website Redesign • Multi-Page E-Commerce Experience',
+    category: 'Website Redesign & Live Store',
+    bulletSummary: 'Full Store Redesign • Home, Shop All & PDP • 1:1 Vector Fidelity • Live Cart',
+    description:
+      'PlayStaples PT2 is the complete, interactive website redesign transformed directly from Figma into a living e-commerce experience. Featuring a high-impact responsive homepage with live car color swatches, a comprehensive "Shop All" catalog with interactive product filtering, and a dedicated 360° product exploration page for the handcrafted wooden "Kaali Peeli" Premier Padmini collectible.',
+    thumbnail: '/playstaples-pt2/thumbnail.webp',
+    hoverImage: '/playstaples-pt2/hover.webp',
+    previewPhotos: [
+      '/playstaples-pt2/home_full.webp',
+      '/playstaples-pt2/product_full.webp',
+      '/playstaples-pt2/shop_collections_full.webp',
+      '/playstaples-pt2/shop_all_full.webp',
+    ],
+    tags: ['E-Commerce', 'Website Redesign', 'Live Interactive Store', 'Figma to Code', 'UI/UX Design'],
+    deliverables: [
+      'Full multi-page e-commerce storefront: Home, Shop All & Product Detail Page (PDP)',
+      'Interactive navbar with live page switching, cart counter & search drawer',
+      'Faithful 1:1 reproduction of the Figma master frames with crisp high-resolution fidelity',
+      'Product catalog with real add-to-cart, filter toggles, and detail inspection',
+      'Dedicated full-screen website route at /playstaples-pt2 and interactive case study modal preview',
+    ],
+    highlights:
+      'A fully functional e-commerce website reimagining PlayStaples—featuring the redesigned homepage, shop-all grid, and product detail view with interactive shopping cart and seamless page routing.',
+    tools: ['React', 'Tailwind CSS', 'Figma', 'UI/UX Design', 'E-Commerce'],
+    storeUrl: '/playstaples-pt2',
+    isPlayStaplesPt2: true,
+  },
 ]
 
 const getProjectGallery = (project) => {
@@ -374,6 +411,33 @@ const getProjectGallery = (project) => {
           img: playStaplesMoodboardImg,
           title: '06 // Part 2: Ideation & Visual Moodboard',
           subtitle: 'Art Direction Exploration: Abstract, Maggie, Airborne & Buttermax',
+        },
+      ],
+    }
+  }
+
+  if (project.id === 'playstaples-pt2') {
+    return {
+      hero: {
+        img: '/playstaples-pt2/home_full.webp',
+        title: 'PlayStaples PT2 // Live E-Commerce Storefront Redesign',
+        caption: 'Master Redesign: Homepage, Series 01 Catalog & 360° Product Page',
+      },
+      secondary: [
+        {
+          img: '/playstaples-pt2/product_full.webp',
+          title: '02 // Kaali Peeli 360° Product Detail Page',
+          subtitle: 'Multi-angle studio photography, magnetic luggage callouts, and customer reviews',
+        },
+        {
+          img: '/playstaples-pt2/shop_collections_full.webp',
+          title: '03 // Series 01 — Indian Terrain Vehicles',
+          subtitle: 'Sedans, Hatchbacks, Minivans & Buses handcrafted collectible line',
+        },
+        {
+          img: '/playstaples-pt2/shop_all_full.webp',
+          title: '04 // Shop All E-Commerce Catalog & Specials',
+          subtitle: 'Specials banner, category filters, and seamless store layout',
         },
       ],
     }
@@ -468,6 +532,7 @@ export default function ContentsSection() {
   const [activeProject, setActiveProject] = React.useState(null)
   const [activeImageZoom, setActiveImageZoom] = React.useState(null)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
+  const [hoveredCardId, setHoveredCardId] = React.useState(null)
 
   // Track browser native fullscreen state
   React.useEffect(() => {
@@ -659,20 +724,24 @@ export default function ContentsSection() {
         {/* FULL BLEED GRID WITH RED FOOTER TITLE STRIPS & PERFECT ALIGNMENT */}
         <div className="relative z-10 w-full border-t-4 border-b-4 border-black bg-black">
           <div className="w-full grid grid-cols-1 md:grid-cols-2 items-stretch">
-            {projectsData.map((card, idx) => (
-              <div 
-                key={card.id} 
-                className={`group relative cursor-pointer flex flex-col h-full overflow-hidden bg-neutral-950 ${
-                  idx < projectsData.length - 1 ? 'border-b-4 border-black' : ''
-                } ${
-                  idx >= projectsData.length - 2 ? 'md:border-b-0' : ''
-                } ${
-                  idx % 2 === 0 ? 'md:border-r-4 md:border-black' : ''
-                }`}
-                onClick={() => handleOpenProject(card)}
-              >
-                {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
-                <div className={`relative w-full aspect-[4/3] flex-1 overflow-hidden ${card.flipImages ? 'bg-[#c99bd8]' : 'bg-neutral-900'}`}>
+            {projectsData.map((card, idx) => {
+              const isLastWide = idx === 4 && projectsData.length === 5
+              return (
+                <div 
+                  key={card.id} 
+                  className={`group relative cursor-pointer flex flex-col h-full overflow-hidden bg-neutral-950 ${
+                    isLastWide
+                      ? 'md:col-span-2 border-b-0 md:border-r-0'
+                      : `${idx < 4 ? 'border-b-4 border-black' : ''} ${
+                          idx % 2 === 0 ? 'md:border-r-4 md:border-black' : ''
+                        }`
+                  }`}
+                  onMouseEnter={() => setHoveredCardId(card.id)}
+                  onMouseLeave={() => setHoveredCardId(null)}
+                  onClick={() => handleOpenProject(card)}
+                >
+                  {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
+                  <div className={`relative w-full ${isLastWide ? 'aspect-[4/3] md:aspect-[21/9]' : 'aspect-[4/3]'} flex-1 overflow-hidden ${card.flipImages ? 'bg-[#c99bd8]' : 'bg-neutral-900'}`}>
                   {card.isIsometricCards ? (
                     <OniCardIsometricAnimation />
                   ) : card.isAureusIsometric ? (
@@ -692,7 +761,7 @@ export default function ContentsSection() {
                       alt={card.title}
                       className="transition-transform duration-700 group-hover:scale-105"
                     />
-                  ) : card.id === 'playstaples' ? (
+                  ) : card.id === 'playstaples' || card.id === 'playstaples-pt2' ? (
                     <img 
                       src={card.thumbnail} 
                       alt={card.title} 
@@ -725,7 +794,11 @@ export default function ContentsSection() {
                       />
                     )}
                     <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />
-                    {!(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards || card.isAureusIsometric || card.id === 'aureaus' || card.id === 'melody') && (
+                    {card.id === 'playstaples-pt2' ? (
+                      <span className="relative z-10 px-5 py-2.5 rounded-full border-2 border-amber-300 text-black font-ca-mono font-black text-xs md:text-sm tracking-widest uppercase bg-amber-400 shadow-2xl group-hover:scale-105 transition-transform flex items-center gap-2">
+                        <span>⚡ Explore Live Store ↗</span>
+                      </span>
+                    ) : !(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards || card.isAureusIsometric || card.id === 'aureaus' || card.id === 'melody') && (
                       <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
                         View Case Study ↗
                       </span>
@@ -734,13 +807,19 @@ export default function ContentsSection() {
                 </div>
 
                 {/* RED TITLE BAR BELOW THE IMAGE */}
-                <div className="w-full bg-[#E84A4A] border-t-4 border-black px-4 py-3 flex items-center justify-center text-center shrink-0 min-h-[3.25rem]">
+                <div className="w-full bg-[#E84A4A] border-t-4 border-black px-4 py-3 flex items-center justify-center text-center shrink-0 min-h-[3.25rem] gap-2 flex-wrap">
                   <h3 className="font-akira font-black text-white text-xs sm:text-sm md:text-base tracking-wider uppercase truncate max-w-full">
                     {card.title}
                   </h3>
+                  {isLastWide && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400 text-black font-fredoka font-bold text-[10px] tracking-wider uppercase shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
+                      <span>Live Store</span>
+                    </span>
+                  )}
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </div>

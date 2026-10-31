@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import '../styles/sketchbook3d.css';
 
-const N = 18;        // 18 strips forming the curved surface
+const N = 12;        // 12 strips forming the curved surface (optimized for 60fps)
 const SPAN = 0.449;  // gutter to outer page edge
 const BETA = 0.60;   // peak curl arc in radians
 const TILT_X = 4.5;
@@ -57,6 +57,18 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   const state = stateRef.current;
   state.idx = idx;
 
+  // Preload and decode adjacent spreads for 0ms decode stutter on page flip
+  useEffect(() => {
+    const toPreload = [idx - 1, idx + 1, idx + 2].filter((i) => i >= 0 && i < pages.length);
+    toPreload.forEach((i) => {
+      const im = new Image();
+      im.src = pages[i].url;
+      if ('decode' in im) {
+        im.decode().catch(() => {});
+      }
+    });
+  }, [idx, pages]);
+
   useEffect(() => {
     const mobileQuery = window.matchMedia('(max-width: 640px)');
     const updateMobile = () => setIsMobile(mobileQuery.matches);
@@ -80,15 +92,14 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
     }
   }, []);
 
-  // Apply 3D perspective lean and scale
+  // Apply 3D perspective lean and scale directly to styles - ZERO React component re-renders
   const applyView = useCallback(() => {
     if (!sb3dRef.current) return;
     sb3dRef.current.style.setProperty('--rx', `${state.view.rx.toFixed(2)}deg`);
     sb3dRef.current.style.setProperty('--ry', `${state.view.ry.toFixed(2)}deg`);
     sb3dRef.current.style.setProperty('--zoom', state.view.z.toFixed(3));
-    setZoomLevel(state.view.z);
-    if (typeof placeLoupe === 'function') placeLoupe();
-  }, []);
+    if (loupeOn && typeof placeLoupe === 'function') placeLoupe();
+  }, [loupeOn]);
 
   const setView = useCallback((rx, ry, z) => {
     state.view.trx = Math.max(-TILT_X, Math.min(TILT_X, rx));
@@ -116,7 +127,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
     return moved;
   }, [applyView]);
 
-  // Apply cosine lighting and rotation to the 18 strips
+  // Apply cosine lighting and rotation to the curl strips
   const applyTurn = useCallback((t) => {
     if (!sb3dRef.current) return;
     const th = Math.PI * t;
@@ -129,25 +140,26 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
     sb3dRef.current.style.setProperty('--td', `${(td * D).toFixed(3)}deg`);
     sb3dRef.current.style.setProperty('--shade', Math.sin(Math.PI * t).toFixed(3));
 
-    for (let i = 0; i < state.strips.length; i++) {
+    const strips = state.strips;
+    for (let i = 0; i < strips.length; i++) {
       const l1 = Math.abs(Math.cos(tt - i * td));
       const l2 = Math.abs(Math.cos(tt - (i + 1) * td));
-      const st = state.strips[i].style;
+      const st = strips[i].style;
       st.setProperty('--lit', l1.toFixed(3));
       st.setProperty('--a1', ((1 - l1) * 0.62).toFixed(3));
       st.setProperty('--a2', ((1 - l2) * 0.62).toFixed(3));
     }
   }, []);
 
-  // Sync magnified mirror layer for the loupe
+  // Sync magnified mirror layer for the loupe (guarded when loupe is off)
   const syncZoomLayer = useCallback(() => {
-    if (!zoomInnerRef.current || !bookRef.current) return;
+    if (!loupeOn || !zoomInnerRef.current || !bookRef.current) return;
     zoomInnerRef.current.textContent = '';
     for (const child of bookRef.current.children) {
       if (child.classList.contains('sb-zone')) continue;
       zoomInnerRef.current.appendChild(child.cloneNode(true));
     }
-  }, []);
+  }, [loupeOn]);
 
   // Loupe placement and coordinates
   const loupeSize = useCallback(() => {
@@ -156,7 +168,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   }, []);
 
   const placeLoupe = useCallback(() => {
-    if (state.lx === null || !loupeRef.current || !bookRef.current || !zoomWrapRef.current || !zoomInnerRef.current) return;
+    if (!loupeOn || state.lx === null || !loupeRef.current || !bookRef.current || !zoomWrapRef.current || !zoomInnerRef.current) return;
     const bw = bookRef.current.clientWidth;
     const bh = bookRef.current.clientHeight;
     if (!bw) return;
@@ -196,11 +208,11 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   }, [loupeOn, loupeSize]);
 
   const restLoupe = useCallback(() => {
-    if (!bookRef.current) return;
+    if (!loupeOn || !bookRef.current) return;
     state.lx = bookRef.current.clientWidth * 0.88;
     state.ly = bookRef.current.clientHeight * 0.84;
     placeLoupe();
-  }, [placeLoupe]);
+  }, [loupeOn, placeLoupe]);
 
   const shoveLoupe = useCallback((dir) => {
     if (!loupeOn || state.lx === null || state.lgrab || !bookRef.current) return;
@@ -214,7 +226,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   }, [kick, loupeOn]);
 
   const loupeEase = useCallback(() => {
-    if (!state.lTarget) return false;
+    if (!loupeOn || !state.lTarget) return false;
     if (state.lgrab) {
       state.lTarget = null;
       return false;
@@ -232,9 +244,9 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
     state.ly += dy * 0.17;
     placeLoupe();
     return true;
-  }, [placeLoupe]);
+  }, [loupeOn, placeLoupe]);
 
-  // Construct the nested 18-strip curl
+  // Construct the nested N-strip curl (GPU-optimized)
   const buildCurl = useCallback((dir, from, to) => {
     state.strips = [];
     const c = document.createElement('div');
@@ -327,7 +339,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
       rh.appendChild(rShade);
       book.appendChild(rh);
 
-      // 18-strip curl
+      // N-strip curl
       const curl = buildCurl(state.turn.dir, state.turn.from, state.turn.to);
       book.appendChild(curl);
       applyTurn(state.turn.t);
@@ -351,7 +363,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   // Main animation frame handler
   const tick = useCallback((now) => {
     state.raf = null;
-    const dt = Math.min(0.032, (now - state.last) / 1000 || 0.016);
+    const dt = Math.min(0.024, (now - state.last) / 1000 || 0.016);
     state.last = now;
 
     if (state.spring && state.turn) {
@@ -437,14 +449,17 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   const step = useCallback((dir) => {
     if (state.introOn) endIntro();
     if (state.turn) {
-      state.idx = state.turn.to;
-      setIdx(state.idx);
+      const targetIdx = state.turn.to;
+      state.spring = null;
+      state.idx = targetIdx;
+      setIdx(targetIdx);
       state.turn = null;
+      paint();
     }
     if ((dir === 'next' && state.idx >= M - 1) || (dir === 'prev' && state.idx <= 0)) return;
     startTurn(dir, 0);
     commit();
-  }, [M, commit, startTurn]);
+  }, [M, commit, paint, startTurn]);
 
   const goTo = useCallback((i) => {
     if (state.introOn) endIntro();
@@ -488,11 +503,11 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   }, [endIntro, paint, startTurn, tweenTo]);
 
   const startIntro = useCallback(() => {
-    const steps = M;
+    const steps = Math.min(M, 8); // Crisp riffle intro
     state.riffle = [];
     for (let r = 0; r < steps; r++) {
       const bell = Math.sin(Math.PI * (r / (steps - 1 || 1)));
-      state.riffle.push({ bell, dur: 0.28 - 0.18 * bell });
+      state.riffle.push({ bell, dur: 0.24 - 0.14 * bell });
     }
     state.riffleAt = 0;
     state.introOn = true;
@@ -509,14 +524,21 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
     const stage = stageRef.current;
     if (!stage) return;
 
-    // Pointer move tilt
+    // Pointer move tilt (debounced across animation frames)
+    let moveTicking = false;
     const handlePointerMove = (e) => {
       if (e.pointerType === 'touch' || state.drag || !bookRef.current) return;
-      const r = bookRef.current.getBoundingClientRect();
-      if (!r.width) return;
-      const nx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width * 0.62)));
-      const ny = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height * 0.9)));
-      setView(-ny * TILT_X, nx * TILT_Y, state.view.tz);
+      if (moveTicking) return;
+      moveTicking = true;
+      requestAnimationFrame(() => {
+        moveTicking = false;
+        if (!bookRef.current) return;
+        const r = bookRef.current.getBoundingClientRect();
+        if (!r.width) return;
+        const nx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width * 0.62)));
+        const ny = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height * 0.9)));
+        setView(-ny * TILT_X, nx * TILT_Y, state.view.tz);
+      });
     };
 
     const handlePointerOut = (e) => {
@@ -639,7 +661,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
   };
 
   const handleLoupeMove = (e) => {
-    if (!state.lgrab || !bookRef.current) return;
+    if (!loupeOn || !state.lgrab || !bookRef.current) return;
     const bw = bookRef.current.clientWidth;
     const bh = bookRef.current.clientHeight;
     const R = loupeSize() / 2;
@@ -707,6 +729,7 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
             className="tool"
             onClick={() => {
               setView(0, 0, 1);
+              setZoomLevel(1);
               goTo(0);
             }}
             title="Reset to Page 1 & Default Zoom"
@@ -721,7 +744,11 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
           <button
             type="button"
             className="tool"
-            onClick={() => setView(state.view.trx, state.view.try_, state.view.tz / 1.15)}
+            onClick={() => {
+              const newZ = Math.max(ZOOM_MIN, state.view.tz / 1.15);
+              setView(state.view.trx, state.view.try_, newZ);
+              setZoomLevel(newZ);
+            }}
             disabled={zoomLevel <= ZOOM_MIN + 0.01}
             title="Zoom Out"
           >
@@ -731,7 +758,11 @@ export default function ThreeUISketchbookViewer({ pages, onClose, autoRiffle = t
           <button
             type="button"
             className="tool"
-            onClick={() => setView(state.view.trx, state.view.try_, state.view.tz * 1.15)}
+            onClick={() => {
+              const newZ = Math.min(ZOOM_MAX, state.view.tz * 1.15);
+              setView(state.view.trx, state.view.try_, newZ);
+              setZoomLevel(newZ);
+            }}
             disabled={zoomLevel >= ZOOM_MAX - 0.01}
             title="Zoom In"
           >

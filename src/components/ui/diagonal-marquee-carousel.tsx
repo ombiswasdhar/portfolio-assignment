@@ -34,14 +34,14 @@ const Card = ({ card, className }: { card: CardItem; className?: string }) => {
   return (
     <div
       className={cn(
-        "group relative h-[300px] w-[400px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow-2xl bg-neutral-900 border border-white/10",
+        "group relative h-[300px] w-[400px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow-md bg-neutral-900 border border-white/10 will-change-transform",
         className,
       )}
     >
       <img
         src={card.url}
         alt={card.title}
-        loading="eager"
+        loading="lazy"
         decoding="async"
         className="h-full w-full object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-105"
       />
@@ -85,7 +85,7 @@ const MarqueeRow = ({
             </div>
           ))}
         </div>
-        <div className="flex shrink-0">
+        <div className="flex shrink-0" aria-hidden="true">
           {cards.map((card, idx) => (
             <div key={`${card.id}-${idx}-copy`} className="shrink-0 pr-6">
               <Card card={card} className={cardClassName} />
@@ -117,7 +117,7 @@ export default function DiagonalMarqueeCarousel({
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { rootMargin: "250px" }
+      { rootMargin: "150px 0px" }
     );
 
     observer.observe(el);
@@ -128,10 +128,9 @@ export default function DiagonalMarqueeCarousel({
     transform: `rotate(${angle}deg)`,
   };
 
-  // Repeat cards 3 times per half (15 cards total for 5 source cards)
-  // This guarantees each block is >3500px wide, eliminating any gap or snap at loop boundaries
   const sourceCards = cards.length > 0 ? cards : DEFAULT_CARDS;
-  const rowCards = [...sourceCards, ...sourceCards, ...sourceCards];
+  // Repeat enough to ensure seamless track wrap without overwhelming the GPU
+  const rowCards = sourceCards.length >= 6 ? sourceCards : [...sourceCards, ...sourceCards];
   const rowCardsReverse = [...rowCards].reverse();
 
   return (
@@ -156,16 +155,22 @@ export default function DiagonalMarqueeCarousel({
         .animate-marquee-left {
           animation: marquee-left var(--speed) linear infinite;
           will-change: transform;
+          transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
         .animate-marquee-right {
           animation: marquee-right var(--speed) linear infinite;
           will-change: transform;
+          transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
       `,
         }}
       />
       <div
-        className="absolute z-0 flex w-[220vw] flex-col gap-4 sm:gap-6"
+        className="absolute z-0 flex w-[220vw] flex-col gap-4 sm:gap-6 will-change-transform"
         style={rotationStyle}
       >
         <MarqueeRow
@@ -173,28 +178,21 @@ export default function DiagonalMarqueeCarousel({
           speed={baseSpeed}
           direction={-1}
           cardClassName={cardClassName}
-          isPaused={false}
+          isPaused={!isInView}
         />
         <MarqueeRow
           cards={rowCardsReverse}
-          speed={Math.max(25, baseSpeed - 10)}
+          speed={Math.max(25, baseSpeed - 8)}
           direction={alternateDirections ? 1 : -1}
           cardClassName={cardClassName}
-          isPaused={false}
+          isPaused={!isInView}
         />
         <MarqueeRow
           cards={rowCards}
-          speed={baseSpeed + 8}
+          speed={baseSpeed + 6}
           direction={-1}
           cardClassName={cardClassName}
-          isPaused={false}
-        />
-        <MarqueeRow
-          cards={rowCardsReverse}
-          speed={Math.max(25, baseSpeed - 6)}
-          direction={alternateDirections ? 1 : -1}
-          cardClassName={cardClassName}
-          isPaused={false}
+          isPaused={!isInView}
         />
       </div>
 
@@ -213,20 +211,3 @@ export default function DiagonalMarqueeCarousel({
     </div>
   );
 }
-
-/**
- * Great UI Component
- *
- * Built with React, TypeScript, Tailwind CSS, and Framer Motion.
- * Designed to be accessible, customizable, and production-ready.
- *
- * Website: https://great-ui.com
- * GitHub: https://github.com/Saurabh-2607/GreatUI
- * X (Great UI): https://x.com/GreatUIHQ
- *
- * Released under the MIT License.
- * Contributions, issues, and feature requests are always welcome.
- *
- * Author: Saurabh Sharma
- * X: https://x.com/srbh_s
- */

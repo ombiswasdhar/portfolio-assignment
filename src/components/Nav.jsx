@@ -66,6 +66,19 @@ export default function Nav() {
       handleScroll()
     }
 
+    let sectionElements = null
+    let lightElements = null
+
+    const cacheElements = () => {
+      sectionElements = {
+        cv: document.getElementById('cv'),
+        work: document.getElementById('work') || document.getElementById('featured-works'),
+        skills: document.getElementById('skills'),
+        about: document.getElementById('about'),
+      }
+      lightElements = Array.from(document.querySelectorAll('[data-theme="light"], .ca-dotted-grid-bg'))
+    }
+
     const handleScroll = () => {
       if (navigationScrollRef.current) {
         window.clearTimeout(navigationScrollRef.current)
@@ -78,11 +91,10 @@ export default function Nav() {
         const nextMarqueeOffset = Math.min(window.scrollY, MARQUEE_HEIGHT)
         setMarqueeOffset((current) => current === nextMarqueeOffset ? current : nextMarqueeOffset)
 
-        if (!navigationScrollRef.current) {
-          const cvEl = document.getElementById('cv')
-          const workEl = document.getElementById('work') || document.getElementById('featured-works')
-          const skillsEl = document.getElementById('skills')
-          const aboutEl = document.getElementById('about')
+        if (!sectionElements) cacheElements()
+
+        if (!navigationScrollRef.current && sectionElements) {
+          const { cv: cvEl, work: workEl, skills: skillsEl, about: aboutEl } = sectionElements
 
           const threshold = window.innerHeight * 0.45
           const isAtBottom =
@@ -102,22 +114,27 @@ export default function Nav() {
           setScrollSection((current) => current === nextSection ? current : nextSection)
         }
 
-        // Check whether the top header is over any light section.
-        const lightSections = document.querySelectorAll('[data-theme="light"], .ca-dotted-grid-bg')
-        let isOverLight = false
-        for (let i = 0; i < lightSections.length; i++) {
-          const rect = lightSections[i].getBoundingClientRect()
-          if (rect.top <= 88 && rect.bottom >= 0) {
-            isOverLight = true
-            break
+        // Check whether the top header is over any light section
+        if (lightElements) {
+          let isOverLight = false
+          for (let i = 0; i < lightElements.length; i++) {
+            const rect = lightElements[i].getBoundingClientRect()
+            if (rect.top <= 88 && rect.bottom >= 0) {
+              isOverLight = true
+              break
+            }
           }
+          setIsLightBg((current) => current === isOverLight ? current : isOverLight)
         }
-        setIsLightBg((current) => current === isOverLight ? current : isOverLight)
       })
     }
 
+    cacheElements()
     window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll, { passive: true })
+    window.addEventListener('resize', () => {
+      cacheElements()
+      handleScroll()
+    }, { passive: true })
     window.addEventListener('scrollend', finishNavigationScroll)
     handleScroll()
 

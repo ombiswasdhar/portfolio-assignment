@@ -18,6 +18,7 @@ const AureusPage = lazy(() => import('./pages/Aureus'))
 const QuantumSwarmDemo = lazy(() => import('./components/examples/quantum-swarm-demo'))
 const HelixChronoMatrixDemo = lazy(() => import('./components/examples/helix-chrono-matrix-demo'))
 const MengToSketchbookScene = lazy(() => import('./components/MengToSketchbookScene'))
+const PlayStaplesStore = lazy(() => import('./pages/PlayStaplesStore'))
 
 // Initialize device performance tier & attributes immediately
 if (typeof window !== 'undefined') {
@@ -70,6 +71,10 @@ function App() {
             <Route path="/helix-chrono-matrix" element={<HelixChronoMatrixDemo />} />
             <Route path="/sketchbook/threeui" element={<MengToSketchbookScene />} />
             <Route path="/threeui-sketchbook" element={<MengToSketchbookScene />} />
+            <Route path="/playstaples-pt2" element={<PlayStaplesStore />} />
+            <Route path="/playstaples-store" element={<PlayStaplesStore />} />
+            <Route path="/playstaples-redesign" element={<PlayStaplesStore />} />
+            <Route path="/playstaples2" element={<PlayStaplesStore />} />
           </Routes>
           </Suspense>
         </div>

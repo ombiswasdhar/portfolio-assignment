@@ -1,10 +1,30 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 export default function AboutMarquee({ className = '' }) {
-  const repetitions = Array.from({ length: 16 }, (_, i) => i)
+  const containerRef = useRef(null)
+  const [isInView, setIsInView] = useState(true)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { rootMargin: '200px 0px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const repetitions = Array.from({ length: 10 }, (_, i) => i)
+  const playState = isInView ? 'running' : 'paused'
 
   return (
     <div
+      ref={containerRef}
       aria-label="About section dual animated marquee"
       className={`w-full select-none overflow-hidden flex flex-col ${className}`}
     >
@@ -15,7 +35,10 @@ export default function AboutMarquee({ className = '' }) {
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-14 z-10 bg-gradient-to-l from-[#DE2020] to-transparent" />
 
         <div className="relative w-full overflow-hidden h-full flex items-center">
-          <div className="animate-marquee-scroll flex items-center h-full">
+          <div
+            className="animate-marquee-scroll flex items-center h-full will-change-transform"
+            style={{ animationPlayState: playState }}
+          >
             {/* Half 1 */}
             <div className="flex items-center h-full shrink-0">
               {repetitions.map((idx) => (
@@ -49,16 +72,19 @@ export default function AboutMarquee({ className = '' }) {
         </div>
       </div>
 
-      {/* Bottom Tier: Tilted White Ribbon moved up along with About section, slightly overlapping red marquee on right side */}
+      {/* Bottom Tier: Tilted White Ribbon moved up along with About section */}
       <div className="relative w-full overflow-visible pt-1.5 sm:pt-2 md:pt-2.5 pb-4 sm:pb-5 md:pb-6 z-20 pointer-events-auto">
-        <div className="w-[108%] -ml-[4%] rotate-[1.3deg] sm:rotate-[1.6deg] md:rotate-[1.8deg] shadow-[0_10px_32px_rgba(0,0,0,0.85)]">
+        <div className="w-[108%] -ml-[4%] rotate-[1.3deg] sm:rotate-[1.6deg] md:rotate-[1.8deg] shadow-[0_10px_32px_rgba(0,0,0,0.85)] will-change-transform">
           <div className="relative w-full h-9 sm:h-10 bg-white text-black flex items-stretch overflow-hidden border-y-2 border-black">
             {/* Soft edge gradient fades from white */}
             <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-14 z-10 bg-gradient-to-r from-white to-transparent" />
             <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-14 z-10 bg-gradient-to-l from-white to-transparent" />
 
             <div className="relative w-full overflow-hidden h-full flex items-center">
-              <div className="animate-marquee-scroll-reverse flex items-center h-full">
+              <div
+                className="animate-marquee-scroll-reverse flex items-center h-full will-change-transform"
+                style={{ animationPlayState: playState }}
+              >
                 {/* Half 1 */}
                 <div className="flex items-center h-full shrink-0">
                   {repetitions.map((idx) => (
@@ -69,7 +95,7 @@ export default function AboutMarquee({ className = '' }) {
                       <span className="font-akira font-black text-xs sm:text-sm tracking-wider uppercase text-neutral-900 group-hover/wht:text-[#DE2020] transition-colors">
                         ABOUT
                       </span>
-                      <span className="text-[#DE2020] text-xs sm:text-sm font-bold shrink-0 drop-shadow-[0_0_6px_rgba(222,32,32,0.4)]">
+                      <span className="text-[#DE2020] text-xs sm:text-sm font-bold shrink-0 [text-shadow:0_0_8px_rgba(222,32,32,0.6)]">
                         ✦
                       </span>
                     </div>
@@ -86,7 +112,7 @@ export default function AboutMarquee({ className = '' }) {
                       <span className="font-akira font-black text-xs sm:text-sm tracking-wider uppercase text-neutral-900 group-hover/wht:text-[#DE2020] transition-colors">
                         ABOUT
                       </span>
-                      <span className="text-[#DE2020] text-xs sm:text-sm font-bold shrink-0 drop-shadow-[0_0_6px_rgba(222,32,32,0.4)]">
+                      <span className="text-[#DE2020] text-xs sm:text-sm font-bold shrink-0 [text-shadow:0_0_8px_rgba(222,32,32,0.6)]">
                         ✦
                       </span>
                     </div>
