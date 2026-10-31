@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Maximize2, Minimize2, ExternalLink, ChevronLeft, ChevronRight, ArrowLeft, Sparkles } from 'lucide-react'
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
+import { isLocalHost } from './ContentsSection'
 import PlayStaplesStoreView from './PlayStaplesStoreView'
 
 // Project challenge copy for each case study
@@ -68,16 +69,17 @@ export default function ProjectCaseStudyModal({
   allProjects = [],
   onSelectProject,
 }) {
+  const isPlayStaplesStore = isLocalHost && project?.id === 'playstaples-pt2'
   const [activeZoomImage, setActiveZoomImage] = useState(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [activeTab, setActiveTab] = useState(project?.id === 'playstaples-pt2' ? 'website' : 'story')
+  const [activeTab, setActiveTab] = useState(isPlayStaplesStore ? 'website' : 'story')
   const scrollContainerRef = useRef(null)
 
   useBodyScrollLock(true)
 
   useEffect(() => {
-    setActiveTab(project?.id === 'playstaples-pt2' ? 'website' : 'story')
-  }, [project?.id])
+    setActiveTab(isPlayStaplesStore ? 'website' : 'story')
+  }, [project?.id, isPlayStaplesStore])
 
   // Track browser native fullscreen state
   useEffect(() => {
@@ -196,7 +198,7 @@ export default function ProjectCaseStudyModal({
         </button>
 
         {/* Center mode switcher when project is PlayStaples PT2 */}
-        {project.id === 'playstaples-pt2' ? (
+        {isPlayStaplesStore ? (
           <div className="flex items-center gap-1.5 p-1 rounded-full bg-black/5 border border-black/10">
             <button
               type="button"
@@ -232,7 +234,7 @@ export default function ProjectCaseStudyModal({
         )}
 
         <div className="flex items-center gap-2 sm:gap-3">
-          {project.id === 'playstaples-pt2' && (
+          {isPlayStaplesStore && (
             <a
               href="/playstaples-pt2"
               target="_blank"
@@ -268,7 +270,7 @@ export default function ProjectCaseStudyModal({
       </div>
 
       {/* TRIONN SPLIT SCREEN CONTAINER OR EMBEDDED LIVE STORE */}
-      {project.id === 'playstaples-pt2' && activeTab === 'website' ? (
+      {isPlayStaplesStore && activeTab === 'website' ? (
         <div className="relative z-10 w-full max-w-[1700px] mx-auto px-2 sm:px-6 lg:px-10 py-3 sm:py-6 flex-1 flex flex-col">
           <div className="w-full rounded-2xl overflow-hidden border-2 border-black/20 shadow-[0_16px_50px_rgba(0,0,0,0.12)] bg-white flex flex-col min-h-[85vh]">
             <PlayStaplesStoreView isEmbedded={true} onClose={onClose} />
@@ -405,7 +407,7 @@ export default function ProjectCaseStudyModal({
                 : 'grid grid-cols-2 gap-5 sm:gap-6'
             }`}
           >
-            {project.id === 'playstaples-pt2' && (
+            {isPlayStaplesStore && (
               <div className="w-full bg-amber-400 border-b border-black px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2 text-black">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-black animate-pulse" />

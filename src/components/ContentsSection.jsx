@@ -181,7 +181,14 @@ function StarburstMascot({ className = 'w-18 h-18' }) {
 /* ========================================================================= */
 /* 4 RICH PROJECTS DATA */
 /* ========================================================================= */
-export const projectsData = [
+export const isLocalHost = typeof window !== 'undefined' && Boolean(
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname === '0.0.0.0' ||
+  window.location.hostname.endsWith('.local')
+)
+
+const baseProjectsData = [
   {
     id: 'playstaples',
     num: '01',
@@ -337,6 +344,10 @@ export const projectsData = [
       'Reimagined live music ticketing by pairing atmospheric dark-mode concert discovery with an airy, split-theme artist lineup and a frictionless two-column checkout—turning booking anxiety into pre-show excitement.',
     tools: ['Figma', 'UI/UX Design', 'User Journey Mapping', 'Visual Direction'],
   },
+]
+
+// PlayStaples PT2 Live Store is restricted strictly to local host development
+const localOnlyProjectsData = [
   {
     id: 'playstaples-pt2',
     num: '05',
@@ -375,6 +386,10 @@ export const projectsData = [
     isPlayStaplesPt2: true,
   },
 ]
+
+export const projectsData = isLocalHost
+  ? [...baseProjectsData, ...localOnlyProjectsData]
+  : baseProjectsData
 
 const getProjectGallery = (project) => {
   if (!project) return { hero: null, secondary: [] }

@@ -1,11 +1,12 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import CustomCursor from './components/CustomCursor'
 import ConstellationGrid from '@/components/ui/constellation-grid'
 import MusicPlayer from './components/MusicPlayer'
 import { MusicProvider } from './context/MusicContext'
 import { getDeviceTier } from './utils/deviceTier'
+import { isLocalHost } from './components/ContentsSection'
 import AugePreloader from './components/AugePreloader'
 
 const Work = lazy(() => import('./pages/Work'))
@@ -71,10 +72,22 @@ function App() {
             <Route path="/helix-chrono-matrix" element={<HelixChronoMatrixDemo />} />
             <Route path="/sketchbook/threeui" element={<MengToSketchbookScene />} />
             <Route path="/threeui-sketchbook" element={<MengToSketchbookScene />} />
-            <Route path="/playstaples-pt2" element={<PlayStaplesStore />} />
-            <Route path="/playstaples-store" element={<PlayStaplesStore />} />
-            <Route path="/playstaples-redesign" element={<PlayStaplesStore />} />
-            <Route path="/playstaples2" element={<PlayStaplesStore />} />
+            {/* PlayStaples Store is restricted exclusively to localhost development */}
+            {isLocalHost ? (
+              <>
+                <Route path="/playstaples-pt2" element={<PlayStaplesStore />} />
+                <Route path="/playstaples-store" element={<PlayStaplesStore />} />
+                <Route path="/playstaples-redesign" element={<PlayStaplesStore />} />
+                <Route path="/playstaples2" element={<PlayStaplesStore />} />
+              </>
+            ) : (
+              <>
+                <Route path="/playstaples-pt2" element={<Navigate to="/" replace />} />
+                <Route path="/playstaples-store" element={<Navigate to="/" replace />} />
+                <Route path="/playstaples-redesign" element={<Navigate to="/" replace />} />
+                <Route path="/playstaples2" element={<Navigate to="/" replace />} />
+              </>
+            )}
           </Routes>
           </Suspense>
         </div>
