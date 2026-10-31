@@ -43,6 +43,36 @@ import {
  * - Interactive contact hotspots (Phone, Email, Instagram, Behance) & Mentorsity link
  * - Download & Print action bar
  */
+/**
+ * Detect whether the user is on a touch device (mobile phone, iPad, tablet)
+ * or a desktop / laptop with mouse hover capability.
+ */
+function getCvZoomHint() {
+  if (typeof window === 'undefined') return 'tap any section to zoom in'
+
+  const ua = navigator.userAgent || ''
+  const maxTouch = navigator.maxTouchPoints || 0
+
+  // 1. Explicit iPad detection:
+  // - Classic iOS Safari UA contains 'iPad'
+  // - Modern iPadOS 13+ desktop-class Safari reports 'MacIntel' with touch points > 1
+  const isIPad = /iPad/i.test(ua) || (maxTouch > 1 && (navigator.platform === 'MacIntel' || /Macintosh/i.test(ua)))
+
+  // 2. Mobile phones & tablets (iPhone, iPod, Android phones, Android tablets, etc.)
+  const isMobileOrTabletUA = /iPhone|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini|Tablet/i.test(ua)
+
+  // 3. Media query check for touch devices without fine hover pointer
+  const isTouchPointer = window.matchMedia ? window.matchMedia('(pointer: coarse)').matches : false
+  const hasNoHover = window.matchMedia ? window.matchMedia('(hover: none)').matches : false
+
+  if (isIPad || isMobileOrTabletUA || (hasNoHover && isTouchPointer) || (isTouchPointer && window.innerWidth <= 1024)) {
+    return 'tap any section to zoom in'
+  }
+
+  // Desktop / laptop device with mouse / trackpad
+  return 'hover on any paragraph to zoom in'
+}
+
 export default function CVSection() {
   const containerRef = useRef(null)
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
@@ -50,6 +80,24 @@ export default function CVSection() {
   const [copiedEmail, setCopiedEmail] = useState(false)
   const [pinnedCard, setPinnedCard] = useState(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [bubbleHintText, setBubbleHintText] = useState(() => getCvZoomHint())
+
+  useEffect(() => {
+    const updateHint = () => {
+      setBubbleHintText(getCvZoomHint())
+    }
+
+    updateHint()
+    window.addEventListener('resize', updateHint)
+
+    const mqlHover = window.matchMedia ? window.matchMedia('(hover: hover) and (pointer: fine)') : null
+    mqlHover?.addEventListener?.('change', updateHint)
+
+    return () => {
+      window.removeEventListener('resize', updateHint)
+      mqlHover?.removeEventListener?.('change', updateHint)
+    }
+  }, [])
 
   // Escape key and scroll lock for preview modal
   useEffect(() => {
@@ -149,7 +197,7 @@ export default function CVSection() {
             </span>
             <span className="w-2 h-2 rounded-full bg-[#BA1F1F] animate-pulse" />
             <ComicTapHintBubble
-              text="tap any section to zoom in"
+              text={bubbleHintText}
               active={pinnedCard !== null}
               onClick={(e) => {
                 e.stopPropagation()
