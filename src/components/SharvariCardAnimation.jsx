@@ -33,30 +33,11 @@ export default function SharvariCardAnimation({ className = '' }) {
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-transparent to-black/60" />
       </div>
 
-      {/* Top Banner Bar: College Assignment Tag & Live Website Badge */}
-      <div className="absolute top-3 sm:top-5 left-3 sm:left-6 right-3 sm:right-6 z-20 flex items-center justify-between flex-wrap gap-2 pointer-events-none">
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] sm:text-xs font-ca-mono font-bold uppercase tracking-wider text-white shadow-lg">
-            <span>College Assignment • Symbiosis</span>
-          </span>
-          <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-neutral-800 text-white text-[10px] font-fredoka font-bold uppercase tracking-wider shadow-md">
-            NGO Website Redesign
-          </span>
-        </div>
-
-        <div className="flex items-center px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 backdrop-blur-md text-emerald-300 text-[10px] sm:text-xs font-fredoka font-bold uppercase tracking-wider shadow-lg">
-          <span>Live • sharvariwasnik.foundation</span>
-        </div>
-      </div>
-
-      {/* Center / Bottom Layout: Impact Telemetry & Program Highlights */}
+      {/* Center / Bottom Layout: Foundation Name, Headline & Description */}
       <div className="absolute inset-x-3 sm:inset-x-6 bottom-3 sm:bottom-6 z-20 flex flex-col md:flex-row md:items-end justify-between gap-4 pointer-events-none">
-        {/* Left: Foundation Name, Headline & Verified Impact Stats */}
+        {/* Left: Foundation Name, Headline & Description */}
         <div className="max-w-xl">
           <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-6 h-6 rounded bg-[#D7191F] text-white flex items-center justify-center font-bold text-xs shadow-md">
-              SWF
-            </div>
             <span className="text-xs sm:text-sm font-fredoka font-semibold text-neutral-300 uppercase tracking-widest">
               Sharvari Wasnik Foundation
             </span>
@@ -66,22 +47,9 @@ export default function SharvariCardAnimation({ className = '' }) {
             NGO WEBSITE
           </h4>
 
-          <p className="text-xs sm:text-sm text-neutral-300 font-fredoka mt-1 line-clamp-2 max-w-lg leading-snug drop-shadow">
-            Complete multi-page web platform redesign for Sharvari Wasnik Foundation—featuring 5 dedicated responsive pages, impact telemetry, and community pathways.
+          <p className="text-xs sm:text-sm text-neutral-300 font-fredoka mt-1 max-w-lg leading-snug drop-shadow">
+            Website Redesign for Sharvari Wasnik Foundation
           </p>
-
-          {/* Verified Impact Metrics Pill Row */}
-          <div className="flex flex-wrap items-center gap-2 mt-3 font-fredoka">
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white text-[10px] sm:text-xs font-medium">
-              <span className="text-amber-400 font-bold">5</span> Core Pages
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white text-[10px] sm:text-xs font-medium">
-              <span className="text-emerald-400 font-bold">450+</span> Books Donated
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white text-[10px] sm:text-xs font-medium">
-              <span className="text-rose-400 font-bold">150+</span> Beneficiaries
-            </span>
-          </div>
         </div>
 
         {/* Right: Multi-Page Website Preview Cards */}
