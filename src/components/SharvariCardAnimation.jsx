@@ -33,28 +33,18 @@ export default function SharvariCardAnimation({ className = '' }) {
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-transparent to-black/60" />
       </div>
 
-      {/* Floating Crimson Accent Glow matching SWF Brand Red (#D7191F) */}
-      <div
-        className={`absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-[#D7191F]/30 blur-3xl pointer-events-none transition-opacity duration-500 ${
-          isHovered ? 'opacity-80' : 'opacity-40'
-        }`}
-        aria-hidden="true"
-      />
-
       {/* Top Banner Bar: College Assignment Tag & Live Website Badge */}
       <div className="absolute top-3 sm:top-5 left-3 sm:left-6 right-3 sm:right-6 z-20 flex items-center justify-between flex-wrap gap-2 pointer-events-none">
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] sm:text-xs font-ca-mono font-bold uppercase tracking-wider text-white shadow-lg">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D7191F] animate-pulse" />
+          <span className="inline-flex items-center px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] sm:text-xs font-ca-mono font-bold uppercase tracking-wider text-white shadow-lg">
             <span>College Assignment • Symbiosis</span>
           </span>
-          <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-[#D7191F]/90 text-white text-[10px] font-fredoka font-bold uppercase tracking-wider shadow-md">
+          <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-neutral-800 text-white text-[10px] font-fredoka font-bold uppercase tracking-wider shadow-md">
             NGO Website Redesign
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 backdrop-blur-md text-emerald-300 text-[10px] sm:text-xs font-fredoka font-bold uppercase tracking-wider shadow-lg">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+        <div className="flex items-center px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 backdrop-blur-md text-emerald-300 text-[10px] sm:text-xs font-fredoka font-bold uppercase tracking-wider shadow-lg">
           <span>Live • sharvariwasnik.foundation</span>
         </div>
       </div>

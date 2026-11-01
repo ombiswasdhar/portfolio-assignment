@@ -67,8 +67,8 @@ const PROJECT_THEMES = {
   },
   sharvari: {
     baseBg: '#FDFBFA', // Warm clean white/paper
-    defaultGlow1: '#D7191F', // Foundation crimson brand red
-    defaultGlow2: '#1E1B1B', // Charcoal black
+    defaultGlow1: '#EAE5DC', // Clean neutral paper
+    defaultGlow2: '#ECE8E1',
   },
 }
 
@@ -186,7 +186,9 @@ export default function ProjectCaseStudyModal({
       <div
         className="fixed inset-0 pointer-events-none -z-10"
         style={{
-          background: `
+          background: project.id === 'sharvari'
+            ? 'none'
+            : `
             radial-gradient(900px circle at 50% 20%, ${theme.defaultGlow1}20, transparent 70%),
             radial-gradient(1000px circle at 85% 15%, ${theme.defaultGlow2}18, transparent 65%),
             radial-gradient(900px circle at 15% 85%, ${theme.defaultGlow1}14, transparent 65%)
@@ -247,7 +249,7 @@ export default function ProjectCaseStudyModal({
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#D7191F] text-white hover:bg-neutral-900 text-xs font-fredoka font-bold uppercase tracking-wider transition-all shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 text-xs font-fredoka font-bold uppercase tracking-wider transition-all shadow-xs"
               title="Visit live NGO website"
             >
               <span>Live Website</span>
@@ -351,7 +353,7 @@ export default function ProjectCaseStudyModal({
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D7191F] text-white hover:bg-neutral-900 text-xs font-fredoka font-bold uppercase tracking-wider shadow-md hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 text-xs font-fredoka font-bold uppercase tracking-wider shadow-md hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
                     >
                       <Sparkles className="w-3.5 h-3.5 text-white" />
                       <span>Visit Live Website</span>
@@ -435,21 +437,21 @@ export default function ProjectCaseStudyModal({
             }`}
           >
             {project.liveUrl && (
-              <div className="col-span-2 w-full bg-[#D7191F] text-white rounded-2xl px-4 sm:px-6 py-3.5 flex items-center justify-between flex-wrap gap-2 shadow-md">
-                <div className="flex items-center">
-                  <span className="text-xs font-fredoka font-bold uppercase tracking-wider">
-                    Live Production Website Active • sharvariwasnik.foundation
+              <div className="col-span-2 flex items-center justify-between pt-1 pb-2 px-1 text-xs font-fredoka">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-neutral-500 uppercase tracking-wider text-[11px]">
+                    Live Website:
                   </span>
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-bold text-neutral-900 hover:text-neutral-600 transition-colors underline underline-offset-4"
+                  >
+                    <span>sharvariwasnik.foundation</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-neutral-500" />
+                  </a>
                 </div>
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-100 text-neutral-950 text-xs font-fredoka font-bold uppercase tracking-wider transition-all shadow"
-                >
-                  <span>Visit Live Website</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
               </div>
             )}
             {isPlayStaplesStore && (
