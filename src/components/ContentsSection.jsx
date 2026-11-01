@@ -912,14 +912,12 @@ export default function ContentsSection() {
                     {card.title}
                   </h3>
                   {card.id === 'sharvari' && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white text-neutral-900 font-fredoka font-bold text-[10px] tracking-wider uppercase shadow-xs">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#D7191F] animate-pulse" />
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-white text-neutral-900 font-fredoka font-bold text-[10px] tracking-wider uppercase shadow-xs">
                       <span>Live NGO Website</span>
                     </span>
                   )}
                   {card.id === 'playstaples-pt2' && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400 text-black font-fredoka font-bold text-[10px] tracking-wider uppercase shadow-xs">
-                      <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-amber-400 text-black font-fredoka font-bold text-[10px] tracking-wider uppercase shadow-xs">
                       <span>Live Store</span>
                     </span>
                   )}

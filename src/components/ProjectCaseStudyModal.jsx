@@ -436,8 +436,7 @@ export default function ProjectCaseStudyModal({
           >
             {project.liveUrl && (
               <div className="col-span-2 w-full bg-[#D7191F] text-white rounded-2xl px-4 sm:px-6 py-3.5 flex items-center justify-between flex-wrap gap-2 shadow-md">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+                <div className="flex items-center">
                   <span className="text-xs font-fredoka font-bold uppercase tracking-wider">
                     Live Production Website Active • sharvariwasnik.foundation
                   </span>
@@ -455,8 +454,7 @@ export default function ProjectCaseStudyModal({
             )}
             {isPlayStaplesStore && (
               <div className="w-full bg-amber-400 border-b border-black px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2 text-black">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-black animate-pulse" />
+                <div className="flex items-center">
                   <span className="text-xs font-black uppercase tracking-wider">
                     Interactive Multi-Page Storefront Active
                   </span>
