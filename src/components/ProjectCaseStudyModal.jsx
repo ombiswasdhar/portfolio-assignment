@@ -397,25 +397,25 @@ export default function ProjectCaseStudyModal({
             </div>
 
             {/* Bottom Project Navigation (Previous / Next) */}
-            <div className="border-t border-black/10 pt-4 flex items-center justify-between text-xs font-fredoka uppercase tracking-wider text-neutral-600 mt-6 lg:mt-auto">
+            <div className="border-t border-black/10 pt-4 flex items-center justify-between text-xs font-fredoka uppercase tracking-wider text-neutral-600 mt-6 lg:mt-auto gap-2">
               <button
                 type="button"
                 onClick={handlePrevProject}
-                className="flex items-center gap-2 font-fredoka font-semibold text-xs tracking-wider uppercase text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-black/5 font-fredoka font-bold text-xs tracking-wider uppercase text-neutral-700 hover:text-neutral-950 transition-all cursor-pointer min-h-[38px] active:scale-95"
                 title={`Previous: ${prevProject.title}`}
               >
                 <ChevronLeft className="w-4 h-4 text-[#E84A4A]" />
                 <span>Previous</span>
               </button>
 
-              <div className="text-[11px] text-neutral-500 font-fredoka font-semibold">
+              <div className="text-center font-fredoka font-bold text-xs tracking-widest text-neutral-600 px-3 py-1.5 rounded-full bg-black/5 select-none shadow-2xs">
                 {currentIndex + 1} / {allProjects.length}
               </div>
 
               <button
                 type="button"
                 onClick={handleNextProject}
-                className="flex items-center gap-2 font-fredoka font-semibold text-xs tracking-wider uppercase text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer ml-auto"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-black/5 font-fredoka font-bold text-xs tracking-wider uppercase text-neutral-700 hover:text-neutral-950 transition-all cursor-pointer min-h-[38px] active:scale-95"
                 title={`Next: ${nextProject.title}`}
               >
                 <span>Next</span>
