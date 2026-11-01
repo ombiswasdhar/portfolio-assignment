@@ -597,7 +597,7 @@ export default function AugePreloader({
         className="absolute top-6 left-6 right-6 z-30 flex items-center justify-between text-xs sm:text-[13px] tracking-[0.16em] font-fredoka font-medium uppercase text-neutral-400 pointer-events-none"
       >
         <span>PORTFOLIO // 2026</span>
-        <span className="hidden sm:inline">CREATIVE TECHNOLOGY & DESIGN</span>
+        <span className="hidden sm:inline">CREATIVITY AND DESIGN</span>
         <span>SHILLONG, IN</span>
       </div>
 
