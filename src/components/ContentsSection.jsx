@@ -881,27 +881,25 @@ export default function ContentsSection() {
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                     />
                   )}
-                  {!(card.isSharvari || card.id === 'sharvari') && (
-                    <div className={`absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.isAureusIsometric || card.id === 'business-cards' || card.id === 'oni-studios' || card.id === 'aureaus' || card.id === 'melody' ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
-                      {card.hoverImage && (
-                        <img 
-                          src={card.hoverImage} 
-                          alt={`${card.title} project artwork`} 
-                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
-                        />
-                      )}
-                      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/25" />
-                      {card.id === 'playstaples-pt2' ? (
-                        <span className="relative z-10 px-5 py-2.5 rounded-full border-2 border-amber-300 text-black font-ca-mono font-black text-xs md:text-sm tracking-widest uppercase bg-amber-400 shadow-2xl group-hover:scale-105 transition-transform flex items-center gap-2">
-                          <span>⚡ Explore Live Store ↗</span>
-                        </span>
-                      ) : !(card.hoverImage || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards || card.isAureusIsometric || card.id === 'aureaus' || card.id === 'melody') && (
-                        <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
-                          View Case Study ↗
-                        </span>
-                      )}
-                    </div>
-                  )}
+                  <div className={`absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isSharvari || card.id === 'sharvari' || card.isIsometricCards || card.isAureusIsometric || card.id === 'business-cards' || card.id === 'oni-studios' || card.id === 'aureaus' || card.id === 'melody' ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
+                    {card.hoverImage && card.id !== 'sharvari' && (
+                      <img 
+                        src={card.hoverImage} 
+                        alt={`${card.title} project artwork`} 
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                      />
+                    )}
+                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/25" />
+                    {card.id === 'playstaples-pt2' ? (
+                      <span className="relative z-10 px-5 py-2.5 rounded-full border-2 border-amber-300 text-black font-ca-mono font-black text-xs md:text-sm tracking-widest uppercase bg-amber-400 shadow-2xl group-hover:scale-105 transition-transform flex items-center gap-2">
+                        <span>⚡ Explore Live Store ↗</span>
+                      </span>
+                    ) : !(card.hoverImage || card.id === 'sharvari' || card.isSharvari || card.id === 'business-cards' || card.id === 'oni-studios' || card.isIsometricCards || card.isAureusIsometric || card.id === 'aureaus' || card.id === 'melody') && (
+                      <span className="px-5 py-2 rounded-full border-2 border-white text-white font-ca-mono font-bold text-xs md:text-sm tracking-widest uppercase bg-black/60 shadow-xl group-hover:scale-105 transition-transform">
+                        View Case Study ↗
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* RED TITLE BAR BELOW THE IMAGE */}
