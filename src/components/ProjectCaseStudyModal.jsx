@@ -504,7 +504,7 @@ export default function ProjectCaseStudyModal({
                     <div className="absolute top-3 left-3 pointer-events-none">
                       <span className="text-[11px] font-fredoka font-semibold text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-xs backdrop-blur-md">
                         {project.id === 'sharvari'
-                          ? ['Page 01 // Home', 'Page 02 // About', 'Page 03 // Events', 'Page 04 // Contact', 'Page 05 // Make a Donation'][idx] || `#${String(idx + 1).padStart(2, '0')}`
+                          ? ['Page 01 // Home', 'Page 02 // About', 'Page 03 // Events', 'Page 04 // Team', 'Page 05 // Contact', 'Page 06 // Make a Donation'][idx] || `#${String(idx + 1).padStart(2, '0')}`
                           : `#${String(idx + 1).padStart(2, '0')}`
                         }
                       </span>

@@ -21,7 +21,7 @@ export default function SharvariCardAnimation({ className = '' }) {
       {/* Background Graphic: Hero Visual with Anton "EMPOWERING LIVES." artwork */}
       <div className="absolute inset-0 w-full h-full">
         <img
-          src="/sharvari/page_home.jpg"
+          src="/sharvari/page_home.png"
           alt="NGO Website - Sharvari Wasnik Foundation"
           className={`w-full h-full object-cover object-top transition-transform duration-700 ease-out ${
             isHovered ? 'scale-105 filter brightness-95' : 'scale-100 filter brightness-90'
@@ -98,7 +98,7 @@ export default function SharvariCardAnimation({ className = '' }) {
         <div className="hidden lg:flex items-center gap-3">
           <div className="w-28 xl:w-32 aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-2xl relative group/card transition-transform duration-300 hover:scale-105">
             <img
-              src="/sharvari/page_about.jpg"
+              src="/sharvari/page_about.png"
               alt="About Page Preview"
               className="w-full h-full object-cover object-top"
               loading="lazy"
@@ -111,7 +111,7 @@ export default function SharvariCardAnimation({ className = '' }) {
 
           <div className="w-28 xl:w-32 aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-2xl relative group/card transition-transform duration-300 hover:scale-105">
             <img
-              src="/sharvari/page_events.jpg"
+              src="/sharvari/page_events.png"
               alt="Events Page Preview"
               className="w-full h-full object-cover object-top"
               loading="lazy"
