@@ -373,12 +373,12 @@ const baseProjectsData = [
     ],
     tags: ['UI/UX Redesign', 'Non-Profit / NGO', 'Live Website', 'Service Learning', 'Figma', 'Front-End Development'],
     deliverables: [
-      'Page 01 // Home: Hero typography mask, impact metrics telemetry & dual initiative hubs',
-      'Page 02 // About: Foundation mission, core pillars & grassroots origin story',
-      'Page 03 // Events: Comprehensive directory of 18+ initiatives across education, sports & fundraisers',
-      'Page 04 // Team: Leadership, educator coaches, and youth mentor profiles',
-      'Page 05 // Contact: Nagpur headquarters address, interactive inquiry form & volunteer channels',
-      'Page 06 // Make a Donation: Transparent donation tiers, allocation breakdown & direct payment pathways',
+      'Home: Hero typography mask, impact metrics telemetry & dual initiative hubs',
+      'About: Foundation mission, core pillars & grassroots origin story',
+      'Events: Comprehensive directory of 18+ initiatives across education, sports & fundraisers',
+      'Team: Leadership, educator coaches, and youth mentor profiles',
+      'Contact: Nagpur headquarters address, interactive inquiry form & volunteer channels',
+      'Make a Donation: Transparent donation tiers, allocation breakdown & direct payment pathways',
       'Live production deployment and custom domain setup at sharvariwasnik.foundation',
     ],
     highlights:
