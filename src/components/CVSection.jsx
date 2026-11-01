@@ -436,25 +436,53 @@ export default function CVSection() {
               role="region"
               aria-label="Zoomed view: Experience"
             >
-              <div className="flex items-center justify-between border-b border-white/20 pb-1">
-                <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white">
-                  WORK EXPERIENCE
-                </h3>
-                <span className="text-[9px] sm:text-[10px] text-neutral-400 font-semibold uppercase tracking-wider">
-                  2026 - Present
-                </span>
-              </div>
+              <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-1 border-b border-white/20">
+                MY EXPERIENCE
+              </h3>
 
               <div className="space-y-1.5 sm:space-y-2 pt-1 text-[9.5px] sm:text-[11px] md:text-[12px] font-fredoka leading-tight text-neutral-100 select-text">
-                <div className="flex items-center justify-between gap-2 font-fredoka">
-                  <div>
-                    <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
-                      1. PLAY STAPLES — UI/UX Designer <span className="text-neutral-400 font-normal text-[9px] sm:text-[10px]">(Aug 2026)</span>
-                    </h4>
-                    <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
-                      Spearheaded full e-commerce website redesign, usability testing, and semantic brand design system.
-                    </p>
-                  </div>
+                <div>
+                  <h4 className="font-bold text-white text-[10.5px] sm:text-[12px] font-fredoka">
+                    1. Sports Council Head :
+                  </h4>
+                  <ul className="list-disc list-inside text-neutral-200 pl-1 space-y-0.5 text-[8.5px] sm:text-[10px] font-fredoka">
+                    <li>Designed posters and promotional materials for college sports and other events.</li>
+                    <li>Helped organize and manage sports tournaments and activities.</li>
+                    <li>Collaborated with teams to ensure smooth execution and maximum participation.</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
+                    2. Member of Placement Cell.
+                  </h4>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
+                    3. Conducted a workshop at a government school, sharing skills and guiding students.
+                  </h4>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 pt-0.5 font-fredoka">
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                    4. Worked as a Graphics Designer at Mentorsity
+                  </h4>
+                  <a
+                    href="https://mentorsity.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-amber-400 hover:bg-yellow-300 text-black font-fredoka font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
+                  >
+                    <span>Mentorsity ↗</span>
+                  </a>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 pt-0.5 font-fredoka">
+                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
+                    5. Re-designed a website from ground up for PLAYSTAPLES
+                  </h4>
                   <a
                     href="#work"
                     onClick={(e) => {
@@ -462,81 +490,10 @@ export default function CVSection() {
                       const el = document.getElementById('featured-works') || document.getElementById('work')
                       if (el) el.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-fredoka font-bold text-[8.5px] sm:text-[9.5px] tracking-wide transition-all shadow shrink-0"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-fredoka font-bold text-[9px] sm:text-[10px] tracking-wide transition-all shadow shrink-0"
                   >
-                    <span>View ↗</span>
+                    <span>PlayStaples ↗</span>
                   </a>
-                </div>
-
-                <div className="flex items-center justify-between gap-2 font-fredoka">
-                  <div>
-                    <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
-                      2. MENTORSITY — Graphics Designer <span className="text-neutral-400 font-normal text-[9px] sm:text-[10px]">(Jan - Mar 2026)</span>
-                    </h4>
-                    <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
-                      Created engaging visual assets and graphic design solutions for digital presence.
-                    </p>
-                  </div>
-                  <a
-                    href="https://mentorsity.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-400 hover:bg-yellow-300 text-black font-fredoka font-bold text-[8.5px] sm:text-[9.5px] tracking-wide transition-all shadow shrink-0"
-                  >
-                    <span>Mentorsity ↗</span>
-                  </a>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px]">
-                    3. F3K — Graphics / UI-UX Designer <span className="text-neutral-400 font-normal text-[9px] sm:text-[10px]">(Oct 2026 - Feb 2027)</span>
-                  </h4>
-                  <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
-                    Visual assets, digital presence, and cross-functional design solutions.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
-                    4. Sports Council Head & Badminton Team Captain
-                  </h4>
-                  <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
-                    Campus tournament branding, 4-year captain (4th of 38 teams), Placement Cell.
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between gap-2 font-fredoka">
-                  <div>
-                    <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
-                      5. NGO Website (Sharvari Wasnik Foundation)
-                    </h4>
-                    <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
-                      Full website redesign & digital overhaul; service learning accessibility project.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <a
-                      href="#work"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        const el = document.getElementById('featured-works') || document.getElementById('work')
-                        if (el) el.scrollIntoView({ behavior: 'smooth' })
-                      }}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-fredoka font-bold text-[8.5px] sm:text-[9.5px] tracking-wide transition-all shadow"
-                    >
-                      <span>View ↗</span>
-                    </a>
-                    <a
-                      href="https://www.sharvariwasnik.foundation"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-fredoka font-bold text-[8.5px] sm:text-[9.5px] tracking-wide transition-all shadow"
-                    >
-                      <span>Live Site ↗</span>
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>
@@ -558,19 +515,16 @@ export default function CVSection() {
               aria-label="Zoomed view: Interests"
             >
               <h3 className="font-fredoka font-bold text-xs sm:text-sm md:text-base tracking-wider uppercase text-white pb-1 border-b border-white/20">
-                INTERESTS & ACHIEVEMENTS
+                INTERESTS
               </h3>
 
               <div className="space-y-1.5 sm:space-y-2 pt-1 text-[9.5px] sm:text-[11px] md:text-[12px] font-fredoka leading-snug text-neutral-100 select-text">
                 <p>
-                  Passionate about both creativity and sports. Active in badminton, table tennis, football, sketching, animating, playing guitar, and traveling.
+                  I'm passionate about both creativity and activity. I enjoy sports like badminton, table tennis, football, and basketball, which keep me energized and disciplined.
                 </p>
-                <div className="pt-1 border-t border-white/10 flex flex-wrap gap-1 text-[8.5px] sm:text-[9.5px]">
-                  <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">🏆 Best Visual Branding (SID Sharktank)</span>
-                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">🥇 2 Gold, 1 Silver (Starblaze)</span>
-                  <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">🏸 4-Yr SID Badminton Captain</span>
-                  <span className="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏃 2× 56km Symbithon</span>
-                </div>
+                <p>
+                  On the creative side, I love sketching, animating, gaming, playing the guitar, and watching movies. I'm also an avid traveler, always curious to explore new places, cultures, and experiences.
+                </p>
               </div>
             </div>
 
@@ -607,7 +561,7 @@ export default function CVSection() {
                   title="Call 9383049271"
                 >
                   <PhoneIcon className="w-4 h-4 shrink-0 shadow-sm" />
-                  <span className="truncate">: +91-9383049271</span>
+                  <span className="truncate">: 9383049271</span>
                 </a>
                 <button
                   type="button"
