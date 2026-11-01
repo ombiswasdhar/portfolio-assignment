@@ -16,6 +16,7 @@ import OniCardIsometricAnimation from './OniCardIsometricAnimation'
 import AureusIsometricAnimation from './AureusIsometricAnimation'
 import AureusShowcase from './AureusShowcase'
 import Melody3DWall from './Melody3DWall'
+import SharvariCardAnimation from './SharvariCardAnimation'
 import ProjectCaseStudyModal from './ProjectCaseStudyModal'
 import DiagonalMarqueeCarousel from '@/components/ui/diagonal-marquee-carousel'
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock'
@@ -344,13 +345,58 @@ const baseProjectsData = [
       'Reimagined live music ticketing by pairing atmospheric dark-mode concert discovery with an airy, split-theme artist lineup and a frictionless two-column checkout—turning booking anxiety into pre-show excitement.',
     tools: ['Figma', 'UI/UX Design', 'User Journey Mapping', 'Visual Direction'],
   },
+  {
+    id: 'sharvari',
+    num: '05',
+    tabTitle: 'Sharvari Foundation',
+    displayTitle: 'SHARVARI WASNIK ©',
+    folderColor: '#D7191F', // NGO Crimson Brand Red
+    tabColor: '#D7191F',
+    accentColor: '#1E1B1B', // Deep Charcoal
+    date: 'OCT 2026',
+    title: 'Sharvari Wasnik Foundation',
+    subtitle: 'NGO Digital Overhaul & Live Web Platform • College Assignment',
+    category: 'Web Redesign & Non-Profit Platform',
+    bulletSummary: 'College NGO Assignment • Full Website Redesign • Class of Hope & Udyogini • Live Platform',
+    description:
+      'The Sharvari Wasnik Foundation is a Nagpur-based non-governmental organization dedicated to child welfare, education, women empowerment, and community development. Undertaken as a core service-learning college assignment at Symbiosis Institute of Design, this project is a complete ground-up website redesign and digital overhaul. The platform transforms the foundation\'s presence into a modern, transparent, and mobile-responsive live web experience—spotlighting core initiatives such as "Class of Hope" (free library, digital literacy, self-defense, and scholarships) and "Udyogini" (women\'s financial self-reliance and artisan food manufacturing), backed by verified impact metrics and seamless volunteer and donation pathways.',
+    thumbnail: '/sharvari/hero.jpg',
+    hoverImage: '/sharvari/community_celebration.jpg',
+    isSharvari: true,
+    previewPhotos: [
+      '/sharvari/hero.jpg',
+      '/sharvari/library_education.jpg',
+      '/sharvari/women_empowerment.jpg',
+      '/sharvari/food_stall.jpg',
+      '/sharvari/financial_literacy.jpg',
+      '/sharvari/community_celebration.jpg',
+      '/sharvari/cricket_sports.jpg',
+      '/sharvari/food_manufacturing.jpg',
+      '/sharvari/cloth_drive.jpg',
+      '/sharvari/fundraiser_school.jpg',
+    ],
+    tags: ['UI/UX Redesign', 'Non-Profit / NGO', 'Live Website', 'Service Learning', 'Figma', 'Front-End Development'],
+    deliverables: [
+      'Ground-up digital brand identity & responsive web architecture for the Nagpur-based NGO',
+      'Interactive initiative hubs: "Class of Hope" (child welfare & education) and "Udyogini" (women\'s financial independence)',
+      'Structured program showcase detailing digital literacy, soft skills, karate self-defense, and the Annapurna meal drive',
+      'Grassroots women entrepreneurship portal highlighting artisan snack manufacturing and Centre Point School stalls',
+      'Verified community impact metrics telemetry (150+ beneficiaries, 450+ books donated, 35+ welfare programs)',
+      'Frictionless engagement channels: volunteer onboarding forms, donation gateways & event calendars',
+      'Live production deployment and custom domain setup at sharvariwasnik.foundation',
+    ],
+    highlights:
+      'Executed a comprehensive college service-learning website overhaul for a grassroots NGO in Nagpur—transforming fragmented community initiatives into a bold, transparent, and mobile-responsive live web platform that champions education and women empowerment.',
+    tools: ['UI/UX Design', 'Web Design', 'Information Architecture', 'Figma', 'Front-End Development', 'Responsive Design'],
+    liveUrl: 'https://www.sharvariwasnik.foundation',
+  },
 ]
 
 // PlayStaples PT2 Live Store is restricted strictly to local host development
 const localOnlyProjectsData = [
   {
     id: 'playstaples-pt2',
-    num: '05',
+    num: '06',
     tabTitle: 'PlayStaples PT2',
     displayTitle: 'PLAYSTAPLES PT2 ©',
     folderColor: '#FFE100', // Bombay Taxi Yellow
@@ -530,6 +576,43 @@ const getProjectGallery = (project) => {
         caption: 'Full Journey Showcase: Atmospheric Dark Mode, Split-Theme Lineup & 3D Periwinkle Staging',
       },
       secondary: [],
+    }
+  }
+
+  if (project.id === 'sharvari') {
+    return {
+      hero: {
+        img: '/sharvari/hero.jpg',
+        title: 'Sharvari Wasnik Foundation // NGO Digital Overhaul & Live Platform',
+        caption: 'Master Redesign: Bold Editorial Typography, Impact Telemetry & Dual Initiative Architecture',
+      },
+      secondary: [
+        {
+          img: '/sharvari/library_education.jpg',
+          title: '02 // "Class of Hope" Educational Initiative',
+          subtitle: 'Free community library, scholarship grants, English speaking & computer typing workshops',
+        },
+        {
+          img: '/sharvari/women_empowerment.jpg',
+          title: '03 // "Udyogini" Women Financial Empowerment',
+          subtitle: 'SEBI-guided financial literacy, Lokmat Sakhi Manch solidarity & artisan food craft unit',
+        },
+        {
+          img: '/sharvari/food_stall.jpg',
+          title: '04 // Grassroots Retail & Community Commerce',
+          subtitle: 'Centre Point School sales stalls for traditional millet and maize flours & homemade snacks',
+        },
+        {
+          img: '/sharvari/community_celebration.jpg',
+          title: '05 // Service Learning & Student Recognition',
+          subtitle: 'Academic achievements, cultural exposure trips, and life skills workshops in Nagpur',
+        },
+        {
+          img: '/sharvari/fundraiser_school.jpg',
+          title: '06 // Fundraisers & Community Drives',
+          subtitle: 'Donation drives, Diwali meets, school fetes, and Nandanwan cloth distribution',
+        },
+      ],
     }
   }
 
@@ -757,7 +840,9 @@ export default function ContentsSection() {
                 >
                   {/* PROJECT IMAGE CONTAINER WITH AUTOMATIC IMAGE CYCLING */}
                   <div className={`relative w-full ${isLastWide ? 'aspect-[4/3] md:aspect-[21/9]' : 'aspect-[4/3]'} flex-1 overflow-hidden ${card.flipImages ? 'bg-[#c99bd8]' : 'bg-neutral-900'}`}>
-                  {card.isIsometricCards ? (
+                  {card.isSharvari || card.id === 'sharvari' ? (
+                    <SharvariCardAnimation />
+                  ) : card.isIsometricCards ? (
                     <OniCardIsometricAnimation />
                   ) : card.isAureusIsometric ? (
                     <DiagonalMarqueeCarousel
@@ -800,16 +885,20 @@ export default function ContentsSection() {
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                     />
                   )}
-                  <div className={`absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.isAureusIsometric || card.id === 'business-cards' || card.id === 'oni-studios' || card.id === 'aureaus' || card.id === 'melody' ? 'pointer-events-none' : card.hoverImage ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
-                    {card.hoverImage && (
+                  <div className={`absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 ${card.isIsometricCards || card.isAureusIsometric || card.id === 'business-cards' || card.id === 'oni-studios' || card.id === 'aureaus' || card.id === 'melody' ? 'pointer-events-none' : card.hoverImage && card.id !== 'sharvari' ? '' : 'bg-black/50 backdrop-blur-[2px]'}`}>
+                    {card.hoverImage && card.id !== 'sharvari' && (
                       <img 
                         src={card.hoverImage} 
                         alt={`${card.title} project artwork`} 
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                       />
                     )}
-                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/35" />
-                    {card.id === 'playstaples-pt2' ? (
+                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[#E84A4A]/25" />
+                    {card.id === 'sharvari' ? (
+                      <span className="relative z-10 px-5 py-2.5 rounded-full border-2 border-white text-white font-ca-mono font-black text-xs md:text-sm tracking-widest uppercase bg-[#D7191F] shadow-2xl group-hover:scale-105 transition-transform flex items-center gap-2">
+                        <span>⚡ View Case Study & Live Site ↗</span>
+                      </span>
+                    ) : card.id === 'playstaples-pt2' ? (
                       <span className="relative z-10 px-5 py-2.5 rounded-full border-2 border-amber-300 text-black font-ca-mono font-black text-xs md:text-sm tracking-widest uppercase bg-amber-400 shadow-2xl group-hover:scale-105 transition-transform flex items-center gap-2">
                         <span>⚡ Explore Live Store ↗</span>
                       </span>
@@ -826,7 +915,13 @@ export default function ContentsSection() {
                   <h3 className="font-akira font-black text-white text-xs sm:text-sm md:text-base tracking-wider uppercase truncate max-w-full">
                     {card.title}
                   </h3>
-                  {isLastWide && (
+                  {card.id === 'sharvari' && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white text-neutral-900 font-fredoka font-bold text-[10px] tracking-wider uppercase shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#D7191F] animate-pulse" />
+                      <span>Live NGO Website</span>
+                    </span>
+                  )}
+                  {card.id === 'playstaples-pt2' && (
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400 text-black font-fredoka font-bold text-[10px] tracking-wider uppercase shadow-xs">
                       <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
                       <span>Live Store</span>

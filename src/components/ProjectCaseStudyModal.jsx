@@ -27,6 +27,10 @@ const PROJECT_STORIES = {
     challenge:
       'Live concert ticketing platforms frequently suffer from cluttered visual noise, disjointed page transitions, and anxiety-inducing checkout flows that drain the raw anticipation of seeing live music. The objective for Melody was to design a unified, end-to-end desktop web experience that channels the electric atmosphere of rock concerts and live festivals while providing effortless clarity, immediate event discovery, and zero-friction ticket purchasing.',
   },
+  sharvari: {
+    challenge:
+      'The Sharvari Wasnik Foundation—a grassroots NGO in Nagpur dedicated to child education, women empowerment, and community welfare—operated with limited digital visibility and fragmented channels for donation, volunteering, and public awareness. Undertaken as a core college service-learning assignment at Symbiosis Institute of Design, the objective was to completely overhaul and redesign their web platform from the ground up. This involved structuring the information architecture around flagship initiatives like "Class of Hope" and "Udyogini", implementing transparent telemetry for verified social impact, establishing an accessible digital identity with warm editorial aesthetics, and deploying the responsive platform live at sharvariwasnik.foundation.',
+  },
 }
 
 // Project-specific color themes matching the project detail image & branding
@@ -60,6 +64,11 @@ const PROJECT_THEMES = {
     baseBg: '#F2F1FA',
     defaultGlow1: '#8B7DE8', // Periwinkle lavender
     defaultGlow2: '#FF6584', // Electric rock pink / coral
+  },
+  sharvari: {
+    baseBg: '#FDFBFA', // Warm clean white/paper
+    defaultGlow1: '#D7191F', // Foundation crimson brand red
+    defaultGlow2: '#1E1B1B', // Charcoal black
   },
 }
 
@@ -152,6 +161,10 @@ export default function ProjectCaseStudyModal({
   // TRIONN grid arrangement: Full width (col-span-2) for sequential case study boards, or staggered for photo sets
   const getItemSpan = (index) => {
     if (project.id === 'playstaples' || project.id === 'aureaus') return 'col-span-2'
+    if (project.id === 'sharvari') {
+      if (index === 0) return 'col-span-2'
+      return 'col-span-2 sm:col-span-1'
+    }
     if (index === 0 || index === 1) return 'col-span-2'
     const offset = index - 2
     const pattern = offset % 3
@@ -234,6 +247,18 @@ export default function ProjectCaseStudyModal({
         )}
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#D7191F] text-white hover:bg-neutral-900 text-xs font-fredoka font-bold uppercase tracking-wider transition-all shadow-xs"
+              title="Visit live NGO website"
+            >
+              <span>Live Website</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          )}
           {isPlayStaplesStore && (
             <a
               href="/playstaples-pt2"
@@ -329,8 +354,20 @@ export default function ProjectCaseStudyModal({
               </div>
 
               {/* External Links (TRIONN Buttons for Behance & Figma & Live Store) */}
-              {(project.behanceUrl || project.figmaUrl || project.storeUrl) && (
+              {(project.behanceUrl || project.figmaUrl || project.storeUrl || project.liveUrl) && (
                 <div className="flex flex-wrap items-center gap-4 sm:gap-5 mb-8">
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#D7191F] text-white hover:bg-neutral-900 text-xs font-fredoka font-bold uppercase tracking-wider shadow-md hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-white" />
+                      <span>Visit Live Website</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
                   {project.storeUrl && (
                     <a
                       href={project.storeUrl}
@@ -407,6 +444,25 @@ export default function ProjectCaseStudyModal({
                 : 'grid grid-cols-2 gap-5 sm:gap-6'
             }`}
           >
+            {project.liveUrl && (
+              <div className="col-span-2 w-full bg-[#D7191F] text-white rounded-2xl px-4 sm:px-6 py-3.5 flex items-center justify-between flex-wrap gap-2 shadow-md">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+                  <span className="text-xs font-fredoka font-bold uppercase tracking-wider">
+                    Live Production Website Active • sharvariwasnik.foundation
+                  </span>
+                </div>
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-neutral-100 text-neutral-950 text-xs font-fredoka font-bold uppercase tracking-wider transition-all shadow"
+                >
+                  <span>Visit Live Website</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            )}
             {isPlayStaplesStore && (
               <div className="w-full bg-amber-400 border-b border-black px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2 text-black">
                 <div className="flex items-center gap-2">

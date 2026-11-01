@@ -507,13 +507,37 @@ export default function CVSection() {
                   </p>
                 </div>
 
-                <div>
-                  <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
-                    5. Sharvari Wasnik Foundation & Govt School Workshop
-                  </h4>
-                  <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
-                    Service learning accessibility project; interactive creative design thinking workshop.
-                  </p>
+                <div className="flex items-center justify-between gap-2 font-fredoka">
+                  <div>
+                    <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
+                      5. Sharvari Wasnik Foundation & Govt School Workshop
+                    </h4>
+                    <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
+                      Full website redesign & digital overhaul; service learning accessibility project.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <a
+                      href="#work"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        const el = document.getElementById('featured-works') || document.getElementById('work')
+                        if (el) el.scrollIntoView({ behavior: 'smooth' })
+                      }}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-fredoka font-bold text-[8.5px] sm:text-[9.5px] tracking-wide transition-all shadow"
+                    >
+                      <span>View ↗</span>
+                    </a>
+                    <a
+                      href="https://www.sharvariwasnik.foundation"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-fredoka font-bold text-[8.5px] sm:text-[9.5px] tracking-wide transition-all shadow"
+                    >
+                      <span>Live Site ↗</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
