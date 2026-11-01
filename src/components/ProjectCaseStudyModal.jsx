@@ -234,8 +234,7 @@ export default function ProjectCaseStudyModal({
             </button>
           </div>
         ) : (
-          <div className="hidden md:flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: project.folderColor || '#E84A4A' }} />
+          <div className="hidden md:flex items-center">
             <span className="text-xs font-fredoka font-bold uppercase tracking-wider text-neutral-800">
               {project.title}
             </span>
@@ -309,14 +308,9 @@ export default function ProjectCaseStudyModal({
             {/* Title & Metadata Block */}
             <div className="flex flex-col">
               {/* Category tag */}
-              <div className="flex items-center gap-2 mb-3">
-                <span className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: project.folderColor || '#E84A4A' }} />
+              <div className="flex items-center mb-3">
                 <span className="text-[11px] font-fredoka font-semibold tracking-[0.16em] uppercase text-neutral-600">
                   {project.category || 'CASE STUDY'}
-                </span>
-                <span className="text-neutral-300 font-fredoka text-[11px]">/</span>
-                <span className="text-[11px] font-fredoka font-medium text-neutral-500 uppercase">
-                  {project.date ? project.date.split(',')[1]?.trim() || project.date : '2026'}
                 </span>
               </div>
 
