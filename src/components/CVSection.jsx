@@ -195,7 +195,6 @@ export default function CVSection() {
             <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-fredoka font-semibold uppercase tracking-widest bg-white/5 border border-white/10 text-neutral-300">
               Curriculum Vitae
             </span>
-            <span className="w-2 h-2 rounded-full bg-[#BA1F1F] animate-pulse" />
             <ComicTapHintBubble
               text={bubbleHintText}
               active={pinnedCard !== null}
