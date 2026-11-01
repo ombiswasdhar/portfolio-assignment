@@ -21,16 +21,16 @@ export default function SharvariCardAnimation({ className = '' }) {
       {/* Background Graphic: Hero Visual with Anton "EMPOWERING LIVES." artwork */}
       <div className="absolute inset-0 w-full h-full">
         <img
-          src="/sharvari/hero.jpg"
-          alt="Sharvari Wasnik Foundation - Empowering Lives"
-          className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
+          src="/sharvari/page_home.jpg"
+          alt="NGO Website - Sharvari Wasnik Foundation"
+          className={`w-full h-full object-cover object-top transition-transform duration-700 ease-out ${
             isHovered ? 'scale-105 filter brightness-95' : 'scale-100 filter brightness-90'
           }`}
           loading="lazy"
         />
         {/* Ambient Dark Gradient Vignette for Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/50" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-transparent to-black/60" />
       </div>
 
       {/* Floating Crimson Accent Glow matching SWF Brand Red (#D7191F) */}
@@ -73,52 +73,52 @@ export default function SharvariCardAnimation({ className = '' }) {
           </div>
 
           <h4 className="text-xl sm:text-2xl md:text-3xl font-akira font-black text-white tracking-wide leading-tight drop-shadow-md">
-            EMPOWERING LIVES.
+            NGO WEBSITE
           </h4>
 
           <p className="text-xs sm:text-sm text-neutral-300 font-fredoka mt-1 line-clamp-2 max-w-lg leading-snug drop-shadow">
-            Complete digital overhaul developed as a service-learning project for the Nagpur-based NGO—unifying free education, digital literacy, and women empowerment.
+            Complete multi-page web platform redesign for Sharvari Wasnik Foundation—featuring 5 dedicated responsive pages, impact telemetry, and community pathways.
           </p>
 
           {/* Verified Impact Metrics Pill Row */}
           <div className="flex flex-wrap items-center gap-2 mt-3 font-fredoka">
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white text-[10px] sm:text-xs font-medium">
-              <span className="text-amber-400 font-bold">450+</span> Books Donated
+              <span className="text-amber-400 font-bold">5</span> Core Pages
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white text-[10px] sm:text-xs font-medium">
-              <span className="text-emerald-400 font-bold">150+</span> Beneficiaries
+              <span className="text-emerald-400 font-bold">450+</span> Books Donated
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white text-[10px] sm:text-xs font-medium">
-              <span className="text-rose-400 font-bold">35+</span> Welfare Programs
+              <span className="text-rose-400 font-bold">150+</span> Beneficiaries
             </span>
           </div>
         </div>
 
-        {/* Right: Dual Initiative Preview Cards (Class of Hope & Udyogini) */}
+        {/* Right: Multi-Page Website Preview Cards */}
         <div className="hidden lg:flex items-center gap-3">
           <div className="w-28 xl:w-32 aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-2xl relative group/card transition-transform duration-300 hover:scale-105">
             <img
-              src="/sharvari/library_education.jpg"
-              alt="Class of Hope"
-              className="w-full h-full object-cover"
+              src="/sharvari/page_about.jpg"
+              alt="About Page Preview"
+              className="w-full h-full object-cover object-top"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             <span className="absolute bottom-1.5 left-2 right-2 text-[9px] font-fredoka font-bold text-white uppercase tracking-wider truncate">
-              Class of Hope
+              About Page
             </span>
           </div>
 
           <div className="w-28 xl:w-32 aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-2xl relative group/card transition-transform duration-300 hover:scale-105">
             <img
-              src="/sharvari/women_empowerment.jpg"
-              alt="Udyogini Women Empowerment"
-              className="w-full h-full object-cover"
+              src="/sharvari/page_events.jpg"
+              alt="Events Page Preview"
+              className="w-full h-full object-cover object-top"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             <span className="absolute bottom-1.5 left-2 right-2 text-[9px] font-fredoka font-bold text-white uppercase tracking-wider truncate">
-              Udyogini
+              Events Page
             </span>
           </div>
         </div>
@@ -126,3 +126,4 @@ export default function SharvariCardAnimation({ className = '' }) {
     </div>
   )
 }
+

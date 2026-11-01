@@ -510,7 +510,7 @@ export default function CVSection() {
                 <div className="flex items-center justify-between gap-2 font-fredoka">
                   <div>
                     <h4 className="font-bold text-white text-[10px] sm:text-[11.5px] font-fredoka">
-                      5. Sharvari Wasnik Foundation & Govt School Workshop
+                      5. NGO Website (Sharvari Wasnik Foundation)
                     </h4>
                     <p className="text-neutral-300 text-[8.5px] sm:text-[9.5px] pl-2">
                       Full website redesign & digital overhaul; service learning accessibility project.

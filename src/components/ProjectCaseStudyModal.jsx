@@ -160,11 +160,7 @@ export default function ProjectCaseStudyModal({
 
   // TRIONN grid arrangement: Full width (col-span-2) for sequential case study boards, or staggered for photo sets
   const getItemSpan = (index) => {
-    if (project.id === 'playstaples' || project.id === 'aureaus') return 'col-span-2'
-    if (project.id === 'sharvari') {
-      if (index === 0) return 'col-span-2'
-      return 'col-span-2 sm:col-span-1'
-    }
+    if (project.id === 'playstaples' || project.id === 'aureaus' || project.id === 'sharvari') return 'col-span-2'
     if (index === 0 || index === 1) return 'col-span-2'
     const offset = index - 2
     const pattern = offset % 3
@@ -507,7 +503,10 @@ export default function ProjectCaseStudyModal({
                   {!isSeamless && (
                     <div className="absolute top-3 left-3 pointer-events-none">
                       <span className="text-[11px] font-fredoka font-semibold text-neutral-700 bg-white/90 px-2.5 py-1 rounded-full border border-black/10 shadow-xs backdrop-blur-md">
-                        #{String(idx + 1).padStart(2, '0')}
+                        {project.id === 'sharvari'
+                          ? ['Page 01 // Home', 'Page 02 // About', 'Page 03 // Events', 'Page 04 // Contact', 'Page 05 // Make a Donation'][idx] || `#${String(idx + 1).padStart(2, '0')}`
+                          : `#${String(idx + 1).padStart(2, '0')}`
+                        }
                       </span>
                     </div>
                   )}
