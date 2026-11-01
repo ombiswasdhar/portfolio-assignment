@@ -596,7 +596,7 @@ export default function AugePreloader({
         ref={statusLineRef}
         className="absolute top-6 left-6 right-6 z-30 flex items-center justify-between text-xs sm:text-[13px] tracking-[0.16em] font-fredoka font-medium uppercase text-neutral-400 pointer-events-none"
       >
-        <span>PORTFOLIO // 2026</span>
+        <span>PORTFOLIO</span>
         <span className="hidden sm:inline">CREATIVITY AND DESIGN</span>
         <span>SHILLONG, IN</span>
       </div>
@@ -611,9 +611,6 @@ export default function AugePreloader({
             000
           </span>
         </div>
-        <span className="text-[10px] sm:text-[11px] font-fredoka uppercase tracking-[0.2em] text-white/40">
-          Click or press Space to skip
-        </span>
       </div>
     </div>
   )
