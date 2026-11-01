@@ -40,8 +40,8 @@ export default function ConstellationGrid() {
         let width = 0;
         let height = 0;
         let isVisible = !document.hidden;
-        let isScrolling = false;
-        let scrollTimeout: any = null;
+        let gridCols = 0;
+        let gridRows = 0;
 
         // Pointer velocity & inertial tracking (mouse & touch)
         const mouse = {
@@ -102,13 +102,7 @@ export default function ConstellationGrid() {
             mouse.y = -1000;
         };
 
-        const handleScroll = () => {
-            isScrolling = true;
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                isScrolling = false;
-            }, 100);
-        };
+
 
         const handleVisibilityChange = () => {
             isVisible = !document.hidden;
@@ -120,11 +114,11 @@ export default function ConstellationGrid() {
 
         const initNodes = () => {
             nodes = [];
-            const cols = Math.ceil(width / spacing) + 1;
-            const rows = Math.ceil(height / spacing) + 1;
+            gridCols = Math.ceil(width / spacing) + 1;
+            gridRows = Math.ceil(height / spacing) + 1;
 
-            for (let i = 0; i < cols; i++) {
-                for (let j = 0; j < rows; j++) {
+            for (let i = 0; i < gridCols; i++) {
+                for (let j = 0; j < gridRows; j++) {
                     const x = i * spacing;
                     const y = j * spacing;
                     nodes.push({
@@ -148,7 +142,6 @@ export default function ConstellationGrid() {
         window.addEventListener('mouseleave', handleMouseLeave);
         window.addEventListener('touchmove', handleTouchMove, { passive: true });
         window.addEventListener('touchend', handleTouchEnd, { passive: true });
-        window.addEventListener('scroll', handleScroll, { passive: true });
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
         let lastTime = performance.now();
@@ -160,19 +153,7 @@ export default function ConstellationGrid() {
                 return;
             }
 
-            // If scrolled deep into the page where background is completely covered, pause drawing to save 100% GPU
-            if (window.scrollY > window.innerHeight * 1.5) {
-                animationFrameId = requestAnimationFrame(render);
-                return;
-            }
 
-            // Yield frame rate during active scrolling on all devices to ensure butter-smooth 60/120fps scrolling
-            if (isScrolling) {
-                if (now - lastRenderTime < 33) {
-                    animationFrameId = requestAnimationFrame(render);
-                    return;
-                }
-            }
 
             lastRenderTime = now;
             const dt = Math.min((now - lastTime) / 1000, 0.05);
@@ -233,27 +214,72 @@ export default function ConstellationGrid() {
                 n.y += n.vy * dt * 60;
             }
 
-            // Draw Connections (Batched into a single draw call for locked 60/120 FPS performance)
+            // Draw Connections (Grid-adjacency neighbor lookup for locked 60/120 FPS performance)
             ctx.strokeStyle = `rgba(${nodeColor}, ${isDarkMode ? 0.14 : 0.07})`;
             ctx.lineWidth = 0.7;
             ctx.beginPath();
-            for (let i = 0; i < nodes.length; i++) {
-                const n = nodes[i];
+            for (let i = 0; i < gridCols; i++) {
+                const iOffset = i * gridRows;
+                const nextIOffset = (i + 1) * gridRows;
+                const prevIOffset = (i - 1) * gridRows;
+                const hasNextCol = i + 1 < gridCols;
+                const hasPrevCol = i > 0;
 
-                for (let j = i + 1; j < nodes.length; j++) {
-                    const n2 = nodes[j];
+                for (let j = 0; j < gridRows; j++) {
+                    const n = nodes[iOffset + j];
+                    if (!n) continue;
+                    const hasNextRow = j + 1 < gridRows;
 
-                    // Rapid bounding box reject before expensive calculation
-                    const ndx = n.x - n2.x;
-                    if (ndx > MAX_CONN_DIST || ndx < -MAX_CONN_DIST) continue;
-                    const ndy = n.y - n2.y;
-                    if (ndy > MAX_CONN_DIST || ndy < -MAX_CONN_DIST) continue;
+                    // 1. Right neighbor (i + 1, j)
+                    if (hasNextCol) {
+                        const n2 = nodes[nextIOffset + j];
+                        if (n2) {
+                            const ndx = n.x - n2.x;
+                            const ndy = n.y - n2.y;
+                            if (ndx * ndx + ndy * ndy < MAX_CONN_DIST_SQ) {
+                                ctx.moveTo(n.x, n.y);
+                                ctx.lineTo(n2.x, n2.y);
+                            }
+                        }
+                    }
 
-                    const distSq = ndx * ndx + ndy * ndy;
+                    // 2. Down neighbor (i, j + 1)
+                    if (hasNextRow) {
+                        const n2 = nodes[iOffset + j + 1];
+                        if (n2) {
+                            const ndx = n.x - n2.x;
+                            const ndy = n.y - n2.y;
+                            if (ndx * ndx + ndy * ndy < MAX_CONN_DIST_SQ) {
+                                ctx.moveTo(n.x, n.y);
+                                ctx.lineTo(n2.x, n2.y);
+                            }
+                        }
+                    }
 
-                    if (distSq < MAX_CONN_DIST_SQ) {
-                        ctx.moveTo(n.x, n.y);
-                        ctx.lineTo(n2.x, n2.y);
+                    // 3. Down-Right diagonal neighbor (i + 1, j + 1)
+                    if (hasNextCol && hasNextRow) {
+                        const n2 = nodes[nextIOffset + j + 1];
+                        if (n2) {
+                            const ndx = n.x - n2.x;
+                            const ndy = n.y - n2.y;
+                            if (ndx * ndx + ndy * ndy < MAX_CONN_DIST_SQ) {
+                                ctx.moveTo(n.x, n.y);
+                                ctx.lineTo(n2.x, n2.y);
+                            }
+                        }
+                    }
+
+                    // 4. Down-Left diagonal neighbor (i - 1, j + 1)
+                    if (hasPrevCol && hasNextRow) {
+                        const n2 = nodes[prevIOffset + j + 1];
+                        if (n2) {
+                            const ndx = n.x - n2.x;
+                            const ndy = n.y - n2.y;
+                            if (ndx * ndx + ndy * ndy < MAX_CONN_DIST_SQ) {
+                                ctx.moveTo(n.x, n.y);
+                                ctx.lineTo(n2.x, n2.y);
+                            }
+                        }
                     }
                 }
             }
@@ -312,13 +338,11 @@ export default function ConstellationGrid() {
 
         return () => {
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
-            clearTimeout(scrollTimeout);
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseleave', handleMouseLeave);
             window.removeEventListener('touchmove', handleTouchMove);
             window.removeEventListener('touchend', handleTouchEnd);
-            window.removeEventListener('scroll', handleScroll);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [isDarkMode, tier, isHigh, isMedium, isLow, isMobile, dprCap]);

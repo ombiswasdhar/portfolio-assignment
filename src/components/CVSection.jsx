@@ -77,10 +77,21 @@ export default function CVSection() {
   const containerRef = useRef(null)
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
   const [tilt, setTilt] = useState({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
+  const tiltRafRef = useRef(null)
+  const lastMousePosRef = useRef({ clientX: 0, clientY: 0 })
   const [copiedEmail, setCopiedEmail] = useState(false)
   const [pinnedCard, setPinnedCard] = useState(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [bubbleHintText, setBubbleHintText] = useState(() => getCvZoomHint())
+
+  // Cleanup tilt RAF on unmount
+  useEffect(() => {
+    return () => {
+      if (tiltRafRef.current) {
+        cancelAnimationFrame(tiltRafRef.current)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const updateHint = () => {
@@ -135,20 +146,32 @@ export default function CVSection() {
     }
   }, [pinnedCard])
 
-  // 3D Tilt calculation on mouse move
+  // 3D Tilt calculation on mouse move (RAF throttled for 120fps butter-smooth rendering without React state lag)
   const handleMouseMove = (e) => {
     if (!containerRef.current) return
-    const rect = containerRef.current.getBoundingClientRect()
-    const px = (e.clientX - rect.left) / rect.width
-    const py = (e.clientY - rect.top) / rect.height
+    lastMousePosRef.current = { clientX: e.clientX, clientY: e.clientY }
 
-    const tiltX = (py - 0.5) * -10
-    const tiltY = (px - 0.5) * 10
+    if (tiltRafRef.current) return
 
-    setTilt({ x: tiltX, y: tiltY, isHovered: true, px, py })
+    tiltRafRef.current = requestAnimationFrame(() => {
+      tiltRafRef.current = null
+      if (!containerRef.current) return
+      const rect = containerRef.current.getBoundingClientRect()
+      const px = (lastMousePosRef.current.clientX - rect.left) / rect.width
+      const py = (lastMousePosRef.current.clientY - rect.top) / rect.height
+
+      const tiltX = (py - 0.5) * -10
+      const tiltY = (px - 0.5) * 10
+
+      setTilt({ x: tiltX, y: tiltY, isHovered: true, px, py })
+    })
   }
 
   const handleMouseLeave = () => {
+    if (tiltRafRef.current) {
+      cancelAnimationFrame(tiltRafRef.current)
+      tiltRafRef.current = null
+    }
     setTilt({ x: 0, y: 0, isHovered: false, px: 0.5, py: 0.5 })
   }
 
@@ -290,9 +313,9 @@ export default function CVSection() {
             {/* Dynamic Specular Sheen Light Reflection across the glossy poster on tilt */}
             {tilt.isHovered && !pinnedCard && (
               <div
-                className="absolute inset-0 pointer-events-none mix-blend-overlay transition-opacity duration-200 z-10"
+                className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-200 z-10"
                 style={{
-                  background: `radial-gradient(circle at ${(tilt.px || 0.5) * 100}% ${(tilt.py || 0.5) * 100}%, rgba(255,255,255,0.42) 0%, transparent 60%)`,
+                  background: `radial-gradient(circle at ${(tilt.px || 0.5) * 100}% ${(tilt.py || 0.5) * 100}%, rgba(255,255,255,0.35) 0%, transparent 60%)`,
                 }}
                 aria-hidden="true"
               />
