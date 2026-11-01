@@ -29,7 +29,7 @@ const PROJECT_STORIES = {
   },
   sharvari: {
     challenge:
-      'The Sharvari Wasnik Foundation—a grassroots NGO in Nagpur dedicated to child education, women empowerment, and community welfare—operated with limited digital visibility and fragmented channels for donation, volunteering, and public awareness. Undertaken as a core college service-learning assignment at Symbiosis Institute of Design, the objective was to completely overhaul and redesign their web platform from the ground up. This involved structuring the information architecture around flagship initiatives like "Class of Hope" and "Udyogini", implementing transparent telemetry for verified social impact, establishing an accessible digital identity with warm editorial aesthetics, and deploying the responsive platform live at sharvariwasnik.foundation.',
+      'The Sharvari Wasnik Foundation is a grassroots NGO in Nagpur doing incredible work in child education and women\'s empowerment. But like many non-profits, their digital presence was holding them back—trying to donate or volunteer was a scattered, confusing experience. For my SID service-learning project, I completely rebuilt their web platform from the ground up. I focused on cleaning up the information architecture to highlight programs like "Class of Hope" and "Udyogini," built in transparent impact tracking, and gave the site a warmer, more approachable visual identity. The responsive platform is now live at sharvariwasnik.foundation.',
   },
 }
 

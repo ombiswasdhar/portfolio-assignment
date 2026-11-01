@@ -359,7 +359,7 @@ const baseProjectsData = [
     category: 'Web Redesign & Non-Profit Platform',
     bulletSummary: 'College NGO Assignment • Full Website Redesign • 6 Core Pages • Live Platform',
     description:
-      'A complete ground-up website redesign for the Sharvari Wasnik Foundation—a Nagpur-based grassroots NGO dedicated to child welfare, free library education, women financial independence, and community development. Undertaken as a core service-learning college assignment at Symbiosis Institute of Design, this project overhauls their digital footprint into a responsive multi-page web platform spanning Home, About, Events, Team, Contact, and Make a Donation.',
+      'The Sharvari Wasnik Foundation is a grassroots NGO in Nagpur doing incredible work in child education and women\'s empowerment. But like many non-profits, their digital presence was holding them back—trying to donate or volunteer was a scattered, confusing experience. For my SID service-learning project, I completely rebuilt their web platform from the ground up. I focused on cleaning up the information architecture to highlight programs like "Class of Hope" and "Udyogini," built in transparent impact tracking, and gave the site a warmer, more approachable visual identity. The responsive platform is now live at sharvariwasnik.foundation.',
     thumbnail: '/sharvari/page_home.png',
     hoverImage: '/sharvari/page_about.png',
     isSharvari: true,
